@@ -1,0 +1,3 @@
+displayName = Biome Extractors Mod
+author = MistressNebula
+version = 0.1
