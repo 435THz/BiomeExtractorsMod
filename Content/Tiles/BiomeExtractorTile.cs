@@ -11,24 +11,28 @@ namespace BiomeExtractorsMod.Content.Tiles
 
     public abstract class BiomeExtractorTile : ModTile
 	{
-		protected abstract BiomeExtractorEnt getTileEntity();
+		protected abstract BiomeExtractorEnt GetTileEntity();
 
 		public override void SetStaticDefaults()
 		{
 			Main.tileLavaDeath[Type] = true;
-            DustType = DustID.Iron;
+            Main.tileNoAttach[Type] = true;
+            Main.tileFrameImportant[Type] = true;
             // set Main.tileLavaDeath[Type] = true; for low tiers
+
+            DustType = DustID.Iron;
             
             TileObjectData.newTile.Width  = 3;
             TileObjectData.newTile.Height = 3;
 
-            TileObjectData.newTile.Origin = new Point16(0, 2); // Bottom-left
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
+            TileObjectData.newTile.Origin = new Point16(1, 2); // Bottom-left
             TileObjectData.newTile.CoordinateHeights = [16, 16, 18]; // Extend into grass tiles.
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.CoordinatePadding = 2;
 
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(getTileEntity().Hook_AfterPlacement, -1, 0, false);
+            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(GetTileEntity().Hook_AfterPlacement, -1, 0, false);
 			TileObjectData.newTile.UsesCustomCanPlace = true;
 
             TileObjectData.addTile(Type);
@@ -39,9 +43,7 @@ namespace BiomeExtractorsMod.Content.Tiles
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-            // ModTileEntity.Kill() handles checking if the tile entity exists and destroying it if it does exist in the world for you
-            // The tile coordinate parameters already refer to the top-left corner of the multitile
-            ModContent.GetInstance<BiomeExtractorEnt>().Kill(i, j);
+            GetTileEntity().Kill(i, j);
         }
 	}
 }

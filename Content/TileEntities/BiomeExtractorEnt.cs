@@ -8,6 +8,10 @@ namespace BiomeExtractorsMod.Content.TileEntities
 {
     public abstract class BiomeExtractorEnt : ModTileEntity
     {
+        public abstract int GetTier();
+        public abstract int GetExtractionSpeed();
+        public abstract float GetExtractionChance();
+
         public override bool IsTileValidForEntity(int x, int y)
         {
             Tile tile = Main.tile[x, y];
@@ -26,7 +30,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 NetMessage.SendData(MessageID.TileEntityPlacement, number: i, number2: j, number3: Type);
             }
 
-            Point16 tileOrigin = new Point16(1, 1);
+            Point16 tileOrigin = new(1, 1);
             int placedEntity = Place(i - tileOrigin.X, j - tileOrigin.Y);
             return placedEntity;
         }

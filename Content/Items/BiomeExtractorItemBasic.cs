@@ -16,7 +16,7 @@ namespace BiomeExtractorsMod.Content.Items
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Item.SetShopValues(ItemRarityColor.Green2, Terraria.Item.buyPrice(gold: 15));
+            Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(gold: 15));
         }
     }
 }

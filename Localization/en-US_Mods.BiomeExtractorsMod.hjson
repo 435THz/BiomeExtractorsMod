@@ -1,1 +1,17 @@
-# This file will automatically update with entries for new content after a build and reload
+Items: {
+	BiomeExtractorItemBasic: {
+		DisplayName: Biome Extractor (Basic)
+		Tooltip: ""
+	}
+}
+
+Configs: {
+	ExtractorConfig.DisplayName: Extractors Config
+	Common: {
+		BasicTierHeader: Basic Extractors
+		BasicTierChanceTitle: Extraction Chance
+		BasicTierChanceTooltip: "The chance the extractor has of generating something at every Extraction Tick."
+		BasicTierSpeedTitle: Extraction Speed
+		BasicTierSpeedTooltip: "How many frames pass between Extraction Ticks for a Basic Extractor."
+	}
+}
