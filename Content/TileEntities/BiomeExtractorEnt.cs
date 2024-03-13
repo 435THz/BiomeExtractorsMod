@@ -12,6 +12,10 @@ namespace BiomeExtractorsMod.Content.TileEntities
     public abstract class BiomeExtractorEnt : ModTileEntity
     {
         private static string tagTimer = "timer";
+        private static readonly int[] chestOffsetY = [1, -1, 0, 2];
+        private static readonly int[] chestOffsetX = [-2, 3];
+
+
         private int timer = 0;
 
         public int TimeElapsed
@@ -49,6 +53,55 @@ namespace BiomeExtractorsMod.Content.TileEntities
             try { t = tag.GetAsInt(tagTimer); }
             catch(Exception) { t = 0; }
             TimeElapsed = t;
+        }
+
+        public override void Update()
+        {
+
+            TimeElapsed++;
+            if (TimeElapsed == 0)
+            {
+                Chest chest = getAdjacentChest();
+                if(chest == null)
+                {
+                    TimeElapsed--;
+                    return;
+                }
+
+                Item generated = BiomeExtraction.generateItem(GetTier());
+                bool success = BiomeExtraction.AddToChest(generated, chest);
+                if(!success) TimeElapsed--;
+            }
+        }
+
+        private Chest getAdjacentChest()
+        {
+
+            bool prioritizeLeft = Main.rand.NextBool();
+            int start = prioritizeLeft ? 0 :  1;
+            int shift = prioritizeLeft ? 1 : -1;
+
+            for (int i = 0; i < 8000; i++)
+            {
+                Chest chest = Main.chest[i];
+                if (chest != null)
+                {
+                    for(int Xi = start; i>=0 && i<2; i+=shift)
+                    {
+                        for (int Yi = 0; i < 4; i ++)
+                        {
+                            int X = Position.X + chestOffsetX[Xi];
+                            int Y = Position.Y + chestOffsetY[Yi];
+
+                            if (chest.x == X && chest.y == Y)
+                            {
+                                return chest;
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         public override bool IsTileValidForEntity(int x, int y)

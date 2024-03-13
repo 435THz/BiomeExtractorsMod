@@ -28,7 +28,7 @@ namespace BiomeExtractorsMod.Common
             return starting != newItem.stack;
         }
 
-            internal static Item generateItem()
+            internal static Item generateItem(int tier)
         {
             Item item = new Item();
             item.SetDefaults(ItemID.StoneBlock);
