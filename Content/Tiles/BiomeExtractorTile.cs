@@ -11,7 +11,9 @@ namespace BiomeExtractorsMod.Content.Tiles
 
     public abstract class BiomeExtractorTile : ModTile
 	{
-		protected abstract BiomeExtractorEnt GetTileEntity();
+        internal static Point16 origin = new Point16(1, 2); // Bottom-center
+
+        protected abstract BiomeExtractorEnt GetTileEntity();
 
 		public override void SetStaticDefaults()
 		{
@@ -26,7 +28,7 @@ namespace BiomeExtractorsMod.Content.Tiles
             TileObjectData.newTile.Height = 3;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
-            TileObjectData.newTile.Origin = new Point16(1, 2); // Bottom-left
+            TileObjectData.newTile.Origin = origin;
             TileObjectData.newTile.CoordinateHeights = [16, 16, 18]; // Extend into grass tiles.
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.CoordinatePadding = 2;
