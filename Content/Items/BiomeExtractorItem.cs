@@ -6,6 +6,10 @@ namespace BiomeExtractorsMod.Content.Items
     {
         protected abstract int getTileId();
 
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 5;
+        }
         public override void SetDefaults()
         {
             Item.DefaultToPlaceableTile(getTileId());
