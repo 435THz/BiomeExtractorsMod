@@ -104,11 +104,18 @@ namespace BiomeExtractorsMod.Content.TileEntities
             return null;
         }
 
+
+
+
+
+        // Spawning related code
         public override bool IsTileValidForEntity(int x, int y)
         {
             Tile tile = Main.tile[x, y];
-            return tile.HasTile && tile.TileType == ModContent.TileType<BiomeExtractorTile>();
+            return tile.HasTile && tile.TileType == getTileType();
         }
+
+        protected abstract int getTileType();
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
         {
@@ -120,7 +127,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
                 NetMessage.SendData(MessageID.TileEntityPlacement, number: i, number2: j, number3: Type);
             }
-
+            
             Point16 tileOrigin = BiomeExtractorTile.origin;
             int placedEntity = Place(i - tileOrigin.X, j - tileOrigin.Y);
             return placedEntity;

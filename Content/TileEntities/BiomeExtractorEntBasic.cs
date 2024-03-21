@@ -1,4 +1,5 @@
 using BiomeExtractorsMod.Common.Configs;
+using BiomeExtractorsMod.Content.Tiles;
 using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.TileEntities
@@ -7,7 +8,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
     public class BiomeExtractorEntBasic : BiomeExtractorEnt
     {
-        protected override int GetTier()
+        public override int GetTier()
         {
             return 1;
         }
@@ -19,6 +20,11 @@ namespace BiomeExtractorsMod.Content.TileEntities
         protected override int getSelfChance()
         {
             return ModContent.GetInstance<ExtractorConfig>().BasicExtractorChance;
+        }
+
+        protected override int getTileType()
+        {
+            return ModContent.TileType<BiomeExtractorTileBasic>();
         }
     }
 }
