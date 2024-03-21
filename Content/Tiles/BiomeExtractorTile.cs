@@ -23,11 +23,11 @@ namespace BiomeExtractorsMod.Content.Tiles
             // set Main.tileLavaDeath[Type] = true; for low tiers
 
             DustType = DustID.Iron;
-            
+
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
             TileObjectData.newTile.Width  = 3;
             TileObjectData.newTile.Height = 3;
 
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
             TileObjectData.newTile.Origin = origin;
             TileObjectData.newTile.CoordinateHeights = [16, 16, 18]; // Extend into grass tiles.
             TileObjectData.newTile.CoordinateWidth = 16;
