@@ -14,6 +14,10 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private static string tagTimer = "timer";
         private static readonly int[] chestOffsetY = [1, -1, 0, 2];
         private static readonly int[] chestOffsetX = [-2, 3];
+        public enum EnumTiers
+        {
+            BASIC = 0, DEMONIC = 1, INFERNAL = 2, STEAMPUNK = 3, CYBER = 4, LUNAR = 5, ETHEREAL = 6
+        }
 
 
         private int timer = 0;
