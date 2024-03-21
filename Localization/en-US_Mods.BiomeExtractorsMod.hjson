@@ -3,15 +3,21 @@ Items: {
 		DisplayName: Biome Extractor (Basic)
 		Tooltip: ""
 	}
+
+	DevCursor: {
+		DisplayName: Dev Cursor
+		Tooltip: ""
+	}
 }
 
 Configs: {
 	ExtractorConfig.DisplayName: Extractors Config
+
 	Common: {
 		BasicTierHeader: Basic Extractors
 		BasicTierChanceTitle: Extraction Chance
-		BasicTierChanceTooltip: "The chance the extractor has of generating something at every Extraction Tick."
+		BasicTierChanceTooltip: The chance the extractor has of generating something at every Extraction Tick.
 		BasicTierSpeedTitle: Extraction Speed
-		BasicTierSpeedTooltip: "How many frames pass between Extraction Ticks for a Basic Extractor."
+		BasicTierSpeedTooltip: How many frames pass between Extraction Ticks for a Basic Extractor.
 	}
 }
