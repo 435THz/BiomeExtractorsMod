@@ -1,3 +1,4 @@
+using BiomeExtractorsMod.Content.TileEntities;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -23,15 +24,27 @@ namespace BiomeExtractorsMod.Common
                     newItem.stack -= transfer;
                     item.stack += transfer;
                 }
-                if(newItem.stack < 1) return true;
+                if (newItem.stack < 1)
+                {
+                    return true;
+                }
             }
             return starting != newItem.stack;
         }
 
-            internal static Item generateItem(int tier)
+            internal static Item GenerateItem(BiomeExtractorEnt entity)
         {
-            Item item = new Item();
+            Item item = new();
             item.SetDefaults(ItemID.StoneBlock);
+            SceneMetrics metric = new();
+            SceneMetricsScanSettings settings = new()
+            {
+                BiomeScanCenterPositionInWorld = entity.Position.ToVector2(),
+                ScanOreFinderData = false
+            };
+            metric.ScanAndExportToMain(settings);
+            if (metric.EnoughTilesForDesert) //TODO S C R E A M
+                item.SetDefaults(ItemID.SandBlock);
             item.stack = 1;
             return item;
         }
