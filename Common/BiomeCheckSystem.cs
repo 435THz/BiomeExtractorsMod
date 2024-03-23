@@ -49,9 +49,9 @@ namespace BiomeExtractorsMod.Common.Systems
             }
         }
 
-        public class ItemEntry(int item, int count)
+        public class ItemEntry(short item, int count)
         {
-            public int Id { get; private set; } = item;
+            public short Id { get; private set; } = item;
             public int Count { get; private set; } = count;
 
             public override bool Equals(object obj)
@@ -85,10 +85,9 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly string shells = "shells";
         public static readonly string hallow = "hallow";
         public static readonly string hallowed_bars = "hallowed_bars";
-        public static readonly string hallowed_snow = "hallowed_snow";
-        public static readonly string hallowed_bars_snow = "hallowed_bars_snow";
+        public static readonly string hallowed_forest = "hallowed_forest";
         public static readonly string hallowed_desert = "hallowed_desert";
-        public static readonly string hallowed_bars_desert = "hallowed_bars_desert";
+        public static readonly string hallowed_snow = "hallowed_snow";
         public static readonly string mushroom = "mushroom";
         public static readonly string corruption = "corruption";
         public static readonly string corrupt_snow = "corrupt_snow";
@@ -149,6 +148,9 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly List<ushort> crimsonIceBlocks = [TileID.FleshIce];
         static readonly List<ushort> corruptIceBlocks = [TileID.CorruptIce];
         static readonly List<ushort> hallowIceBlocks = [TileID.HallowedIce];
+        static readonly List<ushort> crimsonForestBlocks = [TileID.CrimsonGrass, TileID.CrimsonJungleGrass,                        TileID.CorruptThorns,   TileID.Crimstone];
+        static readonly List<ushort> corruptForestBlocks = [TileID.CorruptGrass, TileID.CorruptJungleGrass, TileID.CorruptThorns,  TileID.CorruptPlants,   TileID.Ebonstone];
+        static readonly List<ushort> hallowForestBlocks = [TileID.HallowedGrass,                            TileID.HallowedPlants, TileID.HallowedPlants2, TileID.Pearlstone];
         static readonly List<ushort> crimsonBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass, TileID.CorruptThorns,                         TileID.Crimstone,  TileID.Crimsand,  TileID.CrimsonHardenedSand, TileID.CrimsonSandstone, TileID.FleshIce];
         static readonly List<ushort> corruptBlocks = [TileID.CorruptGrass,  TileID.CorruptJungleGrass, TileID.CorruptThorns,  TileID.CorruptPlants,  TileID.Ebonstone,  TileID.Ebonsand,  TileID.CorruptHardenedSand, TileID.CorruptSandstone, TileID.CorruptIce];
         static readonly List<ushort> hallowBlocks =  [TileID.HallowedGrass,                            TileID.HallowedPlants, TileID.HallowedPlants2,TileID.Pearlstone, TileID.Pearlsand, TileID.HallowHardenedSand,  TileID.HallowSandstone,  TileID.HallowedIce];
@@ -271,15 +273,16 @@ namespace BiomeExtractorsMod.Common.Systems
             _poolRequirements[poolName].Clear();
 
         }
-        public void AddItemInPool(string poolName, int itemId) => AddItemInPool(poolName, new ItemEntry(itemId, 1), 1);
-        public void AddItemInPool(string poolName, int itemId, int weight) => AddItemInPool(poolName, new ItemEntry(itemId, 1), weight);
-        public void AddItemInPool(string poolName, int itemId, int count, int weight) => AddItemInPool(poolName, new ItemEntry(itemId, count), weight);
+
+        public void AddItemInPool(string poolName, short itemId) => AddItemInPool(poolName, new ItemEntry(itemId, 1), 1);
+        public void AddItemInPool(string poolName, short itemId, int weight) => AddItemInPool(poolName, new ItemEntry(itemId, 1), weight);
+        public void AddItemInPool(string poolName, short itemId, int count, int weight) => AddItemInPool(poolName, new ItemEntry(itemId, count), weight);
         public void AddItemInPool(string poolName, ItemEntry item, int weight)
         {
             _itemPools[poolName].Add(item, weight);
         }
-        public void RemoveItemFromPool(string poolName, int itemId) => RemoveItemFromPool(poolName, new ItemEntry(itemId, 1));
-        public void RemoveItemFromPool(string poolName, int itemId, int count) => RemoveItemFromPool(poolName, new ItemEntry(itemId, count));
+        public void RemoveItemFromPool(string poolName, short itemId) => RemoveItemFromPool(poolName, new ItemEntry(itemId, 1));
+        public void RemoveItemFromPool(string poolName, short itemId, int count) => RemoveItemFromPool(poolName, new ItemEntry(itemId, count));
         public void RemoveItemFromPool(string poolName, ItemEntry item)
         {
             _itemPools[poolName].Remove(item);
@@ -353,10 +356,9 @@ namespace BiomeExtractorsMod.Common.Systems
 
             AddPool(hallow,               100);
             AddPool(hallowed_bars,        100);
-            AddPool(hallowed_snow,        150);
-            AddPool(hallowed_bars_snow,   150);
-            AddPool(hallowed_desert,      150);
-            AddPool(hallowed_bars_desert, 150);        
+            AddPool(hallowed_forest,      100);      
+            AddPool(hallowed_desert,      100);
+            AddPool(hallowed_snow,        100);
 
             AddPool(mushroom, 200);
 
@@ -488,13 +490,11 @@ namespace BiomeExtractorsMod.Common.Systems
 
             AddPoolRequirements(mushroom, mush100);
 
-            AddPoolRequirements(hallowed_bars_desert, tierSteampunk, postMechs, undergroundLayer, hallow125.Invoke(hallowSandBlocks));
-            AddPoolRequirements(hallowed_bars_snow,   tierSteampunk, postMechs, undergroundLayer, hallow125.Invoke(hallowIceBlocks));
-            AddPoolRequirements(hallowed_bars,        tierSteampunk, postMechs, undergroundLayer, hallow125.Invoke(hallowBlocks));
-
-            AddPoolRequirements(hallowed_desert, tierSteampunk, hardmodeOnly, undergroundLayer, hallow125.Invoke(hallowSandBlocks));
-            AddPoolRequirements(hallowed_snow,   tierSteampunk, hardmodeOnly, undergroundLayer, hallow125.Invoke(hallowIceBlocks));
-            AddPoolRequirements(hallow,          tierSteampunk, hardmodeOnly, undergroundLayer, hallow125.Invoke(hallowBlocks));
+            AddPoolRequirements(hallowed_desert, tierSteampunk, hardmodeOnly, hallow125.Invoke(hallowIceBlocks));
+            AddPoolRequirements(hallowed_forest, tierSteampunk, hardmodeOnly, hallow125.Invoke(hallowForestBlocks));
+            AddPoolRequirements(hallowed_desert, tierSteampunk, hardmodeOnly, hallow125.Invoke(hallowSandBlocks));
+            AddPoolRequirements(hallowed_bars,   tierSteampunk, postMechs,    hallow125.Invoke(hallowBlocks));
+            AddPoolRequirements(hallow,          tierSteampunk, hardmodeOnly, hallow125.Invoke(hallowBlocks));
 
             AddPoolRequirements(shells, tierSteampunk, hardmodeOnly, jungle140);
             AddPoolRequirements(jungle,                              jungle140);
@@ -507,6 +507,98 @@ namespace BiomeExtractorsMod.Common.Systems
 
         private void PopulatePools()
         {
+            AddItemInPool(forest, ItemID.DirtBlock);
+            AddItemInPool(forest, ItemID.StoneBlock);
+            AddItemInPool(forest, ItemID.ClayBlock);
+            AddItemInPool(forest, ItemID.Gel);
+            AddItemInPool(forest, ItemID.PinkGel);
+            AddItemInPool(forest, ItemID.GrassSeeds);
+            AddItemInPool(forest, ItemID.Wood);
+            AddItemInPool(forest, ItemID.Acorn);
+            AddItemInPool(forest, ItemID.Daybloom);
+            AddItemInPool(forest, ItemID.Mushroom);
+            AddItemInPool(forest, ItemID.YellowMarigold);
+            AddItemInPool(forest, ItemID.BlueBerries);
+            AddItemInPool(forest, ItemID.JuliaButterfly);
+            AddItemInPool(forest, ItemID.MonarchButterfly);
+            AddItemInPool(forest, ItemID.PurpleEmperorButterfly);
+            AddItemInPool(forest, ItemID.RedAdmiralButterfly);
+            AddItemInPool(forest, ItemID.SulphurButterfly);
+            AddItemInPool(forest, ItemID.TreeNymphButterfly);
+            AddItemInPool(forest, ItemID.UlyssesButterfly);
+            AddItemInPool(forest, ItemID.ZebraSwallowtailButterfly);
+            AddItemInPool(forest, ItemID.BlueDragonfly);
+            AddItemInPool(forest, ItemID.GreenDragonfly);
+            AddItemInPool(forest, ItemID.RedDragonfly);
+            AddItemInPool(forest, ItemID.Grasshopper);
+            AddItemInPool(forest, ItemID.Worm);
+            AddItemInPool(forest, ItemID.Stinkbug);
+
+            AddItemInPool(sky,    ItemID.Cloud, 7);
+            AddItemInPool(sky,    ItemID.RainCloud, 3);
+            AddItemInPool(sky,    ItemID.Feather, 20);
+            AddItemInPool(flight, ItemID.SoulofFlight, 5);
+
+
+            AddItemInPool(snow, ItemID.SnowBlock);
+            AddItemInPool(snow, ItemID.IceBlock);
+            AddItemInPool(snow, ItemID.Gel);
+            AddItemInPool(snow, ItemID.BorealWood);
+            AddItemInPool(snow, ItemID.Shiverthorn);
+
+            AddItemInPool(desert, ItemID.SandBlock);
+            AddItemInPool(desert, ItemID.Cactus);
+            AddItemInPool(desert, ItemID.Waterleaf);
+            AddItemInPool(desert, ItemID.PinkPricklyPear);
+            AddItemInPool(desert, ItemID.Scorpion);
+            AddItemInPool(desert, ItemID.BlackScorpion);
+
+            AddItemInPool(jungle, ItemID.MudBlock);
+            AddItemInPool(jungle, ItemID.Gel);
+            AddItemInPool(jungle, ItemID.RichMahogany);
+            AddItemInPool(jungle, ItemID.BambooBlock);
+            AddItemInPool(jungle, ItemID.JungleGrassSeeds);
+            AddItemInPool(jungle, ItemID.Moonglow);
+            AddItemInPool(jungle, ItemID.SkyBlueFlower);
+            AddItemInPool(jungle, ItemID.Frog);
+            AddItemInPool(jungle, ItemID.Grubby);
+            AddItemInPool(jungle, ItemID.Sluggy);
+            AddItemInPool(jungle, ItemID.Buggy);
+            AddItemInPool(shells, ItemID.TurtleShell);
+
+            AddItemInPool(hallow, ItemID.PixieDust);
+            AddItemInPool(hallow, ItemID.UnicornHorn);
+            AddItemInPool(hallow, ItemID.RainbowBrick);
+            AddItemInPool(hallow, ItemID.FairyCritterBlue);
+            AddItemInPool(hallow, ItemID.FairyCritterPink);
+            AddItemInPool(hallow, ItemID.FairyCritterGreen);
+
+            AddItemInPool(hallowed_forest, ItemID.DirtBlock);
+            AddItemInPool(hallowed_forest, ItemID.PearlstoneBlock);
+            AddItemInPool(hallowed_forest, ItemID.Gel);
+            AddItemInPool(hallowed_forest, ItemID.Pearlwood);
+            AddItemInPool(hallowed_forest, ItemID.LightningBug);
+            AddItemInPool(hallowed_desert, ItemID.PearlsandBlock);
+            AddItemInPool(hallowed_desert, ItemID.LightShard);
+            AddItemInPool(hallowed_desert, ItemID.Cactus);
+            AddItemInPool(hallowed_desert, ItemID.Waterleaf);
+            AddItemInPool(hallowed_desert, ItemID.PinkPricklyPear);
+            AddItemInPool(hallowed_desert, ItemID.Scorpion);
+            AddItemInPool(hallowed_desert, ItemID.BlackScorpion);
+            AddItemInPool(hallowed_snow, ItemID.SnowBlock);
+            AddItemInPool(hallowed_snow, ItemID.PinkIceBlock);
+            AddItemInPool(hallowed_snow, ItemID.Gel);
+            AddItemInPool(hallowed_snow, ItemID.BorealWood);
+            AddItemInPool(hallowed_snow, ItemID.Shiverthorn);
+            AddItemInPool(hallowed_bars, ItemID.HallowedBar);
+
+            AddItemInPool(mushroom, ItemID.MudBlock, 5);
+            AddItemInPool(mushroom, ItemID.MushroomGrassSeeds, 1);
+            AddItemInPool(mushroom, ItemID.GlowingMushroom, 30);
+
+
+
+
             throw new NotImplementedException();
         }
     }
