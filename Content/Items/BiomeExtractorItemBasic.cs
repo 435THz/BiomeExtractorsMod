@@ -7,7 +7,7 @@ namespace BiomeExtractorsMod.Content.Items
 {
     class BiomeExtractorItemBasic : BiomeExtractorItem
     {
-        protected override int getTileId()
+        protected override int GetTileId()
         {
             return ModContent.TileType<BiomeExtractorTileBasic>();
         }

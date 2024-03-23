@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace ExampleMod.Common.Systems
+namespace BiomeExtractorsMod.Common.Collections
 {
     internal class PriorityList<T> : IDictionary<int, List<T>>
     {
@@ -17,11 +17,11 @@ namespace ExampleMod.Common.Systems
             set
             {
                 dictionary[key] = value;
-                addPriority(key);
+                AddPriority(key);
             }
         }
 
-        private void addPriority(int n)
+        private void AddPriority(int n)
         {
             LinkedListNode<int> node = priorityOrder.First;
             while(node != null) { }
@@ -64,7 +64,7 @@ namespace ExampleMod.Common.Systems
             if (!ContainsKey(key)) 
             {
                 dictionary[key] = value;
-                addPriority(key);
+                AddPriority(key);
             }
             else
             {
@@ -78,7 +78,7 @@ namespace ExampleMod.Common.Systems
             if (!dictionary.ContainsKey(key))
             {
                 dictionary[key] = [];
-                addPriority(key);
+                AddPriority(key);
             }
             dictionary[key].Add(element);
         }

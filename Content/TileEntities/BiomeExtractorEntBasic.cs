@@ -12,17 +12,17 @@ namespace BiomeExtractorsMod.Content.TileEntities
         {
             return 1;
         }
-        protected override int getSelfMaxTimer()
+        protected override int GetSelfMaxTimer()
         {
             return ModContent.GetInstance<ExtractorConfig>().BasicExtractorSpeed;
         }
 
-        protected override int getSelfChance()
+        protected override int GetSelfChance()
         {
             return ModContent.GetInstance<ExtractorConfig>().BasicExtractorChance;
         }
 
-        protected override int getTileType()
+        protected override int GetTileType()
         {
             return ModContent.TileType<BiomeExtractorTileBasic>();
         }

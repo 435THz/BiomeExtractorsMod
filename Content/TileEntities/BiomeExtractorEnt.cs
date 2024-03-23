@@ -34,12 +34,12 @@ namespace BiomeExtractorsMod.Content.TileEntities
             protected set { timer = (value + ExtractionSpeed) % ExtractionSpeed; }
         }
 
-        public int ExtractionSpeed { get => getSelfMaxTimer(); }
-        public int ExtractionChance { get => getSelfChance(); }
+        public int ExtractionSpeed { get => GetSelfMaxTimer(); }
+        public int ExtractionChance { get => GetSelfChance(); }
 
-        public abstract int GetTier();
-        protected abstract int getSelfMaxTimer();
-        protected abstract int getSelfChance();
+        public abstract int GetTier(); //TODO refactor these three as necessary
+        protected abstract int GetSelfMaxTimer();
+        protected abstract int GetSelfChance();
 
         public override void SaveData(TagCompound tag)
         {
@@ -65,7 +65,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 if(!IsChestDataValid(chestPos, chestIndex)) {
 
                 //If the chest data is not valid, a new one will be searched for
-                    int index = getAdjacentChest();
+                    int index = GetAdjacentChest();
                     if (index < 0)
                         return;
                     chestIndex = index;
@@ -100,7 +100,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         }
 
         //Looks for a chest in the adjacent spaces to the left or right of this machine
-        private int getAdjacentChest()
+        private int GetAdjacentChest()
         {
             bool prioritizeLeft = Main.rand.NextBool();
             int[] chestOffsetX = prioritizeLeft ? chestOffsetX_fw : chestOffsetX_bw;
@@ -135,7 +135,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         }
 
         //Returns whether the queried chest is unlocked or not
-        private bool IsUnlocked(Chest ch)
+        private static bool IsUnlocked(Chest ch)
         {
             return !Chest.IsLocked(ch.x, ch.y);
         }
@@ -147,10 +147,10 @@ namespace BiomeExtractorsMod.Content.TileEntities
         public override bool IsTileValidForEntity(int x, int y)
         {
             Tile tile = Main.tile[x, y];
-            return tile.HasTile && tile.TileType == getTileType();
+            return tile.HasTile && tile.TileType == GetTileType();
         }
 
-        protected abstract int getTileType();
+        protected abstract int GetTileType();
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
         {

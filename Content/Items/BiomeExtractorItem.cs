@@ -4,7 +4,7 @@ namespace BiomeExtractorsMod.Content.Items
 {
     abstract class BiomeExtractorItem : ModItem
     {
-        protected abstract int getTileId();
+        protected abstract int GetTileId();
 
         public override void SetStaticDefaults()
         {
@@ -12,7 +12,7 @@ namespace BiomeExtractorsMod.Content.Items
         }
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(getTileId());
+            Item.DefaultToPlaceableTile(GetTileId());
         }
     }
 }

@@ -1,3 +1,4 @@
+using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Content.TileEntities;
 using Microsoft.Xna.Framework;
 using System;
@@ -6,7 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ExampleMod.Common.Systems
+namespace BiomeExtractorsMod.Common.Systems
 {
     public class BiomeCheckSystem : ModSystem
     {
