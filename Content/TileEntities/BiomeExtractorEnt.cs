@@ -54,7 +54,6 @@ namespace BiomeExtractorsMod.Content.TileEntities
         public abstract int ExtractionRate { get; }
         public abstract int ExtractionChance { get; }
         public static int BiomeScanRate { get => ModContent.GetInstance<ExtractorConfig>().BiomeScanRate; }
-        internal abstract void DisplayStatus();
 
         public override void SaveData(TagCompound tag)
         {
@@ -72,6 +71,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             Active          = tag.GetBool(tagState);
             chestPos        = new Point(tag.GetAsInt(tagChestX), tag.GetAsInt(tagChestY));
             chestIndex      = Chest.FindChest(chestPos.X, chestPos.Y);
+            PoolList = ModContent.GetInstance<BiomeCheckSystem>().CheckValidBiomes(this); //always run on loading
         }
 
         public override void Update()
@@ -168,8 +168,30 @@ namespace BiomeExtractorsMod.Content.TileEntities
         }
 
         //toggles the machine on and off
-        internal void ToggleState() { Active = !Active; }
+        internal void ToggleState() {
+            Active = !Active;
+            if(Active) PoolList = ModContent.GetInstance<BiomeCheckSystem>().CheckValidBiomes(this); //must refresh when turned back on
+        }
 
+        // displays the machine's status
+        internal void DisplayStatus()
+        {
+            if (Active)
+            {
+                PoolList = ModContent.GetInstance<BiomeCheckSystem>().CheckValidBiomes(this); //must refresh on right click
+                ScanningTimer = 1; //we reset the timer as well
+                string s = "";
+                for (int i = 0; i < PoolList.Count; i++)
+                {
+                    s += PoolList[i];
+                    if (i < PoolList.Count - 1) s += ", ";
+                }
+                Main.NewText("This machine is extracting from the following biomes:\n" +
+                    s);
+            }
+            else
+                Main.NewText("This machine is inactive.");
+        }
 
 
 

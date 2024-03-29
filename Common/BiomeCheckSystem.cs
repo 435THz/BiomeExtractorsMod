@@ -26,9 +26,9 @@ namespace BiomeExtractorsMod.Common.Systems
             public readonly float X => Origin.X;
             public readonly float Y => Origin.Y;
 
-            public readonly int Tiles(ushort tileId) => Result.GetTileCount(tileId);
-            public readonly int Liquids(short liquidId) => Result.GetLiquidCount(liquidId);
-            public readonly bool MinTier(int tier) => Extractor.Tier >= tier;
+            public readonly int Tiles(ushort tileId) => Result == null ? 0 : Result.GetTileCount(tileId);
+            public readonly int Liquids(short liquidId) => Result == null ? 0 : Result.GetLiquidCount(liquidId);
+            public readonly bool MinTier(int tier) => Extractor != null && Extractor.Tier >= tier;
 
             public readonly int Tiles(List<ushort> tileIds)
             {
@@ -144,7 +144,6 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly string ug_crimson_snow = "ug_crimson_snow";
         public static readonly string ug_crimson_desert = "ug_crimson_desert";
         public static readonly string ug_crimson_dark_shard = "ug_crimson_dark_shard";
-        public static readonly string dark_shard = "dark_shard";
         public static readonly string dungeon = "dungeon";
         public static readonly string dungeon_p = "dungeon_p";
         public static readonly string dungeon_g = "dungeon_g";
@@ -254,7 +253,7 @@ namespace BiomeExtractorsMod.Common.Systems
         //returns it to allow for more inline processing
         //caution: if there already was a Result saved inside
         //this ScanData, it will be overwritten
-        public static ScanData Scan(ScanData data)
+        public static ScanData Scan(ref ScanData data)
         {
             SceneMetrics metric = new();
             SceneMetricsScanSettings settings = new()
@@ -333,7 +332,7 @@ namespace BiomeExtractorsMod.Common.Systems
                 Extractor = extractor,
                 Origin = extractor.Position.ToVector2() + Vector2.One
             };
-            Scan(scan);
+            Scan(ref scan);
 
             int last_p = int.MaxValue;
             List<string> found = [];
@@ -412,14 +411,17 @@ namespace BiomeExtractorsMod.Common.Systems
 
             AddPool(mushroom, 200);
             
-            AddPool(corruption,     300);
-            AddPool(corruption_hm,  300);
-            AddPool(crimson,        300);
-            AddPool(corrupt_snow,   300);
-            AddPool(crimson_snow,   300);
-            AddPool(corrupt_desert, 300);
-            AddPool(crimson_desert, 300);
-            AddPool(dark_shard,     300);
+            AddPool(corruption,         300);
+            AddPool(corruption_hm,      300);
+            AddPool(crimson,            300);
+            AddPool(corrupt_forest,     300);
+            AddPool(crimson_forest,     300);
+            AddPool(corrupt_snow,       300);
+            AddPool(crimson_snow,       300);
+            AddPool(corrupt_desert,     300);
+            AddPool(crimson_desert,     300);
+            AddPool(corrupt_dark_shard, 300);
+            AddPool(crimson_dark_shard, 300);
 
             AddPool(graveyard, 500);
 
@@ -490,7 +492,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(meteorite,  tierInfernal,                                 meteorite75);
             AddPoolRequirements(uw_fire,    tierSteampunk, hardmodeOnly, underworldLayer);
             AddPoolRequirements(underworld, tierInfernal,                underworldLayer);
-            AddPoolRequirements(luminite,   tierLunar,     postML,       spaceLayer);
+            AddPoolRequirements(luminite,   tierEthereal,     postML,       spaceLayer);
             AddPoolRequirements(pillar,     tierLunar,     postPillars,  spaceLayer);
             AddPoolRequirements(spc_flight, tierSteampunk, hardmodeOnly, spaceLayer);
             AddPoolRequirements(space,                                   spaceLayer);
@@ -564,7 +566,7 @@ namespace BiomeExtractorsMod.Common.Systems
 
             AddPoolRequirements(mushroom, mush100);
 
-            AddPoolRequirements(hallowed_desert,  tierSteampunk, hardmodeOnly, hallow125.Invoke(hallowIceBlocks));
+            AddPoolRequirements(hallowed_snow,    tierSteampunk, hardmodeOnly, hallow125.Invoke(hallowIceBlocks));
             AddPoolRequirements(hallowed_forest,  tierSteampunk, hardmodeOnly, hallow125.Invoke(hallowForestBlocks));
             AddPoolRequirements(hallowed_desert,  tierSteampunk, hardmodeOnly, hallow125.Invoke(hallowSandBlocks));
             AddPoolRequirements(hallowed_bars,    tierSteampunk, postMechs,    hallow125.Invoke(hallowBlocks));

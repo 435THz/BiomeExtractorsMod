@@ -24,12 +24,16 @@ namespace BiomeExtractorsMod.Common.Collections
         private void AddPriority(int n)
         {
             LinkedListNode<int> node = priorityOrder.First;
-            while(node != null) { }
+            while(node != null)
             {
                 if (n > node.Value)
+                {
                     priorityOrder.AddBefore(node, n);
+                    return;
+                }
                 else if (n == node.Value)
                     return;
+                node = node.Next;
             }
             priorityOrder.AddLast(n);
         }
