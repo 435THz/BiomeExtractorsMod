@@ -21,6 +21,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private static readonly string tagXTimer = "extraction_timer";
         private static readonly string tagBTimer = "biome_scan_timer";
+        private static readonly string tagState  = "isActive";
         private static readonly string tagChestX = "chest_x";
         private static readonly string tagChestY = "chest_y";
         private static readonly int[] chestOffsetY    = [1, -1, 0, 2];
@@ -45,6 +46,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             get => BTimer;
             protected set { BTimer = (value + BiomeScanRate) % BiomeScanRate; }
         }
+        public bool Active { get; private set; } = true;
 
         // getter only
         protected abstract int TileType { get; }
@@ -52,11 +54,13 @@ namespace BiomeExtractorsMod.Content.TileEntities
         public abstract int ExtractionRate { get; }
         public abstract int ExtractionChance { get; }
         public static int BiomeScanRate { get => ModContent.GetInstance<ExtractorConfig>().BiomeScanRate; }
+        internal abstract void DisplayStatus();
 
         public override void SaveData(TagCompound tag)
         {
             tag.Add(tagXTimer, ExtractionTimer);
             tag.Add(tagBTimer, ScanningTimer);
+            tag.Add(tagState,  Active);
             tag.Add(tagChestX, Main.chest[chestIndex].x);
             tag.Add(tagChestY, Main.chest[chestIndex].y);
         }
@@ -65,12 +69,14 @@ namespace BiomeExtractorsMod.Content.TileEntities
         {
             ExtractionTimer = tag.GetAsInt(tagXTimer);
             ScanningTimer   = tag.GetAsInt(tagBTimer);
+            Active          = tag.GetBool(tagState);
             chestPos        = new Point(tag.GetAsInt(tagChestX), tag.GetAsInt(tagChestY));
             chestIndex      = Chest.FindChest(chestPos.X, chestPos.Y);
         }
 
         public override void Update()
         {
+            if (!Active) { return; }
             //Every time the timer wraps back to 0 the extraction routine is performed
             ExtractionTimer++; //never run immediately upon placement
             if (ExtractionTimer == 0)
@@ -160,6 +166,9 @@ namespace BiomeExtractorsMod.Content.TileEntities
         {
             return !Chest.IsLocked(ch.x, ch.y);
         }
+
+        //toggles the machine on and off
+        internal void ToggleState() { Active = !Active; }
 
 
 

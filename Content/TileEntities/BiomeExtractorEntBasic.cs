@@ -16,9 +16,16 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         internal override void DisplayStatus()
         {
+            if(Active)
+            {
+                Main.NewText("This machine is inactive.");
+            }
+            else
+            {
                 string s = PoolList.ToString();
                 Main.NewTextMultiline("This machine is extracting from the following biomes:\n" +
                     s); //TODO format list
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace BiomeExtractorsMod.Content.Tiles
 
     public abstract class BiomeExtractorTile : ModTile
 	{
-        internal static Point16 origin = new Point16(1, 2); // Bottom-center
+        internal static Point16 origin = new(1, 2); // Bottom-center
 
         protected abstract BiomeExtractorEnt GetTileEntity();
 
@@ -41,6 +41,40 @@ namespace BiomeExtractorsMod.Content.Tiles
 
             TileID.Sets.PreventsSandfall[Type] = true;
             TileID.Sets.AvoidedByMeteorLanding[Type] = true;
+        }
+
+        public override bool RightClick(int i, int j)
+        {
+            bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
+            if (found)
+            {
+                entity.DisplayStatus();
+                return true;
+            }
+            return false;
+        }
+
+        public override void HitWire(int i, int j)
+        {
+            bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
+            Point16 top_left = entity.Position;
+            if (found)
+            {
+                entity.ToggleState();
+                for (short x_off = 0; x_off < 3; x_off++)
+                {
+                    for (short y_off = 0; y_off < 3; y_off++)
+                    {
+                        //TODO change visuals
+                        Wiring.SkipWire(top_left.X + x_off, top_left.Y + y_off);
+                    }
+                }
+
+                if (Main.netMode != NetmodeID.SinglePlayer)
+                {
+                    NetMessage.SendTileSquare(-1, top_left.X, top_left.Y, 3, 3);
+                }
+            }
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
