@@ -6,9 +6,83 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace BiomeExtractorsMod.Common.Systems
 {
+    public class ScanData(BiomeExtractorEnt extractor)
+    {
+
+        private readonly BiomeExtractorEnt _extractor = extractor;
+        private Point _origin = extractor.Position.ToPoint() + new Point(1, 1);
+        private Point _size = new(Main.buffScanAreaWidth, Main.buffScanAreaHeight);
+        private readonly Dictionary<int, int> _tileCounts = [];
+        private readonly Dictionary<int, int> _liquidCounts = [];
+
+        public float X => _origin.X;
+        public float Y => _origin.Y;
+
+        public int Tiles(int tileId) => _tileCounts.GetValueOrDefault(tileId);
+        public int Liquids(int liquidId) => _tileCounts.GetValueOrDefault(liquidId);
+        public bool MinTier(int tier) => _extractor != null && _extractor.Tier >= tier;
+
+        public int Tiles(List<ushort> tileIds)
+        {
+            int count = 0;
+            foreach (ushort tileId in tileIds) count += Tiles(tileId);
+            return count;
+        }
+        public bool ValidWalls(List<ushort> wallIds, bool blacklist = false)
+        {
+            Point origin = _extractor.Position.ToPoint();
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                {
+                    bool match = blacklist;
+                    foreach (int id in wallIds)
+                    {
+                        if (Main.tile[origin.Y + i, origin.X + j].WallType == id)
+                            if (!blacklist) { match = true; break; }
+                            else { return false; }
+                    }
+                    if (!match) return false;
+                }
+            return true;
+        }
+
+        public void Scan()
+        {
+            _tileCounts.Clear();
+            _liquidCounts.Clear();
+            Rectangle tileRectangle = new(_origin.X - _size.X / 2, _origin.Y - _size.Y / 2, _size.X, _size.Y);
+            tileRectangle = WorldUtils.ClampToWorld(tileRectangle);
+
+            for (int x = tileRectangle.Left; x < tileRectangle.Right; x++)
+            {
+                for (int y = tileRectangle.Top; y < tileRectangle.Bottom; y++)
+                {
+                    if (!tileRectangle.Contains(x, y)) continue;
+
+                    Tile tile = Main.tile[x, y];
+                    if (tile == null) continue; //skip null
+                    if (!tile.HasTile) //count liquids in empty tiles
+                    {
+                        if (tile.LiquidAmount > 0)
+                        {
+                            if(!_liquidCounts.ContainsKey(tile.LiquidType)) _liquidCounts.Add(tile.LiquidType, 0);
+                            _liquidCounts[tile.LiquidType]++;
+                        }
+                        continue;
+                    }
+
+                    //count non-empty tiles
+                    if (!_tileCounts.ContainsKey(tile.TileType)) _tileCounts.Add(tile.TileType, 0);
+                    _tileCounts[tile.TileType]++;
+                }
+            }
+        }
+    }
+
     public class BiomeCheckSystem : ModSystem
     {
 
@@ -17,48 +91,20 @@ namespace BiomeExtractorsMod.Common.Systems
             MINERALS, GEMS, DROPS, TERRAIN, VEGETATION, CRITTERS
         }
 
-        public struct ScanData
+        public class ItemEntry
         {
-            public BiomeExtractorEnt Extractor;
-            public Vector2 Origin;
-            public SceneMetrics Result;
+            public short Id { get; private set; }
+            private int Min { get; set; }
+            private int Max { get; set; }
+            public int Count { get => Main.rand.Next(Min, Max); }
 
-            public readonly float X => Origin.X;
-            public readonly float Y => Origin.Y;
-
-            public readonly int Tiles(ushort tileId) => Result == null ? 0 : Result.GetTileCount(tileId);
-            public readonly int Liquids(short liquidId) => Result == null ? 0 : Result.GetLiquidCount(liquidId);
-            public readonly bool MinTier(int tier) => Extractor != null && Extractor.Tier >= tier;
-
-            public readonly int Tiles(List<ushort> tileIds)
+            public ItemEntry(short item, int count) : this(item, count, count) { }
+            public ItemEntry(short item, int min, int max)
             {
-                int count = 0;
-                foreach (ushort tileId in tileIds) count += Tiles(tileId);
-                return count;
+                Id = item;
+                Min = min;
+                Max = max + 1;
             }
-            public readonly bool ValidWalls(List<ushort> wallIds, bool blacklist = false)
-            {
-                Point origin = Extractor.Position.ToPoint();
-                for (int i = 0; i < 3; i++)
-                    for (int j = 0; j < 3; j++)
-                    {
-                        bool match = blacklist;
-                        foreach (int id in wallIds)
-                        {
-                            if(Main.tile[origin.Y + i, origin.X+j].WallType == id)
-                                if (!blacklist) { match = true; break; }
-                                else { return false; }
-                        }
-                        if (!match) return false;
-                    }
-                return true;
-            }
-        }
-
-        public class ItemEntry(short item, int count)
-        {
-            public short Id { get; private set; } = item;
-            public int Count { get; private set; } = count;
 
             public override bool Equals(object obj)
             {
@@ -78,8 +124,8 @@ namespace BiomeExtractorsMod.Common.Systems
             }
         }
 
-        private readonly Dictionary<string, WeightedList<ItemEntry>> _itemPools = [];
-        private readonly Dictionary<string, List<Predicate<ScanData>>> _poolRequirements = [];
+        private readonly Dictionary<string, WeightedList<ItemEntry>> _itemPools = []; 
+        private readonly Dictionary<string, List<Predicate<ScanData>>> _poolRequirements = []; //TODO Divide by Extractor tier and fail the scan if valid but higher tier
         private readonly PriorityList<string> _priorityList = [];
 
         public static readonly string forest = "forest";
@@ -108,7 +154,7 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly string crimson_dark_shard = "crimson_dark_shard";
         public static readonly string graveyard = "graveyard";
         public static readonly string caverns = "caverns";
-        public static readonly string underground = "underground";
+        public static readonly string underground = "underground"; 
         public static readonly string evil_ores = "evil_ores";
         public static readonly string hm_ores = "hm_ores";
         public static readonly string faeling = "faeling";
@@ -172,9 +218,9 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly List<ushort> crimsonIceBlocks = [TileID.FleshIce];
         static readonly List<ushort> corruptIceBlocks = [TileID.CorruptIce];
         static readonly List<ushort> hallowIceBlocks = [TileID.HallowedIce];
-        static readonly List<ushort> crimsonForestBlocks = [TileID.CrimsonGrass, TileID.CrimsonJungleGrass,                        TileID.CorruptThorns,   TileID.Crimstone];
-        static readonly List<ushort> corruptForestBlocks = [TileID.CorruptGrass, TileID.CorruptJungleGrass, TileID.CorruptThorns,  TileID.CorruptPlants,   TileID.Ebonstone];
-        static readonly List<ushort> hallowForestBlocks = [TileID.HallowedGrass,                            TileID.HallowedPlants, TileID.HallowedPlants2, TileID.Pearlstone];
+        static readonly List<ushort> crimsonForestBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass,                        TileID.CorruptThorns,   TileID.Crimstone];
+        static readonly List<ushort> corruptForestBlocks = [TileID.CorruptGrass,  TileID.CorruptJungleGrass, TileID.CorruptThorns,  TileID.CorruptPlants,   TileID.Ebonstone];
+        static readonly List<ushort> hallowForestBlocks =  [TileID.HallowedGrass, TileID.GolfGrassHallowed,  TileID.HallowedPlants, TileID.HallowedPlants2, TileID.Pearlstone];
         static readonly List<ushort> crimsonBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass, TileID.CorruptThorns,                         TileID.Crimstone,  TileID.Crimsand,  TileID.CrimsonHardenedSand, TileID.CrimsonSandstone, TileID.FleshIce];
         static readonly List<ushort> corruptBlocks = [TileID.CorruptGrass,  TileID.CorruptJungleGrass, TileID.CorruptThorns,  TileID.CorruptPlants,  TileID.Ebonstone,  TileID.Ebonsand,  TileID.CorruptHardenedSand, TileID.CorruptSandstone, TileID.CorruptIce];
         static readonly List<ushort> hallowBlocks =  [TileID.HallowedGrass,                            TileID.HallowedPlants, TileID.HallowedPlants2,TileID.Pearlstone, TileID.Pearlsand, TileID.HallowHardenedSand,  TileID.HallowSandstone,  TileID.HallowedIce];
@@ -182,6 +228,7 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly List<ushort> jungleBlocks = [TileID.JungleGrass, TileID.JunglePlants, TileID.JunglePlants2, TileID.PlantDetritus, TileID.JungleVines, TileID.Hive, TileID.LihzahrdBrick];
         static readonly List<ushort> frostBlocks = [TileID.SnowBlock, TileID.SnowBrick, TileID.IceBlock, TileID.BreakableIce, TileID.FleshIce, TileID.CorruptIce, TileID.HallowedIce];
         static readonly List<ushort> desertBlocks = [TileID.Sand, TileID.Crimsand, TileID.Ebonsand, TileID.Pearlsand, TileID.HardenedSand, TileID.CrimsonHardenedSand, TileID.CorruptHardenedSand, TileID.HallowHardenedSand, TileID.Sandstone, TileID.CrimsonSandstone, TileID.CorruptSandstone, TileID.HallowSandstone];
+        static readonly List<ushort> pureBlocks = [TileID.Grass, TileID.GolfGrass, TileID.Plants, TileID.Plants2, TileID.Stone];
 
         //TIERS
         static readonly Predicate<ScanData> tierDemonic = scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.DEMONIC);
@@ -210,7 +257,7 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly Predicate<ScanData> underworldLayer = scan => scan.Y > Main.maxTilesY - 200;
 
         //SPECIFIC POSITIONS
-        static readonly Predicate<ScanData> oceanArea = scan => scan.Y <= (Main.worldSurface + Main.rockLayer) / 2 && (scan.X < 339 || scan.Y > Main.maxTilesX - 339);
+        static readonly Predicate<ScanData> oceanArea = scan => scan.Y <= (Main.worldSurface + Main.rockLayer) / 2 && (scan.X < 339 || scan.X > Main.maxTilesX - 339);
 
         //WALLS
         static readonly Predicate<ScanData> lihzahrd_bg = scan => scan.ValidWalls([WallID.LihzahrdBrickUnsafe]);
@@ -229,8 +276,8 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly Predicate<ScanData> shimmer300 = scan => scan.Liquids(LiquidID.Shimmer) >= 300;
 
         //BLOCKS
-        static readonly Func<List<ushort>, Predicate<ScanData>> evil300 = tiles => (scan => scan.Tiles(tiles) - scan.Tiles(hallowBlocks) - scan.Tiles(TileID.Sunflower) * 80 >= 300);
-        static readonly Func<List<ushort>, Predicate<ScanData>> hallow125 = tiles => (scan => scan.Tiles(tiles) - scan.Tiles(crimsonBlocks) - scan.Tiles(corruptBlocks) >= 125);
+        static readonly Func<List<ushort>, Predicate<ScanData>> evil300 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(hallowBlocks) - scan.Tiles(TileID.Sunflower) * 5 >= 300;
+        static readonly Func<List<ushort>, Predicate<ScanData>> hallow125 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(crimsonBlocks) - scan.Tiles(corruptBlocks) >= 125;
         static readonly Predicate<ScanData> meteorite75 = scan => scan.Tiles(TileID.Meteorite) >= 75;
         static readonly Predicate<ScanData> hive100 = scan => scan.Tiles(TileID.Hive) > 100;
         static readonly Predicate<ScanData> marble150 = scan => scan.Tiles(TileID.Marble) > 150;
@@ -241,30 +288,11 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly Predicate<ScanData> dungeon250 = scan => scan.Tiles(dungeonBricks) >= 250;
         static readonly Predicate<ScanData> mush100 = scan => scan.Tiles(glowMushroomBlocks) >= 100;
         static readonly Predicate<ScanData> jungle140 = scan => scan.Tiles(jungleBlocks) > 140;
+        static readonly Predicate<ScanData> purity250 = scan => scan.Tiles(pureBlocks) > 250;
         static readonly Predicate<ScanData> desert1500 = scan => scan.Tiles(desertBlocks) > 1500;
         static readonly Predicate<ScanData> frost1500 = scan => scan.Tiles(frostBlocks) > 1500;
-        static readonly Predicate<ScanData> tombstone5 = scan => scan.Tiles(TileID.Tombstones) > 5;
+        static readonly Predicate<ScanData> tombstone5 = scan => scan.Tiles(TileID.Tombstones) > 20;
 
-
-
-
-        //scans the area around the given ScanData.Origin
-        //saves the result in the same Scandata's Result parameter, but also
-        //returns it to allow for more inline processing
-        //caution: if there already was a Result saved inside
-        //this ScanData, it will be overwritten
-        public static ScanData Scan(ref ScanData data)
-        {
-            SceneMetrics metric = new();
-            SceneMetricsScanSettings settings = new()
-            {
-                BiomeScanCenterPositionInWorld = data.Origin,
-                ScanOreFinderData = false
-            };
-            metric.ScanAndExportToMain(settings);
-            data.Result = metric;
-            return data;
-        }
 
         public bool PoolExists(string poolName)
         {
@@ -275,7 +303,7 @@ namespace BiomeExtractorsMod.Common.Systems
             if (!PoolExists(poolName))
             {
                 _priorityList.Add(priority, poolName);
-                _itemPools.Add(poolName, []); //Consider dividing pools up by content
+                _itemPools.Add(poolName, []); //TODO Consider dividing pools up by content
                 _poolRequirements.Add(poolName, []);
                 return true;
             }
@@ -327,12 +355,8 @@ namespace BiomeExtractorsMod.Common.Systems
 
         public List<string> CheckValidBiomes(BiomeExtractorEnt extractor)
         {
-            ScanData scan = new()
-            {
-                Extractor = extractor,
-                Origin = extractor.Position.ToVector2() + Vector2.One
-            };
-            Scan(ref scan);
+            ScanData scan = new(extractor);
+            scan.Scan();
 
             int last_p = int.MaxValue;
             List<string> found = [];
@@ -403,11 +427,11 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(sky,    50);
             AddPool(flight, 50);
 
-            AddPool(hallow,           100);
-            AddPool(hallowed_bars,    100);
-            AddPool(hallowed_forest,  100);      
-            AddPool(hallowed_desert,  100);
-            AddPool(hallowed_snow,    100);
+            AddPool(hallow,          100);
+            AddPool(hallowed_bars,   100);
+            AddPool(hallowed_forest, 100);      
+            AddPool(hallowed_desert, 100);
+            AddPool(hallowed_snow,   100);
 
             AddPool(mushroom, 200);
             
@@ -425,7 +449,7 @@ namespace BiomeExtractorsMod.Common.Systems
 
             AddPool(graveyard, 500);
 
-            AddPool(caverns,      1000);
+            AddPool(caverns,      1000); //TODO move these the fuck up
             AddPool(underground,  1000);
             AddPool(evil_ores,    1000);
             AddPool(hm_ores,      1000);
@@ -492,7 +516,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(meteorite,  tierInfernal,                                 meteorite75);
             AddPoolRequirements(uw_fire,    tierSteampunk, hardmodeOnly, underworldLayer);
             AddPoolRequirements(underworld, tierInfernal,                underworldLayer);
-            AddPoolRequirements(luminite,   tierEthereal,     postML,       spaceLayer);
+            AddPoolRequirements(luminite,   tierEthereal,  postML,       spaceLayer);
             AddPoolRequirements(pillar,     tierLunar,     postPillars,  spaceLayer);
             AddPoolRequirements(spc_flight, tierSteampunk, hardmodeOnly, spaceLayer);
             AddPoolRequirements(space,                                   spaceLayer);
@@ -500,12 +524,12 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(pirate, tierSteampunk, hardmodeOnly, water1k, oceanArea);
             AddPoolRequirements(ocean,                               water1k, oceanArea);
 
-            AddPoolRequirements(temple,    tierCyber,   postGolem,                                  lihzahrd_bg);
-            AddPoolRequirements(ectoplasm, tierCyber,   postPlantera, dungeon250, undergroundLayer, dungeon_bg);
-            AddPoolRequirements(dungeon_p, tierDemonic, dungeon_p250,             undergroundLayer, dungeon_bg_p);
-            AddPoolRequirements(dungeon_g, tierDemonic, dungeon_g250,             undergroundLayer, dungeon_bg_g);
-            AddPoolRequirements(dungeon_b, tierDemonic, dungeon_b250,             undergroundLayer, dungeon_bg_b);
-            AddPoolRequirements(dungeon,   tierDemonic, dungeon250,               undergroundLayer, dungeon_bg);
+            AddPoolRequirements(temple,    tierCyber,   postGolem,                                    lihzahrd_bg);
+            AddPoolRequirements(ectoplasm, tierCyber,   postPlantera, dungeon250,   undergroundLayer, dungeon_bg);
+            AddPoolRequirements(dungeon_p, tierDemonic,               dungeon_p250, undergroundLayer, dungeon_bg_p);
+            AddPoolRequirements(dungeon_g, tierDemonic,               dungeon_g250, undergroundLayer, dungeon_bg_g);
+            AddPoolRequirements(dungeon_b, tierDemonic,               dungeon_b250, undergroundLayer, dungeon_bg_b);
+            AddPoolRequirements(dungeon,   tierDemonic,               dungeon250,   undergroundLayer, dungeon_bg);
 
             AddPoolRequirements(ug_crimson_dark_shard, tierSteampunk, cavernLayer, evil300.Invoke(crimsonSandBlocks));
             AddPoolRequirements(ug_crimson_desert,     tierDemonic,   cavernLayer, evil300.Invoke(crimsonSandBlocks));
@@ -535,34 +559,34 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(life_fruit,   tierSteampunk, postMech,     cavernLayer, jungle140);
             AddPoolRequirements(hive,                                      cavernLayer, hive100,    honey100, hive_bg);
             AddPoolRequirements(ug_jungle,                                 cavernLayer, jungle140);
-            AddPoolRequirements(ug_desert_hm, tierSteampunk, hardmodeOnly, cavernLayer, desert1500);
-            AddPoolRequirements(ug_desert,                                 cavernLayer, desert1500);
-            AddPoolRequirements(ug_snow,                                   cavernLayer, frost1500);
+            AddPoolRequirements(ug_desert_hm, tierSteampunk, hardmodeOnly, undergroundLayer, desert1500);
+            AddPoolRequirements(ug_desert,                                 undergroundLayer, desert1500);
+            AddPoolRequirements(ug_snow,                                   undergroundLayer, frost1500);
 
             AddPoolRequirements(marble,  cavernLayer, marble150,    marble_bg);
             AddPoolRequirements(granite, cavernLayer, granite150,   granite_bg);
             AddPoolRequirements(cobweb,  cavernLayer, hardmodeOnly, spider_bg);
             AddPoolRequirements(spider,  cavernLayer,               spider_bg);
 
-            AddPoolRequirements(caverns,                                 cavernLayer);
-            AddPoolRequirements(underground,                             undergroundLayer);
-            AddPoolRequirements(evil_ores,  tierDemonic,                 undergroundLayer);
-            AddPoolRequirements(hm_ores,    tierSteampunk, hardmodeOnly, undergroundLayer);
-            AddPoolRequirements(faeling,    tierDemonic,                 shimmer300);
+            AddPoolRequirements(caverns,                                 cavernLayer,      purity250);
+            AddPoolRequirements(underground,                             undergroundLayer, purity250);
+            AddPoolRequirements(evil_ores,  tierDemonic,                 undergroundLayer, purity250);
+            AddPoolRequirements(hm_ores,    tierSteampunk, hardmodeOnly, undergroundLayer, purity250);
+            AddPoolRequirements(faeling,    tierDemonic,                 shimmer300,       purity250);
 
             AddPoolRequirements(graveyard, surfaceLayer, tombstone5);
 
             AddPoolRequirements(crimson_dark_shard, tierSteampunk, hardmodeOnly, evil300.Invoke(crimsonSandBlocks));
             AddPoolRequirements(corrupt_dark_shard, tierSteampunk, hardmodeOnly, evil300.Invoke(corruptSandBlocks));
-            AddPoolRequirements(crimson_forest,     tierDemonic,   surfaceLayer, evil300.Invoke(crimsonForestBlocks));
-            AddPoolRequirements(corrupt_forest,     tierDemonic,   surfaceLayer, evil300.Invoke(corruptForestBlocks));
-            AddPoolRequirements(crimson_desert,     tierDemonic,   surfaceLayer, evil300.Invoke(crimsonSandBlocks));
-            AddPoolRequirements(corrupt_desert,     tierDemonic,   surfaceLayer, evil300.Invoke(corruptSandBlocks));
-            AddPoolRequirements(crimson_snow,       tierDemonic,   surfaceLayer, evil300.Invoke(crimsonIceBlocks));
-            AddPoolRequirements(corrupt_snow,       tierDemonic,   surfaceLayer, evil300.Invoke(corruptIceBlocks));
-            AddPoolRequirements(crimson,            tierDemonic,   surfaceLayer, evil300.Invoke(crimsonBlocks));
-            AddPoolRequirements(corruption,         tierDemonic,   surfaceLayer, evil300.Invoke(corruptBlocks));
-            AddPoolRequirements(corruption_hm,      tierSteampunk, surfaceLayer, evil300.Invoke(corruptBlocks));
+            AddPoolRequirements(crimson_forest,     tierDemonic,                 evil300.Invoke(crimsonForestBlocks));
+            AddPoolRequirements(corrupt_forest,     tierDemonic,                 evil300.Invoke(corruptForestBlocks));
+            AddPoolRequirements(crimson_desert,     tierDemonic,                 evil300.Invoke(crimsonSandBlocks));
+            AddPoolRequirements(corrupt_desert,     tierDemonic,                 evil300.Invoke(corruptSandBlocks));
+            AddPoolRequirements(crimson_snow,       tierDemonic,                 evil300.Invoke(crimsonIceBlocks));
+            AddPoolRequirements(corrupt_snow,       tierDemonic,                 evil300.Invoke(corruptIceBlocks));
+            AddPoolRequirements(crimson,            tierDemonic,                 evil300.Invoke(crimsonBlocks));
+            AddPoolRequirements(corruption,         tierDemonic,                 evil300.Invoke(corruptBlocks));
+            AddPoolRequirements(corruption_hm,      tierSteampunk,               evil300.Invoke(corruptBlocks));
 
             AddPoolRequirements(mushroom, mush100);
 
@@ -578,6 +602,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(snow,                                frost1500);
             AddPoolRequirements(flight, tierSteampunk, hardmodeOnly, skyLayer);
             AddPoolRequirements(sky,                                 skyLayer);
+            AddPoolRequirements(forest,                              purity250);
         }
 
         private void PopulatePools()
@@ -828,14 +853,32 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(temple, ItemID.LunarTabletFragment);
             AddItemInPool(temple, ItemID.LihzahrdPowerCell);
 
+            AddItemInPool(ocean, ItemID.SandBlock);
+            AddItemInPool(ocean, ItemID.ShellPileBlock);
+            AddItemInPool(ocean, ItemID.Coral);
+            AddItemInPool(ocean, ItemID.Seashell);
+            AddItemInPool(ocean, ItemID.Starfish);
+            AddItemInPool(ocean, ItemID.TulipShell);
+            AddItemInPool(ocean, ItemID.LightningWhelkShell);
+            AddItemInPool(ocean, ItemID.JunoniaShell);
+            AddItemInPool(ocean, ItemID.PalmWood);
+            AddItemInPool(ocean, ItemID.LimeKelp);
+            AddItemInPool(ocean, ItemID.BlackInk);
+            AddItemInPool(ocean, ItemID.PurpleMucos);
+            AddItemInPool(ocean, ItemID.SharkFin);
+            AddItemInPool(pirate, ItemID.PirateMap);
+
+
+            AddItemInPool(space, ItemID.Cloud, 4);
+            AddItemInPool(space, ItemID.RainCloud, 2);
             AddItemInPool(space, ItemID.FallenStar, 5);
             AddItemInPool(space, ItemID.Feather, 4);
-            AddItemInPool(spc_flight, ItemID.SoulofFlight, 1);
+            AddItemInPool(spc_flight, ItemID.SoulofFlight, 5);
             AddItemInPool(pillar, ItemID.FragmentNebula, 10);
             AddItemInPool(pillar, ItemID.FragmentSolar, 10);
             AddItemInPool(pillar, ItemID.FragmentStardust, 10);
             AddItemInPool(pillar, ItemID.FragmentVortex, 10);
-            AddItemInPool(luminite, ItemID.LunarOre, 20);
+            AddItemInPool(luminite, new ItemEntry(ItemID.LunarOre, 5, 15), 20);
 
             AddItemInPool(underworld, ItemID.AshBlock);
             AddItemInPool(underworld, ItemID.Hellstone);
