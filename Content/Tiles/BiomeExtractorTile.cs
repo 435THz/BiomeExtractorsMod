@@ -43,7 +43,7 @@ namespace BiomeExtractorsMod.Content.Tiles
             TileID.Sets.AvoidedByMeteorLanding[Type] = true;
         }
 
-		public override void KillMultiTile(int i, int j, int frameX, int frameY)
+        public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
             GetTileEntity().Kill(i, j);
         }

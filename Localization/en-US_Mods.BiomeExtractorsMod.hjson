@@ -16,8 +16,8 @@ Configs: {
 	Common: {
 		BasicTierHeader: Basic Extractors
 		BasicTierChanceTitle: Extraction Chance
-		BasicTierChanceTooltip: The chance the extractor has of generating something at every Extraction Tick.
-		BasicTierSpeedTitle: Extraction Speed
-		BasicTierSpeedTooltip: How many frames pass between Extraction Ticks for a Basic Extractor.
+		BasicTierChanceTooltip: The chance the extractor has of generating anything for every Extraction.
+		BasicTierRateTitle: Extraction Rate
+		BasicTierRateTooltip: How many frames pass between Extractions for a Basic Extractor.
 	}
 }

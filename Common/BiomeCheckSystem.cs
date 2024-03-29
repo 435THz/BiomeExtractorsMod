@@ -28,7 +28,7 @@ namespace BiomeExtractorsMod.Common.Systems
 
             public readonly int Tiles(ushort tileId) => Result.GetTileCount(tileId);
             public readonly int Liquids(short liquidId) => Result.GetLiquidCount(liquidId);
-            public readonly bool MinTier(int tier) => Extractor.GetTier() >= tier;
+            public readonly bool MinTier(int tier) => Extractor.Tier >= tier;
 
             public readonly int Tiles(List<ushort> tileIds)
             {

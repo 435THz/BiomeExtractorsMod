@@ -4,27 +4,14 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.TileEntities
 {
-
-
     public class BiomeExtractorEntBasic : BiomeExtractorEnt
     {
-        public override int GetTier()
-        {
-            return 1;
-        }
-        protected override int GetSelfMaxTimer()
-        {
-            return ModContent.GetInstance<ExtractorConfig>().BasicExtractorSpeed;
-        }
+        public override int Tier { get => 1; }
+        public override int ExtractionRate { get => ModContent.GetInstance<ExtractorConfig>().BasicExtractorRate; }
+        public override int ExtractionChance { get => ModContent.GetInstance<ExtractorConfig>().BasicExtractorChance; }
+        protected override int TileType => ModContent.TileType<BiomeExtractorTileBasic>();
 
-        protected override int GetSelfChance()
         {
-            return ModContent.GetInstance<ExtractorConfig>().BasicExtractorChance;
-        }
-
-        protected override int GetTileType()
-        {
-            return ModContent.TileType<BiomeExtractorTileBasic>();
         }
     }
 }

@@ -1,6 +1,9 @@
 using BiomeExtractorsMod.Common;
+using BiomeExtractorsMod.Common.Configs;
+using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Content.Tiles;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -16,50 +19,49 @@ namespace BiomeExtractorsMod.Content.TileEntities
             BASIC = 0, DEMONIC = 1, INFERNAL = 2, STEAMPUNK = 3, CYBER = 4, LUNAR = 5, ETHEREAL = 6
         }
 
-        private static readonly string tagTimer  = "timer";
+        private static readonly string tagXTimer = "extraction_timer";
         private static readonly string tagChestX = "chest_x";
         private static readonly string tagChestY = "chest_y";
         private static readonly int[] chestOffsetY    = [1, -1, 0, 2];
         private static readonly int[] chestOffsetX_fw = [-2, 3];
         private static readonly int[] chestOffsetX_bw = [3, -2];
 
-        private int timer = 0;
+        private int XTimer = 0;
         private Point chestPos;
 
         private int chestIndex;
 
-        public int TimeElapsed
+        public int ExtractionTimer
         {
-            get => timer;
-            protected set { timer = (value + ExtractionSpeed) % ExtractionSpeed; }
+            get => XTimer;
+            protected set { XTimer = (value + ExtractionRate) % ExtractionRate; }
         }
 
-        public int ExtractionSpeed { get => GetSelfMaxTimer(); }
-        public int ExtractionChance { get => GetSelfChance(); }
-
-        public abstract int GetTier(); //TODO refactor these three as necessary
-        protected abstract int GetSelfMaxTimer();
-        protected abstract int GetSelfChance();
+        // getter only
+        protected abstract int TileType { get; }
+        public abstract int Tier { get; }
+        public abstract int ExtractionRate { get; }
+        public abstract int ExtractionChance { get; }
 
         public override void SaveData(TagCompound tag)
         {
-            tag.Add(tagTimer, TimeElapsed);
+            tag.Add(tagXTimer, ExtractionTimer);
             tag.Add(tagChestX, Main.chest[chestIndex].x);
             tag.Add(tagChestY, Main.chest[chestIndex].y);
         }
 
         public override void LoadData(TagCompound tag)
         {
-            TimeElapsed = tag.GetAsInt(tagTimer);
-            chestPos = new Point(tag.GetAsInt(tagChestX), tag.GetAsInt(tagChestY));
-            chestIndex = Chest.FindChest(chestPos.X, chestPos.Y);
+            ExtractionTimer = tag.GetAsInt(tagXTimer);
+            chestPos        = new Point(tag.GetAsInt(tagChestX), tag.GetAsInt(tagChestY));
+            chestIndex      = Chest.FindChest(chestPos.X, chestPos.Y);
         }
 
         public override void Update()
         {
             //Every time the timer wraps back to 0 the extraction routine is performed
-            TimeElapsed++;
-            if (TimeElapsed == 0)
+            ExtractionTimer++; //never run immediately upon placement
+            if (ExtractionTimer == 0)
             {
                 //Discard the chest if it is not valid anymore
                 if(!IsChestDataValid(chestPos, chestIndex)) {
@@ -147,10 +149,8 @@ namespace BiomeExtractorsMod.Content.TileEntities
         public override bool IsTileValidForEntity(int x, int y)
         {
             Tile tile = Main.tile[x, y];
-            return tile.HasTile && tile.TileType == GetTileType();
+            return tile.HasTile && tile.TileType == TileType;
         }
-
-        protected abstract int GetTileType();
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
         {

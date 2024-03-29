@@ -10,15 +10,13 @@ namespace BiomeExtractorsMod.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        // The things in brackets are known as "Attributes".
-
         [Header("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierHeader")]
-        
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierSpeedTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierSpeedTooltip")]
+
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierRateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierRateTooltip")]
         [Range(1, 86400)]
         [DefaultValue(180)]
-        public int BasicExtractorSpeed;
+        public int BasicExtractorRate;
 
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierChanceTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierChanceTooltip")]
@@ -31,7 +29,7 @@ namespace BiomeExtractorsMod.Common.Configs
         {
             // RangeAttribute is just a suggestion to the UI. If we want to enforce constraints, we need to validate the data here. Users can edit config files manually with values outside the RangeAttribute, so we fix here if necessary.
             // Both enforcing ranges and not enforcing ranges have uses in mods. Make sure you fix config values if values outside the range will mess up your mod.
-            BasicExtractorSpeed = Math.Max(BasicExtractorSpeed, 1);
+            BasicExtractorRate = Utils.Clamp(BasicExtractorRate, 1, 86400);
             BasicExtractorChance = Utils.Clamp(BasicExtractorChance, 0, 100);
 
         }
