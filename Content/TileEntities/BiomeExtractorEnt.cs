@@ -20,21 +20,30 @@ namespace BiomeExtractorsMod.Content.TileEntities
         }
 
         private static readonly string tagXTimer = "extraction_timer";
+        private static readonly string tagBTimer = "biome_scan_timer";
         private static readonly string tagChestX = "chest_x";
         private static readonly string tagChestY = "chest_y";
         private static readonly int[] chestOffsetY    = [1, -1, 0, 2];
         private static readonly int[] chestOffsetX_fw = [-2, 3];
         private static readonly int[] chestOffsetX_bw = [3, -2];
 
+
         private int XTimer = 0;
+        private int BTimer = 0;
         private Point chestPos;
 
         private int chestIndex;
+        protected List<string> PoolList { get; private set; } = [];
 
         public int ExtractionTimer
         {
             get => XTimer;
             protected set { XTimer = (value + ExtractionRate) % ExtractionRate; }
+        }
+        public int ScanningTimer
+        {
+            get => BTimer;
+            protected set { BTimer = (value + BiomeScanRate) % BiomeScanRate; }
         }
 
         // getter only
@@ -42,10 +51,12 @@ namespace BiomeExtractorsMod.Content.TileEntities
         public abstract int Tier { get; }
         public abstract int ExtractionRate { get; }
         public abstract int ExtractionChance { get; }
+        public static int BiomeScanRate { get => ModContent.GetInstance<ExtractorConfig>().BiomeScanRate; }
 
         public override void SaveData(TagCompound tag)
         {
             tag.Add(tagXTimer, ExtractionTimer);
+            tag.Add(tagBTimer, ScanningTimer);
             tag.Add(tagChestX, Main.chest[chestIndex].x);
             tag.Add(tagChestY, Main.chest[chestIndex].y);
         }
@@ -53,6 +64,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         public override void LoadData(TagCompound tag)
         {
             ExtractionTimer = tag.GetAsInt(tagXTimer);
+            ScanningTimer   = tag.GetAsInt(tagBTimer);
             chestPos        = new Point(tag.GetAsInt(tagChestX), tag.GetAsInt(tagChestY));
             chestIndex      = Chest.FindChest(chestPos.X, chestPos.Y);
         }
@@ -77,6 +89,13 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 Item generated = BiomeExtraction.GenerateItem(this);
                 BiomeExtraction.AddToChest(generated, Main.chest[chestIndex]);
             }
+
+            //Every time this timer wraps back to 0 the scanning routine is performed
+            if (ScanningTimer == 0)
+            {
+                PoolList = ModContent.GetInstance<BiomeCheckSystem>().CheckValidBiomes(this);
+            }
+            ScanningTimer++; //always run immediately upon placement
         }
 
         private bool IsChestDataValid(Point pos, int index)

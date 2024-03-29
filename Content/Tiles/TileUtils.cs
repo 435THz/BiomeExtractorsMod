@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
-namespace MyMod
+namespace BiomeExtractorsMod.Content
 {
     public static class TileUtils
     {

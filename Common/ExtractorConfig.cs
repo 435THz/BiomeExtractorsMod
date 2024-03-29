@@ -12,6 +12,12 @@ namespace BiomeExtractorsMod.Common.Configs
 
         [Header("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierHeader")]
 
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.ScanRateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.ScanRateTooltip")]
+        [Range(1, 86400)]
+        [DefaultValue(3600)]
+        public int BiomeScanRate;
+
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierRateTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierRateTooltip")]
         [Range(1, 86400)]
@@ -29,6 +35,8 @@ namespace BiomeExtractorsMod.Common.Configs
         {
             // RangeAttribute is just a suggestion to the UI. If we want to enforce constraints, we need to validate the data here. Users can edit config files manually with values outside the RangeAttribute, so we fix here if necessary.
             // Both enforcing ranges and not enforcing ranges have uses in mods. Make sure you fix config values if values outside the range will mess up your mod.
+            BiomeScanRate = Utils.Clamp(BiomeScanRate, 1, 86400);
+
             BasicExtractorRate = Utils.Clamp(BasicExtractorRate, 1, 86400);
             BasicExtractorChance = Utils.Clamp(BasicExtractorChance, 0, 100);
 
