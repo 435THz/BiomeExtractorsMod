@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Terraria;
 
 namespace BiomeExtractorsMod.Common.Collections
@@ -77,19 +78,28 @@ namespace BiomeExtractorsMod.Common.Collections
         {
             if (dictionary.Count == 0) return default;
             int roll = Main.rand.Next(TotalWeight);
+
+            T ret = FromWeight (roll);
+
+            if (ret.Equals(default(T))) return Roll();
+            return ret;
+        }
+
+        public T FromWeight(int weight)
+        {
+            if (weight < 0) return default;
+
             int current = 0;
             T def = default;
             T ret = default;
             foreach (T key in Keys)
             {
                 current += this[key];
-                if (current >= roll && ret.Equals(def)) ret = key;
+                if (current > weight && ret.Equals(def)) ret = key;
             }
             TotalWeight = current;
-            if (ret.Equals(def)) return Roll();
             return ret;
         }
-
 
         public void Add(KeyValuePair<T, int> item)
             => dictionary.Add(item.Key, item.Value);
