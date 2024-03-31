@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Terraria;
 
 namespace BiomeExtractorsMod.Common.Collections
@@ -42,10 +41,10 @@ namespace BiomeExtractorsMod.Common.Collections
         {
             if (weight <= 0) return;
             if (dictionary.ContainsKey(element))
-                dictionary[element]++;
+                dictionary[element]+=weight;
             else
-                dictionary.Add(element, 1);
-            TotalWeight++;
+                dictionary.Add(element, weight);
+            TotalWeight+=weight;
         }
 
         public void Clear()
@@ -95,7 +94,7 @@ namespace BiomeExtractorsMod.Common.Collections
             foreach (T key in Keys)
             {
                 current += this[key];
-                if (current > weight && ret.Equals(def)) ret = key;
+                if (current > weight && EqualityComparer<T>.Default.Equals(ret, def)) ret = key;
             }
             TotalWeight = current;
             return ret;

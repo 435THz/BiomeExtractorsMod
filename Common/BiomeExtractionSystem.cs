@@ -83,9 +83,8 @@ namespace BiomeExtractorsMod.Common.Systems
         }
     }
 
-    public class BiomeCheckSystem : ModSystem
+    public class BiomeExtractionSystem : ModSystem
     {
-
         public enum PoolType
         {
             MINERALS, GEMS, DROPS, TERRAIN, VEGETATION, CRITTERS
@@ -114,17 +113,17 @@ namespace BiomeExtractorsMod.Common.Systems
             {
                 if (obj == null) return false;
                 if (obj is not ItemEntry) return false;
-                return Id == ((ItemEntry)obj).Id && Count == ((ItemEntry)obj).Count;
+                return Id == ((ItemEntry)obj).Id && Min == ((ItemEntry)obj).Min && Max == ((ItemEntry)obj).Max;
             }
 
             public override int GetHashCode()
             {
-                return Id.GetHashCode() * Count.GetHashCode();
+                return Id.GetHashCode() * Min.GetHashCode() * Max.GetHashCode();
             }
 
             public override string ToString()
             {
-                return Main.item[Id].Name + " (" + Count + ")";
+                return Id+": "+Main.item[Id].Name + " (" + Min +"-"+ (Max-1) + ")";
             }
         }
 
@@ -228,16 +227,7 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly List<ushort> jungleBlocks = [TileID.JungleGrass, TileID.JunglePlants, TileID.JunglePlants2, TileID.PlantDetritus, TileID.JungleVines, TileID.Hive, TileID.LihzahrdBrick];
         static readonly List<ushort> frostBlocks = [TileID.SnowBlock, TileID.SnowBrick, TileID.IceBlock, TileID.BreakableIce, TileID.FleshIce, TileID.CorruptIce, TileID.HallowedIce];
         static readonly List<ushort> desertBlocks = [TileID.Sand, TileID.Crimsand, TileID.Ebonsand, TileID.Pearlsand, TileID.HardenedSand, TileID.CrimsonHardenedSand, TileID.CorruptHardenedSand, TileID.HallowHardenedSand, TileID.Sandstone, TileID.CrimsonSandstone, TileID.CorruptSandstone, TileID.HallowSandstone];
-        static readonly List<ushort> pureBlocks = [TileID.Grass, TileID.GolfGrass, TileID.Plants, TileID.Plants2, TileID.Stone];
-
-        //TIERS
-        static readonly Predicate<ScanData> tierDemonic = scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.DEMONIC);
-        static readonly Predicate<ScanData> tierInfernal = scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.INFERNAL);
-        static readonly Predicate<ScanData> tierSteampunk = scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.STEAMPUNK);
-        static readonly Predicate<ScanData> tierCyber = scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.CYBER);
-        static readonly Predicate<ScanData> tierLunar = scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.LUNAR);
-        static readonly Predicate<ScanData> tierEthereal = scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.ETHEREAL);
-
+        
         //PROGRESSION
         static readonly Predicate<ScanData> hardmodeOnly = scan => Main.hardMode;
         static readonly Predicate<ScanData> postMech = scan => Condition.DownedMechBossAny.IsMet();
@@ -445,6 +435,49 @@ namespace BiomeExtractorsMod.Common.Systems
             return item;
         }
 
+        public void PrintDiagnostics(BiomeExtractorEnt extractor, List<string> pools)
+        {
+            double rolls = (86400 / extractor.ExtractionRate) * (extractor.ExtractionChance / 100.0);
+            string s = "\nProjected item extraction:\n" +
+                "Item Name - chance% - unit/game day\n";
+            int lines = 3;
+
+            int totalWeight = 0;
+            foreach (string pool in pools)
+                totalWeight += _itemPools[pool].TotalWeight;
+
+            for (int i = 0; i < pools.Count; i++)
+            {
+                WeightedList<ItemEntry> pool = _itemPools[pools[i]];
+                foreach(KeyValuePair<ItemEntry, int> entry in pool)
+                {
+                    string ss = new Item(entry.Key.Id).Name+" - ";
+                    decimal chance = entry.Value * 100 / (decimal)totalWeight;
+                    decimal truncated = decimal.Truncate(chance * 100) / 100;
+                    ss += truncated.ToString() + "% - ";
+
+                    double med = (entry.Key.Min + entry.Key.Max - 1) / 2.0;
+                    int amountPerDay = (int)(rolls * med * (double)chance / 100);
+                    ss += amountPerDay;
+                    lines++;
+                    if (lines < 10)
+                    {
+                        ss += "\n";
+                        s += ss;
+                    }
+                    else
+                    {
+                        s += ss;
+                        Main.NewText(s);
+                        s = "";
+                        lines = 0;
+                    }
+                }
+            }
+            if(lines>0)
+                Main.NewText(s);
+        }
+
         public override void PostSetupContent()
         {
             InitializePools();
@@ -532,10 +565,10 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(pirate, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 2500);
 
             AddPool(faeling, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 3000, true);
-            AddPool(spider,  3000, true);
-            AddPool(cobweb,  3000, true);
-            AddPool(granite, 3000, true);
-            AddPool(marble,  3000, true);
+            AddPool(spider,                                            3000, true);
+            AddPool(cobweb,                                            3000, true);
+            AddPool(granite,                                           3000, true);
+            AddPool(marble,                                            3000, true);
 
             AddPool(space,                                                  4000);
             AddPool(spc_flight, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 4000);
@@ -642,33 +675,33 @@ namespace BiomeExtractorsMod.Common.Systems
 
         private void PopulatePools()
         {
-            AddItemInPool(forest, ItemID.DirtBlock);
-            AddItemInPool(forest, ItemID.StoneBlock);
-            AddItemInPool(forest, ItemID.ClayBlock);
-            AddItemInPool(forest, ItemID.Gel);
-            AddItemInPool(forest, ItemID.PinkGel);
-            AddItemInPool(forest, ItemID.GrassSeeds);
-            AddItemInPool(forest, ItemID.Wood);
-            AddItemInPool(forest, ItemID.Acorn);
-            AddItemInPool(forest, ItemID.Daybloom);
-            AddItemInPool(forest, ItemID.Mushroom);
-            AddItemInPool(forest, ItemID.YellowMarigold);
-            AddItemInPool(forest, ItemID.BlueBerries);
-            AddItemInPool(forest, ItemID.JuliaButterfly);
-            AddItemInPool(forest, ItemID.MonarchButterfly);
-            AddItemInPool(forest, ItemID.PurpleEmperorButterfly);
-            AddItemInPool(forest, ItemID.RedAdmiralButterfly);
-            AddItemInPool(forest, ItemID.SulphurButterfly);
-            AddItemInPool(forest, ItemID.TreeNymphButterfly);
-            AddItemInPool(forest, ItemID.UlyssesButterfly);
-            AddItemInPool(forest, ItemID.ZebraSwallowtailButterfly);
-            AddItemInPool(forest, ItemID.BlueDragonfly);
-            AddItemInPool(forest, ItemID.GreenDragonfly);
-            AddItemInPool(forest, ItemID.RedDragonfly);
-            AddItemInPool(forest, ItemID.Grasshopper);
-            AddItemInPool(forest, ItemID.Firefly);
-            AddItemInPool(forest, ItemID.Worm);
-            AddItemInPool(forest, ItemID.Stinkbug);
+            AddItemInPool(forest, ItemID.DirtBlock,                 70);
+            AddItemInPool(forest, ItemID.StoneBlock,                18);
+            AddItemInPool(forest, ItemID.ClayBlock,                 20);
+            AddItemInPool(forest, ItemID.Gel,                       60);
+            AddItemInPool(forest, ItemID.PinkGel,                   10);
+            AddItemInPool(forest, ItemID.GrassSeeds,                16);
+            AddItemInPool(forest, new ItemEntry(ItemID.Wood,1,3),   150);
+            AddItemInPool(forest, ItemID.Acorn,                     20);
+            AddItemInPool(forest, ItemID.Daybloom,                  25);
+            AddItemInPool(forest, ItemID.Mushroom,                  25);
+            AddItemInPool(forest, ItemID.YellowMarigold,            21);
+            AddItemInPool(forest, ItemID.BlueBerries,               21);
+            AddItemInPool(forest, ItemID.JuliaButterfly,            3);
+            AddItemInPool(forest, ItemID.MonarchButterfly,          4);
+            AddItemInPool(forest, ItemID.PurpleEmperorButterfly,    2);
+            AddItemInPool(forest, ItemID.RedAdmiralButterfly,       2);
+            AddItemInPool(forest, ItemID.SulphurButterfly,          4);
+            AddItemInPool(forest, ItemID.TreeNymphButterfly,        1);
+            AddItemInPool(forest, ItemID.UlyssesButterfly,          3);
+            AddItemInPool(forest, ItemID.ZebraSwallowtailButterfly, 3);
+            AddItemInPool(forest, ItemID.BlueDragonfly,             2);
+            AddItemInPool(forest, ItemID.GreenDragonfly,            2);
+            AddItemInPool(forest, ItemID.RedDragonfly,              2);
+            AddItemInPool(forest, ItemID.Grasshopper,               4);
+            AddItemInPool(forest, ItemID.Firefly,                   3);
+            AddItemInPool(forest, ItemID.Worm,                      3);
+            AddItemInPool(forest, ItemID.Stinkbug,                  4);
 
             AddItemInPool(sky,    ItemID.Cloud, 7);
             AddItemInPool(sky,    ItemID.RainCloud, 3);
@@ -680,12 +713,15 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(snow, ItemID.BorealWood);
             AddItemInPool(snow, ItemID.Shiverthorn);
 
-            AddItemInPool(desert, ItemID.SandBlock);
-            AddItemInPool(desert, ItemID.Cactus);
-            AddItemInPool(desert, ItemID.Waterleaf);
-            AddItemInPool(desert, ItemID.PinkPricklyPear);
-            AddItemInPool(desert, ItemID.Scorpion);
-            AddItemInPool(desert, ItemID.BlackScorpion);
+            AddItemInPool(desert, ItemID.SandBlock,       75);
+            AddItemInPool(desert, ItemID.Cactus,          18);
+            AddItemInPool(desert, ItemID.Waterleaf,       41);
+            AddItemInPool(desert, ItemID.PinkPricklyPear, 26);
+            AddItemInPool(desert, ItemID.Scorpion,        8);
+            AddItemInPool(desert, ItemID.BlackScorpion,   6);
+            AddItemInPool(desert, ItemID.YellowDragonfly, 4);
+            AddItemInPool(desert, ItemID.BlackDragonfly,  4);
+            AddItemInPool(desert, ItemID.OrangeDragonfly, 4);
 
             AddItemInPool(jungle, ItemID.MudBlock);
             AddItemInPool(jungle, ItemID.RichMahogany);
@@ -903,7 +939,6 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(ocean, ItemID.PurpleMucos);
             AddItemInPool(ocean, ItemID.SharkFin);
             AddItemInPool(pirate, ItemID.PirateMap);
-
 
             AddItemInPool(space, ItemID.Cloud, 4);
             AddItemInPool(space, ItemID.RainCloud, 2);

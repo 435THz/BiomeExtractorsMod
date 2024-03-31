@@ -26,7 +26,7 @@ namespace BiomeExtractorsMod.Common.Configs
 
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierChanceTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.BasicTierChanceTooltip")]
-        [DefaultValue(60)]
+        [DefaultValue(100)]
         public int BasicExtractorChance;
         
         // A method annotated with OnDeserialized will run after deserialization. You can use it for enforcing things like ranges, since Range and Increment are UI suggestions.

@@ -1,8 +1,8 @@
-using BiomeExtractorsMod.Common;
 using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Content.Tiles;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
@@ -71,7 +71,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             Active          = tag.GetBool(tagState);
             chestPos        = new Point(tag.GetAsInt(tagChestX), tag.GetAsInt(tagChestY));
             chestIndex      = Chest.FindChest(chestPos.X, chestPos.Y);
-            PoolList = ModContent.GetInstance<BiomeCheckSystem>().CheckValidBiomes(this); //always run on loading
+            PoolList        = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this); //always run on loading
         }
 
         public override void Update()
@@ -92,16 +92,45 @@ namespace BiomeExtractorsMod.Content.TileEntities
                     chestPos = new Point(Main.chest[index].x, Main.chest[index].y);
                 }
                 
-                Item generated = BiomeExtraction.GenerateItem(this);
-                BiomeExtraction.AddToChest(generated, Main.chest[chestIndex]);
+                Item generated = ModContent.GetInstance<BiomeExtractionSystem>().RollItem(PoolList);
+                AddToChest(generated);
             }
 
             //Every time this timer wraps back to 0 the scanning routine is performed
             if (ScanningTimer == 0)
             {
-                PoolList = ModContent.GetInstance<BiomeCheckSystem>().CheckValidBiomes(this);
+                PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this);
             }
             ScanningTimer++; //always run immediately upon placement
+        }
+
+
+        private bool AddToChest(Item newItem)
+        {
+            Chest chest = Main.chest[chestIndex];
+
+            int starting = newItem.stack;
+            for (int inventoryIndex = 0; inventoryIndex < Chest.maxItems; inventoryIndex++)
+            {
+                Item item = chest.item[inventoryIndex];
+                if (item.type == ItemID.None)
+                {
+                    item.SetDefaults(newItem.type);
+                    newItem.stack -= item.stack;
+                }
+                if (item.type == newItem.type)
+                {
+                    int diff = item.maxStack - item.stack;
+                    int transfer = Math.Min(diff, newItem.stack);
+                    newItem.stack -= transfer;
+                    item.stack += transfer;
+                }
+                if (newItem.stack < 1)
+                {
+                    return true;
+                }
+            }
+            return starting != newItem.stack;
         }
 
         private bool IsChestDataValid(Point pos, int index)
@@ -170,7 +199,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         //toggles the machine on and off
         internal void ToggleState() {
             Active = !Active;
-            if(Active) PoolList = ModContent.GetInstance<BiomeCheckSystem>().CheckValidBiomes(this); //must refresh when turned back on
+            if(Active) PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this); //must refresh when turned back on
         }
 
         // displays the machine's status
@@ -178,19 +207,27 @@ namespace BiomeExtractorsMod.Content.TileEntities
         {
             if (Active)
             {
-                PoolList = ModContent.GetInstance<BiomeCheckSystem>().CheckValidBiomes(this); //must refresh on right click
+                PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this); //must refresh on right click
                 ScanningTimer = 1; //we reset the timer as well
-                string s = "";
-                for (int i = 0; i < PoolList.Count; i++)
+                if (PoolList.Count > 0)
                 {
-                    s += PoolList[i];
-                    if (i < PoolList.Count - 1) s += ", ";
+                    string s = "";
+                    for (int i = 0; i < PoolList.Count; i++)
+                    {
+                        s += PoolList[i];
+                        if (i < PoolList.Count - 1) s += ", ";
+                    }
+                    Main.NewText("This machine is extracting resources from the following biomes:\n" +
+                        s);
                 }
-                Main.NewText("This machine is extracting from the following biomes:\n" +
-                    s);
+                else
+                    Main.NewText("This machine cannot find anyting to extract.");
             }
             else
                 Main.NewText("This machine is inactive.");
+
+            //TODO hook up to client side config
+            ModContent.GetInstance<BiomeExtractionSystem>().PrintDiagnostics(this, PoolList);
         }
 
 
