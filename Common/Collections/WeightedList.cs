@@ -101,7 +101,7 @@ namespace BiomeExtractorsMod.Common.Collections
         }
 
         public void Add(KeyValuePair<T, int> item)
-            => dictionary.Add(item.Key, item.Value);
+            => Add(item.Key, item.Value);
 
         public bool Contains(KeyValuePair<T, int> item)
         {

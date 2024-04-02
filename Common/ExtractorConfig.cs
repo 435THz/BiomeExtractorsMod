@@ -6,7 +6,17 @@ using Terraria.ModLoader.Config;
 
 namespace BiomeExtractorsMod.Common.Configs
 {
-    public class ExtractorConfig : ModConfig
+    public class ExtractorClient : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ClientSide;
+
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.DiagPrintTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Client.DiagPrintTooltip")]
+        [DefaultValue(false)]
+        public bool DiagnosticPrint;
+    }
+
+        public class ExtractorConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 

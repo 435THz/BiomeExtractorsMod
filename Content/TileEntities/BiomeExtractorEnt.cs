@@ -202,7 +202,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             if(Active) PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this); //must refresh when turned back on
         }
 
-        // displays the machine's status
+        // displays the machine's status in chat
         internal void DisplayStatus()
         {
             if (Active)
@@ -217,17 +217,16 @@ namespace BiomeExtractorsMod.Content.TileEntities
                         s += PoolList[i];
                         if (i < PoolList.Count - 1) s += ", ";
                     }
-                    Main.NewText("This machine is extracting resources from the following biomes:\n" +
+                    Main.NewText("The machine is extracting resources from the following biomes:\n" +
                         s);
+                    if(ModContent.GetInstance<ExtractorClient>().DiagnosticPrint)
+                        ModContent.GetInstance<BiomeExtractionSystem>().PrintDiagnostics(this, PoolList);
                 }
                 else
-                    Main.NewText("This machine cannot find anyting to extract.");
+                    Main.NewText("The machine could not extract anything from this place.");
             }
             else
-                Main.NewText("This machine is inactive.");
-
-            //TODO hook up to client side config
-            ModContent.GetInstance<BiomeExtractionSystem>().PrintDiagnostics(this, PoolList);
+                Main.NewText("The machine is inactive.");
         }
 
 
