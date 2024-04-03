@@ -8,6 +8,20 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Items\BiomeExtractorItemCyber.png" />
+    <None Remove="Content\Items\BiomeExtractorItemDemonic.png" />
+    <None Remove="Content\Items\BiomeExtractorItemEthereal.png" />
+    <None Remove="Content\Items\BiomeExtractorItemInfernal.png" />
+    <None Remove="Content\Items\BiomeExtractorItemLunar.png" />
+    <None Remove="Content\Items\BiomeExtractorItemSteampunk.png" />
+    <None Remove="Content\Tiles\BiomeExtractorTileCyber.png" />
+    <None Remove="Content\Tiles\BiomeExtractorTileDemonic.png" />
+    <None Remove="Content\Tiles\BiomeExtractorTileEthereal.png" />
+    <None Remove="Content\Tiles\BiomeExtractorTileInfernal.png" />
+    <None Remove="Content\Tiles\BiomeExtractorTileLunar.png" />
+    <None Remove="Content\Tiles\BiomeExtractorTileSteampunk.png" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
 </Project>

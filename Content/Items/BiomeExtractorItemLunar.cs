@@ -5,17 +5,17 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    class BiomeExtractorItemBasic : BiomeExtractorItem
+    class BiomeExtractorItemLunar : BiomeExtractorItem
     {
         protected override int GetTileId()
         {
-            return ModContent.TileType<BiomeExtractorTileBasic>();
+            return ModContent.TileType<BiomeExtractorTileLunar>();
         }
 
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(gold: 10)); // sell at 2
+            Item.SetShopValues(ItemRarityColor.Cyan9, Item.buyPrice(gold: 40)); // sell at 8
         }
     }
 }

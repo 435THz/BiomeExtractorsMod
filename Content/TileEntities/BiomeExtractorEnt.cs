@@ -16,7 +16,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
     {
         public enum EnumTiers
         {
-            BASIC = 0, DEMONIC = 1, INFERNAL = 2, STEAMPUNK = 3, CYBER = 4, LUNAR = 5, ETHEREAL = 6
+            BASIC = 1, DEMONIC = 2, INFERNAL = 3, STEAMPUNK = 4, CYBER = 5, LUNAR = 6, ETHEREAL = 7
         }
 
         private static readonly string tagXTimer = "extraction_timer";

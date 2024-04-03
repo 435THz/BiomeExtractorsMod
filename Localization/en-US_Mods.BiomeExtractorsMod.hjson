@@ -1,23 +1,193 @@
 Items: {
-	BiomeExtractorItemBasic: {
-		DisplayName: Biome Extractor (Basic)
-		Tooltip: ""
-	}
-
 	DevCursor: {
 		DisplayName: Dev Cursor
 		Tooltip: ""
 	}
+
+	BiomeExtractorItemBasic: {
+		DisplayName: Biome Extractor
+		Tooltip: Place it anywhere in the world to extract common materials from the area around it.
+	}
+
+	BiomeExtractorItemDemonic: {
+		DisplayName: Demonic Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can extract materials from the evil biomes and the dungeon.
+			'''
+	}
+
+	BiomeExtractorItemInfernal: {
+		DisplayName: Infernal Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can extract materials from the underworld and from meteorites.
+			'''
+	}
+
+	BiomeExtractorItemSteampunk: {
+		DisplayName: Steampunk Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can extract most early hardmode materials.
+			'''
+	}
+
+	BiomeExtractorItemCyber: {
+		DisplayName: Cybernetic Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can extract Ectoplasm from the Dungeon and Lihzahrd materials from the Temple.
+			'''
+	}
+
+	BiomeExtractorItemLunar: {
+		DisplayName: Lunar Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can extract Luminite when placed in space after the Lunar Event has been completed.
+			'''
+	}
+
+	BiomeExtractorItemEthereal: {
+		DisplayName: Ethereal Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can extract Pillar Fragments when in space after they have all been defeated.
+			'''
+	}
 }
 
 Configs: {
-	ExtractorConfig.DisplayName: Extractors Config
+	ExtractorClient.DisplayName: Extractor Client
+
+	Client: {
+		DiagPrintTitle: Print Diagnostic Data
+		DiagPrintTooltip:
+			'''
+			If this is enabled, right clicking an Extractor will print
+			      detailed informations about what can be obtained from it,
+			as well as the chance of any one option being chosen and
+			      its expected amount after one in-game day.
+			This data will appear in your chat.
+			Defaults to false.
+			'''
+	}
+
+	ExtractorConfig.DisplayName: Biome Extractors Settings
 
 	Common: {
-		BasicTierHeader: Basic Extractors
-		BasicTierChanceTitle: Extraction Chance
-		BasicTierChanceTooltip: The chance the extractor has of generating anything for every Extraction.
-		BasicTierRateTitle: Extraction Rate
-		BasicTierRateTooltip: How many frames pass between Extractions for a Basic Extractor.
+		GeneralConfigHeader: General Settings
+		ScanRateTitle: Biome Scan Rate
+		ScanRateTooltip:
+			'''
+			How often Extractors check for biome changes.
+			This value is the number of frames between each scan.
+			Default is 3600, which corresponds to 60 seconds.
+			'''
+		Tier1Header: Basic Extractors
+		Tier1ChanceTitle: Extraction Chance
+		Tier1ChanceTooltip:
+			'''
+			The % chance Basic Extractors have of generating anything for every Extraction.
+			Defaults to 60.
+			'''
+		Tier1RateTitle: Extraction Rate
+		Tier1RateTooltip:
+			'''
+			How often Basic Extractors try to generate something.
+			This value is the number of frames between each attempt.
+			Defaults to 180, which corresponds to 3 seconds.
+			'''
+		Tier2Header: Demonic Extractors
+		Tier2ChanceTitle: Extraction Chance
+		Tier2ChanceTooltip:
+			'''
+			The % chance Demonic Extractors have of generating anything for every Extraction.
+			Defaults to 75.
+			'''
+		Tier2RateTitle: Extraction Rate
+		Tier2RateTooltip:
+			'''
+			How often Demonic Extractors try to generate something.
+			This value is the number of frames between each attempt.
+			Defaults to 120, which corresponds to 2 seconds.
+			'''
+		Tier3Header: Infernal Extractors
+		Tier3ChanceTitle: Extraction Chance
+		Tier3ChanceTooltip:
+			'''
+			The % chance Infernal Extractors have of generating anything for every Extraction.
+			Defaults to 85.
+			'''
+		Tier3RateTitle: Extraction Rate
+		Tier3RateTooltip:
+			'''
+			How often Infernal Extractors try to generate something.
+			This value is the number of frames between each attempt.
+			Defaults to 90, which corresponds to 1.5 seconds.
+			'''
+		Tier4Header: Steampunk Extractors
+		Tier4ChanceTitle: Extraction Chance
+		Tier4ChanceTooltip:
+			'''
+			The % chance Steampunk Extractors have of generating anything for every Extraction.
+			Defaults to 90.
+			'''
+		Tier4RateTitle: Extraction Rate
+		Tier4RateTooltip:
+			'''
+			How often Steampunk Extractors try to generate something.
+			This value is the number of frames between each attempt.
+			Defaults to 60, which corresponds to 1 second.
+			'''
+		Tier5Header: Cybernetic Extractors
+		Tier5ChanceTitle: Extraction Chance
+		Tier5ChanceTooltip:
+			'''
+			The % chance Cybernetic Extractors have of generating anything for every Extraction.
+			Defaults to 94.
+			'''
+		Tier5RateTitle: Extraction Rate
+		Tier5RateTooltip:
+			'''
+			How often Cybernetic Extractors try to generate something.
+			This value is the number of frames between each attempt.
+			Defaults to 45, which corresponds to 3/4ths of a second.
+			'''
+		Tier6Header: Lunar Extractors
+		Tier6ChanceTitle: Extraction Chance
+		Tier6ChanceTooltip:
+			'''
+			The % chance Lunar Extractors have of generating anything for every Extraction.
+			Defaults to 97.
+			'''
+		Tier6RateTitle: Extraction Rate
+		Tier6RateTooltip:
+			'''
+			How often Lunar Extractors try to generate something.
+			This value is the number of frames between each attempt.
+			Defaults to 30, which corresponds to half a second.
+			'''
+		Tier7Header: Ethereal Extractors
+		Tier7ChanceTitle: Extraction Chance
+		Tier7ChanceTooltip:
+			'''
+			The % chance Ethereal Extractors have of generating anything for every Extraction.
+			Defaults to 100.
+			'''
+		Tier7RateTitle: Extraction Rate
+		Tier7RateTooltip:
+			'''
+			How often Ethereal Extractors try to generate something.
+			This value is the number of frames between each attempt.
+			Defaults to 24, which corresponds to 2/5ths of a second.
+			'''
 	}
 }
