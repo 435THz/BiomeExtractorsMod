@@ -438,10 +438,13 @@ namespace BiomeExtractorsMod.Common.Systems
 
         public void PrintDiagnostics(BiomeExtractorEnt extractor, List<string> pools)
         {
-            double rolls = (86400 / extractor.ExtractionRate) * (extractor.ExtractionChance / 100.0);
-            string s = "\nProjected item extraction:\n" +
-                "Item Name - chance% - unit/game day\n";
-            int lines = 3;
+            int e_rate =   extractor.ExtractionRate;
+            int e_chance = extractor.ExtractionChance;
+            double rolls = (86400 / e_rate) * (e_chance / 100.0);
+            string s = "\nRate: " + e_rate + "f - Chance: " + e_chance + "%\n\n" +
+                "Projected item extraction:\n" +
+                "Item Name - chance% - unit/day\n";
+            int lines = 5;
 
             WeightedList<ItemEntry> joinedPool = [];
             foreach (string poolName in pools)
@@ -454,7 +457,9 @@ namespace BiomeExtractorsMod.Common.Systems
 
             foreach (KeyValuePair<ItemEntry, int> entry in joinedPool)
             {
-                string ss = new Item(entry.Key.Id).Name + " - ";
+                string ss = new Item(entry.Key.Id).Name;
+                if (entry.Key.Min != entry.Key.Max - 1) ss += " (" + entry.Key.Min + "-" + (entry.Key.Max - 1) + ")";
+                ss += " - ";
                 decimal chance = entry.Value * 100 / (decimal)totalWeight;
                 decimal truncated = decimal.Truncate(chance * 100) / 100;
                 ss += truncated.ToString() + "% - ";
@@ -476,8 +481,8 @@ namespace BiomeExtractorsMod.Common.Systems
                     lines = 0;
                 }
             }
-            if(lines>0)
-                Main.NewText(s);
+            if (lines < 1) s += "\n";
+            Main.NewText(s);
         }
 
         public override void PostSetupContent()
