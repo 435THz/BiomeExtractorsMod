@@ -138,4 +138,22 @@ namespace BiomeExtractorsMod.Common.Configs
             Tier7ExtractorChance = Utils.Clamp(Tier7ExtractorChance, 0, 100); 
         }
     }
+
+    public class ExtractorCompat : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ServerSide;
+
+        [Header("$Mods.BiomeExtractorsMod.Configs.Compat.MSHeader")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Compat.MaxMSTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Compat.MaxMSTooltip")]
+        [Range(1, int.MaxValue)]
+        [DefaultValue(9999)]
+        public int MaxMS;
+
+        [OnDeserialized]
+        internal void EnforceRanges()
+        {
+            MaxMS = Math.Max(-1, MaxMS); //-1: no limit, 0 = never push
+        }
+    }
 }
