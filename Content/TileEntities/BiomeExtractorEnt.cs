@@ -130,7 +130,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private bool AddToOutput(Item newItem)
         {
-            if (outputType == OutputType.MS_ENVIRONMENTACCESS) return MagicStorageHook.AddItemToStorage(newItem, outputPos);
+            if (BiomeExtractorsMod.MS_loaded && outputType == OutputType.MS_ENVIRONMENTACCESS) return MagicStorageHook.AddItemToStorage(newItem, outputPos);
             if (outputType == OutputType.CHEST) AddToChest(newItem);
             return false;
         }
@@ -165,7 +165,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private bool IsOutputDataValid()
         {
-            if (outputType == OutputType.MS_ENVIRONMENTACCESS && ModContent.GetInstance<ExtractorCompat>().MaxMS > 0)
+            if (BiomeExtractorsMod.MS_loaded && outputType == OutputType.MS_ENVIRONMENTACCESS && ModContent.GetInstance<ExtractorCompat>().MaxMS != 0)
                 return MagicStorageHook.IsOutputValid(outputPos);
             if (outputType == OutputType.CHEST)
                 return IsChestValid();
@@ -215,7 +215,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 if (!prioritizeLeft) n += (i % 2 == 0 ? 1 : -1); //invert 2 by 2 to prioritize rightmost first
 
                 Point pos = PosOffsets[n]+Position.ToPoint();
-                if (MagicStorageHook.IsTileEnvAccess(pos))
+                if (BiomeExtractorsMod.MS_loaded && MagicStorageHook.IsTileEnvAccess(pos))
                 {
                     Point accessPosition = MagicStorageHook.GetAccessPosition(pos);
                     return new(OutputType.MS_ENVIRONMENTACCESS, accessPosition);
