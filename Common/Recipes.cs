@@ -54,22 +54,21 @@ namespace BiomeExtractorsMod.Common
 
             Recipe.Create(ModContent.ItemType<BiomeExtractorItemCyber>())
                 .AddIngredient(ModContent.ItemType<BiomeExtractorItemSteampunk>())
-                .AddRecipeGroup(nameof(ItemID.ChlorophyteBar), 5)
+                .AddIngredient(ItemID.ChlorophyteBar, 5)
                 .AddIngredient(ItemID.Nanites, 12)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
 
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemSteampunk>())
-                .AddIngredient(ModContent.ItemType<BiomeExtractorItemLunar>())
+            Recipe.Create(ModContent.ItemType<BiomeExtractorItemLunar>())
+                .AddIngredient(ModContent.ItemType<BiomeExtractorItemCyber>())
                 .AddIngredient(ItemID.FragmentNebula, 8)
                 .AddIngredient(ItemID.FragmentSolar, 8)
                 .AddIngredient(ItemID.FragmentStardust, 8)
                 .AddIngredient(ItemID.FragmentVortex, 8)
                 .AddTile(TileID.LunarCraftingStation)
+                .AddCustomShimmerResult(ModContent.ItemType<BiomeExtractorItemEthereal>())
                 .AddDecraftCondition(Condition.DownedMoonLord)
                 .Register();
-
-            ItemID.Sets.ShimmerTransformToItem[ModContent.ItemType<BiomeExtractorItemLunar>()] = ModContent.ItemType<BiomeExtractorItemEthereal>();
         }
     }
 }
