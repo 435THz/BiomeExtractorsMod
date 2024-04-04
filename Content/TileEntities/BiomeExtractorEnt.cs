@@ -1,6 +1,7 @@
 using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Content.Tiles;
+using BiomeExtractorsMod.CrossMod;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -14,26 +15,40 @@ namespace BiomeExtractorsMod.Content.TileEntities
 {
     public abstract class BiomeExtractorEnt : ModTileEntity
     {
+        private struct OutData(OutputType type, Point point)
+        {
+            public OutputType Type { get; private set; } = type;
+            public Point Point { get; private set; } = point;
+
+            public OutData() : this(OutputType.NONE, new Point()) { }
+        }
+
         public enum EnumTiers
         {
             BASIC = 1, DEMONIC = 2, INFERNAL = 3, STEAMPUNK = 4, CYBER = 5, LUNAR = 6, ETHEREAL = 7
         }
 
+        private enum OutputType
+        { 
+            NONE, CHEST, MS_ENVIRONMENTACCESS
+        }
+
         private static readonly string tagXTimer = "extraction_timer";
         private static readonly string tagBTimer = "biome_scan_timer";
-        private static readonly string tagState  = "isActive";
-        private static readonly string tagChestX = "chest_x";
-        private static readonly string tagChestY = "chest_y";
-        private static readonly int[] chestOffsetY    = [1, -1, 0, 2];
-        private static readonly int[] chestOffsetX_fw = [-2, 3];
-        private static readonly int[] chestOffsetX_bw = [3, -2];
+        private static readonly string tagState = "isActive";
+        private static readonly string tagTType = "targetType";
+        private static readonly string tagOutputX = "chest_x";
+        private static readonly string tagOutputY = "chest_y";
+        private static readonly Point[] PosOffsets = [new(-1,2), new(3, 2), new(-1, 0), new(3, 0), new(0, -1), new(2, -1)];
 
 
         private int XTimer = 0;
         private int BTimer = 0;
-        private Point chestPos;
+        private Point outputPos;
+        private OutputType outputType;
 
-        private int chestIndex;
+        private int ChestIndex { get => Chest.FindChest(outputPos.X, outputPos.Y); }
+
         protected List<string> PoolList { get; private set; } = [];
 
         public int ExtractionTimer
@@ -54,24 +69,32 @@ namespace BiomeExtractorsMod.Content.TileEntities
         public abstract int ExtractionRate { get; }
         public abstract int ExtractionChance { get; }
         public static int BiomeScanRate { get => ModContent.GetInstance<ExtractorConfig>().BiomeScanRate; }
-
+        
         public override void SaveData(TagCompound tag)
         {
             tag.Add(tagXTimer, ExtractionTimer);
             tag.Add(tagBTimer, ScanningTimer);
             tag.Add(tagState,  Active);
-            tag.Add(tagChestX, Main.chest[chestIndex].x);
-            tag.Add(tagChestY, Main.chest[chestIndex].y);
+            tag.Add(tagTType,  (int)outputType);
+            tag.Add(tagOutputX, outputPos.X);
+            tag.Add(tagOutputY, outputPos.Y);
         }
 
         public override void LoadData(TagCompound tag)
         {
-            ExtractionTimer = tag.GetAsInt(tagXTimer);
-            ScanningTimer   = tag.GetAsInt(tagBTimer);
-            Active          = tag.GetBool(tagState);
-            chestPos        = new Point(tag.GetAsInt(tagChestX), tag.GetAsInt(tagChestY));
-            chestIndex      = Chest.FindChest(chestPos.X, chestPos.Y);
-            PoolList        = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this); //always run on loading
+            tag.TryGet(tagXTimer, out int xtimer);
+            tag.TryGet(tagBTimer, out int btimer);
+            tag.TryGet(tagState, out bool active);
+            tag.TryGet(tagOutputX, out int x);
+            tag.TryGet(tagOutputY, out int y);
+            tag.TryGet(tagTType, out int type);
+
+            ExtractionTimer = xtimer;
+            ScanningTimer   = btimer;
+            Active          = active;
+            outputPos       = new Point(x, y);
+            outputType      = (OutputType)type;
+            PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this); //always run on loading
         }
 
         public override void Update()
@@ -81,19 +104,20 @@ namespace BiomeExtractorsMod.Content.TileEntities
             ExtractionTimer++; //never run immediately upon placement
             if (ExtractionTimer == 0)
             {
-                //Discard the chest if it is not valid anymore
-                if(!IsChestDataValid(chestPos, chestIndex)) {
+                //Discard the output if it is not valid
+                if (!IsOutputDataValid()) {
 
-                //If the chest data is not valid, a new one will be searched for
-                    int index = GetAdjacentChest();
-                    if (index < 0)
-                        return;
-                    chestIndex = index;
-                    chestPos = new Point(Main.chest[index].x, Main.chest[index].y);
+                    //If the output data is not valid, a new one will be searched for
+                    OutData output = GetNewOutput();
+                    outputType = output.Type;
+                    outputPos = output.Point;
                 }
-                
-                Item generated = ModContent.GetInstance<BiomeExtractionSystem>().RollItem(PoolList);
-                AddToChest(generated);
+
+                if (Main.rand.Next(100) < ExtractionChance)
+                {
+                    Item generated = ModContent.GetInstance<BiomeExtractionSystem>().RollItem(PoolList);
+                    AddToOutput(generated);
+                }
             }
 
             //Every time this timer wraps back to 0 the scanning routine is performed
@@ -104,10 +128,16 @@ namespace BiomeExtractorsMod.Content.TileEntities
             ScanningTimer++; //always run immediately upon placement
         }
 
+        private bool AddToOutput(Item newItem)
+        {
+            if (outputType == OutputType.MS_ENVIRONMENTACCESS) return MagicStorageHook.AddItemToStorage(newItem, outputPos);
+            if (outputType == OutputType.CHEST) AddToChest(newItem);
+            return false;
+        }
 
         private bool AddToChest(Item newItem)
         {
-            Chest chest = Main.chest[chestIndex];
+            Chest chest = Main.chest[ChestIndex];
 
             int starting = newItem.stack;
             for (int inventoryIndex = 0; inventoryIndex < Chest.maxItems; inventoryIndex++)
@@ -133,61 +163,101 @@ namespace BiomeExtractorsMod.Content.TileEntities
             return starting != newItem.stack;
         }
 
-        private bool IsChestDataValid(Point pos, int index)
+        private bool IsOutputDataValid()
         {
-            if (index < 0 || index >= 8000) return false; //if the index is invalid
-            Chest chest = Main.chest[index];
-            if (chest == null) return false; //if the chest is null
-            if (chest.x != pos.X || chest.y != pos.Y) return false; //if the chest position doesn't match
-            for (int Xi = 0; Xi < 2; Xi++) 
-            {
-                for (int Yi = 0; Yi < 4; Yi++)
-                {
-                    int X = Position.X + chestOffsetX_fw[Xi];
-                    int Y = Position.Y + chestOffsetY[Yi];
+            if (outputType == OutputType.MS_ENVIRONMENTACCESS && ModContent.GetInstance<ExtractorCompat>().MaxMS > 0)
+                return MagicStorageHook.IsOutputValid(outputPos);
+            if (outputType == OutputType.CHEST)
+                return IsChestValid();
+            return false;
+        }
 
-                    if (chest.x == X && chest.y == Y && IsUnlocked(chest))
-                    {
-                        return true;
-                    }
+        private bool IsChestValid()
+        {
+            int index = ChestIndex;
+            if (index < 0) return false; //if the chest does not exist
+            Chest chest = Main.chest[index];
+            if (!IsUnlocked(chest)) return false; //if the chest is locked
+
+            for (int i = 0; i < 6; i++)
+            {
+                Point pos = PosOffsets[i];
+                int X = Position.X + pos.X;
+                int Y = Position.Y + pos.Y;
+
+                if (outputPos.X > X - 2 && outputPos.X <= X && outputPos.Y > Y - 2 && outputPos.Y <= Y)
+                {
+                    return true;
                 }
             }
-            return false; //if the position is invalid or the chest is locked
+            return false; //if the position is invalid
+        }
+
+        private OutData GetNewOutput()
+        {
+            OutData output;
+            if (BiomeExtractorsMod.MS_loaded && ModContent.GetInstance<ExtractorCompat>().MaxMS > 0)
+            {
+                output = GetAdjacentMSAccess();
+                if (output.Type != OutputType.NONE) return output;
+            }
+            output = GetAdjacentChest();
+            return output;
+        }
+
+        private OutData GetAdjacentMSAccess()
+        {
+            bool prioritizeLeft = Main.rand.NextBool();
+
+            for (int i = 0; i < 6; i++)
+            {
+                int n = i;
+                if (!prioritizeLeft) n += (i % 2 == 0 ? 1 : -1); //invert 2 by 2 to prioritize rightmost first
+
+                Point pos = PosOffsets[n]+Position.ToPoint();
+                if (MagicStorageHook.IsTileEnvAccess(pos))
+                {
+                    Point accessPosition = MagicStorageHook.GetAccessPosition(pos);
+                    return new(OutputType.MS_ENVIRONMENTACCESS, accessPosition);
+                }
+            }
+            return new();
         }
 
         //Looks for a chest in the adjacent spaces to the left or right of this machine
-        private int GetAdjacentChest()
+        private OutData GetAdjacentChest()
         {
             bool prioritizeLeft = Main.rand.NextBool();
-            int[] chestOffsetX = prioritizeLeft ? chestOffsetX_fw : chestOffsetX_bw;
 
-            int[] chests = [-1, -1, -1, -1, -1, -1, -1, -1];
+            Chest[] chests = new Chest[4];
             for (int i = 0; i < 8000; i++)
             {
                 Chest chest = Main.chest[i];
                 if (chest != null)
                 {
-                    for (int Yi = 0; Yi < 4; Yi ++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int Xi = 0; Xi < 2; Xi ++)
-                        {
-                            int X = Position.X + chestOffsetX[Xi];
-                            int Y = Position.Y + chestOffsetY[Yi];
-                            int priority = Xi + Yi*2;
+                        int n = j;
+                        if (!prioritizeLeft) n += (j % 2 == 0 ? 1 : -1); //invert 2 by 2 to prioritize rightmost first
 
-                            if (chest.x == X && chest.y == Y && IsUnlocked(chest))
-                            {
-                                chests[priority] = i;
-                            }
+                        Point pos = PosOffsets[n] + Position.ToPoint();
+
+                        if (chest.x > pos.X - 2 && chest.x <= pos.X && chest.y > pos.Y - 2 && chest.y <= pos.Y && IsUnlocked(chest))
+                        {
+                            chests[j] = chest;
                         }
                     }
                 }
             }
             for(int i = 0; i<chests.Length; i++)
             {
-                if (chests[i] >= 0) return chests[i];
+                if (chests[i] != default(Chest))
+                {
+                    Chest chest = chests[i];
+                    return new(OutputType.CHEST, new(chest.x, chest.y));
+                }
             }
-            return -1;
+            return new();
         }
 
         //Returns whether the queried chest is unlocked or not

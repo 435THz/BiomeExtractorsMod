@@ -1,9 +1,7 @@
 ﻿using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Content.Tiles;
 using MagicStorage.Components;
-using MagicStorage.Items;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -19,6 +17,8 @@ namespace BiomeExtractorsMod.CrossMod
             }
         }
 
+        internal static EnvironmentAccess EnvAccessTile { get => TileLoader.GetTile(ModContent.TileType<EnvironmentAccess>()) as EnvironmentAccess; }
+
         private static TEEnvironmentAccess GetMSAccess(Point pos)
         {
             if (MS == null) return null;
@@ -31,8 +31,8 @@ namespace BiomeExtractorsMod.CrossMod
         {
             if (MS == null) return null;
             TEEnvironmentAccess start = GetMSAccess(startFrom);
-            if (start == null) return null;
-            return start.GetHeart();
+            if (start == null || EnvAccessTile == null) return null;
+            return EnvAccessTile.GetHeart(start.Position.X, start.Position.Y);
         }
 
         internal static bool IsOutputValid(Point pos)

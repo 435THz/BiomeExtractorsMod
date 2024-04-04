@@ -151,7 +151,7 @@ namespace BiomeExtractorsMod.Common.Configs
         public int MaxMS;
 
         [OnDeserialized]
-        internal void EnforceRanges()
+        internal void EnforceRanges(StreamingContext context)
         {
             MaxMS = Math.Max(-1, MaxMS); //-1: no limit, 0 = never push
         }
