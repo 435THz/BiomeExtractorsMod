@@ -9,19 +9,10 @@ namespace BiomeExtractorsMod.CrossMod
 {
     internal abstract class MagicStorageHook
     {
-        internal static Mod MS
-        { get 
-            {
-                ModLoader.TryGetMod("MagicStorage", out Mod mod);
-                return mod;
-            }
-        }
-
-        internal static EnvironmentAccess EnvAccessTile { get => TileLoader.GetTile(ModContent.TileType<EnvironmentAccess>()) as EnvironmentAccess; }
+        private static EnvironmentAccess EnvAccessTile { get => TileLoader.GetTile(ModContent.TileType<EnvironmentAccess>()) as EnvironmentAccess; }
 
         private static TEEnvironmentAccess GetMSAccess(Point pos)
         {
-            if (MS == null) return null;
             TileUtils.TryGetTileEntityAs(pos.X, pos.Y, out TEEnvironmentAccess entity);
             if (entity == null) return null;
             return entity;
@@ -29,7 +20,6 @@ namespace BiomeExtractorsMod.CrossMod
 
         private static TEStorageHeart GetMSStorageHeart(Point startFrom)
         {
-            if (MS == null) return null;
             TEEnvironmentAccess start = GetMSAccess(startFrom);
             if (start == null || EnvAccessTile == null) return null;
             return EnvAccessTile.GetHeart(start.Position.X, start.Position.Y);
@@ -64,7 +54,7 @@ namespace BiomeExtractorsMod.CrossMod
         private static int DepositableAmount(TEStorageHeart storage, int itemID)
         {
             int limit = ModContent.GetInstance<ExtractorCompat>().MaxMS;
-            if (limit < 1) return int.MaxValue;
+            if (limit < 0) return int.MaxValue;
 
             int amount = 0;
             foreach (Item item in storage.GetStoredItems())
