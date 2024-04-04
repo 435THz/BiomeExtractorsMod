@@ -1012,7 +1012,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(pillar, ItemID.FragmentSolar,    10);
             AddItemInPool(pillar, ItemID.FragmentStardust, 10);
             AddItemInPool(pillar, ItemID.FragmentVortex,   10);
-            AddItemInPool(luminite, new ItemEntry(ItemID.LunarOre, 5, 15), 20);
+            AddItemInPool(luminite, new ItemEntry(ItemID.LunarOre, 1,5), 20);
 
             AddItemInPool(underworld, ItemID.AshBlock,      20);
             AddItemInPool(underworld, ItemID.Hellstone,     15);
