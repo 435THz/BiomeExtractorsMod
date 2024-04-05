@@ -148,7 +148,6 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly string corrupt_snow = "corrupt_snow";
         public static readonly string corrupt_desert = "corrupt_desert";
         public static readonly string corrupt_forest = "corrupt_forest";
-        public static readonly string crimson = "crimson";
         public static readonly string crimson_snow = "crimson_snow";
         public static readonly string crimson_desert = "crimson_desert";
         public static readonly string crimson_forest = "crimson_forest";
@@ -158,7 +157,7 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly string underground = "underground"; 
         public static readonly string evil_ores = "evil_ores";
         public static readonly string hm_ores = "hm_ores";
-        public static readonly string faeling = "faeling";
+        public static readonly string shimmer = "shimmer";
         public static readonly string granite = "granite";
         public static readonly string marble = "marble";
         public static readonly string cobweb = "cobweb";
@@ -268,7 +267,7 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly Predicate<ScanData> shimmer300 = scan => scan.Liquids(LiquidID.Shimmer) >= 300;
 
         //BLOCKS
-        static readonly Func<List<ushort>, Predicate<ScanData>> evil300 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(hallowBlocks) - scan.Tiles(TileID.Sunflower) * 5 >= 300;
+        static readonly Func<List<ushort>, Predicate<ScanData>> evil300 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(hallowBlocks) - scan.Tiles(TileID.Sunflower) * 10 >= 300;
         static readonly Func<List<ushort>, Predicate<ScanData>> hallow125 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(crimsonBlocks) - scan.Tiles(corruptBlocks) >= 125;
         static readonly Predicate<ScanData> meteorite75 = scan => scan.Tiles(TileID.Meteorite) >= 75;
         static readonly Predicate<ScanData> hive100 = scan => scan.Tiles(TileID.Hive) > 100;
@@ -522,7 +521,6 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(corrupt_forest_hm,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 300);
             AddPool(corrupt_desert_hm,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 300);
             AddPool(corrupt_snow_hm,    (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 300);
-            AddPool(crimson,            (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300);
             AddPool(corrupt_forest,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300);
             AddPool(crimson_forest,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300);
             AddPool(corrupt_snow,       (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300);
@@ -574,7 +572,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(ocean,                                              2500);
             AddPool(pirate, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 2500);
 
-            AddPool(faeling, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 3000, true);
+            AddPool(shimmer, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 3000, true);
             AddPool(spider,                                            3000, true);
             AddPool(cobweb,                                            3000, true);
             AddPool(granite,                                           3000, true);
@@ -620,9 +618,9 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(ug_corrupt_desert,     cavernLayer, evil300.Invoke(corruptSandBlocks));
             AddPoolRequirements(ug_corrupt_snow,       cavernLayer, evil300.Invoke(corruptIceBlocks));
             AddPoolRequirements(ug_corrupt_caverns,    cavernLayer, evil300.Invoke(corruptForestBlocks));
-            AddPoolRequirements(ug_corrupt_desert_hm,  cavernLayer, evil300.Invoke(corruptBlocks));
-            AddPoolRequirements(ug_corrupt_snow_hm,    cavernLayer, evil300.Invoke(corruptBlocks));
-            AddPoolRequirements(ug_corrupt_caverns_hm, cavernLayer, evil300.Invoke(corruptSandBlocks));
+            AddPoolRequirements(ug_corrupt_desert_hm,  cavernLayer, evil300.Invoke(corruptSandBlocks));
+            AddPoolRequirements(ug_corrupt_snow_hm,    cavernLayer, evil300.Invoke(corruptIceBlocks));
+            AddPoolRequirements(ug_corrupt_caverns_hm, cavernLayer, evil300.Invoke(corruptForestBlocks));
 
             AddPoolRequirements(truffle_worm, hardmodeOnly, cavernLayer, mush100);
             AddPoolRequirements(ug_mushroom,                cavernLayer, mush100);
@@ -652,7 +650,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(underground,               undergroundLayer);
             AddPoolRequirements(evil_ores,                 undergroundLayer);
             AddPoolRequirements(hm_ores,     hardmodeOnly, undergroundLayer);
-            AddPoolRequirements(faeling,                   shimmer300);
+            AddPoolRequirements(shimmer,                   shimmer300);
 
             AddPoolRequirements(graveyard, surfaceLayer, tombstone5);
 
@@ -868,7 +866,13 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(graveyard, ItemID.Mouse,  4);
             AddItemInPool(graveyard, ItemID.Maggot, 3);
 
-            AddItemInPool(faeling, ItemID.Shimmerfly,   50);
+            AddItemInPool(shimmer, ItemID.Amethyst, 12);
+            AddItemInPool(shimmer, ItemID.Topaz, 11);
+            AddItemInPool(shimmer, ItemID.Sapphire, 10);
+            AddItemInPool(shimmer, ItemID.Emerald, 9);
+            AddItemInPool(shimmer, ItemID.Ruby, 8);
+            AddItemInPool(shimmer, ItemID.Diamond, 6);
+            AddItemInPool(shimmer, ItemID.Shimmerfly,   44);
             AddItemInPool(marble,  ItemID.MarbleBlock,  75);
             AddItemInPool(granite, ItemID.GraniteBlock, 75);
             AddItemInPool(granite, ItemID.Geode,        50);
