@@ -6,104 +6,104 @@ using Terraria.ModLoader.Config;
 
 namespace BiomeExtractorsMod.Common.Configs
 {
-    public class ExtractorClient : ModConfig
+    public class ConfigClient : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Client.DiagPrintTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Client.DiagPrintTooltip")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintTooltip")]
         [DefaultValue(false)]
         public bool DiagnosticPrint;
     }
 
-    public class ExtractorConfig : ModConfig
+    public class ConfigCommon : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        [Header("$Mods.BiomeExtractorsMod.Configs.Common.GeneralConfigHeader")]
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.ScanRateTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.ScanRateTooltip")]
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.GeneralConfigHeader")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.ScanRateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.ScanRateTooltip")]
         [Range(1, 86400)]
         [DefaultValue(3600)]
         public int BiomeScanRate;
 
-        [Header("$Mods.BiomeExtractorsMod.Configs.Common.Tier1Header")]
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier1RateTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier1RateTooltip")]
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier1Header")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier1RateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier1RateTooltip")]
         [Range(1, 86400)]
         [DefaultValue(180)] //480 attempts/day
         public int Tier1ExtractorRate;
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier1ChanceTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier1ChanceTooltip")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier1ChanceTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier1ChanceTooltip")]
         [DefaultValue(60)]
         public int Tier1ExtractorChance; //480 extractions/day
 
-        [Header("$Mods.BiomeExtractorsMod.Configs.Common.Tier2Header")]
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier2RateTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier2RateTooltip")]
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2Header")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2RateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2RateTooltip")]
         [Range(1, 86400)]
         [DefaultValue(120)] //720 attempts/day
         public int Tier2ExtractorRate;
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier2ChanceTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier2ChanceTooltip")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2ChanceTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2ChanceTooltip")]
         [DefaultValue(75)] //540 extractions/day
         public int Tier2ExtractorChance;
 
-        [Header("$Mods.BiomeExtractorsMod.Configs.Common.Tier3Header")]
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier3RateTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier3RateTooltip")]
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier3Header")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier3RateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier3RateTooltip")]
         [Range(1, 86400)]
         [DefaultValue(90)] //960 attempts/day
         public int Tier3ExtractorRate;
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier3ChanceTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier3ChanceTooltip")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier3ChanceTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier3ChanceTooltip")]
         [DefaultValue(85)] //816 extraction attempts/day
         public int Tier3ExtractorChance;
 
-        [Header("$Mods.BiomeExtractorsMod.Configs.Common.Tier4Header")]
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier4RateTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier4RateTooltip")]
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4Header")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4RateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4RateTooltip")]
         [Range(1, 86400)]
         [DefaultValue(60)] //1440 attempts/day
         public int Tier4ExtractorRate;
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier4ChanceTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier4ChanceTooltip")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4ChanceTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4ChanceTooltip")]
         [Range(1, 100)]
         [DefaultValue(90)] //1296 extractions/day
         public int Tier4ExtractorChance;
 
-        [Header("$Mods.BiomeExtractorsMod.Configs.Common.Tier5Header")]
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier5RateTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier5RateTooltip")]
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5Header")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5RateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5RateTooltip")]
         [Range(1, 86400)]
         [DefaultValue(45)] //1920 attempts/day
         public int Tier5ExtractorRate;
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier5ChanceTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier5ChanceTooltip")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5ChanceTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5ChanceTooltip")]
         [Range(1, 100)]
         [DefaultValue(94)] //1804.8 extractions/day
         public int Tier5ExtractorChance;
 
-        [Header("$Mods.BiomeExtractorsMod.Configs.Common.Tier6Header")]
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier6RateTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier6RateTooltip")]
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6Header")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6RateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6RateTooltip")]
         [Range(1, 86400)]
         [DefaultValue(30)] //2880 attempts/day
         public int Tier6ExtractorRate;
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier6ChanceTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier6ChanceTooltip")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6ChanceTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6ChanceTooltip")]
         [Range(1, 100)]
         [DefaultValue(97)] //2793.6 extractions/day
         public int Tier6ExtractorChance;
 
-        [Header("$Mods.BiomeExtractorsMod.Configs.Common.Tier7Header")]
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier7RateTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier7RateTooltip")]
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7Header")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7RateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7RateTooltip")]
         [Range(1, 86400)]
         [DefaultValue(24)] //3600 attempts/day
         public int Tier7ExtractorRate;
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier7ChanceTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Common.Tier7ChanceTooltip")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7ChanceTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7ChanceTooltip")]
         [Range(1, 100)]
         [DefaultValue(100)] //3600 extractions/day
         public int Tier7ExtractorChance;
@@ -139,14 +139,14 @@ namespace BiomeExtractorsMod.Common.Configs
         }
     }
 
-    public class ExtractorCompat : ModConfig
+    public class ConfigCompat : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        [Header("$Mods.BiomeExtractorsMod.Configs.Compat.MSHeader")]
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.Compat.MaxMSTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.Compat.MaxMSTooltip")]
-        [Range(1, int.MaxValue)]
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCompat.MSHeader")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCompat.MaxMSTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCompat.MaxMSTooltip")]
+        [Range(-1, int.MaxValue)]
         [DefaultValue(9999)]
         public int MaxMS;
 

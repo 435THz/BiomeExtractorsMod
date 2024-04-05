@@ -65,24 +65,22 @@ Items: {
 }
 
 Configs: {
-	ExtractorClient.DisplayName: Extractor Client
-
-	Client: {
+	ConfigClient: {
+		DisplayName: Client Settings
 		DiagPrintTitle: Print Diagnostic Data
 		DiagPrintTooltip:
 			'''
 			If this is enabled, right clicking an Extractor will print
-			      detailed informations about what can be obtained from it,
+			detailed informations about what can be obtained from it,
 			as well as the chance of any one option being chosen and
-			      its expected amount after one in-game day.
+			its expected amount after one in-game day.
 			This data will appear in your chat.
 			Defaults to false.
 			'''
 	}
 
-	ExtractorConfig.DisplayName: Biome Extractors Settings
-
-	Common: {
+	ConfigCommon: {
+		DisplayName: Extractors Settings
 		GeneralConfigHeader: General Settings
 		ScanRateTitle: Biome Scan Rate
 		ScanRateTooltip:
@@ -189,5 +187,87 @@ Configs: {
 			This value is the number of frames between each attempt.
 			Defaults to 24, which corresponds to 2/5ths of a second.
 			'''
+	}
+
+	ConfigCompat: {
+		DisplayName: Compatibility
+		MSHeader: Magic Storage
+		MaxMSTitle: Maximum stack in Storage
+		MaxMSTooltip:
+			'''
+			If Magic Storage is installed, Biome Extractors will be able to store
+			extracted items inside a Magic Storage system, provided they have an
+			adjacent Storage Configuration Interface. However, they will stop
+			generating any specific item if its amount in storage is equal to or
+			greater than this value. This way the system doesn't fill up with junk!
+			To disable this behavior, simply set this value to -1.
+			Setting this value to 0 stops the Extractors from considering Magic
+			Storage as a suitable output altogether.
+			Defaults to 9999.
+			'''
+	}
+}
+
+Text: {
+	ItemGroups: {
+		EvilBars: Evil Metal Bar
+		EvilSamples: Evil Boss Material
+		Tier3HM: Tier 3 Hardmode Bar
+	}
+
+	PoolNames: {
+		forest: Forest
+		underground: Underground
+		caverns: Caverns
+		snow: Snow
+		desert: Desert
+		jungle: Jungle
+		sky: Sky
+		hallowed_forest: Hallow
+		hallowed_desert: Hallowed Desert
+		hallowed_snow: Hallowed Snow
+		mushroom: Glowing Mushroom
+		corrupt_forest: Corruption
+		corrupt_desert: Corrupt Desert
+		corrupt_snow: Corrupt Snow
+		crimson_forest: Crimson
+		crimson_desert: Crimson Desert
+		crimson_snow: Crimson Snow
+		graveyard: Graveyard
+		ug_snow: Ice
+		ug_desert: Underground Desert
+		ug_jungle: Underground Jungle
+		hive: Hive
+		ug_hallowed_caverns: Underground Hallow
+		ug_hallowed_desert: Underground Hallowed Desert
+		ug_hallowed_snow: Hallowed Ice
+		ug_mushroom: Glowing Mushroom
+		ug_corrupt_caverns: Underground Corruption
+		ug_corrupt_desert: Underground Corrupt Desert
+		ug_corrupt_snow: Corrupt Snow
+		ug_crimson_caverns: Underground Crimson
+		ug_crimson_desert: Underground Crimson Desert
+		ug_crimson_snow: Crimson Ice
+		dungeon: Dungeon
+		temple: Jungle Temple
+		shimmer: Aether
+		cobweb: Spider Nest
+		granite: Granite
+		marble: Marble
+		space: Space
+		underworld: Underworld
+		meteorite: Meteorite
+	}
+
+	Diagnostics: {
+		MachineStatePrint: The machine is extracting resources from the following biomes:
+		MachineStateFail: The machine cannot extract anything from this place.
+		MachineStateOff: The machine is inactive.
+		Rate: Rate
+		Frames_short: f
+		Chance: Chance
+		Percent: %
+		Title: Projected item extraction
+		Subtitle: Item Name - chance% - unit/day
 	}
 }

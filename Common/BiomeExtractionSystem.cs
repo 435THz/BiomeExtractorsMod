@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 
@@ -441,9 +442,9 @@ namespace BiomeExtractorsMod.Common.Systems
             int e_rate =   extractor.ExtractionRate;
             int e_chance = extractor.ExtractionChance;
             double rolls = (86400 / e_rate) * (e_chance / 100.0);
-            string s = "\nRate: " + e_rate + "f - Chance: " + e_chance + "%\n\n" +
-                "Projected item extraction:\n" +
-                "Item Name - chance% - unit/day\n";
+            string s = $"\n" + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Rate") + ": " + e_rate + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Frames_short") + " - " + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Chance") + ": " + e_chance + "%\n\n" +
+                Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Title") + ":\n" +
+                Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Subtitle") + "\n";
             int lines = 5;
 
             WeightedList<ItemEntry> joinedPool = [];
@@ -458,11 +459,11 @@ namespace BiomeExtractorsMod.Common.Systems
             foreach (KeyValuePair<ItemEntry, int> entry in joinedPool)
             {
                 string ss = new Item(entry.Key.Id).Name;
-                if (entry.Key.Min != entry.Key.Max - 1) ss += " (" + entry.Key.Min + "-" + (entry.Key.Max - 1) + ")";
+                if (entry.Key.Min != entry.Key.Max - 1) ss += $" ({entry.Key.Min} - {entry.Key.Max - 1})";
                 ss += " - ";
                 decimal chance = entry.Value * 100 / (decimal)totalWeight;
                 decimal truncated = decimal.Truncate(chance * 100) / 100;
-                ss += truncated.ToString() + "% - ";
+                ss += $"{truncated}{Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Percent")} - ";
 
                 double med = (entry.Key.Min + entry.Key.Max - 1) / 2.0;
                 int amountPerDay = (int)(rolls * med * (double)chance / 100);
@@ -481,7 +482,7 @@ namespace BiomeExtractorsMod.Common.Systems
                     lines = 0;
                 }
             }
-            if (lines < 1) s += "\n";
+            if (lines < 1) s += " ";
             Main.NewText(s);
         }
 

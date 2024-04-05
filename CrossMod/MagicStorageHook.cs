@@ -54,7 +54,7 @@ namespace BiomeExtractorsMod.CrossMod
 
         private static int DepositableAmount(TEStorageHeart storage, int itemID)
         {
-            int limit = ModContent.GetInstance<ExtractorCompat>().MaxMS;
+            int limit = ModContent.GetInstance<ConfigCompat>().MaxMS;
             if (limit < 0) return int.MaxValue;
 
             int amount = 0;

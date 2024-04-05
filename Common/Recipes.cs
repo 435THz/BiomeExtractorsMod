@@ -11,13 +11,13 @@ namespace BiomeExtractorsMod.Common
     {
         public override void AddRecipeGroups()
         {
-            RecipeGroup evilOres = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue("Mods.BiomeExtractorsMod.Text.ItemGroups.EvilBars")}", ItemID.DemoniteBar, ItemID.CrimtaneBar);
+            RecipeGroup evilOres = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.EvilBars")}", ItemID.DemoniteBar, ItemID.CrimtaneBar);
             RecipeGroup.RegisterGroup(nameof(ItemID.DemoniteBar), evilOres);
 
-            RecipeGroup evilSamples = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue("Mods.BiomeExtractorsMod.Text.ItemGroups.EvilSamples")}", ItemID.ShadowScale, ItemID.TissueSample);
+            RecipeGroup evilSamples = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.EvilSamples")}", ItemID.ShadowScale, ItemID.TissueSample);
             RecipeGroup.RegisterGroup(nameof(ItemID.ShadowScale), evilSamples);
 
-            RecipeGroup hmOres3 = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue("Mods.BiomeExtractorsMod.Text.ItemGroups.Tier3HM")}", ItemID.AdamantiteBar, ItemID.TitaniumBar);
+            RecipeGroup hmOres3 = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.Tier3HM")}", ItemID.AdamantiteBar, ItemID.TitaniumBar);
             RecipeGroup.RegisterGroup(nameof(ItemID.AdamantiteBar), hmOres3);
         }
 

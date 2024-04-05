@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -68,7 +69,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         public abstract int Tier { get; }
         public abstract int ExtractionRate { get; }
         public abstract int ExtractionChance { get; }
-        public static int BiomeScanRate { get => ModContent.GetInstance<ExtractorConfig>().BiomeScanRate; }
+        public static int BiomeScanRate { get => ModContent.GetInstance<ConfigCommon>().BiomeScanRate; }
         
         public override void SaveData(TagCompound tag)
         {
@@ -165,7 +166,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private bool IsOutputDataValid()
         {
-            if (BiomeExtractorsMod.MS_loaded && outputType == OutputType.MS_ENVIRONMENTACCESS && ModContent.GetInstance<ExtractorCompat>().MaxMS != 0)
+            if (BiomeExtractorsMod.MS_loaded && outputType == OutputType.MS_ENVIRONMENTACCESS && ModContent.GetInstance<ConfigCompat>().MaxMS != 0)
                 return MagicStorageHook.IsOutputValid(outputPos);
             if (outputType == OutputType.CHEST)
                 return IsChestValid();
@@ -196,7 +197,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private OutData GetNewOutput()
         {
             OutData output;
-            if (BiomeExtractorsMod.MS_loaded && ModContent.GetInstance<ExtractorCompat>().MaxMS > 0)
+            if (BiomeExtractorsMod.MS_loaded && ModContent.GetInstance<ConfigCompat>().MaxMS > 0)
             {
                 output = GetAdjacentMSAccess();
                 if (output.Type != OutputType.NONE) return output;
@@ -275,28 +276,39 @@ namespace BiomeExtractorsMod.Content.TileEntities
         // displays the machine's status in chat
         internal void DisplayStatus()
         {
+            string baseText = $"{BiomeExtractorsMod.LocDiagnostics}.MachineState";
             if (Active)
             {
                 PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this); //must refresh on right click
                 ScanningTimer = 1; //we reset the timer as well
                 if (PoolList.Count > 0)
                 {
+                    List<string> entries = [];
                     string s = "";
                     for (int i = 0; i < PoolList.Count; i++)
                     {
-                        s += PoolList[i];
-                        if (i < PoolList.Count - 1) s += ", ";
+                        string key = $"{BiomeExtractorsMod.LocPoolNames}.{PoolList[i]}";
+                        if (Language.Exists(key))
+                        {
+                            string entry = Language.GetTextValue(key);
+                            if (!entries.Contains(entry)) entries.Add(entry);
+                        }
                     }
-                    Main.NewText("The machine is extracting resources from the following biomes:\n" +
-                        s);
-                    if(ModContent.GetInstance<ExtractorClient>().DiagnosticPrint)
+                    for (int i = 0; i < entries.Count; i++)
+                    {
+                        s += entries[i];
+                        if (i < entries.Count - 1) s += ", ";
+                    }
+
+                    Main.NewText(Language.GetTextValue($"{baseText}Print") + "\n" + s);
+                    if (ModContent.GetInstance<ConfigClient>().DiagnosticPrint)
                         ModContent.GetInstance<BiomeExtractionSystem>().PrintDiagnostics(this, PoolList);
                 }
                 else
-                    Main.NewText("The machine could not extract anything from this place.");
+                    Main.NewText(Language.GetTextValue($"{baseText}Fail"));
             }
             else
-                Main.NewText("The machine is inactive.");
+                Main.NewText(Language.GetTextValue($"{baseText}Off"));
         }
 
 
