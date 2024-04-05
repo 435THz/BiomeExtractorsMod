@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.CrossMod
 {
+    [JITWhenModsEnabled("MagicStorage")]
     internal abstract class MagicStorageHook
     {
         private static EnvironmentAccess EnvAccessTile { get => TileLoader.GetTile(ModContent.TileType<EnvironmentAccess>()) as EnvironmentAccess; }
