@@ -246,9 +246,10 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly Predicate<ScanData> spaceLayer = scan => scan.Y < Main.worldSurface * 0.3;
         static readonly Predicate<ScanData> skyLayer = scan => scan.Y < Main.worldSurface * 0.35;
         static readonly Predicate<ScanData> surfaceLayer = scan => scan.Y < Main.worldSurface + 1;
-        static readonly Predicate<ScanData> undergroundLayer = scan => scan.Y > Main.worldSurface + 1;
+        static readonly Predicate<ScanData> belowSurfaceLayer = scan => scan.Y > Main.worldSurface + 1;
         static readonly Predicate<ScanData> middleUnderground = scan => scan.Y > (Main.worldSurface + Main.rockLayer) / 2;
         static readonly Predicate<ScanData> cavernLayer = scan => scan.Y > Main.rockLayer + 1;
+        static readonly Predicate<ScanData> notCavernLayer = scan => scan.Y <= Main.rockLayer;
         static readonly Predicate<ScanData> underworldLayer = scan => scan.Y > Main.maxTilesY - 200;
 
         //SPECIFIC POSITIONS
@@ -358,7 +359,7 @@ namespace BiomeExtractorsMod.Common.Systems
         }
         public void FlushPoolRequirements(string name) {
             PoolEntry pool = (GetPoolEntry(name));
-            if(pool !=null && _poolRequirements[pool.Tier][pool.Name] != null)
+            if (pool != null && _poolRequirements[pool.Tier][pool.Name] != null)
                 _poolRequirements[pool.Tier][pool.Name].Clear();
         }
 
@@ -380,7 +381,7 @@ namespace BiomeExtractorsMod.Common.Systems
             _itemPools[poolName].Clear();
         }
 
-        public List<string> CheckValidBiomes(BiomeExtractorEnt extractor)
+        public List<PoolEntry> CheckValidBiomes(BiomeExtractorEnt extractor)
         {
             ScanData scan = new(extractor);
             scan.Scan();
@@ -600,7 +601,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(granite,                                           3000, true, LocalizeAs(granite));
             AddPool(marble,                                            3000, true, LocalizeAs(marble));
 
-            AddPool(space,                                                  4000);
+            AddPool(space,                                                  4000, LocalizeAs(space));
             AddPool(spc_flight, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 4000);
             AddPool(pillar,     (int)BiomeExtractorEnt.EnumTiers.LUNAR,     4000);
             AddPool(luminite,   (int)BiomeExtractorEnt.EnumTiers.ETHEREAL,  4000);
@@ -624,11 +625,11 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(ocean,                water1k, oceanArea);
 
             AddPoolRequirements(temple,    postGolem,                                    lihzahrd_bg);
-            AddPoolRequirements(ectoplasm, postPlantera, dungeon250,   undergroundLayer, dungeon_bg);
-            AddPoolRequirements(dungeon_p,               dungeon_p250, undergroundLayer, dungeon_bg_p);
-            AddPoolRequirements(dungeon_g,               dungeon_g250, undergroundLayer, dungeon_bg_g);
-            AddPoolRequirements(dungeon_b,               dungeon_b250, undergroundLayer, dungeon_bg_b);
-            AddPoolRequirements(dungeon,                 dungeon250,   undergroundLayer, dungeon_bg);
+            AddPoolRequirements(ectoplasm, postPlantera, dungeon250,   belowSurfaceLayer, dungeon_bg);
+            AddPoolRequirements(dungeon_p,               dungeon_p250, belowSurfaceLayer, dungeon_bg_p);
+            AddPoolRequirements(dungeon_g,               dungeon_g250, belowSurfaceLayer, dungeon_bg_g);
+            AddPoolRequirements(dungeon_b,               dungeon_b250, belowSurfaceLayer, dungeon_bg_b);
+            AddPoolRequirements(dungeon,                 dungeon250,   belowSurfaceLayer, dungeon_bg);
 
             AddPoolRequirements(ug_crimson_desert,     cavernLayer, evil300.Invoke(crimsonSandBlocks));
             AddPoolRequirements(ug_crimson_snow,       cavernLayer, evil300.Invoke(crimsonIceBlocks));
@@ -659,9 +660,9 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(ug_shells,    hardmodeOnly, middleUnderground, jungle140);
             AddPoolRequirements(hive,                       middleUnderground, hive100,    honey100, hive_bg);
             AddPoolRequirements(ug_jungle,                  middleUnderground, jungle140);
-            AddPoolRequirements(ug_desert_hm, hardmodeOnly, undergroundLayer,  desert1500);
-            AddPoolRequirements(ug_desert,                  undergroundLayer,  desert1500);
-            AddPoolRequirements(ug_snow,                    undergroundLayer,  frost1500);
+            AddPoolRequirements(ug_desert_hm, hardmodeOnly, belowSurfaceLayer,  desert1500);
+            AddPoolRequirements(ug_desert,                  belowSurfaceLayer,  desert1500);
+            AddPoolRequirements(ug_snow,                    belowSurfaceLayer,  frost1500);
 
             AddPoolRequirements(marble,  cavernLayer, marble150,    marble_bg);
             AddPoolRequirements(granite, cavernLayer, granite150,   granite_bg);
@@ -669,9 +670,9 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(spider,  cavernLayer, hardmodeOnly, spider_bg);
 
             AddPoolRequirements(caverns,                   cavernLayer);
-            AddPoolRequirements(underground,               undergroundLayer);
-            AddPoolRequirements(evil_ores,                 undergroundLayer);
-            AddPoolRequirements(hm_ores,     hardmodeOnly, undergroundLayer);
+            AddPoolRequirements(underground,               belowSurfaceLayer, notCavernLayer);
+            AddPoolRequirements(evil_ores,                 belowSurfaceLayer);
+            AddPoolRequirements(hm_ores,     hardmodeOnly, belowSurfaceLayer);
             AddPoolRequirements(shimmer,                   shimmer300);
 
             AddPoolRequirements(graveyard, surfaceLayer, tombstone5);
