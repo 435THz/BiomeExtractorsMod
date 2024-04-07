@@ -10,10 +10,15 @@ namespace BiomeExtractorsMod.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintTooltip")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintPoolsTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintPoolsTooltip")]
         [DefaultValue(false)]
-        public bool DiagnosticPrint;
+        public bool DiagnosticPrintPools;
+
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintItemsTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintItemsTooltip")]
+        [DefaultValue(false)]
+        public bool DiagnosticPrintItems;
     }
 
     public class ConfigCommon : ModConfig

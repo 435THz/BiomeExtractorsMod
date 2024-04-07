@@ -67,16 +67,26 @@ Items: {
 Configs: {
 	ConfigClient: {
 		DisplayName: Client Settings
-		DiagPrintTitle: Print Diagnostic Data
+		DiagPrintTitle: Print Hidden Pools
 		DiagPrintTooltip:
 			'''
-			If this is enabled, right clicking an Extractor will print
-			detailed informations about what can be obtained from it,
-			as well as the chance of any one option being chosen and
-			its expected amount after one in-game day.
-			This data will appear in your chat.
+			If this is enabled, right clicking an Extractor will also print
+			the name of invisible pools like those containing hardmode
+			drops and such. These pools will not be localized, as this
+			setting exists only for debug purposes.
 			Defaults to false.
 			'''
+		DiagPrintItemsTitle: Print Extraction Projection
+		DiagPrintItemsTooltip:
+			'''
+			If this is enabled, right clicking an Extractor will also print
+			detailed informations about what can be obtained from it, as
+			well as the chance of any one option being chosen and its
+			expected amount after one in-game day.
+			Defaults to false.
+			'''
+		DiagPrintPoolsTitle: Diagnostic Print Pools
+		DiagPrintPoolsTooltip: ""
 	}
 
 	ConfigCommon: {
@@ -269,6 +279,7 @@ Text: {
 		cobweb: Spider Nest
 		granite: Granite
 		marble: Marble
+		ocean: Ocean
 		space: Space
 		underworld: Underworld
 		meteorite: Meteorite

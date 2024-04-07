@@ -3,6 +3,7 @@ using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Content.Tiles;
 using BiomeExtractorsMod.CrossMod;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -11,6 +12,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
 
 namespace BiomeExtractorsMod.Content.TileEntities
 {
@@ -50,7 +52,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private int ChestIndex { get => Chest.FindChest(outputPos.X, outputPos.Y); }
 
-        protected List<string> PoolList { get; private set; } = [];
+        protected List<PoolEntry> PoolList { get; private set; } = [];
 
         public int ExtractionTimer
         {
@@ -70,7 +72,12 @@ namespace BiomeExtractorsMod.Content.TileEntities
         public abstract int ExtractionRate { get; }
         public abstract int ExtractionChance { get; }
         public static int BiomeScanRate { get => ModContent.GetInstance<ConfigCommon>().BiomeScanRate; }
-        
+
+        //loading
+        private void UpdatePoolList() {
+            PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this);
+        }
+
         public override void SaveData(TagCompound tag)
         {
             tag.Add(tagXTimer, ExtractionTimer);
@@ -95,7 +102,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             Active          = active;
             outputPos       = new Point(x, y);
             outputType      = (OutputType)type;
-            PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this); //always run on loading
+            UpdatePoolList(); //always run on loading
         }
 
         public override void Update()
@@ -123,9 +130,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
             //Every time this timer wraps back to 0 the scanning routine is performed
             if (ScanningTimer == 0)
-            {
-                PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this);
-            }
+                UpdatePoolList();
             ScanningTimer++; //always run immediately upon placement
         }
 
@@ -270,7 +275,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         //toggles the machine on and off
         internal void ToggleState() {
             Active = !Active;
-            if(Active) PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this); //must refresh when turned back on
+            if(Active) UpdatePoolList(); //must refresh when turned back on
         }
 
         // displays the machine's status in chat
@@ -279,29 +284,40 @@ namespace BiomeExtractorsMod.Content.TileEntities
             string baseText = $"{BiomeExtractorsMod.LocDiagnostics}.MachineState";
             if (Active)
             {
-                PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this); //must refresh on right click
+                UpdatePoolList(); //must refresh on right click
                 ScanningTimer = 1; //we reset the timer as well
                 if (PoolList.Count > 0)
                 {
                     List<string> entries = [];
+                    List<string> backup = [];
                     string s = "";
                     for (int i = 0; i < PoolList.Count; i++)
                     {
-                        string key = $"{BiomeExtractorsMod.LocPoolNames}.{PoolList[i]}";
-                        if (Language.Exists(key))
+                        PoolEntry pool = PoolList[i];
+                        backup.Add(pool.Name);
+                        if (pool.IsLocalized())
                         {
+                            string key = pool.LocalizationKey;
                             string entry = Language.GetTextValue(key);
-                            if (!entries.Contains(entry)) entries.Add(entry);
+                            if (entry != "" && !entries.Contains(entry)) entries.Add(entry);
+                            else if (ModContent.GetInstance<ConfigClient>().DiagnosticPrintPools)
+                                entries.Add(pool.Name);
+                        }
+                        else if (ModContent.GetInstance<ConfigClient>().DiagnosticPrintPools) {
+                            entries.Add(pool.Name);
                         }
                     }
-                    for (int i = 0; i < entries.Count; i++)
+
+                    List<string> list = entries;
+                    if (entries.Count == 0) list = backup;
+                    for (int i = 0; i < list.Count; i++)
                     {
-                        s += entries[i];
-                        if (i < entries.Count - 1) s += ", ";
+                        s += list[i];
+                        if (i < list.Count - 1) s += ", ";
                     }
 
                     Main.NewText(Language.GetTextValue($"{baseText}Print") + "\n" + s);
-                    if (ModContent.GetInstance<ConfigClient>().DiagnosticPrint)
+                    if (ModContent.GetInstance<ConfigClient>().DiagnosticPrintItems) 
                         ModContent.GetInstance<BiomeExtractionSystem>().PrintDiagnostics(this, PoolList);
                 }
                 else

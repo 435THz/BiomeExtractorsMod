@@ -91,13 +91,17 @@ namespace BiomeExtractorsMod.Common.Systems
             MINERALS, GEMS, DROPS, TERRAIN, VEGETATION, CRITTERS
         }
 
-        public class PoolEntry(string name, int tier, bool blocking)
+        public class PoolEntry(string name, int tier, bool blocking, string localizationKey)
         {
             public string Name { get; private set; } = name;
             public int Tier { get; private set; } = tier;
             public bool Blocking { get; private set; } = blocking;
+            public string LocalizationKey { get; private set; } = localizationKey;
+            public bool IsLocalized() => LocalizationKey != null;
 
-            public PoolEntry(string name, int tier) : this(name, tier, true) { }
+            public PoolEntry(string name, int tier) : this(name, tier, true, null) { }
+            public PoolEntry(string name, int tier, string localizationKey) : this(name, tier, true, localizationKey) { }
+            public PoolEntry(string name, int tier, bool blocking) : this(name, tier, blocking, null) { }
         }
 
         public class ItemEntry(short item, int min, int max)
@@ -288,6 +292,8 @@ namespace BiomeExtractorsMod.Common.Systems
         private readonly Dictionary<int,Dictionary<string, List<Predicate<ScanData>>>> _poolRequirements = [];
         private readonly PriorityList<string> _priorityList = [];
 
+        private static string LocalizeAs(string suffix) => $"{BiomeExtractorsMod.LocPoolNames}.{suffix}";
+
         public bool PoolExists(PoolEntry pool) => PoolExists(pool.Name); 
         public bool PoolExists(string name) => _poolNames.ContainsKey(name);
 
@@ -295,8 +301,12 @@ namespace BiomeExtractorsMod.Common.Systems
 
         public bool AddPool(string name, int priority) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC), priority);
         public bool AddPool(string name, int priority, bool nonBlocking) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC, !nonBlocking), priority);
+        public bool AddPool(string name, int priority, string localizationKey) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC, localizationKey), priority);
+        public bool AddPool(string name, int priority, bool nonBlocking, string localizationKey) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC, !nonBlocking, localizationKey), priority);
         public bool AddPool(string name, int tier, int priority) => AddPool(new PoolEntry(name, tier), priority);
         public bool AddPool(string name, int tier, int priority, bool nonBlocking) => AddPool(new PoolEntry(name, tier, !nonBlocking), priority);
+        public bool AddPool(string name, int tier, int priority, string localizationKey) => AddPool(new PoolEntry(name, tier, localizationKey), priority);
+        public bool AddPool(string name, int tier, int priority, bool nonBlocking, string localizationKey) => AddPool(new PoolEntry(name, tier, !nonBlocking, localizationKey), priority);
         public bool AddPool(PoolEntry pool, int priority)
         {
             if (PoolExists(pool.Name)) return false;
@@ -377,7 +387,7 @@ namespace BiomeExtractorsMod.Common.Systems
 
             int last_p = int.MaxValue;
             bool stop = false;
-            List<string> found = [];
+            List<PoolEntry> found = [];
             foreach(KeyValuePair<int, string> elem in _priorityList.EnumerateInOrder())
             {
                 if (stop &&  last_p != elem.Key) break;
@@ -399,34 +409,34 @@ namespace BiomeExtractorsMod.Common.Systems
                 if (check_passed && _itemPools[elem.Value].Count > 0)
                 {
                     if(scan.MinTier(pool.Tier))
-                        found.Add(elem.Value);
+                        found.Add(_poolNames[elem.Value]);
                     if(pool.Blocking) stop = true;
                 }
             }
             return found;
         }
 
-        public Item RollItem(List<string> pools)
+        public Item RollItem(List<PoolEntry> pools)
         {
             if (pools.Count == 1)
             {
-                ItemEntry entry = _itemPools[pools[0]].Roll();
+                ItemEntry entry = _itemPools[pools[0].Name].Roll();
                 return new(entry.Id, entry.Count);
             }
 
             int totalWeight = 0;
-            foreach (string pool in pools)
-                totalWeight += _itemPools[pool].TotalWeight;
+            foreach (PoolEntry pool in pools)
+                totalWeight += _itemPools[pool.Name].TotalWeight;
             int roll = Main.rand.Next(totalWeight);
             int current = 0;
             ItemEntry result = new(ItemID.None, 1);
-            foreach (string pool in pools)
+            foreach (PoolEntry pool in pools)
             {
-                current += _itemPools[pool].TotalWeight;
+                current += _itemPools[pool.Name].TotalWeight;
                 if (current > roll)
                 {
-                    int weight = roll - (current - _itemPools[pool].TotalWeight);
-                    result = _itemPools[pool].FromWeight(weight);
+                    int weight = roll - (current - _itemPools[pool.Name].TotalWeight);
+                    result = _itemPools[pool.Name].FromWeight(weight);
                     break;
                 }
             }
@@ -436,7 +446,7 @@ namespace BiomeExtractorsMod.Common.Systems
             return item;
         }
 
-        public void PrintDiagnostics(BiomeExtractorEnt extractor, List<string> pools)
+        public void PrintDiagnostics(BiomeExtractorEnt extractor, List<PoolEntry> pools)
         {
             int e_rate =   extractor.ExtractionRate;
             int e_chance = extractor.ExtractionChance;
@@ -447,10 +457,10 @@ namespace BiomeExtractorsMod.Common.Systems
             int lines = 5;
 
             WeightedList<ItemEntry> joinedPool = [];
-            foreach (string poolName in pools)
+            foreach (PoolEntry pool in pools)
             {
-                WeightedList<ItemEntry> pool = _itemPools[poolName];
-                foreach (KeyValuePair<ItemEntry, int> entry in pool)
+                WeightedList<ItemEntry> items = _itemPools[pool.Name];
+                foreach (KeyValuePair<ItemEntry, int> entry in items)
                     joinedPool.Add(entry);
             }
             int totalWeight = joinedPool.TotalWeight;
@@ -485,35 +495,47 @@ namespace BiomeExtractorsMod.Common.Systems
             Main.NewText(s);
         }
 
+        public void GenerateLocalizationKeys()
+        {
+            foreach(PoolEntry pool in _poolNames.Values)
+            {
+                if(pool.IsLocalized())
+                {
+                    Language.GetOrRegister(pool.LocalizationKey, () => pool.Name);
+                }
+            }
+        }
+
         public override void PostSetupContent()
         {
             InitializePools();
             SetRequirements();
             PopulatePools();
+            GenerateLocalizationKeys();
         }
 
         private void InitializePools()
         {
-            AddPool(forest, 0);
+            AddPool(forest, 0, LocalizeAs(forest));
 
-            AddPool(caverns,                                             10);
-            AddPool(underground,                                         10);
+            AddPool(caverns,                                             10, LocalizeAs(caverns));
+            AddPool(underground,                                         10, LocalizeAs(underground));
             AddPool(evil_ores, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 10);
             AddPool(hm_ores, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 10);
 
-            AddPool(snow,                                               50);
-            AddPool(desert,                                             50);
-            AddPool(jungle,                                             50);
+            AddPool(snow,                                               50, LocalizeAs(snow));
+            AddPool(desert,                                             50, LocalizeAs(desert));
+            AddPool(jungle,                                             50, LocalizeAs(jungle));
             AddPool(shells, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 50);
-            AddPool(sky,                                                50);
+            AddPool(sky,                                                50, LocalizeAs(sky));
             AddPool(flight, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 50);
 
             AddPool(hallowed_bars_forest, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 100);
             AddPool(hallowed_bars_desert, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 100);
             AddPool(hallowed_bars_snow,   (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 100);
-            AddPool(hallowed_forest,      (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 100);      
-            AddPool(hallowed_desert,      (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 100);
-            AddPool(hallowed_snow,        (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 100);
+            AddPool(hallowed_forest,      (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 100, LocalizeAs(hallowed_forest));      
+            AddPool(hallowed_desert,      (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 100, LocalizeAs(hallowed_desert));
+            AddPool(hallowed_snow,        (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 100, LocalizeAs(hallowed_snow));
 
             AddPool(mushroom, 200);
 
@@ -521,32 +543,32 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(corrupt_forest_hm,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 300);
             AddPool(corrupt_desert_hm,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 300);
             AddPool(corrupt_snow_hm,    (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 300);
-            AddPool(corrupt_forest,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300);
-            AddPool(crimson_forest,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300);
-            AddPool(corrupt_snow,       (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300);
-            AddPool(crimson_snow,       (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300);
-            AddPool(corrupt_desert,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300);
-            AddPool(crimson_desert,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300);
+            AddPool(corrupt_forest,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300, LocalizeAs(corrupt_forest));
+            AddPool(crimson_forest,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300, LocalizeAs(crimson_forest));
+            AddPool(corrupt_snow,       (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300, LocalizeAs(corrupt_snow));
+            AddPool(crimson_snow,       (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300, LocalizeAs(crimson_snow));
+            AddPool(corrupt_desert,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300, LocalizeAs(corrupt_desert));
+            AddPool(crimson_desert,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   300, LocalizeAs(crimson_desert));
 
-            AddPool(graveyard, 500);
+            AddPool(graveyard, 500, LocalizeAs(graveyard));
 
-            AddPool(ug_snow,                                                  1050);
-            AddPool(ug_desert,                                                1050);
+            AddPool(ug_snow,                                                  1050, LocalizeAs(ug_snow));
+            AddPool(ug_desert,                                                1050, LocalizeAs(ug_desert));
             AddPool(ug_desert_hm, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1050);
-            AddPool(ug_jungle,                                                1050);
+            AddPool(ug_jungle,                                                1050, LocalizeAs(ug_jungle));
             AddPool(ug_shells,    (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1050);
             AddPool(life_fruit,   (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1050);
-            AddPool(hive,                                                     1050);
+            AddPool(hive,                                                     1050, LocalizeAs(hive));
             AddPool(chlorophyte,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1050);
 
             AddPool(ug_hallowed_bars_caverns, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100);
             AddPool(ug_hallowed_bars_desert,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100);
             AddPool(ug_hallowed_bars_snow,    (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100);
-            AddPool(ug_hallowed_caverns,      (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100);
-            AddPool(ug_hallowed_snow,         (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100);
-            AddPool(ug_hallowed_desert,       (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100);
+            AddPool(ug_hallowed_caverns,      (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100, LocalizeAs(ug_hallowed_caverns));
+            AddPool(ug_hallowed_snow,         (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100, LocalizeAs(ug_hallowed_snow));
+            AddPool(ug_hallowed_desert,       (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100, LocalizeAs(ug_hallowed_desert));
 
-            AddPool(ug_mushroom,                                              1200);
+            AddPool(ug_mushroom,                                              1200, LocalizeAs(ug_mushroom));
             AddPool(truffle_worm, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1200);
 
             AddPool(ug_corrupt_caverns_hm, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1300);
@@ -555,36 +577,36 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(ug_crimson_desert_hm,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1300);
             AddPool(ug_corrupt_snow_hm,    (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1300);
             AddPool(ug_crimson_snow_hm,    (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1300);
-            AddPool(ug_corrupt_caverns,    (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300);
-            AddPool(ug_crimson_caverns,    (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300);
-            AddPool(ug_corrupt_snow,       (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300);
-            AddPool(ug_crimson_snow,       (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300);
-            AddPool(ug_corrupt_desert,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300);
-            AddPool(ug_crimson_desert,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300);
+            AddPool(ug_corrupt_caverns,    (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300, LocalizeAs(ug_corrupt_caverns));
+            AddPool(ug_crimson_caverns,    (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300, LocalizeAs(ug_crimson_caverns));
+            AddPool(ug_corrupt_snow,       (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300, LocalizeAs(ug_corrupt_snow));
+            AddPool(ug_crimson_snow,       (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300, LocalizeAs(ug_crimson_snow));
+            AddPool(ug_corrupt_desert,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300, LocalizeAs(ug_corrupt_desert));
+            AddPool(ug_crimson_desert,     (int)BiomeExtractorEnt.EnumTiers.DEMONIC,   1300, LocalizeAs(ug_crimson_desert));
             
-            AddPool(dungeon,   (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 2000);
+            AddPool(dungeon,   (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 2000, LocalizeAs(dungeon));
             AddPool(dungeon_p, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 2000);
             AddPool(dungeon_g, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 2000);
             AddPool(dungeon_b, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 2000);
             AddPool(ectoplasm, (int)BiomeExtractorEnt.EnumTiers.CYBER,   2000);
-            AddPool(temple,    (int)BiomeExtractorEnt.EnumTiers.CYBER,   2000);
+            AddPool(temple,    (int)BiomeExtractorEnt.EnumTiers.CYBER,   2000, LocalizeAs(temple));
 
-            AddPool(ocean,                                              2500);
+            AddPool(ocean,                                              2500, LocalizeAs(ocean));
             AddPool(pirate, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 2500);
 
-            AddPool(shimmer, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 3000, true);
+            AddPool(shimmer, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 3000, true, LocalizeAs(shimmer));
             AddPool(spider,                                            3000, true);
-            AddPool(cobweb,                                            3000, true);
-            AddPool(granite,                                           3000, true);
-            AddPool(marble,                                            3000, true);
+            AddPool(cobweb,                                            3000, true, LocalizeAs(cobweb));
+            AddPool(granite,                                           3000, true, LocalizeAs(granite));
+            AddPool(marble,                                            3000, true, LocalizeAs(marble));
 
             AddPool(space,                                                  4000);
             AddPool(spc_flight, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 4000);
             AddPool(pillar,     (int)BiomeExtractorEnt.EnumTiers.LUNAR,     4000);
             AddPool(luminite,   (int)BiomeExtractorEnt.EnumTiers.ETHEREAL,  4000);
-            AddPool(underworld, (int)BiomeExtractorEnt.EnumTiers.INFERNAL,  4000);
+            AddPool(underworld, (int)BiomeExtractorEnt.EnumTiers.INFERNAL,  4000, LocalizeAs(underworld));
             AddPool(uw_fire,    (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 4000);
-            AddPool(meteorite,  (int)BiomeExtractorEnt.EnumTiers.INFERNAL,  10000);
+            AddPool(meteorite,  (int)BiomeExtractorEnt.EnumTiers.INFERNAL,  10000, LocalizeAs(meteorite));
         }
 
         private void SetRequirements()
