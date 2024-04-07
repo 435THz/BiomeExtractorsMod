@@ -769,6 +769,26 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(underground, ItemID.OrangeBloodroot, 7);
             AddItemInPool(underground, ItemID.GreenMushroom,   7);
             AddItemInPool(underground, ItemID.TealMushroom,    7);
+            AddItemInPool(caverns, ItemID.StoneBlock, 69);
+            AddItemInPool(caverns, ItemID.DirtBlock, 18);
+            AddItemInPool(caverns, ItemID.SiltBlock, 12);
+            AddItemInPool(caverns, ItemID.CopperOre, 14);
+            AddItemInPool(caverns, ItemID.TinOre, 14);
+            AddItemInPool(caverns, ItemID.IronOre, 12);
+            AddItemInPool(caverns, ItemID.LeadOre, 12);
+            AddItemInPool(caverns, ItemID.SilverOre, 11);
+            AddItemInPool(caverns, ItemID.TungstenOre, 11);
+            AddItemInPool(caverns, ItemID.GoldOre, 10);
+            AddItemInPool(caverns, ItemID.PlatinumOre, 10);
+            AddItemInPool(caverns, ItemID.Amethyst, 12);
+            AddItemInPool(caverns, ItemID.Topaz, 11);
+            AddItemInPool(caverns, ItemID.Sapphire, 10);
+            AddItemInPool(caverns, ItemID.Emerald, 9);
+            AddItemInPool(caverns, ItemID.Ruby, 8);
+            AddItemInPool(caverns, ItemID.Diamond, 6);
+            AddItemInPool(caverns, ItemID.OrangeBloodroot, 7);
+            AddItemInPool(caverns, ItemID.GreenMushroom, 7);
+            AddItemInPool(caverns, ItemID.TealMushroom, 7);
             AddItemInPool(caverns, ItemID.RedHusk,  8);
             AddItemInPool(caverns, ItemID.LimeKelp, 8);
             AddItemInPool(evil_ores, ItemID.CrimtaneOre, 8);
@@ -798,7 +818,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(jungle, ItemID.MudBlock,                          10);
             AddItemInPool(jungle, ItemID.JungleGrassSeeds,                  5);
             AddItemInPool(jungle, new ItemEntry(ItemID.RichMahogany, 1, 3), 35);
-            AddItemInPool(jungle, new ItemEntry(ItemID.BambooBlock,  1, 3), 35); //TODO this to all other wod types
+            AddItemInPool(jungle, new ItemEntry(ItemID.BambooBlock,  1, 3), 35);
             AddItemInPool(jungle, ItemID.Moonglow,                          12);
             AddItemInPool(jungle, ItemID.SkyBlueFlower,                     12);
             AddItemInPool(jungle, ItemID.Frog,                              4);
@@ -889,13 +909,13 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(graveyard, ItemID.Mouse,  4);
             AddItemInPool(graveyard, ItemID.Maggot, 3);
 
-            AddItemInPool(shimmer, ItemID.Amethyst, 12);
-            AddItemInPool(shimmer, ItemID.Topaz, 11);
-            AddItemInPool(shimmer, ItemID.Sapphire, 10);
-            AddItemInPool(shimmer, ItemID.Emerald, 9);
-            AddItemInPool(shimmer, ItemID.Ruby, 8);
-            AddItemInPool(shimmer, ItemID.Diamond, 6);
-            AddItemInPool(shimmer, ItemID.Shimmerfly,   44);
+            AddItemInPool(shimmer, ItemID.Amethyst,   12);
+            AddItemInPool(shimmer, ItemID.Topaz,      11);
+            AddItemInPool(shimmer, ItemID.Sapphire,   10);
+            AddItemInPool(shimmer, ItemID.Emerald,    9);
+            AddItemInPool(shimmer, ItemID.Ruby,       8);
+            AddItemInPool(shimmer, ItemID.Diamond,    6);
+            AddItemInPool(shimmer, ItemID.Shimmerfly, 44);
             AddItemInPool(marble,  ItemID.MarbleBlock,  75);
             AddItemInPool(granite, ItemID.GraniteBlock, 75);
             AddItemInPool(granite, ItemID.Geode,        50);
