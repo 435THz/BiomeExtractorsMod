@@ -1,10 +1,20 @@
+using BiomeExtractorsMod.Common.Configs;
+using System;
+using System.Collections.Generic;
 using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod
 {
     public class BiomeExtractorsMod : Mod
 	{
-        static internal bool MS_loaded;
+        static string GetModName(SupportedMods mod) => Enum.GetName(typeof(SupportedMods), mod);
+        enum SupportedMods
+        {
+            MagicStorage
+        }
+
+        static readonly private Dictionary<SupportedMods, bool> supportedModsLoaded = [];
+        static internal bool MS_loaded => supportedModsLoaded[SupportedMods.MagicStorage] && ModContent.GetInstance<ConfigCompat>().MS;
 
         private static readonly object LocBase = "Mods.BiomeExtractorsMod";
 
@@ -20,7 +30,8 @@ namespace BiomeExtractorsMod
 
         public override void Load()
         {
-            MS_loaded = ModLoader.HasMod("MagicStorage");
+            foreach(SupportedMods mod in Enum.GetValues(typeof(SupportedMods)))
+            supportedModsLoaded[mod] = ModLoader.HasMod(GetModName(mod));
         }
     }
 }
