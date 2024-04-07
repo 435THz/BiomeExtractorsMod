@@ -166,7 +166,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private bool IsOutputDataValid()
         {
-            if (BiomeExtractorsMod.MS_loaded && outputType == OutputType.MS_ENVIRONMENTACCESS && ModContent.GetInstance<ConfigCompat>().MaxMS != 0)
+            if (BiomeExtractorsMod.MS_loaded && outputType == OutputType.MS_ENVIRONMENTACCESS)
                 return MagicStorageHook.IsOutputValid(outputPos);
             if (outputType == OutputType.CHEST)
                 return IsChestValid();
@@ -197,7 +197,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private OutData GetNewOutput()
         {
             OutData output;
-            if (BiomeExtractorsMod.MS_loaded && ModContent.GetInstance<ConfigCompat>().MaxMS > 0)
+            if (BiomeExtractorsMod.MS_loaded)
             {
                 output = GetAdjacentMSAccess();
                 if (output.Type != OutputType.NONE) return output;

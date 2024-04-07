@@ -2,6 +2,7 @@
 using BiomeExtractorsMod.Content.Tiles;
 using MagicStorage.Components;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -45,17 +46,18 @@ namespace BiomeExtractorsMod.CrossMod
             TEStorageHeart heart = GetMSStorageHeart(access);
             if (heart == null) return false;
 
-            int limit = DepositableAmount(heart, newItem.type);
+            int limit = DepositableAmount(heart, newItem.type, newItem.maxStack);
             newItem.stack = Utils.Clamp(newItem.stack, 0, limit);
             if(newItem.stack == 0) return false;
             heart.DepositItem(newItem);
             return true;
         }
 
-        private static int DepositableAmount(TEStorageHeart storage, int itemID)
+        private static int DepositableAmount(TEStorageHeart storage, int itemID, int maxStack)
         {
             int limit = ModContent.GetInstance<ConfigCompat>().MaxMS;
-            if (limit < 0) return int.MaxValue;
+            int stackLimit = ModContent.GetInstance<ConfigCompat>().MaxMSStacks;
+            limit = Math.Min(limit, maxStack * stackLimit);
 
             int amount = 0;
             foreach (Item item in storage.GetStoredItems())

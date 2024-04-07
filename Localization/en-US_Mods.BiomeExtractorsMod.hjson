@@ -192,18 +192,33 @@ Configs: {
 	ConfigCompat: {
 		DisplayName: Compatibility
 		MSHeader: Magic Storage
-		MaxMSTitle: Maximum stack in Storage
+		MSTitle: Connect to Magic Storage
+		MSTooltip:
+			'''
+			This mod offers native compatibility with Magic Storage:
+			Biome Extractors are able to store the items they generate inside of
+			Magic Storage systems if they have an active Storage Configuration
+			Interface adjacent to them. However, if this is not what you want,
+			you can disable compatibility by un-ticking this option.
+			Defaults to true.
+			'''
+		MaxMSTitle: Maximum amount in Storage
 		MaxMSTooltip:
 			'''
-			If Magic Storage is installed, Biome Extractors will be able to store
-			extracted items inside a Magic Storage system, provided they have an
-			adjacent Storage Configuration Interface. However, they will stop
+			Biome Extractors connected to a Magic Storage system will stop
 			generating any specific item if its amount in storage is equal to or
 			greater than this value. This way the system doesn't fill up with junk!
-			To disable this behavior, simply set this value to -1.
-			Setting this value to 0 stops the Extractors from considering Magic
-			Storage as a suitable output altogether.
 			Defaults to 9999.
+			'''
+		MaxMSStacksTitle: Maximum stacks in Storage
+		MaxMSStacksTooltip:
+			'''
+			Biome Extractors connected to a Magic Storage system will stop
+			generating any specific item if the number of stacks occupied by it is
+			equal to or greater than this value.
+			This setting serves as a secondary rule for items with low stack limit,
+			tools, weapons and equipment.
+			Defaults to 5.
 			'''
 	}
 }

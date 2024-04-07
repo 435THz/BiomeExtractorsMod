@@ -144,16 +144,28 @@ namespace BiomeExtractorsMod.Common.Configs
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCompat.MSHeader")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCompat.MSTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCompat.MSTooltip")]
+        [DefaultValue(true)]
+        public bool MS; //if false, act like Magic Storage wasn't installed
+
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCompat.MaxMSTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCompat.MaxMSTooltip")]
-        [Range(-1, int.MaxValue)]
+        [Range(1, int.MaxValue)]
         [DefaultValue(9999)]
         public int MaxMS;
+
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCompat.MaxMSStacksTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCompat.MaxMSStacksTooltip")]
+        [Range(1, int.MaxValue)]
+        [DefaultValue(5)]
+        public int MaxMSStacks;
 
         [OnDeserialized]
         internal void EnforceRanges(StreamingContext context)
         {
-            MaxMS = Math.Max(-1, MaxMS); //-1: no limit, 0 = never push
+            MaxMS =       Math.Max(1, MaxMS);
+            MaxMSStacks = Math.Max(1, MaxMSStacks);
         }
     }
 }
