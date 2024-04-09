@@ -9,8 +9,13 @@ namespace BiomeExtractorsMod.Common
 {
     public class Recipes : ModSystem
     {
+        readonly string basicExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemIron)}";
+
         public override void AddRecipeGroups()
         {
+            RecipeGroup basicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.BasicExtractor")}", ModContent.ItemType<BiomeExtractorItemIron>(), ModContent.ItemType<BiomeExtractorItemLead>());
+            RecipeGroup.RegisterGroup(basicExtractorGroupName, basicExtractor);
+
             RecipeGroup evilOres = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.EvilBars")}", ItemID.DemoniteBar, ItemID.CrimtaneBar);
             RecipeGroup.RegisterGroup(nameof(ItemID.DemoniteBar), evilOres);
 
@@ -24,15 +29,22 @@ namespace BiomeExtractorsMod.Common
 
         public override void AddRecipes()
         {
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemBasic>())
+            Recipe.Create(ModContent.ItemType<BiomeExtractorItemIron>())
                 .AddIngredient(ItemID.Extractinator)
-                .AddRecipeGroup(RecipeGroupID.IronBar, 5)
+                .AddIngredient(ItemID.IronBar, 5)
+                .AddIngredient(ItemID.Chain, 12)
+                .AddTile(TileID.TinkerersWorkbench)
+                .Register();
+
+            Recipe.Create(ModContent.ItemType<BiomeExtractorItemLead>())
+                .AddIngredient(ItemID.Extractinator)
+                .AddIngredient(ItemID.LeadBar, 5)
                 .AddIngredient(ItemID.Chain, 12)
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
 
             Recipe.Create(ModContent.ItemType<BiomeExtractorItemDemonic>())
-                .AddIngredient(ModContent.ItemType<BiomeExtractorItemBasic>())
+                .AddRecipeGroup(basicExtractorGroupName)
                 .AddRecipeGroup(nameof(ItemID.DemoniteBar), 5)
                 .AddRecipeGroup(nameof(ItemID.ShadowScale), 12)
                 .AddTile(TileID.TinkerersWorkbench)
