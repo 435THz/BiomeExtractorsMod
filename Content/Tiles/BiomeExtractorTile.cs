@@ -1,7 +1,6 @@
 using BiomeExtractorsMod.Content.TileEntities;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -12,6 +11,10 @@ namespace BiomeExtractorsMod.Content.Tiles
     public abstract class BiomeExtractorTile : ModTile
 	{
         internal static Point16 origin = new(1, 2); // Bottom-center
+
+        protected abstract int FrameCount { get; }
+        protected virtual int FrameDuration => 5;
+        protected virtual int FrameHeight => 54;
 
         protected abstract BiomeExtractorEnt GetTileEntity();
 
@@ -36,10 +39,41 @@ namespace BiomeExtractorsMod.Content.Tiles
             TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(GetTileEntity().Hook_AfterPlacement, -1, 0, false);
 			TileObjectData.newTile.UsesCustomCanPlace = true;
 
+            TileObjectData.newTile.StyleHorizontal = true;
+
             TileObjectData.addTile(Type);
 
             TileID.Sets.PreventsSandfall[Type] = true;
             TileID.Sets.AvoidedByMeteorLanding[Type] = true;
+        }
+
+        public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
+        {
+            bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
+            if (!found || !entity.Active)
+            {
+                frameYOffset = 0;
+                return;
+            }
+
+            int x = entity.Position.X;
+            int y = entity.Position.Y;
+            //ultra spicy position-dependent animation desyncs right here
+            int frame = Main.tileFrame[type]+x+y;
+            if (x % 2 == 0) frame++;
+            if (y % 3 == 0) frame++;
+            if (y % 4 == 0) frame+=2;
+            if (x % y == 0 || y % x == 0) frame+=3;
+
+            frameYOffset = (frame % FrameCount) * FrameHeight;
+        }
+        public override void AnimateTile(ref int frame, ref int frameCounter)
+        {
+            if (++frameCounter >= FrameDuration)
+            {
+                frameCounter = 0;
+                frame = ++frame % FrameCount;
+            }
         }
 
         public override bool RightClick(int i, int j)
@@ -64,7 +98,6 @@ namespace BiomeExtractorsMod.Content.Tiles
                 {
                     for (short y_off = 0; y_off < 3; y_off++)
                     {
-                        //TODO change visuals
                         Wiring.SkipWire(top_left.X + x_off, top_left.Y + y_off);
                     }
                 }

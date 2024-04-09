@@ -8,10 +8,12 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Items\BiomeExtractorItemCorruption.png" />
+    <None Remove="Content\Items\BiomeExtractorItemCrimson.png" />
     <None Remove="Content\Items\BiomeExtractorItemCyber.png" />
-    <None Remove="Content\Items\BiomeExtractorItemDemonic.png" />
     <None Remove="Content\Items\BiomeExtractorItemEthereal.png" />
     <None Remove="Content\Items\BiomeExtractorItemInfernal.png" />
+    <None Remove="Content\Items\BiomeExtractorItemLead.png" />
     <None Remove="Content\Items\BiomeExtractorItemLunar.png" />
     <None Remove="Content\Items\BiomeExtractorItemSteampunk.png" />
     <None Remove="Content\Tiles\BiomeExtractorTileCyber.png" />

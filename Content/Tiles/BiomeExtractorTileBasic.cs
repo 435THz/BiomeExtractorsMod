@@ -6,6 +6,8 @@ namespace BiomeExtractorsMod.Content.Tiles
 {
     class BiomeExtractorTileBasic : BiomeExtractorTile
     {
+        protected override int FrameCount => 8;
+
         protected override BiomeExtractorEnt GetTileEntity()
         {
             return ModContent.GetInstance<BiomeExtractorEntBasic>();
