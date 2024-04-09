@@ -3,7 +3,6 @@ using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Content.Tiles;
 using BiomeExtractorsMod.CrossMod;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using Terraria;
