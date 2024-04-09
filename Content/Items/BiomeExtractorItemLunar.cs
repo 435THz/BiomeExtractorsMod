@@ -7,10 +7,7 @@ namespace BiomeExtractorsMod.Content.Items
 {
     class BiomeExtractorItemLunar : BiomeExtractorItem
     {
-        protected override int GetTileId()
-        {
-            return ModContent.TileType<BiomeExtractorTileLunar>();
-        }
+        protected override int TileId => ModContent.TileType<BiomeExtractorTileLunar>();
 
         public override void SetDefaults()
         {

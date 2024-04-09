@@ -5,12 +5,9 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    class BiomeExtractorItemBasic : BiomeExtractorItem
+    class BiomeExtractorItemIron : BiomeExtractorItem
     {
-        protected override int GetTileId()
-        {
-            return ModContent.TileType<BiomeExtractorTileBasic>();
-        }
+        protected override int TileId => ModContent.TileType<BiomeExtractorTileBasic>();
 
         public override void SetDefaults()
         {

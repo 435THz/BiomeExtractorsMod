@@ -4,12 +4,17 @@ Items: {
 		Tooltip: ""
 	}
 
-	BiomeExtractorItemBasic: {
+	BiomeExtractorItemIron: {
 		DisplayName: Biome Extractor
 		Tooltip: Place it anywhere in the world to extract common materials from the area around it.
 	}
 
 	BiomeExtractorItemDemonic: {
+	BiomeExtractorItemLead: {
+		DisplayName: Biome Extractor
+		Tooltip: Place it anywhere in the world to extract common materials from the area around it.
+	}
+
 		DisplayName: Demonic Extractor
 		Tooltip:
 			'''

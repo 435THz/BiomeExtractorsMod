@@ -7,10 +7,7 @@ namespace BiomeExtractorsMod.Content.Items
 {
     class BiomeExtractorItemSteampunk : BiomeExtractorItem
     {
-        protected override int GetTileId()
-        {
-            return ModContent.TileType<BiomeExtractorTileSteampunk>();
-        }
+        protected override int TileId => ModContent.TileType<BiomeExtractorTileSteampunk>();
 
         public override void SetDefaults()
         {

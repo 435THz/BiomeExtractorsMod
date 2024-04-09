@@ -7,10 +7,7 @@ namespace BiomeExtractorsMod.Content.Items
 {
     class BiomeExtractorItemCyber : BiomeExtractorItem
     {
-        protected override int GetTileId()
-        {
-            return ModContent.TileType<BiomeExtractorTileCyber>();
-        }
+        protected override int TileId => ModContent.TileType<BiomeExtractorTileCyber>();
 
         public override void SetDefaults()
         {
