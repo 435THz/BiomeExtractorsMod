@@ -2,6 +2,7 @@ using BiomeExtractorsMod.Content.TileEntities;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -84,6 +85,7 @@ namespace BiomeExtractorsMod.Content.Tiles
                 entity.DisplayStatus();
                 return true;
             }
+            Main.NewText(Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.MachineStateBroken"));
             return false;
         }
 

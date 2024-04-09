@@ -289,6 +289,7 @@ Text: {
 		MachineStatePrint: The machine is extracting resources from the following biomes:
 		MachineStateFail: The machine cannot extract anything from this place.
 		MachineStateOff: The machine is inactive.
+		MachineStateBroken: This machine failed to load. Please break and replace it.
 		Rate: Rate
 		Frames_short: f
 		Chance: Chance
