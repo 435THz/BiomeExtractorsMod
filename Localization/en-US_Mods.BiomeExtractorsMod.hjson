@@ -1,7 +1,7 @@
 Items: {
 	DevCursor: {
 		DisplayName: Dev Cursor
-		Tooltip: ""
+		Tooltip: DEV ITEM: Prints to chat the x and y position of the cursor relative to the tile grid.
 	}
 
 	BiomeExtractorItemIron: {
@@ -64,7 +64,7 @@ Items: {
 		Tooltip:
 			'''
 			Place it anywhere in the world to extract common materials from the area around it.
-			It can extract Luminite when placed in space after the Lunar Event has been completed.
+			It can extract Luminite when in space after the Lunar Event has been completed.
 			'''
 	}
 
@@ -81,11 +81,12 @@ Items: {
 Configs: {
 	ConfigClient: {
 		DisplayName: Client Settings
-		DiagPrintTitle: Print Hidden Pools
-		DiagPrintTooltip:
+		DiagConfigHeader: Chat Settings
+		DiagPrintPoolsTitle: Print Hidden Pools
+		DiagPrintPoolsTooltip:
 			'''
 			If this is enabled, right clicking an Extractor will also print
-			the name of invisible pools like those containing hardmode
+			the name of invisible pools like those containing only hardmode
 			drops and such. These pools will not be localized, as this
 			setting exists only for debug purposes.
 			Defaults to false.
@@ -99,8 +100,6 @@ Configs: {
 			expected amount after one in-game day.
 			Defaults to false.
 			'''
-		DiagPrintPoolsTitle: Diagnostic Print Pools
-		DiagPrintPoolsTooltip: ""
 	}
 
 	ConfigCommon: {

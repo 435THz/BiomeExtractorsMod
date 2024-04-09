@@ -10,6 +10,7 @@ namespace BiomeExtractorsMod.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagConfigHeader")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintPoolsTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintPoolsTooltip")]
         [DefaultValue(false)]
