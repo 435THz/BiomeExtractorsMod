@@ -9,12 +9,21 @@ Items: {
 		Tooltip: Place it anywhere in the world to extract common materials from the area around it.
 	}
 
-	BiomeExtractorItemDemonic: {
 	BiomeExtractorItemLead: {
 		DisplayName: Biome Extractor
 		Tooltip: Place it anywhere in the world to extract common materials from the area around it.
 	}
 
+	BiomeExtractorItemCorruption: {
+		DisplayName: Demonic Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can extract materials from the evil biomes and the dungeon.
+			'''
+	}
+
+	BiomeExtractorItemCrimson: {
 		DisplayName: Demonic Extractor
 		Tooltip:
 			'''
@@ -240,6 +249,8 @@ Configs: {
 
 Text: {
 	ItemGroups: {
+		BasicExtractor: Basic Extractor
+		DemonicExtractor: Demonic Extractor
 		EvilBars: Evil Metal Bar
 		EvilSamples: Evil Boss Material
 		Tier3HM: Tier 3 Hardmode Bar

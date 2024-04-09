@@ -16,11 +16,8 @@ namespace BiomeExtractorsMod.Common
             RecipeGroup basicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.BasicExtractor")}", ModContent.ItemType<BiomeExtractorItemIron>(), ModContent.ItemType<BiomeExtractorItemLead>());
             RecipeGroup.RegisterGroup(basicExtractorGroupName, basicExtractor);
 
-            RecipeGroup evilOres = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.EvilBars")}", ItemID.DemoniteBar, ItemID.CrimtaneBar);
-            RecipeGroup.RegisterGroup(nameof(ItemID.DemoniteBar), evilOres);
-
-            RecipeGroup evilSamples = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.EvilSamples")}", ItemID.ShadowScale, ItemID.TissueSample);
-            RecipeGroup.RegisterGroup(nameof(ItemID.ShadowScale), evilSamples);
+            RecipeGroup demonicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.DemonicExtractor")}", ModContent.ItemType<BiomeExtractorItemCorruption>(), ModContent.ItemType<BiomeExtractorItemCrimson>());
+            RecipeGroup.RegisterGroup(demonicExtractorGroupName, demonicExtractor);
 
             RecipeGroup hmOres3 = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.Tier3HM")}", ItemID.AdamantiteBar, ItemID.TitaniumBar);
             RecipeGroup.RegisterGroup(nameof(ItemID.AdamantiteBar), hmOres3);
@@ -43,15 +40,22 @@ namespace BiomeExtractorsMod.Common
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
 
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemDemonic>())
+            Recipe.Create(ModContent.ItemType<BiomeExtractorItemCorruption>())
                 .AddRecipeGroup(basicExtractorGroupName)
-                .AddRecipeGroup(nameof(ItemID.DemoniteBar), 5)
-                .AddRecipeGroup(nameof(ItemID.ShadowScale), 12)
+                .AddIngredient(ItemID.DemoniteBar, 5)
+                .AddIngredient(ItemID.ShadowScale, 12)
+                .AddTile(TileID.TinkerersWorkbench)
+                .Register();
+
+            Recipe.Create(ModContent.ItemType<BiomeExtractorItemCrimson>())
+                .AddRecipeGroup(basicExtractorGroupName)
+                .AddIngredient(ItemID.CrimtaneBar, 5)
+                .AddIngredient(ItemID.TissueSample, 12)
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
 
             Recipe.Create(ModContent.ItemType<BiomeExtractorItemInfernal>())
-                .AddIngredient(ModContent.ItemType<BiomeExtractorItemDemonic>())
+                .AddIngredient(ModContent.ItemType<BiomeExtractorItemCorruption>())
                 .AddIngredient(ItemID.HellstoneBar, 5)
                 .AddIngredient(ItemID.Meteorite, 12)
                 .AddTile(TileID.TinkerersWorkbench)
