@@ -10,6 +10,7 @@ namespace BiomeExtractorsMod.Common
     public class Recipes : ModSystem
     {
         readonly string basicExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemIron)}";
+        readonly string demonicExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemCorruption)}";
 
         public override void AddRecipeGroups()
         {
@@ -55,7 +56,7 @@ namespace BiomeExtractorsMod.Common
                 .Register();
 
             Recipe.Create(ModContent.ItemType<BiomeExtractorItemInfernal>())
-                .AddIngredient(ModContent.ItemType<BiomeExtractorItemCorruption>())
+                .AddRecipeGroup(demonicExtractorGroupName)
                 .AddIngredient(ItemID.HellstoneBar, 5)
                 .AddIngredient(ItemID.Meteorite, 12)
                 .AddTile(TileID.TinkerersWorkbench)
