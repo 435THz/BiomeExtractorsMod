@@ -8,6 +8,7 @@ namespace BiomeExtractorsMod.Content.Items
     class BiomeExtractorItemCrimson : BiomeExtractorItem
     {
         protected override int TileId => ModContent.TileType<BiomeExtractorTileDemonic>();
+        protected override int TileStyle => 1;
 
         public override void SetDefaults()
         {

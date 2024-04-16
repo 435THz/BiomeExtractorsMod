@@ -8,7 +8,6 @@ namespace BiomeExtractorsMod.Content.Items
     class BiomeExtractorItemCorruption : BiomeExtractorItem
     {
         protected override int TileId => ModContent.TileType<BiomeExtractorTileDemonic>();
-        protected override int TileStyle => 0; //TODO 1
 
         public override void SetDefaults()
         {
