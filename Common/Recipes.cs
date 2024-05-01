@@ -9,8 +9,9 @@ namespace BiomeExtractorsMod.Common
 {
     public class Recipes : ModSystem
     {
-        readonly string basicExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemIron)}";
-        readonly string demonicExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemCorruption)}";
+        readonly string basicExtractorGroupName =     $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemIron)}";
+        readonly string demonicExtractorGroupName =   $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemCorruption)}";
+//TODO        readonly string steampunkExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemSteampunk)}"; depends on the design
 
         public override void AddRecipeGroups()
         {
