@@ -40,7 +40,7 @@ Items: {
 			It can extract materials from the underworld and from meteorites.
 			'''
 	}
-	
+
 	BiomeExtractorItemAdamantite: {
 		DisplayName: Steampunk Extractor
 		Tooltip:
