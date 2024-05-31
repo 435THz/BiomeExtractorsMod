@@ -11,7 +11,7 @@ namespace BiomeExtractorsMod.Common
     {
         readonly string basicExtractorGroupName =     $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemIron)}";
         readonly string demonicExtractorGroupName =   $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemCorruption)}";
-//TODO        readonly string steampunkExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemSteampunk)}"; depends on the design
+        readonly string steampunkExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemAdamantite)}";
 
         public override void AddRecipeGroups()
         {
@@ -21,8 +21,8 @@ namespace BiomeExtractorsMod.Common
             RecipeGroup demonicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.DemonicExtractor")}", ModContent.ItemType<BiomeExtractorItemCorruption>(), ModContent.ItemType<BiomeExtractorItemCrimson>());
             RecipeGroup.RegisterGroup(demonicExtractorGroupName, demonicExtractor);
 
-            RecipeGroup hmOres3 = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.Tier3HM")}", ItemID.AdamantiteBar, ItemID.TitaniumBar);
-            RecipeGroup.RegisterGroup(nameof(ItemID.AdamantiteBar), hmOres3);
+            RecipeGroup steampunkExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.DemonicExtractor")}", ModContent.ItemType<BiomeExtractorItemAdamantite>(), ModContent.ItemType<BiomeExtractorItemTitanium>());
+            RecipeGroup.RegisterGroup(steampunkExtractorGroupName, steampunkExtractor);
         }
 
 
@@ -63,15 +63,22 @@ namespace BiomeExtractorsMod.Common
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
 
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemSteampunk>())
+            Recipe.Create(ModContent.ItemType<BiomeExtractorItemAdamantite>())
                 .AddIngredient(ModContent.ItemType<BiomeExtractorItemInfernal>())
-                .AddRecipeGroup(nameof(ItemID.AdamantiteBar), 5)
+                .AddIngredient(ItemID.AdamantiteBar, 5)
+                .AddIngredient(ItemID.Cog, 12)
+                .AddTile(TileID.MythrilAnvil) //covers both
+                .Register();
+
+            Recipe.Create(ModContent.ItemType<BiomeExtractorItemTitanium>())
+                .AddIngredient(ModContent.ItemType<BiomeExtractorItemInfernal>())
+                .AddIngredient(ItemID.TitaniumBar, 5)
                 .AddIngredient(ItemID.Cog, 12)
                 .AddTile(TileID.MythrilAnvil) //covers both
                 .Register();
 
             Recipe.Create(ModContent.ItemType<BiomeExtractorItemCyber>())
-                .AddIngredient(ModContent.ItemType<BiomeExtractorItemSteampunk>())
+                .AddRecipeGroup(steampunkExtractorGroupName)
                 .AddIngredient(ItemID.ChlorophyteBar, 5)
                 .AddIngredient(ItemID.Nanites, 12)
                 .AddTile(TileID.MythrilAnvil)
