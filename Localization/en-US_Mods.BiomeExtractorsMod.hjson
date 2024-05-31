@@ -6,12 +6,20 @@ Items: {
 
 	BiomeExtractorItemIron: {
 		DisplayName: Biome Extractor
-		Tooltip: Place it anywhere in the world to extract common materials from the area around it.
+		Tooltip: 
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			The output will be placed inside of an adjacent chest.
+			'''
 	}
 
 	BiomeExtractorItemLead: {
 		DisplayName: Biome Extractor
-		Tooltip: Place it anywhere in the world to extract common materials from the area around it.
+		Tooltip: 
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			The output will be placed inside of an adjacent chest.
+			'''
 	}
 
 	BiomeExtractorItemCorruption: {
@@ -73,7 +81,7 @@ Items: {
 		Tooltip:
 			'''
 			Place it anywhere in the world to extract common materials from the area around it.
-			It can extract Luminite when in space after the Lunar Event has been completed.
+			It can extract Pillar Fragments when in space after they have all been defeated.
 			'''
 	}
 
@@ -82,7 +90,7 @@ Items: {
 		Tooltip:
 			'''
 			Place it anywhere in the world to extract common materials from the area around it.
-			It can extract Pillar Fragments when in space after they have all been defeated.
+			It can extract Luminite when in space after the Lunar Event has been completed.
 			'''
 	}
 }
