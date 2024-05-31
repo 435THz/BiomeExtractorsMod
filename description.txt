@@ -1,12 +1,12 @@
-Biome Extractors Mod adds a new furniture called “Biome Extractor” to the game. When placed, this machine will extract items from the biome it’s in and then store them in an adjacent chest.
-There are seven types of Biome Extractors, each one more powerful and able to access more loot than the last, but it all starts from a simple Extractinator.
+Biome Extractors Mod adds a new type of furniture called “Biome Extractor” to the game. When placed, this machine will extract items from the biome it’s in and then store them in an adjacent chest.
+There are seven types of Biome Extractors, each one more powerful and able to access more loot than the last, and it all starts from a simple Extractinator.
 Speaking of, this mod also makes it possible to purchase Extractinators from the Mechanic.
 
 Disclaimer: by “extracting from the biome” we mean “generating items related to the biome from nothing”.
 
 Mod support:
-- This mod can deposit items inside Magic Storage systems: just place them beside a connected Storage Configuration Interface.
+- This mod can deposit items inside Magic Storage systems: all you need to do is place them beside a connected Storage Configuration Interface.
 
 Credits:
 Code: MistressNebula (Me)
-Spriting: Levviata
+Spriting: Levviata, "Machinery"
