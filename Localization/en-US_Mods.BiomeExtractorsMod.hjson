@@ -40,8 +40,17 @@ Items: {
 			It can extract materials from the underworld and from meteorites.
 			'''
 	}
+	
+	BiomeExtractorItemAdamantite: {
+		DisplayName: Steampunk Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can extract most early hardmode materials.
+			'''
+	}
 
-	BiomeExtractorItemSteampunk: {
+	BiomeExtractorItemTitanium: {
 		DisplayName: Steampunk Extractor
 		Tooltip:
 			'''
