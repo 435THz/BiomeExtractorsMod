@@ -1,4 +1,5 @@
 displayName = Biome Extractors Mod
 author = MistressNebula
-version = 1.0
+version = 0.1
 weakReferences = MagicStorage@0.6
+homepage = https://github.com/435THz/BiomeExtractorsMod/wiki
