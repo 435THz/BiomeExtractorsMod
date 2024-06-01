@@ -42,7 +42,7 @@ namespace BiomeExtractorsMod.Common.Configs
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier1ChanceTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier1ChanceTooltip")]
         [DefaultValue(60)]
-        public int Tier1ExtractorChance; //480 extractions/day
+        public int Tier1ExtractorChance; //288 extractions/day
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2Header")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2RateTitle")]
