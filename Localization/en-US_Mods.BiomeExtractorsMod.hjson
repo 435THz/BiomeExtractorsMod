@@ -6,7 +6,7 @@ Items: {
 
 	BiomeExtractorItemIron: {
 		DisplayName: Biome Extractor
-		Tooltip: 
+		Tooltip:
 			'''
 			Place it anywhere in the world to extract common materials from the area around it.
 			The output will be placed inside of an adjacent chest.
@@ -15,7 +15,7 @@ Items: {
 
 	BiomeExtractorItemLead: {
 		DisplayName: Biome Extractor
-		Tooltip: 
+		Tooltip:
 			'''
 			Place it anywhere in the world to extract common materials from the area around it.
 			The output will be placed inside of an adjacent chest.
