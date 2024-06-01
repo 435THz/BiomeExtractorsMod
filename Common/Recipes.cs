@@ -32,14 +32,14 @@ namespace BiomeExtractorsMod.Common
                 .AddIngredient(ItemID.Extractinator)
                 .AddIngredient(ItemID.IronBar, 5)
                 .AddIngredient(ItemID.Chain, 12)
-                .AddTile(TileID.TinkerersWorkbench)
+                .AddTile(TileID.Anvils)
                 .Register();
 
             Recipe.Create(ModContent.ItemType<BiomeExtractorItemLead>())
                 .AddIngredient(ItemID.Extractinator)
                 .AddIngredient(ItemID.LeadBar, 5)
                 .AddIngredient(ItemID.Chain, 12)
-                .AddTile(TileID.TinkerersWorkbench)
+                .AddTile(TileID.Anvils)
                 .Register();
 
             Recipe.Create(ModContent.ItemType<BiomeExtractorItemCorruption>())
