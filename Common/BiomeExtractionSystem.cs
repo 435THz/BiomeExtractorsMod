@@ -560,7 +560,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(ug_shells,    (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1050);
             AddPool(life_fruit,   (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1050);
             AddPool(hive,                                                     1050, LocalizeAs(hive));
-            AddPool(chlorophyte,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1050);
+            AddPool(chlorophyte,  (int)BiomeExtractorEnt.EnumTiers.CYBER,     1050);
 
             AddPool(ug_hallowed_bars_caverns, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100);
             AddPool(ug_hallowed_bars_desert,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100);
@@ -624,7 +624,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(pirate, hardmodeOnly, water1k, oceanArea);
             AddPoolRequirements(ocean,                water1k, oceanArea);
 
-            AddPoolRequirements(temple,    postGolem,                                    lihzahrd_bg);
+            AddPoolRequirements(temple,    postGolem,                                     lihzahrd_bg);
             AddPoolRequirements(ectoplasm, postPlantera, dungeon250,   belowSurfaceLayer, dungeon_bg);
             AddPoolRequirements(dungeon_p,               dungeon_p250, belowSurfaceLayer, dungeon_bg_p);
             AddPoolRequirements(dungeon_g,               dungeon_g250, belowSurfaceLayer, dungeon_bg_g);
@@ -660,9 +660,9 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(ug_shells,    hardmodeOnly, middleUnderground, jungle140);
             AddPoolRequirements(hive,                       middleUnderground, hive100,    honey100, hive_bg);
             AddPoolRequirements(ug_jungle,                  middleUnderground, jungle140);
-            AddPoolRequirements(ug_desert_hm, hardmodeOnly, belowSurfaceLayer,  desert1500);
-            AddPoolRequirements(ug_desert,                  belowSurfaceLayer,  desert1500);
-            AddPoolRequirements(ug_snow,                    belowSurfaceLayer,  frost1500);
+            AddPoolRequirements(ug_desert_hm, hardmodeOnly, belowSurfaceLayer, desert1500);
+            AddPoolRequirements(ug_desert,                  belowSurfaceLayer, desert1500);
+            AddPoolRequirements(ug_snow,                    belowSurfaceLayer, frost1500);
 
             AddPoolRequirements(marble,  cavernLayer, marble150,    marble_bg);
             AddPoolRequirements(granite, cavernLayer, granite150,   granite_bg);
