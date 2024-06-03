@@ -595,11 +595,11 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(ocean,                                              2500, LocalizeAs(ocean));
             AddPool(pirate, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 2500);
 
-            AddPool(shimmer, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 3000, true, LocalizeAs(shimmer));
-            AddPool(spider,                                            3000, true);
-            AddPool(cobweb,                                            3000, true, LocalizeAs(cobweb));
-            AddPool(granite,                                           3000, true, LocalizeAs(granite));
-            AddPool(marble,                                            3000, true, LocalizeAs(marble));
+            AddPool(shimmer, (int)BiomeExtractorEnt.EnumTiers.DEMONIC,  3000, true, LocalizeAs(shimmer));
+            AddPool(spider,  (int)BiomeExtractorEnt.EnumTiers.INFERNAL, 3000, true);
+            AddPool(cobweb,                                             3000, true, LocalizeAs(cobweb));
+            AddPool(granite,                                            3000, true, LocalizeAs(granite));
+            AddPool(marble,                                             3000, true, LocalizeAs(marble));
 
             AddPool(space,                                                  4000, LocalizeAs(space));
             AddPool(spc_flight, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 4000);
