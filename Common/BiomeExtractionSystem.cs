@@ -916,11 +916,11 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(shimmer, ItemID.Ruby,       8);
             AddItemInPool(shimmer, ItemID.Diamond,    6);
             AddItemInPool(shimmer, ItemID.Shimmerfly, 44);
-            AddItemInPool(marble,  ItemID.MarbleBlock,  75);
-            AddItemInPool(granite, ItemID.GraniteBlock, 75);
-            AddItemInPool(granite, ItemID.Geode,        50);
-            AddItemInPool(cobweb,  ItemID.Cobweb,       50);
-            AddItemInPool(spider,  ItemID.SpiderFang,   75);
+            AddItemInPool(marble,  ItemID.Marble,     75);
+            AddItemInPool(granite, ItemID.Granite,    75);
+            AddItemInPool(granite, ItemID.Geode,      50);
+            AddItemInPool(cobweb,  ItemID.Cobweb,     50);
+            AddItemInPool(spider,  ItemID.SpiderFang, 75);
 
             AddItemInPool(ug_snow, ItemID.SnowBlock,  12);
             AddItemInPool(ug_snow, ItemID.IceBlock,   6);
