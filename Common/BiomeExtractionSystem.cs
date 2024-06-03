@@ -560,7 +560,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(ug_shells,    (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1050);
             AddPool(life_fruit,   (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1050);
             AddPool(hive,                                                     1050, LocalizeAs(hive));
-            AddPool(chlorophyte,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1050);
+            AddPool(chlorophyte,  (int)BiomeExtractorEnt.EnumTiers.CYBER,     1050);
 
             AddPool(ug_hallowed_bars_caverns, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100);
             AddPool(ug_hallowed_bars_desert,  (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 1100);
@@ -595,11 +595,11 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(ocean,                                              2500, LocalizeAs(ocean));
             AddPool(pirate, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 2500);
 
-            AddPool(shimmer, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, 3000, true, LocalizeAs(shimmer));
-            AddPool(spider,                                            3000, true);
-            AddPool(cobweb,                                            3000, true, LocalizeAs(cobweb));
-            AddPool(granite,                                           3000, true, LocalizeAs(granite));
-            AddPool(marble,                                            3000, true, LocalizeAs(marble));
+            AddPool(shimmer, (int)BiomeExtractorEnt.EnumTiers.DEMONIC,  3000, true, LocalizeAs(shimmer));
+            AddPool(spider,  (int)BiomeExtractorEnt.EnumTiers.INFERNAL, 3000, true);
+            AddPool(cobweb,                                             3000, true, LocalizeAs(cobweb));
+            AddPool(granite,                                            3000, true, LocalizeAs(granite));
+            AddPool(marble,                                             3000, true, LocalizeAs(marble));
 
             AddPool(space,                                                  4000, LocalizeAs(space));
             AddPool(spc_flight, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, 4000);
@@ -624,7 +624,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(pirate, hardmodeOnly, water1k, oceanArea);
             AddPoolRequirements(ocean,                water1k, oceanArea);
 
-            AddPoolRequirements(temple,    postGolem,                                    lihzahrd_bg);
+            AddPoolRequirements(temple,    postGolem,                                     lihzahrd_bg);
             AddPoolRequirements(ectoplasm, postPlantera, dungeon250,   belowSurfaceLayer, dungeon_bg);
             AddPoolRequirements(dungeon_p,               dungeon_p250, belowSurfaceLayer, dungeon_bg_p);
             AddPoolRequirements(dungeon_g,               dungeon_g250, belowSurfaceLayer, dungeon_bg_g);
@@ -660,9 +660,9 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(ug_shells,    hardmodeOnly, middleUnderground, jungle140);
             AddPoolRequirements(hive,                       middleUnderground, hive100,    honey100, hive_bg);
             AddPoolRequirements(ug_jungle,                  middleUnderground, jungle140);
-            AddPoolRequirements(ug_desert_hm, hardmodeOnly, belowSurfaceLayer,  desert1500);
-            AddPoolRequirements(ug_desert,                  belowSurfaceLayer,  desert1500);
-            AddPoolRequirements(ug_snow,                    belowSurfaceLayer,  frost1500);
+            AddPoolRequirements(ug_desert_hm, hardmodeOnly, belowSurfaceLayer, desert1500);
+            AddPoolRequirements(ug_desert,                  belowSurfaceLayer, desert1500);
+            AddPoolRequirements(ug_snow,                    belowSurfaceLayer, frost1500);
 
             AddPoolRequirements(marble,  cavernLayer, marble150,    marble_bg);
             AddPoolRequirements(granite, cavernLayer, granite150,   granite_bg);
@@ -916,11 +916,11 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(shimmer, ItemID.Ruby,       8);
             AddItemInPool(shimmer, ItemID.Diamond,    6);
             AddItemInPool(shimmer, ItemID.Shimmerfly, 44);
-            AddItemInPool(marble,  ItemID.MarbleBlock,  75);
-            AddItemInPool(granite, ItemID.GraniteBlock, 75);
-            AddItemInPool(granite, ItemID.Geode,        50);
-            AddItemInPool(cobweb,  ItemID.Cobweb,       50);
-            AddItemInPool(spider,  ItemID.SpiderFang,   75);
+            AddItemInPool(marble,  ItemID.Marble,     75);
+            AddItemInPool(granite, ItemID.Granite,    75);
+            AddItemInPool(granite, ItemID.Geode,      50);
+            AddItemInPool(cobweb,  ItemID.Cobweb,     50);
+            AddItemInPool(spider,  ItemID.SpiderFang, 75);
 
             AddItemInPool(ug_snow, ItemID.SnowBlock,  12);
             AddItemInPool(ug_snow, ItemID.IceBlock,   6);
