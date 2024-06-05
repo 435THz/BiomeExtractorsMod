@@ -15,5 +15,3 @@ This mod shouldn't break anything no matter of what you install. If that is not 
 [b][u][h2]Credits:[/h2][/u][/b]
 [b]Code:[/b] MistressNebula (Me)
 [b]Spriting:[/b] Levviata, "Machinery"
-
-[quote=tModLoader]Developed By MistressNebula[/quote]
