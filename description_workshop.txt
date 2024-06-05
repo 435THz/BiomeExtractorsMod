@@ -10,7 +10,9 @@ Speaking of, this mod also makes it possible to purchase Extractinators from the
 This mod shouldn't break anything no matter of what you install. If that is not the case, please add an issue to the mod's [url=https://github.com/435THz/BiomeExtractorsMod]github[/url].
 
 [b][u][h2]Mod support:[/h2][/u][/b]
+[list]
 [*] This mod can deposit items inside Magic Storage systems: all you need to do is place them beside a connected Storage Configuration Interface.
+[/list]
 
 [b][u][h2]Credits:[/h2][/u][/b]
 [b]Code:[/b] MistressNebula (Me)
