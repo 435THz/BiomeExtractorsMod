@@ -68,6 +68,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         // getter only
         protected abstract int TileType { get; }
         public abstract int Tier { get; }
+        public abstract string LocalName { get; }
         public abstract int ExtractionRate { get; }
         public abstract int ExtractionChance { get; }
         public static int BiomeScanRate { get => ModContent.GetInstance<ConfigCommon>().BiomeScanRate; }
@@ -277,8 +278,8 @@ namespace BiomeExtractorsMod.Content.TileEntities
             if(Active) UpdatePoolList(); //must refresh when turned back on
         }
 
-        // displays the machine's status in chat
-        internal void DisplayStatus()
+        // returns the machine's status message
+        internal string GetStatus()
         {
             string baseText = $"{BiomeExtractorsMod.LocDiagnostics}.MachineState";
             if (Active)
@@ -315,15 +316,15 @@ namespace BiomeExtractorsMod.Content.TileEntities
                         if (i < list.Count - 1) s += ", ";
                     }
 
-                    Main.NewText(Language.GetTextValue($"{baseText}Print") + "\n" + s);
                     if (ModContent.GetInstance<ConfigClient>().DiagnosticPrintItems) 
                         ModContent.GetInstance<BiomeExtractionSystem>().PrintDiagnostics(this, PoolList);
+                    return Language.GetTextValue($"{baseText}Print") + "\n" + s;
                 }
                 else
-                    Main.NewText(Language.GetTextValue($"{baseText}Fail"));
+                    return Language.GetTextValue($"{baseText}Fail");
             }
             else
-                Main.NewText(Language.GetTextValue($"{baseText}Off"));
+                return Language.GetTextValue($"{baseText}Off");
         }
 
 

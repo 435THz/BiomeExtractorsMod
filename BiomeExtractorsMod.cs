@@ -18,6 +18,8 @@ namespace BiomeExtractorsMod
 
         private static readonly object LocBase = "Mods.BiomeExtractorsMod";
 
+        private static string LocItemsCategory => $"{LocBase}.Items";
+        public static string LocExtractorPrefix => $"{LocItemsCategory}.BiomeExtractorItem";
         private static string LocConfigCategory => $"{LocBase}.Config";
         public static string LocClientConfig => $"{LocConfigCategory}.ConfigClient";
         public static string LocCommonConfig => $"{LocConfigCategory}.ConfigCommon";

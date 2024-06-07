@@ -1,9 +1,4 @@
 Items: {
-	DevCursor: {
-		DisplayName: Dev Cursor
-		Tooltip: DEV ITEM: Prints to chat the x and y position of the cursor relative to the tile grid.
-	}
-
 	BiomeExtractorItemIron: {
 		DisplayName: Biome Extractor
 		Tooltip:
@@ -318,8 +313,8 @@ Text: {
 	}
 
 	Diagnostics: {
-		MachineStatePrint: The machine is extracting resources from the following biomes:
-		MachineStateFail: The machine cannot extract anything from this place.
+		MachineStatePrint: Extracting from Biomes:
+		MachineStateFail: The machine cannot extract from this Biome.
 		MachineStateOff: The machine is inactive.
 		MachineStateBroken: This machine failed to load. Please break and replace it.
 		Rate: Rate

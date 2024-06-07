@@ -24,8 +24,6 @@
     <None Remove="description_workshop.txt" />
   </ItemGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="MagicStorage">
       <HintPath>..\ModAssemblies\MagicStorage_v0.6.0.3.dll</HintPath>
     </Reference>

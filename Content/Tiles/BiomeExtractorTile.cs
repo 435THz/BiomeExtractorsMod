@@ -1,3 +1,4 @@
+using BiomeExtractorsMod.Common.UI;
 using BiomeExtractorsMod.Content.TileEntities;
 using Terraria;
 using Terraria.DataStructures;
@@ -94,7 +95,7 @@ namespace BiomeExtractorsMod.Content.Tiles
             bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
             if (found)
             {
-                entity.DisplayStatus();
+                ModContent.GetInstance<UISystem>().OpenInterface(entity);
                 return true;
             }
             Main.NewText(Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.MachineStateBroken"));
