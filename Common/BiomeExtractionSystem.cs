@@ -70,7 +70,7 @@ namespace BiomeExtractorsMod.Common.Systems
                     {
                         if (tile.LiquidAmount > 0)
                         {
-                            if(!_liquidCounts.ContainsKey(tile.LiquidType)) _liquidCounts.Add(tile.LiquidType, 0);
+                            _liquidCounts.TryAdd(tile.LiquidType, 0);
                             _liquidCounts[tile.LiquidType]++;
                         }
                         continue;
@@ -1027,8 +1027,8 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(dungeon_g, ItemID.AncientGreenDungeonBrick, 12);
             AddItemInPool(dungeon_b, ItemID.AncientBlueDungeonBrick,  12);
             AddItemInPool(dungeon, ItemID.Spike,     6);
-            AddItemInPool(dungeon, ItemID.Bone,      35);
-            AddItemInPool(dungeon, ItemID.GoldenKey, 5);
+            AddItemInPool(dungeon, ItemID.Bone,      36);
+            AddItemInPool(dungeon, ItemID.GoldenKey, 1);
             AddItemInPool(ectoplasm, ItemID.Ectoplasm, 30);
 
             AddItemInPool(temple, ItemID.LihzahrdBrick,       12);
