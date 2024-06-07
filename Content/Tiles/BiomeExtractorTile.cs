@@ -77,6 +77,18 @@ namespace BiomeExtractorsMod.Content.Tiles
             }
         }
 
+        public override void MouseOver(int i, int j)
+        {
+            Player player = Main.LocalPlayer;
+            Tile tile = Main.tile[i, j];
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = ItemType(tile);
+            player.noThrow = 2;
+
+            base.MouseOver(i, j);
+        }
+        protected abstract int ItemType(Tile tile);
+
         public override bool RightClick(int i, int j)
         {
             bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
