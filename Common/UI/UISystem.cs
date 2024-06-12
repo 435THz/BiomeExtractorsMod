@@ -69,13 +69,10 @@ namespace BiomeExtractorsMod.Common.UI
 
         internal void OpenInterface(BiomeExtractorEnt clicked)
         {
-            if (UIHolder.CurrentState is null || !Extractor.Equals(clicked))
-            {
-                SoundEngine.PlaySound(SoundID.MenuOpen);
-                Extractor = clicked;
-                UIHolder?.SetState(Interface);
-                Interface = new ExtractorUI(); //TODO swap with update call
-            }
+            SoundEngine.PlaySound(SoundID.MenuOpen);
+            Extractor = clicked;
+            UIHolder?.SetState(Interface);
+            Interface = new ExtractorUI(); //TODO swap with update call
         }
 
         internal void CloseInterface()

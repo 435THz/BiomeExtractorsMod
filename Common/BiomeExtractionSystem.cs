@@ -447,53 +447,19 @@ namespace BiomeExtractorsMod.Common.Systems
             return item;
         }
 
-        public void PrintDiagnostics(BiomeExtractorEnt extractor, List<PoolEntry> pools)
+        public WeightedList<ItemEntry> JoinPools(List<PoolEntry> pools)
         {
-            int e_rate =   extractor.ExtractionRate;
-            int e_chance = extractor.ExtractionChance;
-            double rolls = (86400 / e_rate) * (e_chance / 100.0);
-            string s = $"\n" + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Rate") + ": " + e_rate + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Frames_short") + " - " + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Chance") + ": " + e_chance + "%\n\n" +
-                Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Title") + ":\n" +
-                Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Subtitle") + "\n";
-            int lines = 5;
-
             WeightedList<ItemEntry> joinedPool = [];
-            foreach (PoolEntry pool in pools)
+            if (pools is not null)
             {
-                WeightedList<ItemEntry> items = _itemPools[pool.Name];
-                foreach (KeyValuePair<ItemEntry, int> entry in items)
-                    joinedPool.Add(entry);
-            }
-            int totalWeight = joinedPool.TotalWeight;
-
-            foreach (KeyValuePair<ItemEntry, int> entry in joinedPool)
-            {
-                string ss = new Item(entry.Key.Id).Name;
-                if (entry.Key.Min != entry.Key.Max - 1) ss += $" ({entry.Key.Min} - {entry.Key.Max - 1})";
-                ss += " - ";
-                decimal chance = entry.Value * 100 / (decimal)totalWeight;
-                decimal truncated = decimal.Truncate(chance * 100) / 100;
-                ss += $"{truncated}{Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Percent")} - ";
-
-                double med = (entry.Key.Min + entry.Key.Max - 1) / 2.0;
-                int amountPerDay = (int)(rolls * med * (double)chance / 100);
-                ss += amountPerDay;
-                lines++;
-                if (lines < 10)
+                foreach (PoolEntry pool in pools)
                 {
-                    ss += "\n";
-                    s += ss;
-                }
-                else
-                {
-                    s += ss;
-                    Main.NewText(s);
-                    s = "";
-                    lines = 0;
+                    WeightedList<ItemEntry> items = _itemPools[pool.Name];
+                    foreach (KeyValuePair<ItemEntry, int> entry in items)
+                        joinedPool.Add(entry);
                 }
             }
-            if (lines < 1) s += " ";
-            Main.NewText(s);
+            return joinedPool;
         }
 
         public void GenerateLocalizationKeys()

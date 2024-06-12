@@ -313,15 +313,12 @@ Text: {
 	}
 
 	Diagnostics: {
-		MachineStatePrint: Extracting from Biomes:
-		MachineStateFail: The machine cannot extract from this Biome.
+		MachineStatePrint: Extracting from:
+		MachineStateFail: The machine cannot extract anything from this place.
 		MachineStateOff: The machine is inactive.
 		MachineStateBroken: This machine failed to load. Please break and replace it.
-		Rate: Rate
-		Frames_short: f
+		Per_day: items/day
 		Chance: Chance
 		Percent: %
-		Title: Projected item extraction
-		Subtitle: Item Name - chance% - unit/day
 	}
 }

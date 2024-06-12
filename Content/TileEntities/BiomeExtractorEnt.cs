@@ -1,3 +1,4 @@
+using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Content.Tiles;
@@ -42,7 +43,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private static readonly string tagOutputX = "chest_x";
         private static readonly string tagOutputY = "chest_y";
         private static readonly Point[] PosOffsets = [new(-1,2), new(3, 2), new(-1, 0), new(3, 0), new(0, -1), new(2, -1)];
-
+        private static BiomeExtractionSystem BES = ModContent.GetInstance<BiomeExtractionSystem>();
 
         private int XTimer = 0;
         private int BTimer = 0;
@@ -75,7 +76,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         //loading
         private void UpdatePoolList() {
-            PoolList = ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(this);
+            PoolList = BES.CheckValidBiomes(this);
         }
 
         public override void SaveData(TagCompound tag)
@@ -123,7 +124,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
                 if (Main.rand.Next(100) < ExtractionChance)
                 {
-                    Item generated = ModContent.GetInstance<BiomeExtractionSystem>().RollItem(PoolList);
+                    Item generated = BES.RollItem(PoolList);
                     AddToOutput(generated);
                 }
             }
@@ -316,9 +317,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
                         if (i < list.Count - 1) s += ", ";
                     }
 
-                    if (ModContent.GetInstance<ConfigClient>().DiagnosticPrintItems) 
-                        ModContent.GetInstance<BiomeExtractionSystem>().PrintDiagnostics(this, PoolList);
-                    return Language.GetTextValue($"{baseText}Print") + "\n" + s;
+                    return Language.GetTextValue($"{baseText}Print") + " " + s;
                 }
                 else
                     return Language.GetTextValue($"{baseText}Fail");
@@ -327,7 +326,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 return Language.GetTextValue($"{baseText}Off");
         }
 
-
+        internal WeightedList<ItemEntry> GetDropList() => BES.JoinPools(PoolList);
 
         // Spawning related code
         public override bool IsTileValidForEntity(int x, int y)

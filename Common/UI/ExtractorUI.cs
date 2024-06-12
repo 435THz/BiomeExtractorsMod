@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using System.Threading.Channels;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
+using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.UI;
 using Terraria.UI;
 
 namespace BiomeExtractorsMod.Common.UI
@@ -13,26 +16,26 @@ namespace BiomeExtractorsMod.Common.UI
         UIText header;
         UIPanel button;
         UIText biomeText;
+        UISlotArea slotArea;
+
         public override void OnInitialize()
         {
-            panel = new UIPanel();
-            panel.Width.Set(500, 0);
-            panel.Height.Set(400, 0);
-            panel.Top.Set(0, 0.025f);
-            panel.Left.Set(-panel.Width.Pixels / 2, 0.5f);
+            panel = new();
+            panel.Top.Set(0f, 0.025f);
+            panel.HAlign = 0.5f;
             Append(panel);
 
-            header = new UIText("", 1.2f);
+            header = new("", 1.2f);
             header.HAlign = 0.5f;
-            header.Top.Set(10, 0);
+            header.Top.Set(10f, 0f);
             panel.Append(header);
 
-            button = new UIPanel();
-            button.Width.Set(36, 0);
-            button.Height.Set(36, 0);
+            button = new();
+            button.Width.Set(36f, 0f);
+            button.Height.Set(36f, 0f);
             button.HAlign = 1f;
-            button.Top.Set(2, 0);
-            button.Left.Set(-2, 0);
+            button.Top.Set(2f, 0f);
+            button.Left.Set(-2f, 0f);
             button.OnLeftClick += OnButtonClick;
             panel.Append(button);
 
@@ -40,13 +43,19 @@ namespace BiomeExtractorsMod.Common.UI
             text.HAlign = text.VAlign = 0.5f;
             button.Append(text);
 
-            biomeText = new UIText("");
-            biomeText.Left.Set(0, 0);
-            biomeText.Top.Set(40, 0);
+            biomeText = new("");
+            biomeText.Left.Set(0f, 0f);
+            biomeText.Top.Set(40f, 0f);
             biomeText.IsWrapped = true;
-            biomeText.Width.Set(500, 0);
-            biomeText.TextOriginX = 0;
+            biomeText.TextOriginX = 0f;
             panel.Append(biomeText);
+
+            slotArea = new();
+            slotArea.HAlign = 0.5f;
+            panel.Append(slotArea);
+
+            panel.Width.Set(slotArea.Width.Pixels+23f, 0f);
+            biomeText.Width.Set(panel.Width.Pixels, 0f);
         }
 
         private void OnButtonClick(UIMouseEvent evt, UIElement listeningElement)
@@ -64,6 +73,25 @@ namespace BiomeExtractorsMod.Common.UI
             {
                 PlayerInput.LockVanillaMouseScroll("BiomeExtractorsMod/LootTable");
             }
+            if (slotArea.Hovered >= 0)
+            {
+                int slot = slotArea.Hovered + slotArea.TopRow * slotArea.Columns;
+                if (slot < slotArea.SlotData.Length)
+                {
+                    SlotData data = slotArea.SlotData[slot];
+                    string name = data.Item.Name;
+                    string chance = Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Chance") + $": {data.ChanceString}";
+                    string daily = "";
+                    UISystem uisys = ModContent.GetInstance<UISystem>();
+                    if (uisys is not null)
+                    {
+                        double rolls = (86400 / uisys.Extractor.ExtractionRate) * (uisys.Extractor.ExtractionChance / 100.0);
+                        daily = data.DailyString(rolls) + " " + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Per_day");
+                    }
+
+                    UICommon.TooltipMouseText($"{name}\n{chance}\n{daily}");
+                }
+            }
         }
 
         public override void OnActivate()
@@ -73,10 +101,15 @@ namespace BiomeExtractorsMod.Common.UI
             {
                 header.SetText(uisys.GetExtractorName());
                 biomeText.SetText(uisys.GetExtractorStatus());
+                slotArea.Top.Set(100f, 0f);
+                slotArea.InitElements(uisys.Extractor.GetDropList());
             }
+            panel.Height.Set(slotArea.Top.Pixels + slotArea.Height.Pixels + 30f, 0f);
         }
 
         public override void OnDeactivate()
-        {}
+        {
+            slotArea.SlotData = [];
+        }
     }
 }
