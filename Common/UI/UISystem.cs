@@ -64,7 +64,6 @@ namespace BiomeExtractorsMod.Common.UI
         public override void Unload()
         {
             Extractor = null;
-            Interface = null;
         }
 
         internal void OpenInterface(BiomeExtractorEnt clicked)
@@ -72,7 +71,7 @@ namespace BiomeExtractorsMod.Common.UI
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Extractor = clicked;
             UIHolder?.SetState(Interface);
-            Interface = new ExtractorUI(); //TODO swap with update call
+            Interface.OnActivate();
         }
 
         internal void CloseInterface()

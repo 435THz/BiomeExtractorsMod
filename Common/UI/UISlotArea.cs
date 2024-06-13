@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader.UI;
+using Terraria.ModLoader;
 using Terraria.UI;
 using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
 
