@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
@@ -26,7 +25,6 @@ namespace BiomeExtractorsMod.Common.UI
 
     internal class UIResultSlot : UIPanel
     {
-        internal SlotData Data; //TODO remove
         internal static int size = 45;
         internal UIItemIcon icon;
         internal UIText amount;
