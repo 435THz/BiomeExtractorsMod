@@ -15,11 +15,6 @@ namespace BiomeExtractorsMod.Common.Configs
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintPoolsTooltip")]
         [DefaultValue(false)]
         public bool DiagnosticPrintPools;
-
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintItemsTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintItemsTooltip")]
-        [DefaultValue(false)]
-        public bool DiagnosticPrintItems;
     }
 
     public class ConfigCommon : ModConfig
