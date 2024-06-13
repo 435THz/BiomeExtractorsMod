@@ -93,23 +93,14 @@ Items: {
 Configs: {
 	ConfigClient: {
 		DisplayName: Client Settings
-		DiagConfigHeader: Chat Settings
+		DiagConfigHeader: UI Settings
 		DiagPrintPoolsTitle: Print Hidden Pools
 		DiagPrintPoolsTooltip:
 			'''
-			If this is enabled, right clicking an Extractor will also print
-			the name of invisible pools like those containing only hardmode
+			If this is enabled, Extractors will also show the name
+			of invisible pools like those containing only hardmode
 			drops and such. These pools will not be localized, as this
 			setting exists only for debug purposes.
-			Defaults to false.
-			'''
-		DiagPrintItemsTitle: Print Extraction Projection
-		DiagPrintItemsTooltip:
-			'''
-			If this is enabled, right clicking an Extractor will also print
-			detailed informations about what can be obtained from it, as
-			well as the chance of any one option being chosen and its
-			expected amount after one in-game day.
 			Defaults to false.
 			'''
 	}
