@@ -100,8 +100,15 @@ namespace BiomeExtractorsMod.Common.UI
             if (uisys is not null)
             {
                 header.SetText(uisys.GetExtractorName());
-                biomeText.SetText(uisys.GetExtractorStatus());
-                slotArea.Top.Set(100f, 0f);
+                string status = uisys.GetExtractorStatus();
+                biomeText.SetText(status);
+
+                DynamicSpriteFont font = FontAssets.MouseText.Value;
+                float spacing = font.LineSpacing;
+                string visibleText = font.CreateWrappedText(status, panel.Width.Pixels-23f);
+                float height = (visibleText.Split('\n').Length * spacing);
+
+                slotArea.Top.Set(40f + height, 0f);
                 slotArea.InitElements(uisys.Extractor.GetDropList());
             }
             panel.Height.Set(slotArea.Top.Pixels + slotArea.Height.Pixels + 30f, 0f);
