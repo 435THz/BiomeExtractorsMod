@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using System.Threading.Channels;
+using ReLogic.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ModLoader.UI;
 using Terraria.UI;
 
 namespace BiomeExtractorsMod.Common.UI
@@ -89,7 +89,7 @@ namespace BiomeExtractorsMod.Common.UI
                         daily = data.DailyString(rolls) + " " + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Per_day");
                     }
 
-                    UICommon.TooltipMouseText($"{name}\n{chance}\n{daily}");
+                    SetTooltip($"{name}\n[c/FFFFFF:{chance}]\n[c/FFFFFF:{daily}]", data.Item.rare);
                 }
             }
         }
@@ -110,6 +110,20 @@ namespace BiomeExtractorsMod.Common.UI
         public override void OnDeactivate()
         {
             slotArea.SlotData = [];
+        }
+
+        public static void SetTooltip(string text, int rarity)
+        {
+            Item fakeItem = new();
+            fakeItem.SetDefaults(0, noMatCheck: true);
+            fakeItem.SetNameOverride(text);
+            fakeItem.type = 1;
+            fakeItem.scale = 0f;
+            fakeItem.rare = rarity;
+            fakeItem.value = -1;
+            Main.HoverItem = fakeItem;
+            Main.instance.MouseText("");
+            Main.mouseText = true;
         }
     }
 }
