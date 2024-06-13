@@ -109,6 +109,8 @@ namespace BiomeExtractorsMod.Content.Tiles
             if (found)
             {
                 entity.ToggleState();
+                UISystem ui = ModContent.GetInstance<UISystem>();
+                if (ui?.Extractor == entity) ui.Interface.OnActivate();
                 for (short x_off = 0; x_off < 3; x_off++)
                 {
                     for (short y_off = 0; y_off < 3; y_off++)

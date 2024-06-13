@@ -1,6 +1,7 @@
 using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Common.Systems;
+using BiomeExtractorsMod.Common.UI;
 using BiomeExtractorsMod.Content.Tiles;
 using BiomeExtractorsMod.CrossMod;
 using Microsoft.Xna.Framework;
@@ -131,7 +132,11 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
             //Every time this timer wraps back to 0 the scanning routine is performed
             if (ScanningTimer == 0)
+            {
                 UpdatePoolList();
+                UISystem ui = ModContent.GetInstance<UISystem>();
+                if (ui?.Extractor == this) ui.Interface.OnActivate();
+            }
             ScanningTimer++; //always run immediately upon placement
         }
 
