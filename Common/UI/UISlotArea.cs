@@ -13,10 +13,12 @@ namespace BiomeExtractorsMod.Common.UI
 {
     internal class UISlotArea : UIElement
     {
-        public const int Padding = 4;
+        public static readonly int Padding = 4;
 
-        public int Columns { get; private set; } = 8;
-        public int Rows { get; private set; } = 4;
+        public static readonly int Columns = 8;
+        public static readonly int Rows = 4;
+        public static float AreaWidth = (UIResultSlot.size + Padding) * Columns + 20f;
+        public static float AreaHeight = (UIResultSlot.size + Padding) * Rows;
 
         public UIResultSlot[,] Slots { get; set; } = new UIResultSlot[1, 1] {
             { new UIResultSlot(0) }
@@ -60,8 +62,8 @@ namespace BiomeExtractorsMod.Common.UI
             scrollbar.SetView(Rows, MaxRows);
             Append(scrollbar);
 
-            Width.Set((UIResultSlot.size + Padding) * Columns + scrollbar.Width.Pixels, 0f);
-            Height.Set((UIResultSlot.size + Padding) * Rows, 1f);
+            Width.Set(AreaWidth, 0f);
+            Height.Set(AreaHeight, 1f);
         }
 
         public void InitElements(WeightedList<ItemEntry> pool)

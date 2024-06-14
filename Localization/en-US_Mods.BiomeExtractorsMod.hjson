@@ -93,15 +93,22 @@ Items: {
 Configs: {
 	ConfigClient: {
 		DisplayName: Client Settings
-		DiagConfigHeader: UI Settings
-		DiagPrintPoolsTitle: Print Hidden Pools
-		DiagPrintPoolsTooltip:
+		UIConfigHeader: UI Settings
+		UIPrintPoolsTitle: Print Hidden Pools
+		UIPrintPoolsTooltip:
 			'''
 			If this is enabled, Extractors will also show the name
 			of invisible pools like those containing only hardmode
 			drops and such. These pools will not be localized, as this
 			setting exists only for debug purposes.
 			Defaults to false.
+			'''
+		WindowPosTitle: Save Window Position
+		WindowPosTooltip:
+			'''
+			If this is enabled, the Extractor UI will reappear in the same
+			place it was when it was last closed.
+			Defaults to true.
 			'''
 	}
 

@@ -10,9 +10,14 @@ namespace BiomeExtractorsMod.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
-        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagConfigHeader")]
-        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintPoolsTitle")]
-        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.DiagPrintPoolsTooltip")]
+        [Header("$Mods.BiomeExtractorsMod.Configs.ConfigClient.UIConfigHeader")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.WindowPosTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.WindowPosTooltip")]
+        [DefaultValue(false)]
+        public bool SaveWindowPos;
+
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.UIPrintPoolsTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigClient.UIPrintPoolsTooltip")]
         [DefaultValue(false)]
         public bool DiagnosticPrintPools;
     }

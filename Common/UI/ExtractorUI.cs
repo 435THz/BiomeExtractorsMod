@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using ReLogic.Graphics;
 using Terraria;
 using Terraria.GameContent;
@@ -12,23 +13,42 @@ namespace BiomeExtractorsMod.Common.UI
 {
     internal class ExtractorUI : UIState
     {
+        public static readonly float PanelWidth = UISlotArea.AreaWidth + 24f;
         UIPanel panel;
         UIText header;
         UIPanel button;
         UIText biomeText;
         UISlotArea slotArea;
 
+        bool Dragging = false;
+        Vector2 CursorDragOffset;
+        readonly float panelSnap = 36f;
+        private float draggingAreaHeight => slotArea.Top.Pixels + 12;
+
         public override void OnInitialize()
         {
             panel = new();
-            panel.Top.Set(0f, 0.025f);
-            panel.HAlign = 0.5f;
+            panel.Top.Set(0f, 0f);
+            panel.Left.Set(0f, 0f);
             Append(panel);
+            panel.OnLeftMouseDown += MovePanel;
+            panel.OnLeftMouseUp += StopMovingPanel;
 
             header = new("", 1.2f);
             header.HAlign = 0.5f;
             header.Top.Set(10f, 0f);
             panel.Append(header);
+            header.OnLeftMouseDown += MovePanel;
+            header.OnLeftMouseUp += StopMovingPanel;
+
+            biomeText = new("");
+            biomeText.Left.Set(0f, 0f);
+            biomeText.Top.Set(40f, 0f);
+            biomeText.IsWrapped = true;
+            biomeText.TextOriginX = 0f;
+            panel.Append(biomeText);
+            biomeText.OnLeftMouseDown += MovePanel;
+            biomeText.OnLeftMouseUp += StopMovingPanel;
 
             button = new();
             button.Width.Set(36f, 0f);
@@ -43,18 +63,11 @@ namespace BiomeExtractorsMod.Common.UI
             text.HAlign = text.VAlign = 0.5f;
             button.Append(text);
 
-            biomeText = new("");
-            biomeText.Left.Set(0f, 0f);
-            biomeText.Top.Set(40f, 0f);
-            biomeText.IsWrapped = true;
-            biomeText.TextOriginX = 0f;
-            panel.Append(biomeText);
-
             slotArea = new();
             slotArea.HAlign = 0.5f;
             panel.Append(slotArea);
 
-            panel.Width.Set(slotArea.Width.Pixels+23f, 0f);
+            panel.Width.Set(PanelWidth, 0f);
             biomeText.Width.Set(panel.Width.Pixels, 0f);
         }
 
@@ -75,7 +88,7 @@ namespace BiomeExtractorsMod.Common.UI
             }
             if (slotArea.Hovered >= 0)
             {
-                int slot = slotArea.Hovered + slotArea.TopRow * slotArea.Columns;
+                int slot = slotArea.Hovered + slotArea.TopRow * UISlotArea.Columns;
                 if (slot < slotArea.SlotData.Length)
                 {
                     SlotData data = slotArea.SlotData[slot];
@@ -92,6 +105,36 @@ namespace BiomeExtractorsMod.Common.UI
                     SetTooltip($"{name}\n[c/FFFFFF:{chance}]\n[c/FFFFFF:{daily}]", data.Item.rare);
                 }
             }
+            if (Dragging)
+            {
+                Vector2 mouse = UserInterface.ActiveInstance.MousePosition;
+                Vector2 newPos = mouse + CursorDragOffset;
+                panel.Left.Set(newPos.X, 0f);
+                panel.Top.Set(newPos.Y, 0f);
+            } else {
+                float draggingAreaRight = panel.Left.Pixels + panel.Width.Pixels;
+                float draggingAreaBottom = panel.Top.Pixels + draggingAreaHeight;
+                float screenRightLimit = Main.screenWidth - panelSnap;
+                float screenBottomLimit = Main.screenHeight - panelSnap;
+                if (draggingAreaRight < panelSnap) panel.Left.Set(-panel.Width.Pixels + panelSnap, 0f);
+                else if (panel.Left.Pixels > screenRightLimit) panel.Left.Set(screenRightLimit, 0f);
+                if (draggingAreaBottom < panelSnap) panel.Top.Set(-draggingAreaHeight + panelSnap, 0f);
+                else if (panel.Top.Pixels > screenBottomLimit) panel.Top.Set(screenBottomLimit, 0f);
+            }
+        }
+
+        public void MovePanel(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Vector2 panelPos = new(panel.Left.Pixels, panel.Top.Pixels);
+            Vector2 cursorPos = new(evt.MousePosition.X, evt.MousePosition.Y);
+            CursorDragOffset = panelPos - cursorPos;
+            if(CursorDragOffset.Y > -draggingAreaHeight)
+                Dragging = true;
+        }
+
+        public void StopMovingPanel(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Dragging = false;
         }
 
         public override void OnActivate()
@@ -110,13 +153,20 @@ namespace BiomeExtractorsMod.Common.UI
 
                 slotArea.Top.Set(40f + height, 0f);
                 slotArea.InitElements(uisys.Extractor.GetDropList());
+
+                Vector2 pos = ExtractorPlayer.LocalPlayer.ExtractorWindowPos;
+                panel.Top.Set(pos.Y, 0f);
+                panel.Left.Set(pos.X, 0f);
             }
             panel.Height.Set(slotArea.Top.Pixels + slotArea.Height.Pixels + 30f, 0f);
         }
 
         public override void OnDeactivate()
         {
+            ExtractorPlayer player = ExtractorPlayer.LocalPlayer;
+            player.ExtractorWindowPos = new(panel.Left.Pixels, panel.Top.Pixels);
             slotArea.SlotData = [];
+            Dragging = false;
         }
 
         public static void SetTooltip(string text, int rarity)
