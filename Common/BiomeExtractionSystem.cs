@@ -122,12 +122,28 @@ namespace BiomeExtractorsMod.Common.Systems
             public PoolEntry(string name, int tier, string localizationKey) : this(name, tier, true, localizationKey) { }
         }
 
+        /// <summary>
+        /// An identifier object that details an item entry inside a pool, complete with minimum and maximum drop values.
+        /// </summary>
+        /// <param name="item"> The id of the item represented by this entry.</param>
+        /// <param name="min"> Minimum amount of copies generated if this entry is chosen.</param>
+        /// <param name="max"> Maximum amount of copies generated if this entry is chosen.</param>
         public class ItemEntry(short item, int min, int max)
         {
+            ///<summary>The id of the item represented by this entry</summary>
             public short Id { get; private set; } = item;
+            ///<summary>Minimum amount of copies generated if this entry is chosen.</summary>
             public int Min { get; private set; } = min;
+            ///<summary> Maximum amount of copies generated if this entry is chosen.</summary>
             public int Max { get; private set; } = max;
+            ///<summary>Returns a random number between <c>this.Min</c> and <c>this.Max</c></summary>
             public int Roll { get => Main.rand.Next(Min, Max + 1); }
+
+            /// <summary>
+            /// An identifier object that details an item entry inside a pool, complete with minimum and maximum drop values.
+            /// </summary>
+            /// <param name="item"> The id of the item represented by this entry.</param>
+            /// <param name="count"> The amount of copies generated if this entry is chosen.</param>
             public ItemEntry(short item, int count) : this(item, count, count) { }
 
             public override bool Equals(object obj)
