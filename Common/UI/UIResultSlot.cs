@@ -18,7 +18,7 @@ namespace BiomeExtractorsMod.Common.UI
         }
         public readonly double Med => (Min + Max) / 2.0;
         public readonly int DailyAmount(double rollsPerDay) => (int)(rollsPerDay * Med * (double)Chance / 100);
-        public readonly string AmountString => $"({Min}-{Max})";
+        public readonly string AmountString => Min == Max ? $"{Min}" : $"{Min}-{Max}";
         public readonly string ChanceString => $"{Chance}{Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Percent")}";
         public readonly string DailyString(double rollsPerDay) => ((int)DailyAmount(rollsPerDay)).ToString();
     }
@@ -61,12 +61,12 @@ namespace BiomeExtractorsMod.Common.UI
 
         public void SetAmount(int min, int max)
         {
-            if (min == max-1)
+            if (min == max)
             {
                 if (min <= 1) amount.SetText("");
                 else amount.SetText($"{min}");
             }
-            else amount.SetText($"{min}-{max-1}");
+            else amount.SetText($"{min}-{max}");
         }
 
         public override void MouseOver(UIMouseEvent evt)

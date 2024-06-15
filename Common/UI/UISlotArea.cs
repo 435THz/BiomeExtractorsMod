@@ -118,7 +118,7 @@ namespace BiomeExtractorsMod.Common.UI
                 for (int x = 0; x < Columns; x++)
                 {
                     int slot = ((y + TopRow) * Columns) + x;
-                    int min = 0, max = 1;
+                    int min = 0, max = 0;
                     Item item = new();
                     if (slot<SlotData.Length)
                     {
