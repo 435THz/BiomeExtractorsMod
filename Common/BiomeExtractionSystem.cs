@@ -86,12 +86,12 @@ namespace BiomeExtractorsMod.Common.Systems
 
     public class BiomeExtractionSystem : ModSystem
     {
-        public enum PoolType
-        {
-            MINERALS, GEMS, DROPS, TERRAIN, VEGETATION, CRITTERS
-        }
-
         public class PoolEntry(string name, int tier, bool blocking, string localizationKey)
+        //        public enum PoolType
+        //        {
+        //            MINERALS, GEMS, DROPS, TERRAIN, VEGETATION, CRITTERS
+        //        }
+
         {
             public string Name { get; private set; } = name;
             public int Tier { get; private set; } = tier;
