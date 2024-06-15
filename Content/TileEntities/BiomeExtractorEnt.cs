@@ -55,25 +55,25 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         protected List<PoolEntry> PoolList { get; private set; } = [];
 
-        public int ExtractionTimer
+        protected int ExtractionTimer
         {
             get => XTimer;
-            protected set { XTimer = (value + ExtractionRate) % ExtractionRate; }
+            set { XTimer = (value + ExtractionRate) % ExtractionRate; }
         }
-        public int ScanningTimer
+        protected int ScanningTimer
         {
             get => BTimer;
-            protected set { BTimer = (value + BiomeScanRate) % BiomeScanRate; }
+            set { BTimer = (value + BiomeScanRate) % BiomeScanRate; }
         }
-        public bool Active { get; private set; } = true;
+        internal bool Active { get; private set; } = true;
 
         // getter only
         protected abstract int TileType { get; }
-        public abstract int Tier { get; }
-        public abstract string LocalName { get; }
-        public abstract int ExtractionRate { get; }
-        public abstract int ExtractionChance { get; }
-        public static int BiomeScanRate { get => ModContent.GetInstance<ConfigCommon>().BiomeScanRate; }
+        protected internal abstract int Tier { get; }
+        protected internal abstract string LocalName { get; }
+        protected internal abstract int ExtractionRate { get; }
+        protected internal abstract int ExtractionChance { get; }
+        private static int BiomeScanRate => ModContent.GetInstance<ConfigCommon>().BiomeScanRate;
 
         //loading
         private void UpdatePoolList() {

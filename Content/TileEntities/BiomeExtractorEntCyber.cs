@@ -7,10 +7,10 @@ namespace BiomeExtractorsMod.Content.TileEntities
 {
     public class BiomeExtractorEntCyber : BiomeExtractorEnt
     {
-        public override int Tier { get => (int)EnumTiers.CYBER; }
-        public override string LocalName { get => Language.GetTextValue($"{BiomeExtractorsMod.LocExtractorPrefix}Cyber.DisplayName"); }
-        public override int ExtractionRate { get => ModContent.GetInstance<ConfigCommon>().Tier5ExtractorRate; }
-        public override int ExtractionChance { get => ModContent.GetInstance<ConfigCommon>().Tier5ExtractorChance; }
+        protected internal override int Tier { get => (int)EnumTiers.CYBER; }
+        protected internal override string LocalName { get => Language.GetTextValue($"{BiomeExtractorsMod.LocExtractorPrefix}Cyber.DisplayName"); }
+        protected internal override int ExtractionRate { get => ModContent.GetInstance<ConfigCommon>().Tier5ExtractorRate; }
+        protected internal override int ExtractionChance { get => ModContent.GetInstance<ConfigCommon>().Tier5ExtractorChance; }
         protected override int TileType => ModContent.TileType<BiomeExtractorTileCyber>();
     }
 }
