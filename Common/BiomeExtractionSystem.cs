@@ -91,13 +91,34 @@ namespace BiomeExtractorsMod.Common.Systems
         //            MINERALS, GEMS, DROPS, TERRAIN, VEGETATION, CRITTERS
         //        }
 
+        /// <summary>
+        /// An identifier object that details an item pool's name, tier and behavior.
+        /// </summary>
+        /// <param name="name"> The PoolEntry's identification string.</param>
+        /// <param name="tier"> The minimum Extractor tier required to access this pool.</param>
+        /// <param name="blocking"> If true, biome scans will not scan priority values lower than the one this pool has if this pool is found.</param>
+        /// <param name="localizationKey">If set, this pool will use this string to query its localized name.<br/>
+        /// If <c>null</c>, this pool will not be displayed in the Extractor UI at all.</param>
         public class PoolEntry(string name, int tier, bool blocking = true, string localizationKey = null)
         {
+            /// <summary>The pool's identification string.</summary>
             public string Name { get; private set; } = name;
+            /// <summary>The minimum Tier required to access this pool.</summary>
             public int Tier { get; private set; } = tier;
+            /// <summary>The localization key associated to this pool.</summary>
             public bool Blocking { get; private set; } = blocking;
+            /// <summary>The localization key associated to this pool.</summary>
             public string LocalizationKey { get; private set; } = localizationKey;
+            /// <summary>Returns whether or not this pool has a localized name.</summary>
+            /// <returns><c>true</c> if <c>this.LocalizationKey != null</c>, <c>false</c> otherwise.</returns>
             public bool IsLocalized() => LocalizationKey != null;
+            /// <summary>
+            /// An identifier object that details an item pool's name, tier and behavior.
+            /// </summary>
+            /// <param name="name"> The PoolEntry's identification string.</param>
+            /// <param name="tier"> The minimum Extractor tier required to access this pool.</param>
+            /// <param name="localizationKey">If set, this pool will use this string to query its localized name.<br/>
+            /// If <c>null</c>, this pool will not be displayed in the Extractor UI at all.</param>
             public PoolEntry(string name, int tier, string localizationKey) : this(name, tier, true, localizationKey) { }
         }
 
