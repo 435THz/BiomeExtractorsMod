@@ -105,10 +105,10 @@ namespace BiomeExtractorsMod.Common.Systems
         {
             public short Id { get; private set; } = item;
             public int Min { get; private set; } = min;
-            public int Max { get; private set; } = max + 1;
-            public int Count { get => Main.rand.Next(Min, Max); }
 
             public ItemEntry() : this(0, 1, 1) { }
+            public int Max { get; private set; } = max;
+            public int Roll { get => Main.rand.Next(Min, Max + 1); }
             public ItemEntry(short item, int count) : this(item, count, count) { }
 
             public override bool Equals(object obj)
@@ -419,7 +419,7 @@ namespace BiomeExtractorsMod.Common.Systems
             if (pools.Count == 1)
             {
                 ItemEntry entry = _itemPools[pools[0].Name].Roll();
-                return new(entry.Id, entry.Count);
+                return new(entry.Id, entry.Roll);
             }
 
             int totalWeight = 0;
@@ -439,7 +439,7 @@ namespace BiomeExtractorsMod.Common.Systems
                 }
             }
 
-            Item item = new(result.Id, result.Count);
+            Item item = new(result.Id, result.Roll);
 
             return item;
         }
