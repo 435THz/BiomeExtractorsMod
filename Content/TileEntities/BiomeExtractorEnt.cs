@@ -17,6 +17,9 @@ using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
 
 namespace BiomeExtractorsMod.Content.TileEntities
 {
+    /// <summary>
+    /// The core TileEntity class implemented by all BiomeExtractors. It contains most of the item generation and chest lookup logic.
+    /// </summary>
     public abstract class BiomeExtractorEnt : ModTileEntity
     {
         private struct OutData(OutputType type, Point point)
@@ -27,6 +30,9 @@ namespace BiomeExtractorsMod.Content.TileEntities
             public OutData() : this(OutputType.NONE, new Point()) { }
         }
 
+        /// <summary>
+        /// A list of all Tier values used by the mod. They have huge gaps in between each other for addons to fit in.
+        /// </summary>
         public enum EnumTiers
         {
             BASIC = 1, DEMONIC = 1000, INFERNAL = 2000, STEAMPUNK = 3000, CYBER = 4000, LUNAR = 5000, ETHEREAL = 6000
@@ -67,11 +73,28 @@ namespace BiomeExtractorsMod.Content.TileEntities
         }
         internal bool Active { get; private set; } = true;
 
-        // getter only
+
+        /// <summary>
+        /// Returns the id of the BiomeExtractorTile this Entity is bound to.
+        /// </summary>
         protected abstract int TileType { get; }
+
+        /// <summary>
+        /// Returns the tier of this Extractor.
+        /// </summary>
         protected internal abstract int Tier { get; }
+        /// <summary>
+        /// Returns the localized name of this Extractor. This call is used by the UI to set up its header.
+        /// </summary>
         protected internal abstract string LocalName { get; }
+        /// <summary>
+        /// Returns the extraction rate of this Extractor, in frames.
+        /// </summary>
         protected internal abstract int ExtractionRate { get; }
+        /// <summary>
+        /// Returns the extraction chance of this Extractor, in percentage format.<br/>
+        /// Example: 35 would be 35%
+        /// </summary>
         protected internal abstract int ExtractionChance { get; }
         private static int BiomeScanRate => ModContent.GetInstance<ConfigCommon>().BiomeScanRate;
 
