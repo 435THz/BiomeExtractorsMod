@@ -105,8 +105,6 @@ namespace BiomeExtractorsMod.Common.Systems
         {
             public short Id { get; private set; } = item;
             public int Min { get; private set; } = min;
-
-            public ItemEntry() : this(0, 1, 1) { }
             public int Max { get; private set; } = max;
             public int Roll { get => Main.rand.Next(Min, Max + 1); }
             public ItemEntry(short item, int count) : this(item, count, count) { }
