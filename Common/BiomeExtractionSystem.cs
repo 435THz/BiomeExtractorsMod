@@ -86,22 +86,19 @@ namespace BiomeExtractorsMod.Common.Systems
 
     public class BiomeExtractionSystem : ModSystem
     {
-        public class PoolEntry(string name, int tier, bool blocking, string localizationKey)
         //        public enum PoolType
         //        {
         //            MINERALS, GEMS, DROPS, TERRAIN, VEGETATION, CRITTERS
         //        }
 
+        public class PoolEntry(string name, int tier, bool blocking = true, string localizationKey = null)
         {
             public string Name { get; private set; } = name;
             public int Tier { get; private set; } = tier;
             public bool Blocking { get; private set; } = blocking;
             public string LocalizationKey { get; private set; } = localizationKey;
             public bool IsLocalized() => LocalizationKey != null;
-
-            public PoolEntry(string name, int tier) : this(name, tier, true, null) { }
             public PoolEntry(string name, int tier, string localizationKey) : this(name, tier, true, localizationKey) { }
-            public PoolEntry(string name, int tier, bool blocking) : this(name, tier, blocking, null) { }
         }
 
         public class ItemEntry(short item, int min, int max)
