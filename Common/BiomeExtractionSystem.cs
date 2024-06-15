@@ -51,7 +51,7 @@ namespace BiomeExtractorsMod.Common.Systems
             return true;
         }
 
-        public void Scan()
+        internal void Scan()
         {
             _tileCounts.Clear();
             _liquidCounts.Clear();
