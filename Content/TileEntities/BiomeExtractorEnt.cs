@@ -29,7 +29,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         public enum EnumTiers
         {
-            BASIC = 1, DEMONIC = 2, INFERNAL = 3, STEAMPUNK = 4, CYBER = 5, LUNAR = 6, ETHEREAL = 7
+            BASIC = 1, DEMONIC = 1000, INFERNAL = 2000, STEAMPUNK = 3000, CYBER = 4000, LUNAR = 5000, ETHEREAL = 6000
         }
 
         private enum OutputType
