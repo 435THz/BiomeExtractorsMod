@@ -9,23 +9,45 @@ using Terraria.ObjectData;
 
 namespace BiomeExtractorsMod.Content.Tiles
 {
-
+    /// <summary>
+    /// The core Tile class implemented by all BiomeExtractors. It handles wire and player interactions.
+    /// </summary>
     public abstract class BiomeExtractorTile : ModTile
 	{
         internal static Point16 origin = new(1, 2); // Bottom-center
 
+        /// <summary>
+        /// Returns the number of animation frames this Extractor has.
+        /// </summary>
         protected abstract int FrameCount { get; }
-        protected virtual int FrameDuration => 5;
+        /// <summary>
+        /// Returns the duration, in game frames, of this Extractor's animation frames.
+        /// </summary>
+        protected virtual int FrameDuration => 5; //12FPS
+
+        /// <summary>
+        /// Returns the height of this Extractor's sprite.<br/>
+        /// Useful if a sprite has an overhang meant to patch up holes in uneven terrain sprites.
+        /// </summary>
         protected virtual int FrameHeight => 54;
 
+        /// <summary>
+        /// Returns the template instance of this Extractor's TileEntity type (not the clone/new instance it is bound to during gameplay)
+        /// </summary>
         protected abstract BiomeExtractorEnt TileEntity { get; }
 
-		public override void SetStaticDefaults()
-		{
-			Main.tileLavaDeath[Type] = true;
+        /// <summary>
+        /// Returns the id of the BiomeExtractorItem this Entity is bound to.<br/>
+        /// It may have different results if the tile has multiple styles.
+        /// </summary>
+        protected abstract int ItemType(Tile tile);
+
+        public override void SetStaticDefaults()
+        {
+            //Main.tileLavaDeath[Type] = true; before Infernal. Not enforced to let addons make their own rules.
+            //Main.tileObsidianKill[Type] = true; before Lunar. Not enforced to let addons make their own rules.
             Main.tileNoAttach[Type] = true;
             Main.tileFrameImportant[Type] = true;
-            // set Main.tileLavaDeath[Type] = true; for low tiers
 
             DustType = DustID.Iron;
 
@@ -88,7 +110,6 @@ namespace BiomeExtractorsMod.Content.Tiles
 
             base.MouseOver(i, j);
         }
-        protected abstract int ItemType(Tile tile);
 
         public override bool RightClick(int i, int j)
         {
