@@ -120,12 +120,12 @@ namespace BiomeExtractorsMod.Common.Systems
 
             public override int GetHashCode()
             {
-                return Id.GetHashCode() * Min.GetHashCode() * Max.GetHashCode();
+                return HashCode.Combine(Id, Min, Max);
             }
 
             public override string ToString()
             {
-                return Id+": "+Main.item[Id].Name + " (" + Min +"-"+ (Max-1) + ")";
+                return Id+": "+Main.item[Id].Name + " (" + Min +"-"+ (Max) + ")";
             }
         }
 
