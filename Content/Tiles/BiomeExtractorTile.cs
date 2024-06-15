@@ -18,7 +18,7 @@ namespace BiomeExtractorsMod.Content.Tiles
         protected virtual int FrameDuration => 5;
         protected virtual int FrameHeight => 54;
 
-        protected abstract BiomeExtractorEnt GetTileEntity();
+        protected abstract BiomeExtractorEnt TileEntity { get; }
 
 		public override void SetStaticDefaults()
 		{
@@ -38,7 +38,7 @@ namespace BiomeExtractorsMod.Content.Tiles
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.CoordinatePadding = 2;
 
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(GetTileEntity().Hook_AfterPlacement, -1, 0, false);
+            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(TileEntity.Hook_AfterPlacement, -1, 0, false);
 			TileObjectData.newTile.UsesCustomCanPlace = true;
 
             TileObjectData.newTile.StyleHorizontal = true;
@@ -128,7 +128,7 @@ namespace BiomeExtractorsMod.Content.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-            GetTileEntity().Kill(i, j);
+            TileEntity.Kill(i, j);
         }
 	}
 }

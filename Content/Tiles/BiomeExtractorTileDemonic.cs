@@ -9,10 +9,7 @@ namespace BiomeExtractorsMod.Content.Tiles
     {
         protected override int FrameCount => 8;
 
-        protected override BiomeExtractorEnt GetTileEntity()
-        {
-            return ModContent.GetInstance<BiomeExtractorEntDemonic>();
-        }
+        protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntDemonic>();
 
         public override void SetStaticDefaults()
         {
