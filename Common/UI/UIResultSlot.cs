@@ -16,7 +16,7 @@ namespace BiomeExtractorsMod.Common.UI
             readonly get => decimal.Truncate(_chance * 100) / 100;
             set => _chance = value;
         }
-        public readonly double Med => (Min + Max - 1) / 2.0;
+        public readonly double Med => (Min + Max) / 2.0;
         public readonly int DailyAmount(double rollsPerDay) => (int)(rollsPerDay * Med * (double)Chance / 100);
         public readonly string AmountString => $"({Min}-{Max})";
         public readonly string ChanceString => $"{Chance}{Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Percent")}";
