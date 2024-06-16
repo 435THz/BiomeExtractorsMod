@@ -338,14 +338,10 @@ namespace BiomeExtractorsMod.Common.Systems
             return ret;
         }
 
-        public bool AddPool(string name, int priority) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC), priority);
-        public bool AddPool(string name, int priority, bool nonBlocking) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC, !nonBlocking), priority);
         public bool AddPool(string name, int priority, string localizationKey) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC, localizationKey), priority);
-        public bool AddPool(string name, int priority, bool nonBlocking, string localizationKey) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC, !nonBlocking, localizationKey), priority);
-        public bool AddPool(string name, int tier, int priority) => AddPool(new PoolEntry(name, tier), priority);
-        public bool AddPool(string name, int tier, int priority, bool nonBlocking) => AddPool(new PoolEntry(name, tier, !nonBlocking), priority);
-        public bool AddPool(string name, int tier, int priority, string localizationKey) => AddPool(new PoolEntry(name, tier, localizationKey), priority);
-        public bool AddPool(string name, int tier, int priority, bool nonBlocking, string localizationKey) => AddPool(new PoolEntry(name, tier, !nonBlocking, localizationKey), priority);
+        public bool AddPool(string name, int priority, bool nonBlocking, string localizationKey = null) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC, !nonBlocking, localizationKey), priority);
+        public bool AddPool(string name, int priority, int tier, string localizationKey) => AddPool(new PoolEntry(name, tier, localizationKey), priority);
+        public bool AddPool(string name, int priority, int tier = (int)BiomeExtractorEnt.EnumTiers.BASIC, bool nonBlocking = false, string localizationKey = null) => AddPool(new PoolEntry(name, tier, !nonBlocking, localizationKey), priority);
         public bool AddPool(PoolEntry pool, int priority)
         {
             if (PoolExists(pool.Name)) return false;
