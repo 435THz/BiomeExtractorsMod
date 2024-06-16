@@ -331,6 +331,12 @@ namespace BiomeExtractorsMod.Common.Systems
         public bool PoolExists(string name) => _poolNames.ContainsKey(name);
 
         public PoolEntry GetPoolEntry(string name) => _poolNames.TryGetValue(name, out PoolEntry pool) ? pool : null;
+        public bool GetPoolEntry(string name, out PoolEntry pool)
+        {
+            bool ret = _poolNames.TryGetValue(name, out pool);
+            if (!ret) pool = null;
+            return ret;
+        }
 
         public bool AddPool(string name, int priority) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC), priority);
         public bool AddPool(string name, int priority, bool nonBlocking) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC, !nonBlocking), priority);
