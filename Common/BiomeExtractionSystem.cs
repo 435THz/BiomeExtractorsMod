@@ -160,7 +160,7 @@ namespace BiomeExtractorsMod.Common.Systems
 
             public override string ToString()
             {
-                return Id+": "+Main.item[Id].Name + " (" + Min +"-"+ (Max) + ")";
+                return Id + ": " + Main.item[Id].Name + " (" + Min + "-" + (Max) + ")";
             }
         }
 
@@ -171,7 +171,7 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly string desert = "desert";
         public static readonly string jungle = "jungle";
         public static readonly string shells = "shells";
-        public static readonly string hallowed_bars_forest  = "hallowed_bars_forest";
+        public static readonly string hallowed_bars_forest = "hallowed_bars_forest";
         public static readonly string hallowed_bars_desert = "hallowed_bars_desert";
         public static readonly string hallowed_bars_snow = "hallowed_bars_snow";
         public static readonly string hallowed_forest = "hallowed_forest";
@@ -190,7 +190,7 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly string crimson_dark_shard = "crimson_dark_shard";
         public static readonly string graveyard = "graveyard";
         public static readonly string caverns = "caverns";
-        public static readonly string underground = "underground"; 
+        public static readonly string underground = "underground";
         public static readonly string evil_ores = "evil_ores";
         public static readonly string hm_ores = "hm_ores";
         public static readonly string shimmer = "shimmer";
@@ -239,32 +239,32 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly string pillar = "pillar";
         public static readonly string luminite = "luminite";
         public static readonly string underworld = "underworld";
-        public static readonly string uw_fire= "uw_fire";
+        public static readonly string uw_fire = "uw_fire";
         public static readonly string meteorite = "meteorite";
 
         //WALL AND BLOCK LISTS
-        static readonly List<ushort> dungeonWalls = [WallID.BlueDungeonUnsafe, WallID.BlueDungeonSlabUnsafe, WallID.BlueDungeonTileUnsafe, WallID.GreenDungeonUnsafe, WallID.GreenDungeonSlabUnsafe, WallID.GreenDungeonTileUnsafe, WallID.PinkDungeonUnsafe, WallID.PinkDungeonSlabUnsafe, WallID.PinkDungeonTileUnsafe];
-        static readonly List<ushort> dungeonWallsPink = [WallID.PinkDungeonUnsafe, WallID.PinkDungeonSlabUnsafe, WallID.PinkDungeonTileUnsafe];
+        static readonly List<ushort> dungeonWalls =      [WallID.BlueDungeonUnsafe,  WallID.BlueDungeonSlabUnsafe,  WallID.BlueDungeonTileUnsafe, WallID.GreenDungeonUnsafe, WallID.GreenDungeonSlabUnsafe, WallID.GreenDungeonTileUnsafe, WallID.PinkDungeonUnsafe, WallID.PinkDungeonSlabUnsafe, WallID.PinkDungeonTileUnsafe];
+        static readonly List<ushort> dungeonWallsPink =  [WallID.PinkDungeonUnsafe,  WallID.PinkDungeonSlabUnsafe,  WallID.PinkDungeonTileUnsafe];
         static readonly List<ushort> dungeonWallsGreen = [WallID.GreenDungeonUnsafe, WallID.GreenDungeonSlabUnsafe, WallID.GreenDungeonTileUnsafe];
-        static readonly List<ushort> dungeonWallsBlue = [WallID.BlueDungeonUnsafe, WallID.BlueDungeonSlabUnsafe, WallID.BlueDungeonTileUnsafe];
+        static readonly List<ushort> dungeonWallsBlue =  [WallID.BlueDungeonUnsafe,  WallID.BlueDungeonSlabUnsafe,  WallID.BlueDungeonTileUnsafe];
         static readonly List<ushort> dungeonBricks = [TileID.BlueDungeonBrick, TileID.GreenDungeonBrick, TileID.PinkDungeonBrick];
-        static readonly List<ushort> crimsonSandBlocks = [TileID.Crimsand, TileID.CrimsonHardenedSand, TileID.CrimsonSandstone];
-        static readonly List<ushort> corruptSandBlocks = [TileID.Ebonsand, TileID.CorruptHardenedSand, TileID.CorruptSandstone];
-        static readonly List<ushort> hallowSandBlocks = [TileID.Pearlsand, TileID.HallowHardenedSand, TileID.HallowSandstone];
+        static readonly List<ushort> crimsonSandBlocks = [TileID.Crimsand,  TileID.CrimsonHardenedSand, TileID.CrimsonSandstone];
+        static readonly List<ushort> corruptSandBlocks = [TileID.Ebonsand,  TileID.CorruptHardenedSand, TileID.CorruptSandstone];
+        static readonly List<ushort> hallowSandBlocks =  [TileID.Pearlsand, TileID.HallowHardenedSand,  TileID.HallowSandstone];
         static readonly List<ushort> crimsonIceBlocks = [TileID.FleshIce];
         static readonly List<ushort> corruptIceBlocks = [TileID.CorruptIce];
-        static readonly List<ushort> hallowIceBlocks = [TileID.HallowedIce];
-        static readonly List<ushort> crimsonForestBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass,                        TileID.CorruptThorns,   TileID.Crimstone];
+        static readonly List<ushort> hallowIceBlocks =  [TileID.HallowedIce];
+        static readonly List<ushort> crimsonForestBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass, TileID.CrimsonThorns,                          TileID.Crimstone];
         static readonly List<ushort> corruptForestBlocks = [TileID.CorruptGrass,  TileID.CorruptJungleGrass, TileID.CorruptThorns,  TileID.CorruptPlants,   TileID.Ebonstone];
         static readonly List<ushort> hallowForestBlocks =  [TileID.HallowedGrass, TileID.GolfGrassHallowed,  TileID.HallowedPlants, TileID.HallowedPlants2, TileID.Pearlstone];
-        static readonly List<ushort> crimsonBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass, TileID.CorruptThorns,                         TileID.Crimstone,  TileID.Crimsand,  TileID.CrimsonHardenedSand, TileID.CrimsonSandstone, TileID.FleshIce];
-        static readonly List<ushort> corruptBlocks = [TileID.CorruptGrass,  TileID.CorruptJungleGrass, TileID.CorruptThorns,  TileID.CorruptPlants,  TileID.Ebonstone,  TileID.Ebonsand,  TileID.CorruptHardenedSand, TileID.CorruptSandstone, TileID.CorruptIce];
-        static readonly List<ushort> hallowBlocks =  [TileID.HallowedGrass,                            TileID.HallowedPlants, TileID.HallowedPlants2,TileID.Pearlstone, TileID.Pearlsand, TileID.HallowHardenedSand,  TileID.HallowSandstone,  TileID.HallowedIce];
+        static readonly List<ushort> crimsonBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass, TileID.CrimsonThorns,                         TileID.Crimstone,  TileID.Crimsand,  TileID.CrimsonHardenedSand, TileID.CrimsonSandstone, TileID.FleshIce];
+        static readonly List<ushort> corruptBlocks = [TileID.CorruptGrass,  TileID.CorruptJungleGrass, TileID.CorruptThorns,   TileID.CorruptPlants, TileID.Ebonstone,  TileID.Ebonsand,  TileID.CorruptHardenedSand, TileID.CorruptSandstone, TileID.CorruptIce];
+        static readonly List<ushort> hallowBlocks =  [TileID.HallowedGrass, TileID.HallowedPlants,     TileID.HallowedPlants2,                       TileID.Pearlstone, TileID.Pearlsand, TileID.HallowHardenedSand,  TileID.HallowSandstone,  TileID.HallowedIce];
         static readonly List<ushort> glowMushroomBlocks = [TileID.MushroomGrass, TileID.MushroomPlants, TileID.MushroomTrees, TileID.MushroomVines];
         static readonly List<ushort> jungleBlocks = [TileID.JungleGrass, TileID.JunglePlants, TileID.JunglePlants2, TileID.PlantDetritus, TileID.JungleVines, TileID.Hive, TileID.LihzahrdBrick];
         static readonly List<ushort> frostBlocks = [TileID.SnowBlock, TileID.SnowBrick, TileID.IceBlock, TileID.BreakableIce, TileID.FleshIce, TileID.CorruptIce, TileID.HallowedIce];
         static readonly List<ushort> desertBlocks = [TileID.Sand, TileID.Crimsand, TileID.Ebonsand, TileID.Pearlsand, TileID.HardenedSand, TileID.CrimsonHardenedSand, TileID.CorruptHardenedSand, TileID.HallowHardenedSand, TileID.Sandstone, TileID.CrimsonSandstone, TileID.CorruptSandstone, TileID.HallowSandstone];
-        
+
         //PROGRESSION
         static readonly Predicate<ScanData> hardmodeOnly = scan => Main.hardMode;
         static readonly Predicate<ScanData> postMech = scan => Condition.DownedMechBossAny.IsMet();
