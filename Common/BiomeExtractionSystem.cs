@@ -987,7 +987,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(jungle, ItemID.Grubby,                            3);
             AddItemInPool(jungle, ItemID.Sluggy,                            3);
             AddItemInPool(jungle, ItemID.Buggy,                             2);
-            AddItemInPool(shells, ItemID.TurtleShell,                       20);
+            AddItemInPool(shells, ItemID.TurtleShell,                       5);
 
             AddItemInPool(hallowed_forest, ItemID.DirtBlock,                      26);
             AddItemInPool(hallowed_forest, ItemID.PearlstoneBlock,                7);
