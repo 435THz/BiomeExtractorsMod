@@ -417,29 +417,28 @@ namespace BiomeExtractorsMod.Common.Systems
             int last_p = int.MaxValue;
             bool stop = false;
             List<PoolEntry> found = [];
-            foreach(KeyValuePair<int, string> elem in _priorityList.EnumerateInOrder())
+            foreach (KeyValuePair<int, string> elem in _priorityList.EnumerateInOrder())
             {
-                if (stop &&  last_p != elem.Key) break;
+                if (stop && last_p != elem.Key) break;
                 last_p = elem.Key;
 
                 PoolEntry pool = GetPoolEntry(elem.Value);
                 bool check_passed = true;
-                if (_poolRequirements[pool.Tier].ContainsKey(pool.Name))
+
+                foreach (Predicate<ScanData> check in _poolRequirements[pool.Name])
                 {
-                    foreach (Predicate<ScanData> check in _poolRequirements[pool.Tier][pool.Name])
+                    if (!check.Invoke(scan))
                     {
-                        if (!check.Invoke(scan))
-                        {
-                            check_passed = false;
-                            break;
-                        }
+                        check_passed = false;
+                        break;
                     }
                 }
+
                 if (check_passed && _itemPools[elem.Value].Count > 0)
                 {
-                    if(scan.MinTier(pool.Tier))
+                    if (scan.MinTier(pool.Tier))
                         found.Add(_poolNames[elem.Value]);
-                    if(pool.Blocking) stop = true;
+                    if (pool.Blocking) stop = true;
                 }
             }
             return found;
