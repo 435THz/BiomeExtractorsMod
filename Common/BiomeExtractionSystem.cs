@@ -347,7 +347,7 @@ namespace BiomeExtractorsMod.Common.Systems
             if (PoolExists(pool.Name)) return false;
             _poolNames.Add(pool.Name, pool);
             _priorityList.Add(priority, pool.Name);
-            _itemPools.Add(pool.Name, []); //TODO Consider dividing pools up by content
+            _itemPools.Add(pool.Name, []);
             _poolRequirements.Add(pool.Name, []);
             return true;
         }
