@@ -322,7 +322,7 @@ namespace BiomeExtractorsMod.Common.Systems
 
         private readonly Dictionary<string, PoolEntry> _poolNames = [];
         private readonly Dictionary<string, WeightedList<ItemEntry>> _itemPools = [];
-        private readonly Dictionary<int,Dictionary<string, List<Predicate<ScanData>>>> _poolRequirements = [];
+        private readonly Dictionary<string, List<Predicate<ScanData>>> _poolRequirements = [];
         private readonly PriorityList<string> _priorityList = [];
 
         private static string LocalizeAs(string suffix) => $"{BiomeExtractorsMod.LocPoolNames}.{suffix}";
@@ -346,8 +346,7 @@ namespace BiomeExtractorsMod.Common.Systems
             _poolNames.Add(pool.Name, pool);
             _priorityList.Add(priority, pool.Name);
             _itemPools.Add(pool.Name, []); //TODO Consider dividing pools up by content
-            if (!_poolRequirements.ContainsKey(pool.Tier))
-                _poolRequirements.Add(pool.Tier, []);
+            _poolRequirements.Add(pool.Name, []);
             return true;
         }
         public bool ChangePoolTier(string name, int newTier) => ChangePoolTier(GetPoolEntry(name), newTier);
@@ -356,11 +355,6 @@ namespace BiomeExtractorsMod.Common.Systems
             if (pool == null) return false;
             PoolEntry newPool = new(pool.Name, newTier);
             _poolNames[pool.Name] = newPool;
-
-            if (!_poolRequirements.ContainsKey(newTier))
-                _poolRequirements.Add(newTier, []);
-            _poolRequirements[newPool.Tier][newPool.Name] = _poolRequirements[pool.Tier][pool.Name];
-            _poolRequirements[pool.Tier].Remove(pool.Name);
             return true;
         }
         public bool RemovePool(string name) => PoolExists(name) && RemovePoolWithoutChecking(GetPoolEntry(name));
@@ -377,22 +371,19 @@ namespace BiomeExtractorsMod.Common.Systems
                 l.Remove(pool.Name);
             }
             _itemPools.Remove(pool.Name);
-            _poolRequirements[pool.Tier].Remove(pool.Name);
+            _poolRequirements.Remove(poolName);
             return true;
         }
 
         public void AddPoolRequirements(string name, params Predicate<ScanData>[] conditions)
         {
             PoolEntry pool = GetPoolEntry(name);
-            if (!_poolRequirements[pool.Tier].ContainsKey(pool.Name))
-                _poolRequirements[pool.Tier].Add(pool.Name, []);
-            foreach (Predicate<ScanData> condition in conditions)
-                _poolRequirements[pool.Tier][pool.Name].Add(condition);
+            if (pool == null) return false;
+            foreach (Predicate<ScanData> condition in conditions) _poolRequirements[pool.Name].Add(condition);
         }
         public void FlushPoolRequirements(string name) {
             PoolEntry pool = (GetPoolEntry(name));
-            if (pool != null && _poolRequirements[pool.Tier][pool.Name] != null)
-                _poolRequirements[pool.Tier][pool.Name].Clear();
+            _poolRequirements[pool.Name].Clear();
         }
 
         public void AddItemInPool(string name, short itemId) => AddItemInPool(name, new ItemEntry(itemId, 1), 1);
