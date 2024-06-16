@@ -1110,8 +1110,8 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(ug_jungle,   ItemID.Grubby,                            3);
             AddItemInPool(ug_jungle,   ItemID.Sluggy,                            3);
             AddItemInPool(ug_jungle,   ItemID.Buggy,                             2);
-            AddItemInPool(ug_shells,   ItemID.TurtleShell, 18);
-            AddItemInPool(life_fruit,  ItemID.LifeFruit, 10);
+            AddItemInPool(ug_shells,   ItemID.TurtleShell, 4);
+            AddItemInPool(life_fruit,  ItemID.LifeFruit, 1);
             AddItemInPool(chlorophyte, ItemID.ChlorophyteOre, 30);
             AddItemInPool(hive,        ItemID.Hive,         50);
             AddItemInPool(hive,        ItemID.HoneyBlock,   100);
