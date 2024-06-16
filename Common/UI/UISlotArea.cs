@@ -23,7 +23,6 @@ namespace BiomeExtractorsMod.Common.UI
         private UIResultSlot[,] Slots { get; set; } = new UIResultSlot[1, 1] {
             { new UIResultSlot(0) }
         };
-        public float scrollViewSize = 1.0f;
         internal SlotData[] SlotData { get; set; } = [];
         private readonly UIScrollbar scrollbar;
 
