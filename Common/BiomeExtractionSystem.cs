@@ -351,11 +351,10 @@ namespace BiomeExtractorsMod.Common.Systems
             _poolRequirements.Add(pool.Name, []);
             return true;
         }
-        public bool ChangePoolTier(string name, int newTier) => ChangePoolTier(GetPoolEntry(name), newTier);
-        public bool ChangePoolTier(PoolEntry pool, int newTier)
+        public bool ChangePool(PoolEntry newPool)
         {
-            if (pool == null) return false;
-            PoolEntry newPool = new(pool.Name, newTier);
+            bool found = GetPoolEntry(newPool.Name, out PoolEntry pool);
+            if (!found) return false;
             _poolNames[pool.Name] = newPool;
             return true;
         }
