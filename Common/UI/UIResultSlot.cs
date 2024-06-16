@@ -30,13 +30,12 @@ namespace BiomeExtractorsMod.Common.UI
         internal UIItemIcon icon;
         internal UIText amount;
         internal int index;
-        public UIResultSlot(int index) : this(index, new Item(0), false) { }
-        public UIResultSlot(int index, Item item, bool blackedOut) : base()
+        internal UIResultSlot(int index)
         {
             this.index = index;
             Width.Set(size, 0);
             Height.Set(size, 0);
-            icon = new(item, blackedOut);
+            icon = new(new(0), false);
             icon.HAlign = icon.VAlign = 0.5f;
             Append(icon);
 
