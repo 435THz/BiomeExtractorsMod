@@ -358,20 +358,15 @@ namespace BiomeExtractorsMod.Common.Systems
             _poolNames[pool.Name] = newPool;
             return true;
         }
-        public bool RemovePool(string name) => PoolExists(name) && RemovePoolWithoutChecking(GetPoolEntry(name));
-        public bool RemovePool(PoolEntry pool)
+        public bool RemovePool(string poolName)
         {
-            if (PoolExists(pool)) { return RemovePoolWithoutChecking(pool); }
-            return false;
-        }
-        bool RemovePoolWithoutChecking(PoolEntry pool)
-        {
-            _poolNames.Remove(pool.Name);
+            if(!PoolExists(poolName)) return false;
+            _poolNames.Remove(poolName);
             foreach (List<string> l in _priorityList.Values)
             {
-                l.Remove(pool.Name);
+                l.Remove(poolName);
             }
-            _itemPools.Remove(pool.Name);
+            _itemPools.Remove(poolName);
             _poolRequirements.Remove(poolName);
             return true;
         }
