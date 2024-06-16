@@ -327,7 +327,7 @@ namespace BiomeExtractorsMod.Common.Systems
 
         private static string LocalizeAs(string suffix) => $"{BiomeExtractorsMod.LocPoolNames}.{suffix}";
 
-        public bool PoolExists(PoolEntry pool) => PoolExists(pool.Name); 
+        public bool PoolExists(PoolEntry pool) => PoolExists(pool.Name);
         public bool PoolExists(string name) => _poolNames.ContainsKey(name);
 
         public PoolEntry GetPoolEntry(string name) => _poolNames.TryGetValue(name, out PoolEntry pool) ? pool : null;
