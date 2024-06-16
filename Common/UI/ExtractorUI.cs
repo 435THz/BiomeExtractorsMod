@@ -23,7 +23,7 @@ namespace BiomeExtractorsMod.Common.UI
         bool Dragging = false;
         Vector2 CursorDragOffset;
         readonly float panelSnap = 36f;
-        private float draggingAreaHeight => slotArea.Top.Pixels + 12;
+        private float DraggingAreaHeight => slotArea.Top.Pixels + 12;
 
         public override void OnInitialize()
         {
@@ -113,12 +113,12 @@ namespace BiomeExtractorsMod.Common.UI
                 panel.Top.Set(newPos.Y, 0f);
             } else {
                 float draggingAreaRight = panel.Left.Pixels + panel.Width.Pixels;
-                float draggingAreaBottom = panel.Top.Pixels + draggingAreaHeight;
+                float draggingAreaBottom = panel.Top.Pixels + DraggingAreaHeight;
                 float screenRightLimit = Main.screenWidth - panelSnap;
                 float screenBottomLimit = Main.screenHeight - panelSnap;
                 if (draggingAreaRight < panelSnap) panel.Left.Set(-panel.Width.Pixels + panelSnap, 0f);
                 else if (panel.Left.Pixels > screenRightLimit) panel.Left.Set(screenRightLimit, 0f);
-                if (draggingAreaBottom < panelSnap) panel.Top.Set(-draggingAreaHeight + panelSnap, 0f);
+                if (draggingAreaBottom < panelSnap) panel.Top.Set(-DraggingAreaHeight + panelSnap, 0f);
                 else if (panel.Top.Pixels > screenBottomLimit) panel.Top.Set(screenBottomLimit, 0f);
             }
         }
