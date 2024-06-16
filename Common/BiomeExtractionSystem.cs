@@ -371,33 +371,42 @@ namespace BiomeExtractorsMod.Common.Systems
             return true;
         }
 
-        public void AddPoolRequirements(string name, params Predicate<ScanData>[] conditions)
         {
-            PoolEntry pool = GetPoolEntry(name);
+            PoolEntry pool = GetPoolEntry(poolName);
             if (pool == null) return false;
             foreach (Predicate<ScanData> condition in conditions) _poolRequirements[pool.Name].Add(condition);
+            return true;
         }
-        public void FlushPoolRequirements(string name) {
-            PoolEntry pool = (GetPoolEntry(name));
+        public bool FlushPoolRequirements(string poolName)
+        {
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
             _poolRequirements[pool.Name].Clear();
+            return true;
         }
 
-        public void AddItemInPool(string name, short itemId) => AddItemInPool(name, new ItemEntry(itemId, 1), 1);
-        public void AddItemInPool(string name, short itemId, int weight) => AddItemInPool(name, new ItemEntry(itemId, 1), weight);
-        public void AddItemInPool(string name, short itemId, int count, int weight) => AddItemInPool(name, new ItemEntry(itemId, count), weight);
-        public void AddItemInPool(string name, ItemEntry item, int weight)
+        public bool AddItemInPool(string poolName, short itemId, int weight) => AddItemInPool(poolName, new ItemEntry(itemId, 1), weight);
+        public bool AddItemInPool(string poolName, short itemId, int count = 1, int weight = 1) => AddItemInPool(poolName, new ItemEntry(itemId, count), weight);
+        public bool AddItemInPool(string poolName, ItemEntry item, int weight)
         {
-            _itemPools[name].Add(item, weight);
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
+            _itemPools[poolName].Add(item, weight);
+            return true;
         }
-        public void RemoveItemFromPool(string poolName, short itemId) => RemoveItemFromPool(poolName, new ItemEntry(itemId, 1));
-        public void RemoveItemFromPool(string poolName, short itemId, int count) => RemoveItemFromPool(poolName, new ItemEntry(itemId, count));
-        public void RemoveItemFromPool(string poolName, ItemEntry item)
+        public bool RemoveItemFromPool(string poolName, short itemId, int count) => RemoveItemFromPool(poolName, new ItemEntry(itemId, count));
+        public bool RemoveItemFromPool(string poolName, ItemEntry item)
         {
-            _itemPools[poolName].Remove(item);
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
+            return _itemPools[poolName].Remove(item);
         }
-        public void FlushPoolItems(string poolName)
+        public bool FlushPoolItems(string poolName)
         {
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
             _itemPools[poolName].Clear();
+            return false;
         }
 
         internal List<PoolEntry> CheckValidBiomes(BiomeExtractorEnt extractor)
