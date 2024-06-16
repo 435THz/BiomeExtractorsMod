@@ -13,7 +13,7 @@ namespace BiomeExtractorsMod.Common.UI
 {
     internal class ExtractorUI : UIState
     {
-        public static readonly float PanelWidth = UISlotArea.AreaWidth + 24f;
+        internal static readonly float PanelWidth = UISlotArea.AreaWidth + 24f;
         UIPanel panel;
         UIText header;
         UIPanel button;
@@ -123,16 +123,16 @@ namespace BiomeExtractorsMod.Common.UI
             }
         }
 
-        public void MovePanel(UIMouseEvent evt, UIElement listeningElement)
+        private void MovePanel(UIMouseEvent evt, UIElement listeningElement)
         {
             Vector2 panelPos = new(panel.Left.Pixels, panel.Top.Pixels);
             Vector2 cursorPos = new(evt.MousePosition.X, evt.MousePosition.Y);
             CursorDragOffset = panelPos - cursorPos;
-            if(CursorDragOffset.Y > -draggingAreaHeight)
+            if(CursorDragOffset.Y > -DraggingAreaHeight)
                 Dragging = true;
         }
 
-        public void StopMovingPanel(UIMouseEvent evt, UIElement listeningElement)
+        private void StopMovingPanel(UIMouseEvent evt, UIElement listeningElement)
         {
             Dragging = false;
         }
@@ -169,7 +169,7 @@ namespace BiomeExtractorsMod.Common.UI
             Dragging = false;
         }
 
-        public static void SetTooltip(string text, int rarity)
+        private static void SetTooltip(string text, int rarity)
         {
             Item fakeItem = new();
             fakeItem.SetDefaults(0, noMatCheck: true);

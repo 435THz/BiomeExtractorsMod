@@ -12,16 +12,16 @@ namespace BiomeExtractorsMod.Common
 {
     internal class ExtractorPlayer : ModPlayer
     {
-        public static ExtractorPlayer LocalPlayer => Main.LocalPlayer.GetModPlayer<ExtractorPlayer>();
+        internal static ExtractorPlayer LocalPlayer => Main.LocalPlayer.GetModPlayer<ExtractorPlayer>();
         private static readonly string VectorX = "ExtractorWindowX";
         private static readonly string VectorY = "ExtractorWindowY";
         private static Vector2 Defaultpos => new(((Main.screenWidth / Main.UIScale) - ExtractorUI.PanelWidth) / 2, 18.625f);
         private Vector2? _windowpos = null;
-        public Vector2 ExtractorWindowPos {
+        internal Vector2 ExtractorWindowPos {
             get => ModContent.GetInstance<ConfigClient>().SaveWindowPos && _windowpos is not null ? (Vector2)_windowpos : Defaultpos;
             set => _windowpos = ModContent.GetInstance<ConfigClient>().SaveWindowPos ? value : Defaultpos;
         }
-        public bool IsInExtractorRange(BiomeExtractorEnt extractor)
+        internal bool IsInExtractorRange(BiomeExtractorEnt extractor)
         {
             Point16 tl = TileUtils.GetTopLeftTileInMultitile(extractor.Position.X, extractor.Position.Y);
             int num = (int)((Player.position.X + Player.width * 0.5) / 16.0);

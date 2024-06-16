@@ -13,23 +13,23 @@ namespace BiomeExtractorsMod.Common.UI
 {
     internal class UISlotArea : UIElement
     {
-        public static readonly int Padding = 4;
+        private static readonly int Padding = 4;
 
-        public static readonly int Columns = 8;
-        public static readonly int Rows = 4;
-        public static float AreaWidth = (UIResultSlot.size + Padding) * Columns + 20f;
-        public static float AreaHeight = (UIResultSlot.size + Padding) * Rows;
+        internal static int Columns = 8; //TODO make editable. Will probably require regenerating UISlotArea
+        internal static int Rows = 4;
+        internal static float AreaWidth = (UIResultSlot.size + Padding) * Columns + 20f;
+        internal static float AreaHeight = (UIResultSlot.size + Padding) * Rows;
 
-        public UIResultSlot[,] Slots { get; set; } = new UIResultSlot[1, 1] {
+        private UIResultSlot[,] Slots { get; set; } = new UIResultSlot[1, 1] {
             { new UIResultSlot(0) }
         };
-        public SlotData[] SlotData { get; set; } = [];
-        public UIScrollbar scrollbar;
         public float scrollViewSize = 1.0f;
+        internal SlotData[] SlotData { get; set; } = [];
+        private readonly UIScrollbar scrollbar;
 
-        public int Hovered { get; set; } = -1;
+        internal int Hovered { get; set; } = -1;
         private int  _topRow = 0;
-        public int TopRow
+        internal int TopRow
         {
             get => _topRow;
             set
@@ -38,9 +38,9 @@ namespace BiomeExtractorsMod.Common.UI
             }
         }
         private float _previousViewPosition = 0f;
-        public int MaxRows => (int)Math.Ceiling(SlotData.Length / (double)Columns);
+        internal int MaxRows => (int)Math.Ceiling(SlotData.Length / (double)Columns);
 
-        public UISlotArea() : base()
+        internal UISlotArea() : base()
         {
             Slots = new UIResultSlot[Rows, Columns];
             for (int y = 0; y < Rows; y++)

@@ -8,19 +8,20 @@ namespace BiomeExtractorsMod.Common.UI
 {
     internal struct SlotData(Item item, int min, int max, decimal chance)
     {
-        public Item Item = item;
-        public int Min = min;
-        public int Max = max;
+
+        internal Item Item = item;
+        internal int Min = min;
+        internal int Max = max;
         private decimal _chance = chance;
-        public decimal Chance {
+        internal decimal Chance {
             readonly get => decimal.Truncate(_chance * 100) / 100;
             set => _chance = value;
         }
-        public readonly double Med => (Min + Max) / 2.0;
-        public readonly int DailyAmount(double rollsPerDay) => (int)(rollsPerDay * Med * (double)Chance / 100);
-        public readonly string AmountString => Min == Max ? $"{Min}" : $"{Min}-{Max}";
-        public readonly string ChanceString => $"{Chance}{Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Percent")}";
-        public readonly string DailyString(double rollsPerDay) => ((int)DailyAmount(rollsPerDay)).ToString();
+        internal readonly double Med => (Min + Max) / 2.0;
+        internal readonly int DailyAmount(double rollsPerDay) => (int)(rollsPerDay * Med * (double)Chance / 100);
+        internal readonly string AmountString => Min == Max ? $"{Min}" : $"{Min}-{Max}";
+        internal readonly string ChanceString => $"{Chance}{Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Percent")}";
+        internal readonly string DailyString(double rollsPerDay) => ((int)DailyAmount(rollsPerDay)).ToString();
     }
 
     internal class UIResultSlot : UIPanel
@@ -50,7 +51,7 @@ namespace BiomeExtractorsMod.Common.UI
             base.Draw(spriteBatch);
         }
 
-        public void SetItem(Item item, bool blackedOut)
+        internal void SetItem(Item item, bool blackedOut)
         {
             RemoveChild(amount);
             RemoveChild(icon);
@@ -59,7 +60,7 @@ namespace BiomeExtractorsMod.Common.UI
             Append(amount);
         }
 
-        public void SetAmount(int min, int max)
+        internal void SetAmount(int min, int max)
         {
             if (min == max)
             {
