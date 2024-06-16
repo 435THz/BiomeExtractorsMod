@@ -400,7 +400,7 @@ namespace BiomeExtractorsMod.Common.Systems
             _itemPools[poolName].Clear();
         }
 
-        public List<PoolEntry> CheckValidBiomes(BiomeExtractorEnt extractor)
+        internal List<PoolEntry> CheckValidBiomes(BiomeExtractorEnt extractor)
         {
             ScanData scan = new(extractor);
             scan.Scan();
@@ -436,7 +436,7 @@ namespace BiomeExtractorsMod.Common.Systems
             return found;
         }
 
-        public Item RollItem(List<PoolEntry> pools)
+        internal Item RollItem(List<PoolEntry> pools)
         {
             if (pools.Count == 1)
             {
@@ -466,7 +466,7 @@ namespace BiomeExtractorsMod.Common.Systems
             return item;
         }
 
-        public WeightedList<ItemEntry> JoinPools(List<PoolEntry> pools)
+        internal WeightedList<ItemEntry> JoinPools(List<PoolEntry> pools)
         {
             WeightedList<ItemEntry> joinedPool = [];
             if (pools is not null)
