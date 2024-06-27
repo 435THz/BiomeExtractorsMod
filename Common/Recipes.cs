@@ -45,14 +45,14 @@ namespace BiomeExtractorsMod.Common
             Recipe.Create(ModContent.ItemType<BiomeExtractorItemCorruption>())
                 .AddRecipeGroup(basicExtractorGroupName)
                 .AddIngredient(ItemID.DemoniteBar, 5)
-                .AddIngredient(ItemID.ShadowScale, 12)
+                .AddIngredient(ItemID.VilePowder, 12)
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
 
             Recipe.Create(ModContent.ItemType<BiomeExtractorItemCrimson>())
                 .AddRecipeGroup(basicExtractorGroupName)
                 .AddIngredient(ItemID.CrimtaneBar, 5)
-                .AddIngredient(ItemID.TissueSample, 12)
+                .AddIngredient(ItemID.ViciousPowder, 12)
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
 
