@@ -8,6 +8,7 @@ namespace BiomeExtractorsMod.Content.Tiles
     class BiomeExtractorTileEthereal : BiomeExtractorTile
     {
         protected override int FrameCount => 8;
+
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntEthereal>();
 
         protected override void CreateMapEntries()

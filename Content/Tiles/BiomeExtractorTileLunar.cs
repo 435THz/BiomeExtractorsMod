@@ -8,6 +8,7 @@ namespace BiomeExtractorsMod.Content.Tiles
     class BiomeExtractorTileLunar : BiomeExtractorTile
     {
         protected override int FrameCount => 8;
+
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntLunar>();
 
         protected override void CreateMapEntries()

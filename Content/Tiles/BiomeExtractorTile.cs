@@ -21,6 +21,10 @@ namespace BiomeExtractorsMod.Content.Tiles
         /// </summary>
         protected abstract int FrameCount { get; }
         /// <summary>
+        /// Returns the animation index used by the tile when inactive.
+        /// </summary>
+        protected virtual int IdleFrame { get; } = 0;
+        /// <summary>
         /// Returns the duration, in game frames, of this Extractor's animation frames.
         /// </summary>
         protected virtual int FrameDuration => 5; //12FPS
@@ -98,24 +102,26 @@ namespace BiomeExtractorsMod.Content.Tiles
 
         public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
         {
+            frameYOffset = GetAnimationFrame(type, i, j) * FrameHeight;
+        }
+        protected int GetAnimationFrame(int type, int i, int j)
+        {
             bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
             if (!found || !entity.Active)
             {
-                frameYOffset = 0;
-                return;
+                return IdleFrame;
             }
-
             int x = entity.Position.X;
             int y = entity.Position.Y;
             //ultra spicy position-dependent animation desyncs right here
-            int frame = Main.tileFrame[type]+x+y;
+            int frame = Main.tileFrame[type] + x + y;
             if (x % 2 == 0) frame++;
             if (y % 3 == 0) frame++;
-            if (y % 4 == 0) frame+=2;
-            if (x % y == 0 || y % x == 0) frame+=3;
-
-            frameYOffset = (frame % FrameCount) * FrameHeight;
+            if (y % 4 == 0) frame += 2;
+            if (x % y == 0 || y % x == 0) frame += 3;
+            return frame % FrameCount;
         }
+
         public override void AnimateTile(ref int frame, ref int frameCounter)
         {
             if (++frameCounter >= FrameDuration)
