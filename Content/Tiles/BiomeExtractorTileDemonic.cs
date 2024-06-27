@@ -9,6 +9,7 @@ namespace BiomeExtractorsMod.Content.Tiles
     {
         protected override int FrameCount => 8;
 
+        protected override string glowAsset => "Content/Tiles/BiomeExtractorTileDemonic_Glow";
 
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntDemonic>();
 

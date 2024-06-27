@@ -1,5 +1,7 @@
 using BiomeExtractorsMod.Common.UI;
 using BiomeExtractorsMod.Content.TileEntities;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -34,6 +36,12 @@ namespace BiomeExtractorsMod.Content.Tiles
         /// Useful if a sprite has an overhang meant to patch up holes in uneven terrain sprites.
         /// </summary>
         protected virtual int FrameHeight => 54;
+
+        /// <summary>
+        /// Returns the path to this tile's glowmask asset. If "", no glowmask will be applied.
+        /// The default value is ""
+        /// </summary>
+        protected virtual string glowAsset => "";
 
         /// <summary>
         /// Returns the template instance of this Extractor's TileEntity type (not the clone/new instance it is bound to during gameplay)
@@ -129,6 +137,22 @@ namespace BiomeExtractorsMod.Content.Tiles
                 frameCounter = 0;
                 frame = ++frame % FrameCount;
             }
+        }
+
+        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            if (glowAsset == "") return;
+            bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
+            if (!found || !entity.Active)
+                return;
+            Tile tile = Main.tile[i, j];
+            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
+            Vector2 drawPos = zero + 16f * new Vector2(i, j) - Main.screenPosition;
+            int y = tile.TileFrameY + GetAnimationFrame(Type, i, j) * FrameHeight;
+            Rectangle frame = new(tile.TileFrameX, y, 16, 16);
+            Color lightColor = Lighting.GetColor(i, j, Color.White);
+            Color color = Color.Lerp(Color.White, lightColor, 0.5f);
+            spriteBatch.Draw(Mod.Assets.Request<Texture2D>(glowAsset).Value, drawPos, frame, color);
         }
 
         public override void MouseOver(int i, int j)
