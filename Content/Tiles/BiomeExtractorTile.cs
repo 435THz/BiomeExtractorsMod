@@ -37,10 +37,33 @@ namespace BiomeExtractorsMod.Content.Tiles
         protected abstract BiomeExtractorEnt TileEntity { get; }
 
         /// <summary>
-        /// Returns the id of the BiomeExtractorItem this Entity is bound to.<br/>
+        /// Returns the id of the BiomeExtractorItem this Tile is bound to.<br/>
         /// It may have different results if the tile has multiple styles.
         /// </summary>
         protected abstract int ItemType(Tile tile);
+
+        /// <summary>
+        /// Called inside <see cref="SetStaticDefaults"/>. Its only purpose should be to call AddMapEntry
+        /// as many times as it is necessary.<br/>
+        /// <see cref="GetMapOption(int, int)"/> is already set to use the MapEntry corresponding to the
+        /// tile style, but can be changed freely if more complex behavior is desired or needed.
+        /// </summary>
+        protected abstract void CreateMapEntries();
+        public override ushort GetMapOption(int i, int j)
+        {
+            Tile tile = Main.tile[i, j];
+            return (ushort)TileStyle(tile);
+        }
+
+        protected static LocalizedText MapEntryName { get; } = Language.GetText(BiomeExtractorsMod.LocTileMapName);
+
+        /// <summary>
+        /// Returns the tile style of this Tile.
+        /// </summary>
+        protected virtual int TileStyle(Tile tile)
+        {
+            return tile.TileFrameX / 54;
+        }
 
         public override void SetStaticDefaults()
         {
@@ -66,6 +89,8 @@ namespace BiomeExtractorsMod.Content.Tiles
             TileObjectData.newTile.StyleHorizontal = true;
 
             TileObjectData.addTile(Type);
+
+            CreateMapEntries();
 
             TileID.Sets.PreventsSandfall[Type] = true;
             TileID.Sets.AvoidedByMeteorLanding[Type] = true;

@@ -17,6 +17,11 @@ namespace BiomeExtractorsMod.Content.Tiles
             Main.tileLavaDeath[Type] = true;
         }
 
+        protected override void CreateMapEntries()
+        {
+            AddMapEntry(new(99, 74, 187), MapEntryName);
+            AddMapEntry(new(183, 31, 49), MapEntryName);
+        }
         protected override int ItemType(Tile tile)
         {
             return tile.TileFrameX > 50 ? ModContent.ItemType<BiomeExtractorItemCrimson>() : ModContent.ItemType<BiomeExtractorItemCorruption>();

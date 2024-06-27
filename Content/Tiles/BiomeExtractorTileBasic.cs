@@ -11,11 +11,16 @@ namespace BiomeExtractorsMod.Content.Tiles
 
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntBasic>();
 
-
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
             Main.tileLavaDeath[Type] = true;
+        }
+
+        protected override void CreateMapEntries()
+        {
+            AddMapEntry(new(140, 101, 80), MapEntryName);
+            AddMapEntry(new(85, 114, 123), MapEntryName);
         }
 
         protected override int ItemType(Tile tile)

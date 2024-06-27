@@ -16,6 +16,10 @@ namespace BiomeExtractorsMod.Content.Tiles
             Main.tileObsidianKill[Type] = true;
         }
 
+        protected override void CreateMapEntries()
+        {
+            AddMapEntry(new(226, 116, 56), MapEntryName);
+        }
         protected override int ItemType(Tile tile)
         {
             return ModContent.ItemType<BiomeExtractorItemInfernal>();
