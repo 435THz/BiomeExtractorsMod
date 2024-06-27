@@ -62,7 +62,7 @@ namespace BiomeExtractorsMod.Content.Tiles
         /// </summary>
         protected virtual int TileStyle(Tile tile)
         {
-            return tile.TileFrameX / 54;
+            return TileObjectData.GetTileStyle(tile);
         }
 
         public override void SetStaticDefaults()
