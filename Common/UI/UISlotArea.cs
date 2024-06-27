@@ -68,6 +68,15 @@ namespace BiomeExtractorsMod.Common.UI
         public void InitElements(WeightedList<ItemEntry> pool)
         {
             List<ItemEntry> entries = pool.Keys.ToList();
+            entries.Sort(delegate(ItemEntry key1, ItemEntry key2) {
+                int w1 = pool[key1], w2 = pool[key2];
+                int a1 = key1.Min + key1.Max, a2 = key2.Min + key2.Max;
+                if (w1 != w2)
+                    return w2 - w1;
+                else if (a1 != a2)
+                    return a2 - a1;
+                return key2.Id - key1.Id;
+            });
             SlotData = new SlotData[entries.Count];
             for (int n = 0; n < entries.Count; n++)
             {
