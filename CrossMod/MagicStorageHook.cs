@@ -46,29 +46,52 @@ namespace BiomeExtractorsMod.CrossMod
             TEStorageHeart heart = GetMSStorageHeart(access);
             if (heart == null) return false;
 
-            int limit = DepositableAmount(heart, newItem.type, newItem.maxStack);
+            int limit = DepositableAmount(heart, newItem);
             newItem.stack = Utils.Clamp(newItem.stack, 0, limit);
             if(newItem.stack == 0) return false;
             heart.DepositItem(newItem);
             return true;
         }
 
-        private static int DepositableAmount(TEStorageHeart storage, int itemID, int maxStack)
+        private static int DepositableAmount(TEStorageHeart storage, Item newItem)
         {
             int limit = ModContent.GetInstance<ConfigCompat>().MaxMS;
             int stackLimit = ModContent.GetInstance<ConfigCompat>().MaxMSStacks;
-            limit = Math.Min(limit, maxStack * stackLimit);
+            limit = Math.Min(limit, newItem.maxStack * stackLimit);
 
             int amount = 0;
+            int remainingToStack = 0;
             foreach (Item item in storage.GetStoredItems())
             {
-                if (item.type == itemID)
+                if (item.type == newItem.type)
                 {
                     amount += item.stack;
+                    remainingToStack += newItem.maxStack - item.stack;
                     if (amount >= limit) return 0;
                 }
             }
+            int availableSpace = GetFreeSlots(storage) * newItem.maxStack + remainingToStack;
+            limit = Math.Min(limit, availableSpace);
+
             return limit - amount;
+        }
+
+        private static int GetFreeSlots(TEStorageHeart storage)
+        {
+            int numItems = 0;
+            int capacity = 0;
+            if (storage is not null)
+            {
+                foreach (TEAbstractStorageUnit abstractStorageUnit in storage.GetStorageUnits())
+                {
+                    if (abstractStorageUnit is TEStorageUnit storageUnit)
+                    {
+                        numItems += storageUnit.NumItems;
+                        capacity += storageUnit.Capacity;
+                    }
+                }
+            }
+            return capacity - numItems;
         }
     }
 }
