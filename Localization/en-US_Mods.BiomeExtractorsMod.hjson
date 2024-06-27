@@ -118,7 +118,7 @@ Configs: {
 		TransferAnimationTitle: Show Transfer Animation
 		TransferAnimationTooltip:
 			'''
-			If true, every time an Extractor genertes an item it
+			If true, every time an Extractor generates an item it
 			will show that item going inside the output chest, just
 			like the Quick Stack animation would. Turn this off if
 			you start having performance issues because of it.
