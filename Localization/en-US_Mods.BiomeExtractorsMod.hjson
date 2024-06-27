@@ -115,6 +115,14 @@ Configs: {
 	ConfigCommon: {
 		DisplayName: Extractors Settings
 		GeneralConfigHeader: General Settings
+		TransferAnimationTitle: Show Transfer Animation
+		TransferAnimationTooltip:
+			'''
+			If true, every time an Extractor genertes an item it
+			will show that item going inside the output chest, just
+			like the Quick Stack animation would. Turn this off if
+			you start having performance issues because of it.
+			'''
 		ScanRateTitle: Biome Scan Rate
 		ScanRateTooltip:
 			'''

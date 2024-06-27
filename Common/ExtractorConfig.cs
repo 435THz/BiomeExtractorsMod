@@ -26,7 +26,13 @@ namespace BiomeExtractorsMod.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
+
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.GeneralConfigHeader")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.TransferAnimationTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.TransferAnimationTooltip")]
+        [DefaultValue(true)]
+        public bool ShowTransferAnimation;
+
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.ScanRateTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.ScanRateTooltip")]
         [Range(1, 86400)]

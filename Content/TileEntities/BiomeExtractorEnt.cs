@@ -149,7 +149,12 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 if (Main.rand.Next(100) < ExtractionChance)
                 {
                     Item generated = BES.RollItem(PoolList);
-                    AddToOutput(generated);
+                    if (AddToOutput(generated.Clone()) && ModContent.GetInstance<ConfigCommon>().ShowTransferAnimation)
+                    {
+                        Vector2 start = (Position.ToVector2() + new Vector2(1.5f, 1.5f)) * 16;
+                        Vector2 end = (outputPos.ToVector2() + Vector2.One) * 16;
+                        Chest.VisualizeChestTransfer(start, end, generated, 1);
+                    }
                 }
             }
 
@@ -166,7 +171,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private bool AddToOutput(Item newItem)
         {
             if (BiomeExtractorsMod.MS_loaded && outputType == OutputType.MS_ENVIRONMENTACCESS) return MagicStorageHook.AddItemToStorage(newItem, outputPos);
-            if (outputType == OutputType.CHEST) AddToChest(newItem);
+            if (outputType == OutputType.CHEST) return AddToChest(newItem);
             return false;
         }
 
