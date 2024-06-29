@@ -1185,9 +1185,9 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(ug_corrupt_snow_hm, ItemID.CursedFlame, 20);
             AddItemInPool(ug_corrupt_snow_hm, ItemID.SoulofNight, 20);
 
-            AddItemInPool(dungeon_p, ItemID.AncientPinkDungeonBrick,  12);
-            AddItemInPool(dungeon_g, ItemID.AncientGreenDungeonBrick, 12);
-            AddItemInPool(dungeon_b, ItemID.AncientBlueDungeonBrick,  12);
+            AddItemInPool(dungeon_p, ItemID.PinkBrick,  12);
+            AddItemInPool(dungeon_g, ItemID.GreenBrick, 12);
+            AddItemInPool(dungeon_b, ItemID.BlueBrick,  12);
             AddItemInPool(dungeon, ItemID.Spike,     6);
             AddItemInPool(dungeon, ItemID.Bone,      36);
             AddItemInPool(dungeon, ItemID.GoldenKey, 1);
