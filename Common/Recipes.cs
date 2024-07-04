@@ -9,12 +9,16 @@ namespace BiomeExtractorsMod.Common
 {
     public class Recipes : ModSystem
     {
+        readonly string goldBarGroupName =            nameof(ItemID.GoldBar);
         readonly string basicExtractorGroupName =     $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemIron)}";
         readonly string demonicExtractorGroupName =   $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemCorruption)}";
         readonly string steampunkExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemAdamantite)}";
 
         public override void AddRecipeGroups()
         {
+            RecipeGroup goldBar = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.GoldBar)}", ItemID.GoldBar, ItemID.PlatinumBar);
+            RecipeGroup.RegisterGroup(goldBarGroupName, goldBar);
+
             RecipeGroup basicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.BasicExtractor")}", ModContent.ItemType<BiomeExtractorItemIron>(), ModContent.ItemType<BiomeExtractorItemLead>());
             RecipeGroup.RegisterGroup(basicExtractorGroupName, basicExtractor);
 
@@ -28,6 +32,13 @@ namespace BiomeExtractorsMod.Common
 
         public override void AddRecipes()
         {
+            Recipe.Create(ModContent.ItemType<BiomeScanner>())
+                .AddIngredient(ItemID.Lens, 2)
+                .AddIngredient(ItemID.Wire, 5)
+                .AddRecipeGroup(goldBarGroupName, 2)
+                .AddTile(TileID.TinkerersWorkbench)
+                .Register();
+
             Recipe.Create(ModContent.ItemType<BiomeExtractorItemIron>())
                 .AddIngredient(ItemID.Extractinator)
                 .AddIngredient(ItemID.IronBar, 5)

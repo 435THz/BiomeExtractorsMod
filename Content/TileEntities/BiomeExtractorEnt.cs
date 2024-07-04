@@ -52,7 +52,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private static readonly string tagOutputX = "chest_x";
         private static readonly string tagOutputY = "chest_y";
         private static readonly Point[] PosOffsets = [new(-1,2), new(3, 2), new(-1, 0), new(3, 0), new(0, -1), new(2, -1)];
-        private static readonly BiomeExtractionSystem BES = ModContent.GetInstance<BiomeExtractionSystem>();
+        protected static readonly BiomeExtractionSystem BES = ModContent.GetInstance<BiomeExtractionSystem>();
 
         private int XTimer = 0;
         private int BTimer = 0;
