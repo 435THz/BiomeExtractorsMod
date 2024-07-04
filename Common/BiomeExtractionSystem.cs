@@ -14,6 +14,12 @@ using Terraria.WorldBuilding;
 
 namespace BiomeExtractorsMod.Common.Systems
 {
+    /// <summary>
+    /// A helper class used by <see cref="BiomeExtractionSystem"/>to scan an Extractor's surroundings.
+    /// After a scan, the amount of tiles and liquids found can be checked by calling its getter methods.
+    /// </summary>
+    /// <param name="tier">The tier of the extractor requesting a scan</param>
+    /// <param name="origin">The origin of the scan in tile coordinates</param>
     public class ScanData(BiomeExtractionSystem.ExtractionTier tier, Point16 origin)
     {
 
@@ -23,20 +29,76 @@ namespace BiomeExtractorsMod.Common.Systems
         private readonly Dictionary<int, int> _tileCounts = [];
         private readonly Dictionary<int, int> _liquidCounts = [];
 
+        /// <summary>
+        /// The X position of this scan's origin in tile coordinates.
+        /// </summary>
         public float X => _origin.X;
+        /// <summary>
+        /// The Y position of this scan's origin in tile coordinates.
+        /// </summary>
         public float Y => _origin.Y;
 
+        /// <summary>
+        /// Returns the amount of tiles in the scan area that correspond to any of the requested tile ids.
+        /// </summary>
+        /// <param name="tileIds">A list of tile ids look for</param>
+        /// <returns>The total amount of the requested tiles.</returns>
         public int Tiles(List<ushort> tileIds) => Tiles(tileIds.ToArray());
+        /// <summary>
+        /// Returns the amount of tiles in the scan area that correspond to any of the requested tile ids.
+        /// </summary>
+        /// <param name="tileIds">An array of tile ids look for</param>
+        /// <returns>The total amount of the requested tiles.</returns>
         public int Tiles(params ushort[] tileIds)
         {
             int count = 0;
             foreach (ushort tileId in tileIds) count += _tileCounts.GetValueOrDefault(tileId);
             return count;
         }
+
+        /// <summary>
+        /// Returns the amount of liquid tiles in the scan area that correspond to the requested liquid id.
+        /// </summary>
+        /// <param name="tileId">The id of the liquid to look for</param>
+        /// <returns>The amount of the requested liquid tile</returns>
         public int Liquids(int liquidId) => _liquidCounts.GetValueOrDefault(liquidId);
+
+        /// <summary>
+        /// Returns whether or not the scan's tier is higher or equal than the provided one.
+        /// </summary>
+        /// <param name="tier">The tier to check for</param>
+        /// <returns><see langword="true"/> if tier is lower or equal to the ScanData's tier, <see langword="false"/> otherwise</returns>
         public bool MinTier(int tier) => _tier != null && _tier.Tier >= tier;
+
+        /// <summary>
+        /// Checks if the area has the requested wall as a background.
+        /// More specifically, it only checks for the 3x3 area centered on the scan's origin, and only returns
+        /// <see langword="true"/> if they all match. For an Extractor, this 3x3 area is exactly the space
+        /// occupied by the Extractor tiles.
+        /// </summary>
+        /// <param name="wallId">The id of the wall to check for</param>
+        /// <param name="blacklist">If this is <see langword="true"/>, this method will check if the area does NOT contain the requested wall id</param>
+        /// <returns><see langword="true"/> if all walls in the 3x3 area correspond to the wall id, <see langword="false"/> otherwise</returns>
         public bool ValidWalls(ushort wallId, bool blacklist = false) => ValidWalls(new List<ushort>() { wallId }, blacklist);
+        /// <summary>
+        /// Checks if the area has the requested walls as a background.
+        /// More specifically, it only checks for the 3x3 area centered on the scan's origin, and only returns
+        /// <see langword="true"/> if they all match at least one of the provided walls. For an Extractor, this
+        /// 3x3 area is exactly the space occupied by the Extractor tiles.
+        /// </summary>
+        /// <param name="wallId">An array of wall ids to check for</param>
+        /// <param name="blacklist">If this is <see langword="true"/>, this method will check if the area does NOT contain any of the requested wall ids</param>
+        /// <returns><see langword="true"/> if all walls in the 3x3 area correspond to at least one of the requested wall ids each, <see langword="false"/> otherwise</returns>
         public bool ValidWalls(ushort[] wallIds, bool blacklist = false) => ValidWalls(wallIds.ToList(), blacklist);
+        /// <summary>
+        /// Checks if the area has the requested walls as a background.
+        /// More specifically, it only checks for the 3x3 area centered on the scan's origin, and only returns
+        /// <see langword="true"/> if they all match at least one of the provided walls. For an Extractor, this
+        /// 3x3 area is exactly the space occupied by the Extractor tiles.
+        /// </summary>
+        /// <param name="wallId">An array of wall ids to check for</param>
+        /// <param name="blacklist">If this is <see langword="true"/>, this method will check if the area does NOT contain any of the requested wall ids</param>
+        /// <returns><see langword="true"/> if all walls in the 3x3 area correspond to at least one of the requested wall ids each, <see langword="false"/> otherwise</returns>
         public bool ValidWalls(List<ushort> wallIds, bool blacklist = false)
         {
             Point origin = _origin - new Point(1,1);
