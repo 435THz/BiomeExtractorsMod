@@ -86,6 +86,7 @@ namespace BiomeExtractorsMod.Common.UI
 
         internal void OpenInterface(BiomeExtractorEnt clicked)
         {
+            _pools = null;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 
             Extractor = clicked;
@@ -98,8 +99,10 @@ namespace BiomeExtractorsMod.Common.UI
         }
         internal void OpenInterface(Point16 position, ExtractionTier tier)
         {
+            _pools = null;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 
+            Extractor = null;
             this.position = position;
             this.tier = tier;
             this.active = true;
@@ -121,12 +124,11 @@ namespace BiomeExtractorsMod.Common.UI
             {
                 SoundEngine.PlaySound(SoundID.MenuClose);
                 UIHolder.SetState(null);
+                Extractor = null;
+                position = Point16.Zero;
+                tier = null;
+                active = false;
             }
-            Extractor = null;
-            position = Point16.Zero;
-            tier = null;
-            active = false;
-            _pools = null;
         }
 
         internal string GetTierName()
