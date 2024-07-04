@@ -1,9 +1,12 @@
 using BiomeExtractorsMod.Common.Collections;
+using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Content.TileEntities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -11,11 +14,11 @@ using Terraria.WorldBuilding;
 
 namespace BiomeExtractorsMod.Common.Systems
 {
-    public class ScanData(BiomeExtractorEnt extractor)
+    public class ScanData(BiomeExtractionSystem.ExtractionTier tier, Point16 origin)
     {
 
-        private readonly BiomeExtractorEnt _extractor = extractor;
-        private Point _origin = extractor.Position.ToPoint() + new Point(1, 1);
+        private readonly BiomeExtractionSystem.ExtractionTier _tier = tier;
+        private Point _origin = origin.ToPoint() + new Point(1, 1);
         private Point _size = new(Main.buffScanAreaWidth, Main.buffScanAreaHeight);
         private readonly Dictionary<int, int> _tileCounts = [];
         private readonly Dictionary<int, int> _liquidCounts = [];
@@ -23,19 +26,20 @@ namespace BiomeExtractorsMod.Common.Systems
         public float X => _origin.X;
         public float Y => _origin.Y;
 
-        public int Tiles(int tileId) => _tileCounts.GetValueOrDefault(tileId);
-        public int Liquids(int liquidId) => _liquidCounts.GetValueOrDefault(liquidId);
-        public bool MinTier(int tier) => _extractor != null && _extractor.Tier >= tier;
-
-        public int Tiles(List<ushort> tileIds)
+        public int Tiles(List<ushort> tileIds) => Tiles(tileIds.ToArray());
+        public int Tiles(params ushort[] tileIds)
         {
             int count = 0;
-            foreach (ushort tileId in tileIds) count += Tiles(tileId);
+            foreach (ushort tileId in tileIds) count += _tileCounts.GetValueOrDefault(tileId);
             return count;
         }
+        public int Liquids(int liquidId) => _liquidCounts.GetValueOrDefault(liquidId);
+        public bool MinTier(int tier) => _tier != null && _tier.Tier >= tier;
+        public bool ValidWalls(ushort wallId, bool blacklist = false) => ValidWalls(new List<ushort>() { wallId }, blacklist);
+        public bool ValidWalls(ushort[] wallIds, bool blacklist = false) => ValidWalls(wallIds.ToList(), blacklist);
         public bool ValidWalls(List<ushort> wallIds, bool blacklist = false)
         {
-            Point origin = _extractor.Position.ToPoint();
+            Point origin = _origin - new Point(1,1);
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++)
                 {
@@ -164,6 +168,62 @@ namespace BiomeExtractorsMod.Common.Systems
             }
         }
 
+        /// <summary>
+        /// An identifier object that details an extraction tier's tier number, localization key and efficiency stats. 
+        /// </summary>
+        /// <param name="tier">The tier number of this tier</param>
+        /// <param name="locKey">The localization key of this tier</param>
+        /// <param name="rate">A <see cref="Func{TResult}"/> that returns the extraction rate of this Extraction Tier, in frames.</param>
+        /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>
+        /// Example: 35 would be 35%</param>
+        public class ExtractionTier(int tier, string locKey, Func<int> rate, Func<int> chance)
+        {
+            private readonly Func<int> _rate = rate;
+            private readonly Func<int> _chance = chance;
+
+            /// <summary>
+            /// An empty ExtractionTier object.
+            /// </summary>
+            public readonly static ExtractionTier NULL = new(int.MinValue, "", null, null);
+            /// <summary>
+            /// The tier number of this tier.
+            /// </summary>
+            public readonly int Tier = tier;
+            /// <summary>
+            /// The loclization key associated to this Exraction Tier.
+            /// </summary>
+            public readonly string LocKey = locKey;
+            /// <summary>
+            /// Returns the extraction rate of this Extraction Tier, in frames.
+            /// </summary>
+            public int Rate => _rate is null ? 0 : _rate.Invoke();
+            /// <summary>
+            /// Returns the extraction chance of this Extraction Tier, in percentage format.<br/>
+            /// Example: 35 would be 35%</param>
+            /// </summary>
+            public int Chance => _chance is null ? 0 : _chance.Invoke();
+            /// <summary>
+            /// Returns the localized name of this Extractor. This call is used by the UI to set up its header
+            /// and by the Biome Scanner to show the tier names.
+            /// </summary>
+            public string Name => Language.GetTextValue(LocKey);
+            public override bool Equals(object obj)
+            {
+                if (obj is not ExtractionTier) return false;
+                ExtractionTier tier = (ExtractionTier)obj;
+                return tier.Tier == Tier && tier.LocKey == LocKey;
+            }
+            public override int GetHashCode() => HashCode.Combine(Tier, LocKey);
+            /// <summary>
+            /// Creates a new copy of this ExtracionTier and shifts it tier number.
+            /// </summary>
+            /// <param name="newTier">The new tier to give to the copy of this tier</param>
+            /// <returns>A copy of this tier but with <c>newTier</c> as its tier number</returns>
+            public ExtractionTier CloneAndMove(int newTier) => new(newTier, LocKey, _rate, _chance);
+        }
+        #endregion
+
+        #region IDs
         public static readonly string forest = "forest";
         public static readonly string sky = "sky";
         public static readonly string flight = "flight";
@@ -320,12 +380,139 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly Predicate<ScanData> frost1500 = scan => scan.Tiles(frostBlocks) > 1500;
         static readonly Predicate<ScanData> tombstone5 = scan => scan.Tiles(TileID.Tombstones) > 20;
 
+        private readonly PriorityList<ExtractionTier> _tiers = [];
         private readonly Dictionary<string, PoolEntry> _poolNames = [];
         private readonly Dictionary<string, WeightedList<ItemEntry>> _itemPools = [];
         private readonly Dictionary<string, List<Predicate<ScanData>>> _poolRequirements = [];
         private readonly PriorityList<string> _priorityList = [];
 
-        private static string LocalizeAs(string suffix) => $"{BiomeExtractorsMod.LocPoolNames}.{suffix}";
+        /// <summary>
+        /// Checks if an ExtractionTier is registered to the provided tier number.
+        /// </summary>
+        /// <param name="tier">A tier number</param>
+        /// <returns><see langword="true"/> if the ExtractionTier is registered, <see langword="false"/> otherwise.</returns>
+        public bool TierExists(int tier) => _tiers.ContainsKey(tier);
+
+        /// <summary>
+        /// Checks if the provided ExtractionTier is in the list of registered tiers
+        /// </summary>
+        /// <param name="tier">An ExtractionTier</param>
+        /// <returns><see langword="true"/> if the ExtractionTier is registered, <see langword="false"/> otherwise.</returns>
+        public bool TierExists(ExtractionTier tier) => TierExists(tier.Tier);
+        /// <summary>
+        /// Returns a registered ExractionTier given its tier number.
+        /// </summary>
+        /// <param name="tier">A tier number</param>
+        /// <param name="higher">If this is true, on a failure, this method will call <see cref="GetClosestHigherTier(int)"/>.</param>
+        /// <param name="lower">If this is true, on a failure, this method will call <see cref="GetClosestLowerTier(int)"/>.<br/> This will be checked after <paramref name="higher"/> if that is <see langword="true"/> as well</param>
+        /// <returns>The ExtractionTier registered to the provided tier number if one such tier is registered, <see langword="null"/> otherwise.</returns>
+        public ExtractionTier GetTier(int tier, bool higher = false, bool lower = false)
+        {
+            if (_tiers.TryGetValue(tier, out List<ExtractionTier> l))
+                return l[0];
+            ExtractionTier ret = null;
+            if (higher) ret = GetClosestHigherTier(tier);
+            if (ret != null) return ret;
+            if (lower) ret = GetClosestLowerTier(tier);
+            return ret;
+        }
+        /// <summary>
+        /// Returns the lowest registered tier whose tier number is striictly higher than the requested one.
+        /// </summary>
+        /// <param name="tier">A tier number</param>
+        /// <returns>The closest ExtractionTier whose tier number is strictly higher than the requested one if one exists, <see langword="null"/> otherwise.</returns>
+
+        public ExtractionTier GetClosestHigherTier(int tier)
+        {
+            ExtractionTier ret = null;
+            foreach (int key in _tiers.Keys)
+            {
+                if (key > tier) ret = _tiers[key][0];
+                else break;
+            }
+            return ret;
+        }
+        /// <summary>
+        /// Returns the highest registered tier whose tier number is striictly lower than the requested one.
+        /// </summary>
+        /// <param name="tier">A tier number</param>
+        /// <returns>The closest ExtractionTier whose tier number is strictly lower than the requested one if one exists, <see langword="null"/> otherwise.</returns>
+        public ExtractionTier GetClosestLowerTier(int tier)
+        {
+            List<int> keys = new(_tiers.Keys);
+            if (_tiers.Count < 1) return null;
+            if (keys[^1] > tier) return null;
+            for (int i = keys.Count - 2; i >= 0; i--)
+            {
+                int key = keys[i];
+                if (key > tier) return _tiers[keys[i+1]][0];
+            }
+            return _tiers[keys[0]][0];
+        }
+
+        /// <summary>
+        /// Creates a new ExtractionTier and registers it.
+        /// If an ExtractionTier with that tier number already exists, this method does nothing.
+        /// </summary>
+        /// <param name="tier">The tier number of this tier</param>
+        /// <param name="locKey">The localization key of this tier</param>
+        /// <param name="rate">A <see cref="Func{TResult}"/> that returns the extraction rate of this Extraction Tier, in frames.</param>
+        /// <param name="chance">>A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>
+        /// Example: 35 would be 35%</param>
+        /// <returns><see langword="true"/> if the tier number was not occupied yet, <see langword="false"/> otherwise</returns>
+        public bool AddTier(int tier, string locKey, Func<int> rate, Func<int> chance) => AddTier(new(tier, locKey, rate, chance));
+        /// <summary>
+        /// Registers an ExtractionTier.<br></br>
+        /// If an ExtractionTier with that tier number already exists, this method does nothing.
+        /// </summary>
+        /// <param name="newTier">The tier to be registered</param>
+        /// <returns><see langword="true"/> if the tier number was not occupied yet, <see langword="false"/> otherwise</returns>
+        public bool AddTier(ExtractionTier newTier)
+        {
+            if (TierExists(newTier)) return false;
+            if (_tiers.TryGetValue(newTier.Tier, out List<ExtractionTier> l) && l.Count>0) return false;
+            _tiers.Add(newTier.Tier, newTier);
+            return true;
+        }
+
+        /// <summary>
+        /// Gets rid of an alredy registered tier.
+        /// </summary>
+        /// <param name="tier">The tier number of the tier to get rid of.</param>
+        /// <returns><see langword="true"/> if there was an entry to delete, <see langword="false"/> otherwise</returns>
+        public bool RemoveTier(int tier) => _tiers.TryGetValue(tier, out List<ExtractionTier> l) && l.Count>0 && RemoveTier(l[0]);
+        /// <summary>
+        /// Gets rid of an alredy registered tier.
+        /// </summary>
+        /// <param name="tier">The ExtractionTier to get rid of.</param>
+        /// <returns><see langword="true"/> if there was an entry to delete, <see langword="false"/> otherwise</returns>
+        public bool RemoveTier(ExtractionTier tier) => RemoveTier(tier.Tier);
+        /// <summary>
+        /// Changes the tier number of a registered tier.
+        /// Does nothing if the tier was not registered.
+        /// </summary>
+        /// <param name="oldTier">The tier number of the registered ExtractionTier to be edited</param>
+        /// <param name="newTier">The new tier that the ExtractionTier will have</param>
+        /// <returns><see langword="true"/> if the tier was successfully moved, <see langword="false"/> otherwise.</returns>
+        public bool MoveTier(int oldTier, int newTier)
+        {
+            ExtractionTier tier = GetTier(oldTier);
+            return tier is not null && MoveTier(ref tier, newTier);
+        }
+        /// <summary>
+        /// Changes the tier number of a registered tier.
+        /// Does nothing if the tier was not registered.<br/>
+        /// </summary>
+        /// <param name="oldTier">The ExtractionTier to be edited</param>
+        /// <param name="newTier">The new tier that the ExtractionTier will have</param>
+        /// <returns><see langword="true"/> if the tier was successfully moved, <see langword="false"/> otherwise.</returns>
+        public bool MoveTier(ref ExtractionTier oldTier, int newTier) 
+        {
+            if(!RemoveTier(oldTier.Tier)) return false;
+            oldTier = oldTier.CloneAndMove(newTier);
+            AddTier(oldTier);
+            return true;
+        }
 
         /// <summary>
         /// Checks if the provided PoolEntry is in the list of registered pools
@@ -576,9 +763,9 @@ namespace BiomeExtractorsMod.Common.Systems
             return false;
         }
 
-        internal List<PoolEntry> CheckValidBiomes(BiomeExtractorEnt extractor)
+        internal List<PoolEntry> CheckValidBiomes(ExtractionTier tier, Point16 position)
         {
-            ScanData scan = new(extractor);
+            ScanData scan = new(tier, position);
             scan.Scan();
 
             int last_p = int.MaxValue;
@@ -668,13 +855,27 @@ namespace BiomeExtractorsMod.Common.Systems
                 }
             }
         }
+        private static string LocalizeAs(string suffix) => $"{BiomeExtractorsMod.LocPoolNames}.{suffix}";
 
         public override void PostSetupContent()
         {
+            InitializeTiers();
             InitializePools();
             SetRequirements();
             PopulatePools();
             GenerateLocalizationKeys();
+        }
+
+        private void InitializeTiers()
+        {
+            ConfigCommon cfg = ModContent.GetInstance<ConfigCommon>();
+            AddTier((int)BiomeExtractorEnt.EnumTiers.BASIC,     $"{BiomeExtractorsMod.LocExtractorPrefix}Iron.DisplayName",       delegate { return cfg.Tier1ExtractorRate; }, delegate { return cfg.Tier1ExtractorChance; });
+            AddTier((int)BiomeExtractorEnt.EnumTiers.DEMONIC,   $"{BiomeExtractorsMod.LocExtractorPrefix}Corruption.DisplayName", delegate { return cfg.Tier2ExtractorRate; }, delegate { return cfg.Tier2ExtractorChance; });
+            AddTier((int)BiomeExtractorEnt.EnumTiers.INFERNAL,  $"{BiomeExtractorsMod.LocExtractorPrefix}Infernal.DisplayName",   delegate { return cfg.Tier3ExtractorRate; }, delegate { return cfg.Tier3ExtractorChance; });
+            AddTier((int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, $"{BiomeExtractorsMod.LocExtractorPrefix}Adamantite.DisplayName", delegate { return cfg.Tier4ExtractorRate; }, delegate { return cfg.Tier4ExtractorChance; });
+            AddTier((int)BiomeExtractorEnt.EnumTiers.CYBER,     $"{BiomeExtractorsMod.LocExtractorPrefix}Cyber.DisplayName",      delegate { return cfg.Tier5ExtractorRate; }, delegate { return cfg.Tier5ExtractorChance; });
+            AddTier((int)BiomeExtractorEnt.EnumTiers.LUNAR,     $"{BiomeExtractorsMod.LocExtractorPrefix}Lunar.DisplayName",      delegate { return cfg.Tier6ExtractorRate; }, delegate { return cfg.Tier6ExtractorChance; });
+            AddTier((int)BiomeExtractorEnt.EnumTiers.ETHEREAL,  $"{BiomeExtractorsMod.LocExtractorPrefix}Ethereal.DisplayName",   delegate { return cfg.Tier7ExtractorRate; }, delegate { return cfg.Tier7ExtractorChance; });
         }
 
         private void InitializePools()

@@ -21,17 +21,18 @@ namespace BiomeExtractorsMod.Common
             get => ModContent.GetInstance<ConfigClient>().SaveWindowPos && _windowpos is not null ? (Vector2)_windowpos : Defaultpos;
             set => _windowpos = ModContent.GetInstance<ConfigClient>().SaveWindowPos ? value : Defaultpos;
         }
-        internal bool IsInExtractorRange(BiomeExtractorEnt extractor)
+        
+        internal bool IsInRectangleRange(Point16 center)
         {
-            Point16 tl = TileUtils.GetTopLeftTileInMultitile(extractor.Position.X, extractor.Position.Y);
-            int num = (int)((Player.position.X + Player.width * 0.5) / 16.0);
-            int num2 = (int)((Player.position.Y + Player.height * 0.5) / 16.0);
+            Point16 tl = center + Point16.NegativeOne;
+            int pCenterX = (int)((Player.position.X + Player.width * 0.5) / 16.0);
+            int pCenterY = (int)((Player.position.Y + Player.height * 0.5) / 16.0);
 
             Rectangle r = new(tl.X * 16, tl.Y * 16, 48, 48);
             r.Inflate(-1, -1);
             
             Point point = r.ClosestPointInRect(Player.Center).ToTileCoordinates();
-            return num >= point.X - Player.tileRangeX && num <= point.X + Player.tileRangeX + 1 && num2 >= point.Y - Player.tileRangeY && num2 <= point.Y + Player.tileRangeY + 1;
+            return pCenterX >= point.X - Player.tileRangeX && pCenterX <= point.X + Player.tileRangeX + 1 && pCenterY >= point.Y - Player.tileRangeY && pCenterY <= point.Y + Player.tileRangeY + 1;
         }
 
         public override void UpdateDead()

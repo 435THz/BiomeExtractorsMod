@@ -1,16 +1,14 @@
-using BiomeExtractorsMod.Common.Configs;
+using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Content.Tiles;
-using Terraria.Localization;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.TileEntities
 {
     public class BiomeExtractorEntLunar : BiomeExtractorEnt
     {
-        protected internal override int Tier { get => (int)EnumTiers.LUNAR; }
-        protected internal override string LocalName { get => Language.GetTextValue($"{BiomeExtractorsMod.LocExtractorPrefix}Lunar.DisplayName"); }
-        protected internal override int ExtractionRate { get => ModContent.GetInstance<ConfigCommon>().Tier6ExtractorRate; }
-        protected internal override int ExtractionChance { get => ModContent.GetInstance<ConfigCommon>().Tier6ExtractorChance; }
-        protected override int TileType => ModContent.TileType<BiomeExtractorTileLunar>();
+        protected internal override BiomeExtractionSystem.ExtractionTier ExtractionTier => BES.GetTier((int)EnumTiers.LUNAR, true);
+        protected internal override int TileType => ModContent.TileType<BiomeExtractorTileLunar>();
     }
 }

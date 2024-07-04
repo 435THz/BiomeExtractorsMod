@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
@@ -15,7 +14,7 @@ namespace BiomeExtractorsMod.Common.UI
     {
         private static readonly int Padding = 4;
 
-        internal static int Columns = 8; //TODO make editable. Will probably require regenerating UISlotArea
+        internal static int Columns = 8;
         internal static int Rows = 4;
         internal static float AreaWidth = (UIResultSlot.size + Padding) * Columns + 20f;
         internal static float AreaHeight = (UIResultSlot.size + Padding) * Rows;
@@ -67,7 +66,7 @@ namespace BiomeExtractorsMod.Common.UI
 
         public void InitElements(WeightedList<ItemEntry> pool)
         {
-            List<ItemEntry> entries = pool.Keys.ToList();
+            List<ItemEntry> entries = new(pool.Keys);
             entries.Sort(delegate(ItemEntry key1, ItemEntry key2) {
                 int w1 = pool[key1], w2 = pool[key2];
                 int a1 = key1.Min + key1.Max, a2 = key2.Min + key2.Max;
@@ -135,7 +134,7 @@ namespace BiomeExtractorsMod.Common.UI
                         max = SlotData[slot].Max;
                     }
                     UISystem uisys = ModContent.GetInstance<UISystem>();
-                    Slots[y, x].SetItem(item, uisys is not null && !uisys.Extractor.Active);
+                    Slots[y, x].SetItem(item, uisys is not null && !uisys.active);
                     Slots[y, x].SetAmount(min, max);
                 }
             }

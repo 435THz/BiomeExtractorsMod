@@ -5,6 +5,8 @@ using BiomeExtractorsMod.Common.UI;
 using BiomeExtractorsMod.Content.Tiles;
 using BiomeExtractorsMod.CrossMod;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -13,6 +15,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.ObjectData;
 using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
 
 namespace BiomeExtractorsMod.Content.TileEntities
@@ -26,7 +29,6 @@ namespace BiomeExtractorsMod.Content.TileEntities
         {
             public OutputType Type { get; private set; } = type;
             public Point Point { get; private set; } = point;
-
             public OutData() : this(OutputType.NONE, new Point()) { }
         }
 
@@ -77,30 +79,25 @@ namespace BiomeExtractorsMod.Content.TileEntities
         /// <summary>
         /// Returns the id of the BiomeExtractorTile this Entity is bound to.
         /// </summary>
-        protected abstract int TileType { get; }
+        protected internal abstract int TileType { get; }
 
+        /// <summary>
+        /// </summary>
         /// <summary>
         /// Returns the tier of this Extractor.
         /// </summary>
-        protected internal abstract int Tier { get; }
-        /// <summary>
-        /// Returns the localized name of this Extractor. This call is used by the UI to set up its header.
-        /// </summary>
-        protected internal abstract string LocalName { get; }
-        /// <summary>
-        /// Returns the extraction rate of this Extractor, in frames.
-        /// </summary>
-        protected internal abstract int ExtractionRate { get; }
-        /// <summary>
-        /// Returns the extraction chance of this Extractor, in percentage format.<br/>
-        /// Example: 35 would be 35%
-        /// </summary>
-        protected internal abstract int ExtractionChance { get; }
+        protected internal abstract ExtractionTier ExtractionTier { get; }
+
+        protected internal int Tier => ExtractionTier.Tier;
+        protected internal string LocalName => ExtractionTier.Name;
+        protected internal int ExtractionRate => ExtractionTier.Rate;
+        protected internal int ExtractionChance => ExtractionTier.Chance;
+
         private static int BiomeScanRate => ModContent.GetInstance<ConfigCommon>().BiomeScanRate;
 
         //loading
         private void UpdatePoolList() {
-            PoolList = BES.CheckValidBiomes(this);
+            PoolList = BES.CheckValidBiomes(ExtractionTier, Position + new Point16(1, 1));
         }
 
         public override void SaveData(TagCompound tag)

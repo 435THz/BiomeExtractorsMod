@@ -3,9 +3,16 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
+using BiomeExtractorsMod.Common.Systems;
+using BiomeExtractorsMod.Common.Collections;
+using BiomeExtractorsMod.Common.Configs;
+using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
+using Terraria.Localization;
+using BiomeExtractorsMod.Content.Items;
 
 namespace BiomeExtractorsMod.Common.UI
 {
@@ -14,6 +21,17 @@ namespace BiomeExtractorsMod.Common.UI
         internal UserInterface UIHolder;
         internal ExtractorUI Interface;
         internal BiomeExtractorEnt Extractor;
+        private List<PoolEntry> _pools;
+        internal List<PoolEntry> PoolList { get
+            {
+                _pools ??= ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(tier, position);
+                return _pools;
+            }
+        }
+            
+        internal Point16 position;
+        internal ExtractionTier tier;
+        internal bool active;
 
         private GameTime _lastUpdateUiGameTime;
         
@@ -31,15 +49,12 @@ namespace BiomeExtractorsMod.Common.UI
         public override void UpdateUI(GameTime gameTime)
         {
             _lastUpdateUiGameTime = gameTime;
-            if (UIHolder?.CurrentState != null)
+            if (UIHolder?.CurrentState != null) UIHolder.Update(gameTime);
+            if (Extractor is null)
             {
-                UIHolder.Update(gameTime);
+                if (Main.LocalPlayer.HeldItem.type != ModContent.GetInstance<BiomeScanner>().Type) CloseInterface();
             }
-            if (Extractor is not null)
-            {
-                if (!Extractor.IsTileValidForEntity(Extractor.Position.X, Extractor.Position.Y) ||
-                    !ExtractorPlayer.LocalPlayer.IsInExtractorRange(Extractor)) CloseInterface();
-            }
+            else if (!Extractor.IsTileValidForEntity(position.X, position.Y) || !ExtractorPlayer.LocalPlayer.IsInRectangleRange(position)) CloseInterface();
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -64,14 +79,40 @@ namespace BiomeExtractorsMod.Common.UI
         public override void Unload()
         {
             Extractor = null;
+            position = Point16.Zero;
+            tier = null;
+            active = false;
         }
 
         internal void OpenInterface(BiomeExtractorEnt clicked)
         {
             SoundEngine.PlaySound(SoundID.MenuOpen);
+
             Extractor = clicked;
+            position = clicked.Position;
+            tier = clicked.ExtractionTier;
+            active = clicked.Active;
+
             UIHolder?.SetState(Interface);
             Interface.OnActivate();
+        }
+        internal void OpenInterface(Point16 position, ExtractionTier tier)
+        {
+            SoundEngine.PlaySound(SoundID.MenuOpen);
+
+            this.position = position;
+            this.tier = tier;
+            this.active = true;
+
+            UIHolder?.SetState(Interface);
+            Interface.OnActivate();
+        }
+
+        internal WeightedList<ItemEntry> GetDropList()
+        {
+            BiomeExtractionSystem system = ModContent.GetInstance<BiomeExtractionSystem>();
+            if (Extractor is not null) return Extractor.GetDropList();
+            else return system.JoinPools(PoolList);
         }
 
         internal void CloseInterface()
@@ -82,16 +123,59 @@ namespace BiomeExtractorsMod.Common.UI
                 UIHolder.SetState(null);
             }
             Extractor = null;
+            position = Point16.Zero;
+            tier = null;
+            active = false;
+            _pools = null;
         }
 
-        internal string GetExtractorName()
+        internal string GetTierName()
         {
-            return Extractor.LocalName;
+            return tier.Name;
         }
 
         internal string GetExtractorStatus()
         {
-            return Extractor.GetStatus();
+            if (Extractor is not null) return Extractor.GetStatus();
+            else return GenerateStatus();
+        }
+
+        private string GenerateStatus()
+        {
+            string su = $"{BiomeExtractorsMod.LocDiagnostics}.Scanner";
+            if (PoolList.Count > 0)
+            {
+                List<string> entries = [];
+                List<string> backup = [];
+                string s = "";
+                for (int i = 0; i < PoolList.Count; i++)
+                {
+                    PoolEntry pool = PoolList[i];
+                    backup.Add(pool.Name);
+                    if (pool.IsLocalized())
+                    {
+                        string key = pool.LocalizationKey;
+                        string entry = Language.GetTextValue(key);
+                        if (entry != "" && !entries.Contains(entry)) entries.Add(entry);
+                        else if (ModContent.GetInstance<ConfigClient>().DiagnosticPrintPools)
+                            entries.Add(pool.Name);
+                    }
+                    else if (ModContent.GetInstance<ConfigClient>().DiagnosticPrintPools)
+                    {
+                        entries.Add(pool.Name);
+                    }
+                }
+
+                List<string> list = entries;
+                if (entries.Count == 0) list = backup;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    s += list[i];
+                    if (i < list.Count - 1) s += ", ";
+                }
+                return Language.GetTextValue($"{su}Success") + " " + s;
+            }
+            else return Language.GetTextValue($"{su}Fail");
         }
     }
 }

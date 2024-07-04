@@ -17,7 +17,8 @@ namespace BiomeExtractorsMod.Common.Collections
             set
             {
                 dictionary[key] = value;
-                AddPriority(key);
+                if (value == null || value.Count == 0) Remove(key);
+                else AddPriority(key);
             }
         }
 
@@ -38,7 +39,7 @@ namespace BiomeExtractorsMod.Common.Collections
             priorityOrder.AddLast(n);
         }
 
-        public ICollection<int> Keys => dictionary.Keys;
+        public ICollection<int> Keys => priorityOrder;
 
         public ICollection<List<T>> Values => dictionary.Values;
 

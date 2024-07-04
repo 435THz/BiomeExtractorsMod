@@ -13,7 +13,7 @@ namespace BiomeExtractorsMod.Common.UI
 {
     internal class ExtractorUI : UIState
     {
-        internal static readonly float PanelWidth = UISlotArea.AreaWidth + 24f;
+        internal static float PanelWidth => UISlotArea.AreaWidth + 24f;
         UIPanel panel;
         UIText header;
         UIPanel button;
@@ -98,7 +98,7 @@ namespace BiomeExtractorsMod.Common.UI
                     UISystem uisys = ModContent.GetInstance<UISystem>();
                     if (uisys is not null)
                     {
-                        double rolls = (86400 / uisys.Extractor.ExtractionRate) * (uisys.Extractor.ExtractionChance / 100.0);
+                        double rolls = (86400 / uisys.tier.Rate) * (uisys.tier.Chance / 100.0);
                         daily = data.DailyString(rolls) + " " + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Per_day");
                     }
 
@@ -142,7 +142,7 @@ namespace BiomeExtractorsMod.Common.UI
             UISystem uisys = ModContent.GetInstance<UISystem>();
             if (uisys is not null)
             {
-                header.SetText(uisys.GetExtractorName());
+                header.SetText(uisys.GetTierName());
                 string status = uisys.GetExtractorStatus();
                 biomeText.SetText(status);
 
@@ -152,11 +152,12 @@ namespace BiomeExtractorsMod.Common.UI
                 float height = (visibleText.Split('\n').Length * spacing);
 
                 slotArea.Top.Set(40f + height, 0f);
-                slotArea.InitElements(uisys.Extractor.GetDropList());
+                slotArea.InitElements(uisys.GetDropList());
 
                 Vector2 pos = ExtractorPlayer.LocalPlayer.ExtractorWindowPos;
                 panel.Top.Set(pos.Y, 0f);
                 panel.Left.Set(pos.X, 0f);
+                panel.Width.Set(PanelWidth, 0f);
             }
             panel.Height.Set(slotArea.Top.Pixels + slotArea.Height.Pixels + 30f, 0f);
         }
