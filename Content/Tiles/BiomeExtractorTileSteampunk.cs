@@ -8,6 +8,9 @@ namespace BiomeExtractorsMod.Content.Tiles
     class BiomeExtractorTileSteampunk : BiomeExtractorTile
     {
         protected override int FrameCount => 8;
+
+        protected override int _tileStyles => 2;
+
         protected override string glowAsset => "Content/Tiles/BiomeExtractorTileSteampunk_Glow";
 
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntSteampunk>();

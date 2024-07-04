@@ -1,7 +1,5 @@
 ﻿using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Common.UI;
-using BiomeExtractorsMod.Content.TileEntities;
-using BiomeExtractorsMod.Content.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;

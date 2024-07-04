@@ -1,4 +1,5 @@
 using BiomeExtractorsMod.Common.UI;
+using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Content.TileEntities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,7 +18,6 @@ namespace BiomeExtractorsMod.Content.Tiles
     public abstract class BiomeExtractorTile : ModTile
 	{
         internal static Point16 origin = new(1, 2); // Bottom-center
-
         /// <summary>
         /// Returns the number of animation frames this Extractor has.
         /// </summary>
@@ -67,12 +67,15 @@ namespace BiomeExtractorsMod.Content.Tiles
             return (ushort)TileStyle(tile);
         }
 
-        protected static LocalizedText MapEntryName { get; } = Language.GetText(BiomeExtractorsMod.LocTileMapName);
+        protected static LocalizedText MapEntryName { get; } = Language.GetText(BiomeExtractorsMod.LocMapTileName);
 
         /// <summary>
-        /// Returns the tile style of this Tile.
+        /// Returns the amount of tile styles this Tile has.
         /// </summary>
-        protected virtual int TileStyle(Tile tile)
+        protected virtual int _tileStyles => 1;
+        protected internal int TileStyles(Tile tile) => tile.TileType == Type ? _tileStyles : -1;
+
+        protected int TileStyle(Tile tile)
         {
             return TileObjectData.GetTileStyle(tile);
         }
@@ -168,6 +171,7 @@ namespace BiomeExtractorsMod.Content.Tiles
 
         public override bool RightClick(int i, int j)
         {
+            if (Main.LocalPlayer.HeldItem.type == ModContent.GetInstance<BiomeScanner>().Type) return false;
             bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
             if (found)
             {

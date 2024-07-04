@@ -1,4 +1,18 @@
 Items: {
+	BiomeScanner: {
+		DisplayName: Biome Scanner
+		Tooltip:
+			'''
+			Scans for biomes around the user, simulating a specific type of Extractor.
+			It also pinpoints the location of all Biome Extractors on the map.
+			<left> to scan your surroundings. The menu will not update automatically if you move around.
+			<right> to cycle between extraction tiers.
+			<right> an Extractor to copy its tier.
+			Can only simulate up to the highest tier it has ever copied.
+			Currently simulating:
+			'''
+	}
+
 	BiomeExtractorItemIron: {
 		DisplayName: Biome Extractor
 		Tooltip:
@@ -323,10 +337,18 @@ Text: {
 		MachineStateFail: The machine cannot extract anything from this place.
 		MachineStateOff: The machine is inactive.
 		MachineStateBroken: This machine failed to load. Please break and replace it.
+		ScannerSuccess: Biomes identified:
+		ScannerFail: No biomes could be identified.
+		ScannerChangeTier: Now simulating: {0}
+		ScannerCloneExtractor: The {0}'s tier has been cloned.
 		Per_day: items/day
 		Chance: Chance
 		Percent: %
 	}
 }
 
-Tiles.MapName: Biome Extractor
+Map: {
+	TileName: Biome Extractor
+	IconInactive: Inactive
+	IconNoOutput: No Output
+}

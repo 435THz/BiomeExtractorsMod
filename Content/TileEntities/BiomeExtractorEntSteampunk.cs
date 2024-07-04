@@ -8,6 +8,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 {
     public class BiomeExtractorEntSteampunk : BiomeExtractorEnt
     {
+        internal override Asset<Texture2D> MapIcon => Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconSteampunk");
         protected internal override BiomeExtractionSystem.ExtractionTier ExtractionTier => BES.GetTier((int)EnumTiers.STEAMPUNK, true);
         protected internal override int TileType => ModContent.TileType<BiomeExtractorTileSteampunk>();
     }

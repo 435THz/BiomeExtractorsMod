@@ -58,6 +58,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private int BTimer = 0;
         private Point outputPos;
         private OutputType outputType;
+        public bool HasOutput => outputType != OutputType.NONE;
 
         private int ChestIndex { get => Chest.FindChest(outputPos.X, outputPos.Y); }
 
@@ -80,9 +81,13 @@ namespace BiomeExtractorsMod.Content.TileEntities
         /// Returns the id of the BiomeExtractorTile this Entity is bound to.
         /// </summary>
         protected internal abstract int TileType { get; }
+        internal int TileStyle => TileObjectData.GetTileStyle(Main.tile[Position]);
 
         /// <summary>
+        /// Returns the Asset containing the Texture2D of this BiomeExtractor's map icon.
         /// </summary>
+        internal abstract Asset<Texture2D> MapIcon { get; }
+
         /// <summary>
         /// Returns the tier of this Extractor.
         /// </summary>

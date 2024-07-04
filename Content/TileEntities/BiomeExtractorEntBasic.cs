@@ -8,6 +8,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 {
     public class BiomeExtractorEntBasic : BiomeExtractorEnt
     {
+        internal override Asset<Texture2D> MapIcon => Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconBasic");
         protected internal override BiomeExtractionSystem.ExtractionTier ExtractionTier => BES.GetTier((int)EnumTiers.BASIC, true);
         protected internal override int TileType => ModContent.TileType<BiomeExtractorTileBasic>();
     }

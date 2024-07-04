@@ -8,6 +8,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 {
     public class BiomeExtractorEntLunar : BiomeExtractorEnt
     {
+        internal override Asset<Texture2D> MapIcon => Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconLunar");
         protected internal override BiomeExtractionSystem.ExtractionTier ExtractionTier => BES.GetTier((int)EnumTiers.LUNAR, true);
         protected internal override int TileType => ModContent.TileType<BiomeExtractorTileLunar>();
     }

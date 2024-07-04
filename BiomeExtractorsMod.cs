@@ -29,8 +29,10 @@ namespace BiomeExtractorsMod
         public static string LocDiagnostics => $"{LocTextCategory}.Diagnostics";
         public static string LocPoolNames => $"{LocTextCategory}.PoolNames";
         public static object LocItemGroups => $"{LocTextCategory}.ItemGroups";
-        private static string LocTilesCategory => $"{LocBase}.Tiles";
-        public static string LocTileMapName => $"{LocTilesCategory}.MapName";
+        private static string LocMapCategory => $"{LocBase}.Map";
+        public static string LocMapTileName => $"{LocMapCategory}.TileName";
+        public static string LocIconInactive => $"{LocMapCategory}.IconInactive";
+        public static string LocIconNoOutput => $"{LocMapCategory}.IconNoOutput";
 
         public override void Load()
         {
