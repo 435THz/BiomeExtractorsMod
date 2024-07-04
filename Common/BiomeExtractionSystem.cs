@@ -165,7 +165,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="tier"> The minimum Extractor tier required to access this pool.</param>
         /// <param name="blocking"> If true, biome scans will not scan priority values lower than the one this pool has if this pool is found.</param>
         /// <param name="localizationKey">If set, this pool will use this string to query its localized name.<br/>
-        /// If <c>null</c>, this pool will not be displayed in the Extractor UI at all.</param>
+        /// If <see langword="null"/>, this pool will not be displayed in the Extractor UI at all.</param>
         public class PoolEntry(string name, int tier, bool blocking = true, string localizationKey = null)
         {
             /// <summary>The pool's identification string.</summary>
@@ -177,7 +177,7 @@ namespace BiomeExtractorsMod.Common.Systems
             /// <summary>The localization key associated to this pool.</summary>
             public string LocalizationKey { get; private set; } = localizationKey;
             /// <summary>Returns whether or not this pool has a localized name.</summary>
-            /// <returns><c>true</c> if <c>this.LocalizationKey != null</c>, <c>false</c> otherwise.</returns>
+            /// <returns><see langword="true"/> if <c>this.LocalizationKey != null</c>, <see langword="false"/> otherwise.</returns>
             public bool IsLocalized() => LocalizationKey != null;
             /// <summary>
             /// An identifier object that details an item pool's name, tier and behavior.
@@ -185,7 +185,7 @@ namespace BiomeExtractorsMod.Common.Systems
             /// <param name="name"> The PoolEntry's identification string.</param>
             /// <param name="tier"> The minimum Extractor tier required to access this pool.</param>
             /// <param name="localizationKey">If set, this pool will use this string to query its localized name.<br/>
-            /// If <c>null</c>, this pool will not be displayed in the Extractor UI at all.</param>
+            /// If <see langword="null"/>, this pool will not be displayed in the Extractor UI at all.</param>
             public PoolEntry(string name, int tier, string localizationKey) : this(name, tier, true, localizationKey) { }
         }
 
@@ -586,28 +586,28 @@ namespace BiomeExtractorsMod.Common.Systems
         /// Checks if the provided PoolEntry is in the list of registered pools
         /// </summary>
         /// <param name="pool">A PoolEntry</param>
-        /// <returns><c>true</c> if the PoolEntry is registered, <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the PoolEntry is registered, <see langword="false"/> otherwise.</returns>
         public bool PoolExists(PoolEntry pool) => PoolExists(pool.Name);
         /// <summary>
         /// Checks if a PoolEntry with that name exists in the list of registered pools.
         /// </summary>
         /// <param name="name">A string corresponding to a pool id</param>
-        /// <returns><c>true</c> if the string corresponds to a PoolEntry, <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the string corresponds to a PoolEntry, <see langword="false"/> otherwise.</returns>
         public bool PoolExists(string name) => _poolNames.ContainsKey(name);
 
         /// <summary>
         /// Returns a registered PoolEntry given its name.
         /// </summary>
         /// <param name="name">A string corresponding to a pool id</param>
-        /// <returns>The PoolEntry with the provided name if one such entry is registered, <c>null</c> otherwise.</returns>
+        /// <returns>The PoolEntry with the provided name if one such entry is registered, <see langword="null"/> otherwise.</returns>
         public PoolEntry GetPoolEntry(string name) => _poolNames.TryGetValue(name, out PoolEntry pool) ? pool : null;
         /// <summary>
         /// Returns a registered PoolEntry given its name.
         /// </summary>
         /// <param name="name">A string corresponding to a pool id</param>
         /// <param name="pool">If a PoolEntry with the provided name is registered, this value will<br/>
-        /// hold that entry when the method returns. It will be <c>null</c> otherwise.</param>
-        /// <returns><c>true</c> if a PoolEntry with the provided name is registered, <c>false</c> otherwise.</returns>
+        /// hold that entry when the method returns. It will be <see langword="null"/> otherwise.</param>
+        /// <returns><see langword="true"/> if a PoolEntry with the provided name is registered, <see langword="false"/> otherwise.</returns>
         public bool GetPoolEntry(string name, out PoolEntry pool)
         {
             bool ret = _poolNames.TryGetValue(name, out pool);
@@ -630,7 +630,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="priority">The Priority value of this pool entry. Higher priorities are evaluated first.<br/>
         /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same priority, ignoring everything else.</param>
         /// <param name="localizationKey">The localization key that is used by this pool. </param>
-        /// <returns>True if the PoolEntry didn't exist already, false otherwise</returns>
+        /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
         public bool AddPool(string name, int priority, string localizationKey) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC, localizationKey), priority);
         /// <summary>
         /// Creates a new PoolEntry and:
@@ -648,7 +648,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same <br/>priority, ignoring everything else.</param>
         /// <param name="nonBlocking">If this is true, the priority system will keep checking for pools with lower <br/>priority even if this pool is valid.</param>
         /// <param name="localizationKey">The localization key that is used by this pool. </param>
-        /// <returns>True if the PoolEntry didn't exist already, false otherwise</returns>
+        /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
         public bool AddPool(string name, int priority, bool nonBlocking, string localizationKey = null) => AddPool(new PoolEntry(name, (int)BiomeExtractorEnt.EnumTiers.BASIC, !nonBlocking, localizationKey), priority);
         /// <summary>
         /// Creates a new PoolEntry and:
@@ -666,7 +666,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same <br/>priority, ignoring everything else.</param>
         /// <param name="tier">The minimum Extractor tier required to access this pool.</param>
         /// <param name="localizationKey">The localization key that is used by this pool. </param>
-        /// <returns>True if the PoolEntry didn't exist already, false otherwise</returns>
+        /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
         public bool AddPool(string name, int priority, int tier, string localizationKey) => AddPool(new PoolEntry(name, tier, localizationKey), priority);
         /// <summary>
         /// Creates a new PoolEntry and:
@@ -684,7 +684,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="tier">The minimum Extractor tier required to access this pool.</param>
         /// <param name="nonBlocking">If this is true, the priority system will keep checking for pools with lower <br/>priority even if this pool is valid.</param>
         /// <param name="localizationKey">The localization key that is used by this pool. </param>
-        /// <returns>True if the PoolEntry didn't exist already, false otherwise</returns>
+        /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
         public bool AddPool(string name, int priority, int tier = (int)BiomeExtractorEnt.EnumTiers.BASIC, bool nonBlocking = false, string localizationKey = null) => AddPool(new PoolEntry(name, tier, !nonBlocking, localizationKey), priority);
         /// <summary>
         /// Registers a PoolEntry and adds it to the main priority queue, also creating a new list<br/>
@@ -694,7 +694,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="pool">The PoolEntry to be registered</param>
         /// <param name="priority">The Priority value of this pool entry. Higher priorities are evaluated first.<br/>
         /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same <br/>priority, ignoring everything else.</param>
-        /// <returns><c>true</c> if the PoolEntry didn't exist already, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
         public bool AddPool(PoolEntry pool, int priority)
         {
             if (PoolExists(pool.Name)) return false;
@@ -710,7 +710,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// Nothing will happen if there is no pool to swap this one with.
         /// </summary>
         /// <param name="newPool">The PoolEntry to be registered.</param>
-        /// <returns><c>true</c> if there was an entry to swap with, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if there was an entry to swap with, <see langword="false"/> otherwise</returns>
         public bool ChangePool(PoolEntry newPool)
         {
             bool found = GetPoolEntry(newPool.Name, out PoolEntry pool);
@@ -722,7 +722,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// Gets rid of an alredy registered pool, along with its requirements and ItemEntries.
         /// </summary>
         /// <param name="poolName">The name of the PoolEntry to get rid of.</param>
-        /// <returns><c>true</c> if there was an entry to delete, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if there was an entry to delete, <see langword="false"/> otherwise</returns>
         public bool RemovePool(string poolName)
         {
             if(!PoolExists(poolName)) return false;
@@ -743,7 +743,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// </summary>
         /// <param name="poolName">The name of the PoolEntry to add the predicates to.</param>
         /// <param name="conditions">One or more predicates to add to this pool's list of conditions</param>
-        /// <returns><c>true</c> if the conditions have succesfully been added to a pool, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if the conditions have succesfully been added to a pool, <see langword="false"/> otherwise</returns>
         public bool AddPoolRequirements(string poolName, params Predicate<ScanData>[] conditions)
         {
             PoolEntry pool = GetPoolEntry(poolName);
@@ -755,7 +755,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// Removes all requirememnts registered to a pool.
         /// </summary>
         /// <param name="poolName">The name of the PoolEntry to remove all the predicates of.</param>
-        /// <returns><c>true</c> if the method found a pool to remove the conditions of, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if the method found a pool to remove the conditions of, <see langword="false"/> otherwise</returns>
         public bool FlushPoolRequirements(string poolName)
         {
             PoolEntry pool = GetPoolEntry(poolName);
@@ -770,7 +770,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="poolName">The name of the pool to add the item to.</param>
         /// <param name="itemId">The id of the item to add</param>
         /// <param name="weight">The weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
-        /// <returns><c>true</c> if the method found a pool to add the item to, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
         public bool AddItemInPool(string poolName, short itemId, int weight) => AddItemInPool(poolName, new ItemEntry(itemId, 1), weight);
         /// <summary>
         /// Adds a new ItemEntry to a pool.
@@ -780,7 +780,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="count">The amount of the given item this entry will contain.<br/>
         /// Use <see cref="AddItemInPool(string, ItemEntry, int)"/> if you need to make it a range.</param>
         /// <param name="weight">The weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
-        /// <returns><c>true</c> if the method found a pool to add the item to, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
         public bool AddItemInPool(string poolName, short itemId, int count = 1, int weight = 1) => AddItemInPool(poolName, new ItemEntry(itemId, count), weight);
         /// <summary>
         /// Adds a new ItemEntry to a pool.
@@ -788,7 +788,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="poolName">The name of the pool to add the item to.</param>
         /// <param name="item">The ItemEntry to add</param>
         /// <param name="weight">The weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
-        /// <returns><c>true</c> if the method found a pool to add the item to, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
         public bool AddItemInPool(string poolName, ItemEntry item, int weight)
         {
             PoolEntry pool = GetPoolEntry(poolName);
@@ -803,14 +803,14 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="poolName">The name of the pool to remove the item from.</param>
         /// <param name="itemId">The id of the item to remove</param>
         /// <param name="count">The amount of the given item the target entry contains.<br/>
-        /// <returns><c>true</c> if the pool exists and it contained the target entry, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if the pool exists and it contained the target entry, <see langword="false"/> otherwise</returns>
         public bool RemoveItemFromPool(string poolName, short itemId, int count) => RemoveItemFromPool(poolName, new ItemEntry(itemId, count));
         /// <summary>
         /// Removes an ItemEntry from a pool.
         /// </summary>
         /// <param name="poolName">The name of the pool to remove the item from.</param>
         /// <param name="item">The ItemEntry to remove</param>
-        /// <returns><c>true</c> if the pool exists and it contained the target entry, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if the pool exists and it contained the target entry, <see langword="false"/> otherwise</returns>
         public bool RemoveItemFromPool(string poolName, ItemEntry item)
         {
             PoolEntry pool = GetPoolEntry(poolName);
@@ -822,7 +822,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// Removes all ItemEntries in a pool.
         /// </summary>
         /// <param name="poolName">The name of the pool to remove the item from.</param>
-        /// <returns><c>true</c> if the pool exists, <c>false</c> otherwise</returns>
+        /// <returns><see langword="true"/> if the pool exists, <see langword="false"/> otherwise</returns>
         public bool FlushPoolItems(string poolName)
         {
             PoolEntry pool = GetPoolEntry(poolName);
