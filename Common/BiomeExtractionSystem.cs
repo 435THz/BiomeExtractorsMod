@@ -152,6 +152,7 @@ namespace BiomeExtractorsMod.Common.Systems
 
     public class BiomeExtractionSystem : ModSystem
     {
+        #region Data Structures
         //        public enum PoolType
         //        {
         //            MINERALS, GEMS, DROPS, TERRAIN, VEGETATION, CRITTERS
@@ -363,7 +364,9 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly string underworld = "underworld";
         public static readonly string uw_fire = "uw_fire";
         public static readonly string meteorite = "meteorite";
+        #endregion
 
+        #region Checks
         //WALL AND BLOCK LISTS
         static readonly List<ushort> dungeonWalls =      [WallID.BlueDungeonUnsafe,  WallID.BlueDungeonSlabUnsafe,  WallID.BlueDungeonTileUnsafe, WallID.GreenDungeonUnsafe, WallID.GreenDungeonSlabUnsafe, WallID.GreenDungeonTileUnsafe, WallID.PinkDungeonUnsafe, WallID.PinkDungeonSlabUnsafe, WallID.PinkDungeonTileUnsafe];
         static readonly List<ushort> dungeonWallsPink =  [WallID.PinkDungeonUnsafe,  WallID.PinkDungeonSlabUnsafe,  WallID.PinkDungeonTileUnsafe];
@@ -441,12 +444,15 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly Predicate<ScanData> desert1500 = scan => scan.Tiles(desertBlocks) > 1500;
         static readonly Predicate<ScanData> frost1500 = scan => scan.Tiles(frostBlocks) > 1500;
         static readonly Predicate<ScanData> tombstone5 = scan => scan.Tiles(TileID.Tombstones) > 20;
+        #endregion
 
+        #region API
         private readonly PriorityList<ExtractionTier> _tiers = [];
         private readonly Dictionary<string, PoolEntry> _poolNames = [];
         private readonly Dictionary<string, WeightedList<ItemEntry>> _itemPools = [];
         private readonly Dictionary<string, List<Predicate<ScanData>>> _poolRequirements = [];
         private readonly PriorityList<string> _priorityList = [];
+
 
         /// <summary>
         /// Checks if an ExtractionTier is registered to the provided tier number.
@@ -917,6 +923,9 @@ namespace BiomeExtractorsMod.Common.Systems
                 }
             }
         }
+        #endregion
+
+        #region Database Setup
         private static string LocalizeAs(string suffix) => $"{BiomeExtractorsMod.LocPoolNames}.{suffix}";
 
         public override void PostSetupContent()
@@ -1500,5 +1509,6 @@ namespace BiomeExtractorsMod.Common.Systems
 
             AddItemInPool(meteorite, ItemID.Meteorite);
         }
+        #endregion
     }
 }
