@@ -413,11 +413,11 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly Predicate<ScanData> oceanArea = scan => scan.Y <= (Main.worldSurface + Main.rockLayer) / 2 && (scan.X < 339 || scan.X > Main.maxTilesX - 339);
 
         //WALLS
-        static readonly Predicate<ScanData> lihzahrd_bg = scan => scan.ValidWalls([WallID.LihzahrdBrickUnsafe]);
-        static readonly Predicate<ScanData> hive_bg = scan => scan.ValidWalls([WallID.HiveUnsafe]);
-        static readonly Predicate<ScanData> granite_bg = scan => scan.ValidWalls([WallID.GraniteUnsafe]);
-        static readonly Predicate<ScanData> marble_bg = scan => scan.ValidWalls([WallID.MarbleUnsafe]);
-        static readonly Predicate<ScanData> spider_bg = scan => scan.ValidWalls([WallID.SpiderUnsafe]);
+        static readonly Predicate<ScanData> lihzahrd_bg = scan => scan.ValidWalls(WallID.LihzahrdBrickUnsafe);
+        static readonly Predicate<ScanData> hive_bg = scan => scan.ValidWalls(WallID.HiveUnsafe);
+        static readonly Predicate<ScanData> granite_bg = scan => scan.ValidWalls(WallID.GraniteUnsafe);
+        static readonly Predicate<ScanData> marble_bg = scan => scan.ValidWalls(WallID.MarbleUnsafe);
+        static readonly Predicate<ScanData> spider_bg = scan => scan.ValidWalls(WallID.SpiderUnsafe);
         static readonly Predicate<ScanData> dungeon_bg = scan => scan.ValidWalls(dungeonWalls);
         static readonly Predicate<ScanData> dungeon_bg_p = scan => scan.ValidWalls(dungeonWallsPink);
         static readonly Predicate<ScanData> dungeon_bg_g = scan => scan.ValidWalls(dungeonWallsGreen);
