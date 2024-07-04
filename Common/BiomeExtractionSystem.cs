@@ -1234,10 +1234,10 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(hm_ores, ItemID.TitaniumOre,   16);
             AddItemInPool(hm_ores, ItemID.AdamantiteOre, 16);
 
-            AddItemInPool(snow, ItemID.SnowBlock,   12);
-            AddItemInPool(snow, ItemID.IceBlock,    6);
-            AddItemInPool(snow, ItemID.BorealWood,  40);
-            AddItemInPool(snow, ItemID.Shiverthorn, 7);
+            AddItemInPool(snow, ItemID.SnowBlock,                       12);
+            AddItemInPool(snow, ItemID.IceBlock,                        6);
+            AddItemInPool(snow, new ItemEntry(ItemID.BorealWood, 1, 3), 40);
+            AddItemInPool(snow, ItemID.Shiverthorn,                     7);
 
             AddItemInPool(desert, ItemID.SandBlock,       75);
             AddItemInPool(desert, ItemID.Cactus,          18);
@@ -1284,13 +1284,13 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(hallowed_desert, ItemID.PinkPricklyPear, 16);
             AddItemInPool(hallowed_desert, ItemID.Scorpion,        4);
             AddItemInPool(hallowed_desert, ItemID.BlackScorpion,   3);
-            AddItemInPool(hallowed_snow, ItemID.SnowBlock,    27);
-            AddItemInPool(hallowed_snow, ItemID.PinkIceBlock, 14);
-            AddItemInPool(hallowed_snow, ItemID.PixieDust,    15);
-            AddItemInPool(hallowed_snow, ItemID.UnicornHorn,  5);
-            AddItemInPool(hallowed_snow, ItemID.RainbowBrick, 10);
-            AddItemInPool(hallowed_snow, ItemID.BorealWood,   50);
-            AddItemInPool(hallowed_snow, ItemID.Shiverthorn,  25);
+            AddItemInPool(hallowed_snow, ItemID.SnowBlock,                       27);
+            AddItemInPool(hallowed_snow, ItemID.PinkIceBlock,                    14);
+            AddItemInPool(hallowed_snow, ItemID.PixieDust,                       15);
+            AddItemInPool(hallowed_snow, ItemID.UnicornHorn,                     5);
+            AddItemInPool(hallowed_snow, ItemID.RainbowBrick,                    10);
+            AddItemInPool(hallowed_snow, new ItemEntry(ItemID.BorealWood, 1, 3), 50);
+            AddItemInPool(hallowed_snow, ItemID.Shiverthorn,                     25);
             AddItemInPool(hallowed_bars_forest, ItemID.HallowedBar, 5);
             AddItemInPool(hallowed_bars_desert, ItemID.HallowedBar, 5);
             AddItemInPool(hallowed_bars_snow,   ItemID.HallowedBar, 5);
@@ -1311,10 +1311,10 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(crimson_desert, ItemID.Cactus,        25);
             AddItemInPool(crimson_desert, ItemID.Vertebrae,     25);
             AddItemInPool(crimson_dark_shard, ItemID.DarkShard, 10);
-            AddItemInPool(crimson_snow, ItemID.SnowBlock,   27);
-            AddItemInPool(crimson_snow, ItemID.RedIceBlock, 14);
-            AddItemInPool(crimson_snow, ItemID.Vertebrae,   25);
-            AddItemInPool(crimson_snow, ItemID.BorealWood,  50);
+            AddItemInPool(crimson_snow, ItemID.SnowBlock,                       27);
+            AddItemInPool(crimson_snow, ItemID.RedIceBlock,                     14);
+            AddItemInPool(crimson_snow, ItemID.Vertebrae,                       25);
+            AddItemInPool(crimson_snow, new ItemEntry(ItemID.BorealWood, 1, 3), 50);
 
             AddItemInPool(corrupt_forest, ItemID.DirtBlock,                     26);
             AddItemInPool(corrupt_forest, ItemID.EbonstoneBlock,                7);
@@ -1329,11 +1329,11 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(corrupt_desert, ItemID.RottenChunk,   15);
             AddItemInPool(corrupt_desert, ItemID.WormTooth,     10);
             AddItemInPool(corrupt_desert, ItemID.Cactus,        25);
-            AddItemInPool(corrupt_snow, ItemID.SnowBlock,      27);
-            AddItemInPool(corrupt_snow, ItemID.PurpleIceBlock, 14);
-            AddItemInPool(corrupt_snow, ItemID.RottenChunk,    15);
-            AddItemInPool(corrupt_snow, ItemID.WormTooth,      10);
-            AddItemInPool(corrupt_snow, ItemID.BorealWood,     50);
+            AddItemInPool(corrupt_snow, ItemID.SnowBlock,                       27);
+            AddItemInPool(corrupt_snow, ItemID.PurpleIceBlock,                  14);
+            AddItemInPool(corrupt_snow, ItemID.RottenChunk,                     15);
+            AddItemInPool(corrupt_snow, ItemID.WormTooth,                       10);
+            AddItemInPool(corrupt_snow, new ItemEntry(ItemID.BorealWood, 1, 3), 50);
             AddItemInPool(corrupt_forest_hm, ItemID.CursedFlame, 18);
             AddItemInPool(corrupt_desert_hm, ItemID.CursedFlame, 18);
             AddItemInPool(corrupt_desert_hm, ItemID.DarkShard,   10);
