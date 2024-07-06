@@ -2,7 +2,6 @@ using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Common.UI;
-using BiomeExtractorsMod.Content.Tiles;
 using BiomeExtractorsMod.CrossMod;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -74,7 +73,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             get => BTimer;
             set { BTimer = (value + BiomeScanRate) % BiomeScanRate; }
         }
-        internal bool Active { get; private set; } = true;
+        internal bool Active { get; set; } = true;
 
 
         /// <summary>
@@ -311,7 +310,15 @@ namespace BiomeExtractorsMod.Content.TileEntities
         //toggles the machine on and off
         internal void ToggleState() {
             Active = !Active;
-            if(Active) UpdatePoolList(); //must refresh when turned back on
+            if (Main.netMode == NetmodeID.Server)
+            {
+                ModPacket statePacket = ModContent.GetInstance<BiomeExtractorsMod>().GetPacket(6);
+                statePacket.Write(Position.X);
+                statePacket.Write(Position.Y);
+                statePacket.Write(Active);
+                statePacket.Send();
+            }
+            if (Active) UpdatePoolList(); //must refresh when turned back on
         }
 
         // returns the machine's status message
@@ -372,26 +379,29 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
         {
+            Point16 tileOrigin = new(0, 0);
+            int width = 3;
+            int height = 3;
+            var data = TileObjectData.GetTileData(TileType, 0);
+            if (data != null)
+            {
+                tileOrigin = data.Origin;
+                width = data.Width;
+                height = data.Height;
+            }
+
+            int topLeftX = i - tileOrigin.X;
+            int topLeftY = j - tileOrigin.Y;
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                int width = 3;
-                int height = 3;
-                NetMessage.SendTileSquare(Main.myPlayer, i, j, width, height);
-
-                NetMessage.SendData(MessageID.TileEntityPlacement, number: i, number2: j, number3: Type);
+                NetMessage.SendTileSquare(Main.myPlayer, topLeftX, topLeftY, width, height);
+                NetMessage.SendData(MessageID.TileEntityPlacement, number: topLeftX, number2: topLeftY, number3: Type);
+                return -1;
             }
             
-            Point16 tileOrigin = BiomeExtractorTile.origin;
-            int placedEntity = Place(i - tileOrigin.X, j - tileOrigin.Y);
+            int placedEntity = Place(topLeftX, topLeftY);
             return placedEntity;
         }
 
-        public override void OnNetPlace()
-        {
-            if (Main.netMode == NetmodeID.Server)
-            {
-                NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
-            }
-        }
     }
 }

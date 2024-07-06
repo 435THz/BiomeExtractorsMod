@@ -172,8 +172,7 @@ namespace BiomeExtractorsMod.Content.Tiles
         public override bool RightClick(int i, int j)
         {
             if (Main.LocalPlayer.HeldItem.type == ModContent.GetInstance<BiomeScanner>().Type) return false;
-            bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
-            if (found)
+            if (TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity))
             {
                 ModContent.GetInstance<UISystem>().OpenInterface(entity);
                 return true;
@@ -184,10 +183,9 @@ namespace BiomeExtractorsMod.Content.Tiles
 
         public override void HitWire(int i, int j)
         {
-            bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
-            Point16 top_left = entity.Position;
-            if (found)
+            if (TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity))
             {
+                Point16 top_left = entity.Position;
                 entity.ToggleState();
                 UISystem ui = ModContent.GetInstance<UISystem>();
                 if (ui?.Extractor == entity) ui.Interface.OnActivate();
