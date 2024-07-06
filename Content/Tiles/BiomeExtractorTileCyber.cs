@@ -10,7 +10,7 @@ namespace BiomeExtractorsMod.Content.Tiles
         protected override int FrameCount => 8;
         protected override int IdleFrame => 3;
 
-        protected override string glowAsset => "Content/Tiles/BiomeExtractorTileCyber_Glow";
+        protected override string GlowAsset => "Content/Tiles/BiomeExtractorTileCyber_Glow";
 
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntCyber>();
 

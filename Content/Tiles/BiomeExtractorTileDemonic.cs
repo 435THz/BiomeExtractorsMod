@@ -11,7 +11,7 @@ namespace BiomeExtractorsMod.Content.Tiles
 
         protected override int _tileStyles => 2;
 
-        protected override string glowAsset => "Content/Tiles/BiomeExtractorTileDemonic_Glow";
+        protected override string GlowAsset => "Content/Tiles/BiomeExtractorTileDemonic_Glow";
 
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntDemonic>();
 

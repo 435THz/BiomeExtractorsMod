@@ -41,7 +41,7 @@ namespace BiomeExtractorsMod.Content.Tiles
         /// Returns the path to this tile's glowmask asset. If "", no glowmask will be applied.
         /// The default value is ""
         /// </summary>
-        protected virtual string glowAsset => "";
+        protected virtual string GlowAsset => "";
 
         /// <summary>
         /// Returns the template instance of this Extractor's TileEntity type (not the clone/new instance it is bound to during gameplay)
@@ -144,7 +144,7 @@ namespace BiomeExtractorsMod.Content.Tiles
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            if (glowAsset == "") return;
+            if (GlowAsset == "") return;
             bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
             if (!found || !entity.Active)
                 return;
@@ -155,7 +155,7 @@ namespace BiomeExtractorsMod.Content.Tiles
             Rectangle frame = new(tile.TileFrameX, y, 16, 16);
             Color lightColor = Lighting.GetColor(i, j, Color.White);
             Color color = Color.Lerp(Color.White, lightColor, 0.5f);
-            spriteBatch.Draw(Mod.Assets.Request<Texture2D>(glowAsset).Value, drawPos, frame, color);
+            spriteBatch.Draw(Mod.Assets.Request<Texture2D>(GlowAsset).Value, drawPos, frame, color);
         }
 
         public override void MouseOver(int i, int j)
