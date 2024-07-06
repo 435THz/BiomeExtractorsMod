@@ -8,7 +8,7 @@ namespace BiomeExtractorsMod.Content.Tiles
     class BiomeExtractorTileCyber : BiomeExtractorTile
     {
         protected override int FrameCount => 8;
-        protected override int IdleFrame => 3;
+        protected override int IdleFrame => 4;
 
         protected override string GlowAsset => "Content/Tiles/BiomeExtractorTileCyber_Glow";
 
