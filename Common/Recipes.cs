@@ -19,13 +19,13 @@ namespace BiomeExtractorsMod.Common
             RecipeGroup goldBar = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.GoldBar)}", ItemID.GoldBar, ItemID.PlatinumBar);
             RecipeGroup.RegisterGroup(goldBarGroupName, goldBar);
 
-            RecipeGroup basicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.BasicExtractor")}", ModContent.ItemType<BiomeExtractorItemIron>(), ModContent.ItemType<BiomeExtractorItemLead>());
+            RecipeGroup basicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocExtractorPrefix}Iron.DisplayName")}", ModContent.ItemType<BiomeExtractorItemIron>(), ModContent.ItemType<BiomeExtractorItemLead>());
             RecipeGroup.RegisterGroup(basicExtractorGroupName, basicExtractor);
 
-            RecipeGroup demonicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.DemonicExtractor")}", ModContent.ItemType<BiomeExtractorItemCorruption>(), ModContent.ItemType<BiomeExtractorItemCrimson>());
+            RecipeGroup demonicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocExtractorPrefix}Corruption.DisplayName")}", ModContent.ItemType<BiomeExtractorItemCorruption>(), ModContent.ItemType<BiomeExtractorItemCrimson>());
             RecipeGroup.RegisterGroup(demonicExtractorGroupName, demonicExtractor);
 
-            RecipeGroup steampunkExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocItemGroups}.DemonicExtractor")}", ModContent.ItemType<BiomeExtractorItemAdamantite>(), ModContent.ItemType<BiomeExtractorItemTitanium>());
+            RecipeGroup steampunkExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocExtractorPrefix}Adamantite.DisplayName")}", ModContent.ItemType<BiomeExtractorItemAdamantite>(), ModContent.ItemType<BiomeExtractorItemTitanium>());
             RecipeGroup.RegisterGroup(steampunkExtractorGroupName, steampunkExtractor);
         }
 
