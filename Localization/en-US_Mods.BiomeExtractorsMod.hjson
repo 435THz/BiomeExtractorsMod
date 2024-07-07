@@ -23,12 +23,8 @@ Items: {
 	}
 
 	BiomeExtractorItemLead: {
-		DisplayName: Biome Extractor
-		Tooltip:
-			'''
-			Place it anywhere in the world to extract common materials from the area around it.
-			The output will be placed inside of an adjacent chest.
-			'''
+		DisplayName: "{$BiomeExtractorItemIron.DisplayName}"
+		Tooltip: "{$BiomeExtractorItemIron.Tooltip}"
 	}
 
 	BiomeExtractorItemCorruption: {
@@ -41,12 +37,8 @@ Items: {
 	}
 
 	BiomeExtractorItemCrimson: {
-		DisplayName: Demonic Extractor
-		Tooltip:
-			'''
-			Place it anywhere in the world to extract common materials from the area around it.
-			It can extract materials from the evil biomes and the dungeon.
-			'''
+		DisplayName: "{$BiomeExtractorItemCorruption.DisplayName}"
+		Tooltip: "{$BiomeExtractorItemCorruption.Tooltip}"
 	}
 
 	BiomeExtractorItemInfernal: {
@@ -68,12 +60,8 @@ Items: {
 	}
 
 	BiomeExtractorItemTitanium: {
-		DisplayName: Steampunk Extractor
-		Tooltip:
-			'''
-			Place it anywhere in the world to extract common materials from the area around it.
-			It can extract most early hardmode materials.
-			'''
+		DisplayName: "{$BiomeExtractorItemAdamantite.DisplayName}"
+		Tooltip: "{$BiomeExtractorItemAdamantite.Tooltip}"
 	}
 
 	BiomeExtractorItemCyber: {
@@ -115,14 +103,14 @@ Configs: {
 			of invisible pools like those containing only hardmode
 			drops and such. These pools will not be localized, as this
 			setting exists only for debug purposes.
-			Defaults to false.
+			Defaults to {$LegacyInterface.73}.
 			'''
 		WindowPosTitle: Save Window Position
 		WindowPosTooltip:
 			'''
 			If this is enabled, the Extractor UI will reappear in the same
 			place it was when it was last closed.
-			Defaults to true.
+			Defaults to {$LegacyInterface.72}.
 			'''
 	}
 
@@ -134,8 +122,8 @@ Configs: {
 			'''
 			If true, every time an Extractor generates an item it
 			will show that item going inside the output chest, just
-			like the Quick Stack animation would. Turn this off if
-			you start having performance issues because of it.
+			like the Quick Stack animation would.
+			Defaults to {$LegacyInterface.72}.
 			'''
 		ScanRateTitle: Biome Scan Rate
 		ScanRateTooltip:
@@ -156,7 +144,7 @@ Configs: {
 			'''
 			How often Basic Extractors try to generate something.
 			This value is the number of frames between each attempt.
-			Defaults to 180, which corresponds to 3 seconds.
+			Defaults to 300, which corresponds to 5 seconds.
 			'''
 		Tier2Header: Demonic Extractors
 		Tier2ChanceTitle: Extraction Chance
@@ -170,7 +158,7 @@ Configs: {
 			'''
 			How often Demonic Extractors try to generate something.
 			This value is the number of frames between each attempt.
-			Defaults to 120, which corresponds to 2 seconds.
+			Defaults to 240, which corresponds to 4 seconds.
 			'''
 		Tier3Header: Infernal Extractors
 		Tier3ChanceTitle: Extraction Chance
@@ -184,7 +172,7 @@ Configs: {
 			'''
 			How often Infernal Extractors try to generate something.
 			This value is the number of frames between each attempt.
-			Defaults to 90, which corresponds to 1.5 seconds.
+			Defaults to 180, which corresponds to 3 seconds.
 			'''
 		Tier4Header: Steampunk Extractors
 		Tier4ChanceTitle: Extraction Chance
@@ -198,7 +186,7 @@ Configs: {
 			'''
 			How often Steampunk Extractors try to generate something.
 			This value is the number of frames between each attempt.
-			Defaults to 60, which corresponds to 1 second.
+			Defaults to 120, which corresponds to 2 seconds.
 			'''
 		Tier5Header: Cybernetic Extractors
 		Tier5ChanceTitle: Extraction Chance
@@ -212,7 +200,7 @@ Configs: {
 			'''
 			How often Cybernetic Extractors try to generate something.
 			This value is the number of frames between each attempt.
-			Defaults to 45, which corresponds to 3/4ths of a second.
+			Defaults to 90, which corresponds to 1.5 seconds.
 			'''
 		Tier6Header: Lunar Extractors
 		Tier6ChanceTitle: Extraction Chance
@@ -226,7 +214,7 @@ Configs: {
 			'''
 			How often Lunar Extractors try to generate something.
 			This value is the number of frames between each attempt.
-			Defaults to 30, which corresponds to half a second.
+			Defaults to 60, which corresponds to 1 second.
 			'''
 		Tier7Header: Ethereal Extractors
 		Tier7ChanceTitle: Extraction Chance
@@ -240,7 +228,7 @@ Configs: {
 			'''
 			How often Ethereal Extractors try to generate something.
 			This value is the number of frames between each attempt.
-			Defaults to 24, which corresponds to 2/5ths of a second.
+			Defaults to 45, which corresponds to 3/4ths of a second.
 			'''
 	}
 
@@ -255,7 +243,7 @@ Configs: {
 			Magic Storage systems if they have an active Storage Configuration
 			Interface adjacent to them. However, if this is not what you want,
 			you can disable compatibility by un-ticking this option.
-			Defaults to true.
+			Defaults to {$LegacyInterface.72}.
 			'''
 		MaxMSTitle: Maximum amount in Storage
 		MaxMSTooltip:
@@ -279,57 +267,49 @@ Configs: {
 }
 
 Text: {
-	ItemGroups: {
-		BasicExtractor: Basic Extractor
-		DemonicExtractor: Demonic Extractor
-		EvilBars: Evil Metal Bar
-		EvilSamples: Evil Boss Material
-		Tier3HM: Tier 3 Hardmode Bar
-	}
-
 	PoolNames: {
-		forest: Forest
-		underground: Underground
-		caverns: Caverns
-		snow: Snow
-		desert: Desert
-		jungle: Jungle
-		sky: Sky
-		hallowed_forest: Hallow
-		hallowed_desert: Hallowed Desert
-		hallowed_snow: Hallowed Snow
-		mushroom: Glowing Mushroom
-		corrupt_forest: Corruption
-		corrupt_desert: Corrupt Desert
+		forest: "{$Bestiary_Biomes.Surface}"
+		underground: "{$Bestiary_Biomes.Underground}"
+		caverns: "{$Bestiary_Biomes.Caverns}"
+		snow: "{$Bestiary_Biomes.Snow}"
+		desert: "{$Bestiary_Biomes.Desert}"
+		jungle: "{$Bestiary_Biomes.TheJungle}"
+		sky: "{$Bestiary_Biomes.Sky}"
+		hallowed_forest: "{$Bestiary_Biomes.TheHallow}"
+		hallowed_desert: "{$Bestiary_Biomes.HallowDesert}"
+		hallowed_snow: Hallow Snow
+		mushroom: "{$Bestiary_Biomes.SurfaceMushroom}"
+		corrupt_forest: "{$Bestiary_Biomes.TheCorruption}"
+		corrupt_desert: "{$Bestiary_Biomes.CorruptDesert}"
 		corrupt_snow: Corrupt Snow
-		crimson_forest: Crimson
-		crimson_desert: Crimson Desert
+		crimson_forest: "{$Bestiary_Biomes.Crimson}"
+		crimson_desert: "{$Bestiary_Biomes.CrimsonDesert}"
 		crimson_snow: Crimson Snow
-		graveyard: Graveyard
-		ug_snow: Ice
-		ug_desert: Underground Desert
-		ug_jungle: Underground Jungle
+		graveyard: "{$Bestiary_Biomes.Graveyard}"
+		ug_snow: "{$Bestiary_Biomes.UndergroundSnow}"
+		ug_desert: "{$Bestiary_Biomes.UndergroundDesert}"
+		ug_jungle: "{$Bestiary_Biomes.UndergroundJungle}"
 		hive: Hive
-		ug_hallowed_caverns: Underground Hallow
-		ug_hallowed_desert: Underground Hallowed Desert
-		ug_hallowed_snow: Hallowed Ice
-		ug_mushroom: Glowing Mushroom
-		ug_corrupt_caverns: Underground Corruption
-		ug_corrupt_desert: Underground Corrupt Desert
-		ug_corrupt_snow: Corrupt Snow
-		ug_crimson_caverns: Underground Crimson
-		ug_crimson_desert: Underground Crimson Desert
-		ug_crimson_snow: Crimson Ice
-		dungeon: Dungeon
-		temple: Jungle Temple
+		ug_hallowed_caverns: "{$Bestiary_Biomes.UndergroundHallow}"
+		ug_hallowed_desert: "{$Bestiary_Biomes.HallowUndergroundDesert}"
+		ug_hallowed_snow: "{$Bestiary_Biomes.HallowIce}"
+		ug_mushroom: "{$Bestiary_Biomes.UndergroundMushroom}"
+		ug_corrupt_caverns: "{$Bestiary_Biomes.UndergroundCorruption}"
+		ug_corrupt_desert: "{$Bestiary_Biomes.CorruptUndergroundDesert}"
+		ug_corrupt_snow: "{$Bestiary_Biomes.CorruptIce}"
+		ug_crimson_caverns: "{$Bestiary_Biomes.UndergroundCrimson}"
+		ug_crimson_desert: "{$Bestiary_Biomes.CrimsonUndergroundDesert}"
+		ug_crimson_snow: "{$Bestiary_Biomes.CrimsonIce}"
+		dungeon: "{$Bestiary_Biomes.TheDungeon}"
+		temple: "{$Bestiary_Biomes.TheTemple}"
 		shimmer: Aether
-		cobweb: Spider Nest
-		granite: Granite
-		marble: Marble
-		ocean: Ocean
+		cobweb: "{$Bestiary_Biomes.SpiderNest}"
+		granite: "{$Bestiary_Biomes.Granite}"
+		marble: "{$Bestiary_Biomes.Marble}"
+		ocean: "{$Bestiary_Biomes.Ocean}"
 		space: Space
-		underworld: Underworld
-		meteorite: Meteorite
+		underworld: "{$Bestiary_Biomes.TheUnderworld}"
+		meteorite: "{$Bestiary_Biomes.Meteor}"
 	}
 
 	Diagnostics: {
@@ -348,7 +328,7 @@ Text: {
 }
 
 Map: {
-	TileName: Biome Extractor
+	TileName: "{$Items.BiomeExtractorItemIron.DisplayName}"
 	IconInactive: Inactive
 	IconNoOutput: No Output
 }
