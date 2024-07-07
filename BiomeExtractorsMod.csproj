@@ -23,6 +23,7 @@
     <None Remove="Content\Tiles\BiomeExtractorTileLunar.png" />
     <None Remove="Content\Tiles\BiomeExtractorTileSteampunk.png" />
     <None Remove="description_workshop.txt" />
+    <None Remove="Localization\it-IT_Mods.BiomeExtractorsMod.hjson" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MagicStorage">

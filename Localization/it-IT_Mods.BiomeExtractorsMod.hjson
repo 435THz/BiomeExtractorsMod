@@ -1,0 +1,344 @@
+Items: {
+	BiomeScanner: {
+		DisplayName: Rilevatore ambientale
+		Tooltip:
+			'''
+			Scansiona i biomi attorno all'utilizzatore simulando un tipo di estrattore specifico.
+			Indica anche la posizione di tutti gli Estrattori ambientali sulla mappa.
+			<left> per scansionare la tua posizione. Il menù non si aggiorna automaticamente se ti muovi.
+			<right> per cambiare livello di estrazione.
+			<right> su un Estrattore per copiarne il livello di estrazione.
+			Può simulare Estrattori solo fino al livello più alto che abbia mai copiato.
+			Simulato attualmente:
+			'''
+	}
+
+	BiomeExtractorItemIron: {
+		DisplayName: Estrattore ambientale
+		Tooltip:
+			'''
+			Piazzalo in qualsiasi punto del mondo per estrarre i materiali più comuni trovabili nell'area circostante.
+			L'output sarà riposto in una cassa adiacente al macchinario.
+			'''
+	}
+
+	BiomeExtractorItemLead: {
+		DisplayName: "{$BiomeExtractorItemIron.DisplayName}"
+		Tooltip: "{$BiomeExtractorItemIron.Tooltip}"
+	}
+
+	BiomeExtractorItemCorruption: {
+		DisplayName: Estrattore demoniaco
+		Tooltip:
+			'''
+			Piazzalo in qualsiasi punto del mondo per estrarre i materiali più comuni trovabili nell'area circostante.
+			Può estrarre materiali dai biomi malvagi e dal Dungeon.
+			'''
+	}
+
+	BiomeExtractorItemCrimson: {
+		DisplayName: "{$BiomeExtractorItemCorruption.DisplayName}"
+		Tooltip: "{$BiomeExtractorItemCorruption.Tooltip}"
+	}
+
+	BiomeExtractorItemInfernal: {
+		DisplayName: Estrattore infernale
+		Tooltip:
+			'''
+			Piazzalo in qualsiasi punto del mondo per estrarre i materiali più comuni trovabili nell'area circostante.
+			Può estrarre materiali dagli Inferi e dai meteoiti.
+			'''
+	}
+
+	BiomeExtractorItemAdamantite: {
+		DisplayName: Estrattore steampunk
+		Tooltip:
+			'''
+			Piazzalo in qualsiasi punto del mondo per estrarre i materiali più comuni trovabili nell'area circostante.
+			Può estrarre la maggior parte dei materiali iniziali della modalità Hardmode.
+			'''
+	}
+
+	BiomeExtractorItemTitanium: {
+		DisplayName: "{$BiomeExtractorItemAdamantite.DisplayName}"
+		Tooltip: "{$BiomeExtractorItemAdamantite.Tooltip}"
+	}
+
+	BiomeExtractorItemCyber: {
+		DisplayName: Estrattore cibernetico
+		Tooltip:
+			'''
+			Piazzalo in qualsiasi punto del mondo per estrarre i materiali più comuni trovabili nell'area circostante.
+			Può estrarre Ectoplasma dal Dungeon e materiali rettiliani dal Tempio.
+			'''
+	}
+
+	BiomeExtractorItemLunar: {
+		DisplayName: Estrattore lunare
+		Tooltip:
+			'''
+			Piazzalo in qualsiasi punto del mondo per estrarre i materiali più comuni trovabili nell'area circostante.
+			Può estrarre Frammenti di colonna dallo spazio dopo che tutte le Colonne sono state sconfitte.
+			'''
+	}
+
+	BiomeExtractorItemEthereal: {
+		DisplayName: Estrattore etereo
+		Tooltip:
+			'''
+			Piazzalo in qualsiasi punto del mondo per estrarre i materiali più comuni trovabili nell'area circostante.
+			Può estrarre Luminite dallo spazio dopo che l'Evento Lunare è stato completato.
+			'''
+	}
+}
+
+Configs: {
+	ConfigClient: {
+		DisplayName: Client Settings
+		UIConfigHeader: Impostazioni d'interfaccia
+		UIPrintPoolsTitle: Visualizza le pool nascoste
+		UIPrintPoolsTooltip:
+			'''
+			Se questa impostazione è attiva, gli Estrattori mostreranno
+			anche i nomi di pool invisibili (come quelle che contenngono
+			solo oggetti hardmode, ad esempio). Queste pool non sono
+			localizzate, in questo questa opzione esiste solo per scopi
+			di debug.
+			Valore predefinito: {$LegacyInterface.73}.
+			'''
+		WindowPosTitle: Ricorda posizione finestra
+		WindowPosTooltip:
+			'''
+			Se questa impostazione è attiva, la schermata degli Estrattori
+			riapparirà sempre nello stesso punto in cui si trovava quando
+			è stata chiusa l'ultima volta.
+			Valore predefinito: {$LegacyInterface.72}.
+			'''
+	}
+
+	ConfigCommon: {
+		DisplayName: Extractors Settings
+		GeneralConfigHeader: Impostazioni generali
+		TransferAnimationTitle: Mostra animazione di deposito
+		TransferAnimationTooltip:
+			'''
+			Se attivo, ogni volta che un Estrattore genera qualcosa sarà
+			possibile vedere l'oggetto che viene depositato nella cassa di
+			output.
+			Valore predefinito: {$LegacyInterface.72}.
+			'''
+		ScanRateTitle: Intervallo di scansione
+		ScanRateTooltip:
+			'''
+			Quanto spesso gli Estrattori scansionano l'ambiente circostante.
+			Questo valore è il numero di frame tra una scansione e l'altra.
+			Il valore predefinito è 3600, che corrisponde a 60 secondi.
+			'''
+		Tier1Header: Estrattori semplici
+		Tier1ChanceTitle: Probabilità di successo
+		Tier1ChanceTooltip:
+			'''
+			La chance di successo, in percentuale, di ogni estrazione fatta
+			da Estrattori semplici.
+			Il valore predefinito è 60.
+			'''
+		Tier1RateTitle: Intervallo di estrazione
+		Tier1RateTooltip:
+			'''
+			Quanto spesso gli Estrattori semplici cercano di estrarre qualcosa.
+			Questo valore è il numero di frame tra un'estrazione e l'altra.
+			Il valore predefinito è 300, che corrisponde a 5 secondi.
+			'''
+		Tier2Header: Estrattori demoniaci
+		Tier2ChanceTitle: Probabilità di successo
+		Tier2ChanceTooltip:
+			'''
+			La chance di successo, in percentuale, di ogni estrazione fatta
+			         da Estrattori demoniaci.
+			Il valore predefinito è 75.
+			'''
+		Tier2RateTitle: Intervallo di estrazione
+		Tier2RateTooltip:
+			'''
+			Quanto spesso gli Estrattori demoniaci cercano di estrarre qualcosa.
+			Questo valore è il numero di frame tra un'estrazione e l'altra.
+			Il valore predefinito è 240, che corrisponde a 4 secondi.
+			'''
+		Tier3Header: Estrattori infernali
+		Tier3ChanceTitle: Probabilità di successo
+		Tier3ChanceTooltip:
+			'''
+			La chance di successo, in percentuale, di ogni estrazione fatta
+			         da Estrattori infernali.
+			Il valore predefinito è 85.
+			'''
+		Tier3RateTitle: Intervallo di estrazione
+		Tier3RateTooltip:
+			'''
+			Quanto spesso gli Estrattori infernali cercano di estrarre qualcosa.
+			Questo valore è il numero di frame tra un'estrazione e l'altra.
+			Il valore predefinito è 180, che corrisponde a 3 secondi.
+			'''
+		Tier4Header: Estrattori steampunk
+		Tier4ChanceTitle: Probabilità di successo
+		Tier4ChanceTooltip:
+			'''
+			La chance di successo, in percentuale, di ogni estrazione fatta
+			         da Estrattori steampunk.
+			Il valore predefinito è 90.
+			'''
+		Tier4RateTitle: Intervallo di estrazione
+		Tier4RateTooltip:
+			'''
+			Quanto spesso gli Estrattori steampunk cercano di estrarre qualcosa.
+			Questo valore è il numero di frame tra un'estrazione e l'altra.
+			Il valore predefinito è 120, che corrisponde a 2 secondi.
+			'''
+		Tier5Header: Estrattori cibernetici
+		Tier5ChanceTitle: Probabilità di successo
+		Tier5ChanceTooltip:
+			'''
+			La chance di successo, in percentuale, di ogni estrazione fatta
+			         da Estrattori cibernetici.
+			Il valore predefinito è 94.
+			'''
+		Tier5RateTitle: Intervallo di estrazione
+		Tier5RateTooltip:
+			'''
+			Quanto spesso gli Estrattori cibernetici cercano di estrarre qualcosa.
+			Questo valore è il numero di frame tra un'estrazione e l'altra.
+			Il valore predefinito è 90, che corrisponde a 1.5 secondi.
+			'''
+		Tier6Header: Estrattori lunari
+		Tier6ChanceTitle: Probabilità di successo
+		Tier6ChanceTooltip:
+			'''
+			La chance di successo, in percentuale, di ogni estrazione fatta
+			         da Estrattori lunari.
+			Il valore predefinito è 97.
+			'''
+		Tier6RateTitle: Intervallo di estrazione
+		Tier6RateTooltip:
+			'''
+			Quanto spesso gli Estrattori lunari cercano di estrarre qualcosa.
+			Questo valore è il numero di frame tra un'estrazione e l'altra.
+			Il valore predefinito è 60, che corrisponde a 1 secondo.
+			'''
+		Tier7Header: Estrattori eterei
+		Tier7ChanceTitle: Probabilità di successo
+		Tier7ChanceTooltip:
+			'''
+			La chance di successo, in percentuale, di ogni estrazione fatta
+			         da Estrattori eterei.
+			Il valore predefinito è 100.
+			'''
+		Tier7RateTitle: Intervallo di estrazione
+		Tier7RateTooltip:
+			'''
+			Quanto spesso gli Estrattori eterei cercano di estrarre qualcosa.
+			Questo valore è il numero di frame tra un'estrazione e l'altra.
+			Il valore predefinito è 45, che corrisponde a 3/4 di secondo.
+			'''
+	}
+
+	ConfigCompat: {
+		DisplayName: Compatibility
+		MSHeader: Magic Storage
+		MSTitle: Connetti a Magic Storage
+		MSTooltip:
+			'''
+			Questa mod è nativamente compatibile con la Magic Storage mod:
+			Gli Estrattori ambientali sono in grado di depositare gli oggetti da
+			loro generati all'interno di sistemi della Magic Storage, purché siano
+			adiacenti ad una Storage Configuration Interface attiva. Se questa
+			funzionalità non ti interessa puoi disattivarla tramite questa
+			opzione.
+			Valore predefinito: {$LegacyInterface.72}
+			'''
+		MaxMSTitle: Numero massimo nel deposito
+		MaxMSTooltip:
+			'''
+			Un Estrattore connesso ad un sistema della Magic Storage mod smetterà
+			di produrre oggetti il cui numero nel deposito è pari o superiore a
+			questo valore. In questo modo il sistema non si riempirà di spazzatura!
+			Valore predefinito: 9999.
+			'''
+		MaxMSStacksTitle: Slot massimi nel deposito
+		MaxMSStacksTooltip:
+			'''
+			Un Estrattore connesso ad un sistema della Magic Storage mod smetterà
+			di produrre oggetti il cui numero di slot occupati nel deposito è pari
+			o superiore a questo valore. Questa impostazione serve da regola
+			secondaria per oggetti con un limite di copie per slot basso, attrezzi,
+			armi ed equipaggiamenti.
+			Valore predefinito: 5.
+			'''
+	}
+}
+
+Text: {
+	PoolNames: {
+		forest: "{$Bestiary_Biomes.Surface}"
+		underground: "{$Bestiary_Biomes.Underground}"
+		caverns: "{$Bestiary_Biomes.Caverns}"
+		snow: "{$Bestiary_Biomes.Snow}"
+		desert: "{$Bestiary_Biomes.Desert}"
+		jungle: "{$Bestiary_Biomes.TheJungle}"
+		sky: "{$Bestiary_Biomes.Sky}"
+		hallowed_forest: "{$Bestiary_Biomes.TheHallow}"
+		hallowed_desert: "{$Bestiary_Biomes.HallowDesert}"
+		hallowed_snow: Neve consacrata
+		mushroom: "{$Bestiary_Biomes.SurfaceMushroom}"
+		corrupt_forest: "{$Bestiary_Biomes.TheCorruption}"
+		corrupt_desert: "{$Bestiary_Biomes.CorruptDesert}"
+		corrupt_snow: Neve corrotta
+		crimson_forest: "{$Bestiary_Biomes.Crimson}"
+		crimson_desert: "{$Bestiary_Biomes.CrimsonDesert}"
+		crimson_snow: Neve cremisi
+		graveyard: "{$Bestiary_Biomes.Graveyard}"
+		ug_snow: "{$Bestiary_Biomes.UndergroundSnow}"
+		ug_desert: "{$Bestiary_Biomes.UndergroundDesert}"
+		ug_jungle: "{$Bestiary_Biomes.UndergroundJungle}"
+		hive: Alveare
+		ug_hallowed_caverns: "{$Bestiary_Biomes.UndergroundHallow}"
+		ug_hallowed_desert: "{$Bestiary_Biomes.HallowUndergroundDesert}"
+		ug_hallowed_snow: "{$Bestiary_Biomes.HallowIce}"
+		ug_mushroom: "{$Bestiary_Biomes.UndergroundMushroom}"
+		ug_corrupt_caverns: "{$Bestiary_Biomes.UndergroundCorruption}"
+		ug_corrupt_desert: "{$Bestiary_Biomes.CorruptUndergroundDesert}"
+		ug_corrupt_snow: "{$Bestiary_Biomes.CorruptIce}"
+		ug_crimson_caverns: "{$Bestiary_Biomes.UndergroundCrimson}"
+		ug_crimson_desert: "{$Bestiary_Biomes.CrimsonUndergroundDesert}"
+		ug_crimson_snow: "{$Bestiary_Biomes.CrimsonIce}"
+		dungeon: "{$Bestiary_Biomes.TheDungeon}"
+		temple: "{$Bestiary_Biomes.TheTemple}"
+		shimmer: Etere
+		cobweb: "{$Bestiary_Biomes.SpiderNest}"
+		granite: "{$Bestiary_Biomes.Granite}"
+		marble: "{$Bestiary_Biomes.Marble}"
+		ocean: "{$Bestiary_Biomes.Ocean}"
+		space: Spazio
+		underworld: "{$Bestiary_Biomes.TheUnderworld}"
+		meteorite: "{$Bestiary_Biomes.Meteor}"
+	}
+
+	Diagnostics: {
+		MachineStatePrint: Estraendo da:
+		MachineStateFail: Questo macchinario non può estrarre nulla da questo posto.
+		MachineStateOff: Questo macchinario è spento.
+		MachineStateBroken: Questo macchinario non è stato caricato coorettamente. Rompilo e ri-piazzalo.
+		ScannerSuccess: Biomi trovati:
+		ScannerFail: Non è stato possibile identificare nessun bioma.
+		ScannerChangeTier: Livello simulato: {0}
+		ScannerCloneExtractor: Il livello di estrazione del {0} è stato copiato.
+		Per_day: copie/g
+		Chance: Chance
+		Percent: %
+	}
+}
+
+Map: {
+	TileName: "{$Items.BiomeExtractorItemIron.DisplayName}"
+	IconInactive: Spento
+	IconNoOutput: No Output
+}
