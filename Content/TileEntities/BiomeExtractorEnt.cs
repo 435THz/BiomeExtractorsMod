@@ -1,6 +1,6 @@
+using BiomeExtractorsMod.Common;
 using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Common.Configs;
-using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Common.UI;
 using BiomeExtractorsMod.CrossMod;
 using Microsoft.Xna.Framework;
@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -39,7 +40,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             BASIC = 1, DEMONIC = 1000, INFERNAL = 2000, STEAMPUNK = 3000, CYBER = 4000, LUNAR = 5000, ETHEREAL = 6000
         }
 
-        private enum OutputType
+        internal enum OutputType
         { 
             NONE, CHEST, MS_ENVIRONMENTACCESS
         }
@@ -51,13 +52,21 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private static readonly string tagOutputX = "chest_x";
         private static readonly string tagOutputY = "chest_y";
         private static readonly Point[] PosOffsets = [new(-1,2), new(3, 2), new(-1, 0), new(3, 0), new(0, -1), new(2, -1)];
-        protected static readonly BiomeExtractionSystem BES = ModContent.GetInstance<BiomeExtractionSystem>();
 
         private int XTimer = 0;
         private int BTimer = 0;
         private Point outputPos;
-        private OutputType outputType;
-        public bool HasOutput => outputType != OutputType.NONE;
+        private OutputType _outType;
+        internal OutputType OutType
+        {
+            get => _outType;
+            set
+            {
+                _outType = value;
+                SendUpdatePacket(ServerMessageType.EXTRACTOR_UPDATE);
+            }
+        }
+        public bool HasOutput => OutType != OutputType.NONE;
 
         private int ChestIndex { get => Chest.FindChest(outputPos.X, outputPos.Y); }
 
@@ -73,7 +82,16 @@ namespace BiomeExtractorsMod.Content.TileEntities
             get => BTimer;
             set { BTimer = (value + BiomeScanRate) % BiomeScanRate; }
         }
-        internal bool Active { get; set; } = true;
+        private bool _active = true;
+        internal bool Active
+        {
+            get => _active;
+            set
+            {
+                _active = value;
+                SendUpdatePacket(ServerMessageType.EXTRACTOR_UPDATE);
+            }
+        }
 
 
         /// <summary>
@@ -82,10 +100,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         protected internal abstract int TileType { get; }
         internal int TileStyle => TileObjectData.GetTileStyle(Main.tile[Position]);
 
-        /// <summary>
-        /// Returns the Asset containing the Texture2D of this BiomeExtractor's map icon.
-        /// </summary>
-        internal abstract Asset<Texture2D> MapIcon { get; }
+        internal Asset<Texture2D> MapIcon => Mod.Assets.Request<Texture2D>(MapIconAsset);
 
         /// <summary>
         /// Returns the tier of this Extractor.
@@ -96,12 +111,13 @@ namespace BiomeExtractorsMod.Content.TileEntities
         protected internal string LocalName => ExtractionTier.Name;
         protected internal int ExtractionRate => ExtractionTier.Rate;
         protected internal int ExtractionChance => ExtractionTier.Chance;
+        internal string MapIconAsset => ExtractionTier.IconPath;
 
         private static int BiomeScanRate => ModContent.GetInstance<ConfigCommon>().BiomeScanRate;
 
         //loading
         private void UpdatePoolList() {
-            PoolList = BES.CheckValidBiomes(ExtractionTier, Position + new Point16(1, 1));
+            PoolList = Instance.CheckValidBiomes(ExtractionTier, Position + new Point16(1, 1));
         }
 
         public override void SaveData(TagCompound tag)
@@ -109,7 +125,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             tag.Add(tagXTimer, ExtractionTimer);
             tag.Add(tagBTimer, ScanningTimer);
             tag.Add(tagState,  Active);
-            tag.Add(tagTType,  (int)outputType);
+            tag.Add(tagTType,  (int)OutType);
             tag.Add(tagOutputX, outputPos.X);
             tag.Add(tagOutputY, outputPos.Y);
         }
@@ -127,7 +143,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             ScanningTimer   = btimer;
             Active          = active;
             outputPos       = new Point(x, y);
-            outputType      = (OutputType)type;
+            OutType      = (OutputType)type;
             UpdatePoolList(); //always run on loading
         }
 
@@ -143,13 +159,13 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
                     //If the output data is not valid, a new one will be searched for
                     OutData output = GetNewOutput();
-                    outputType = output.Type;
+                    OutType = output.Type;
                     outputPos = output.Point;
                 }
 
                 if (Main.rand.Next(100) < ExtractionChance)
                 {
-                    Item generated = BES.RollItem(PoolList);
+                    Item generated = Instance.RollItem(PoolList);
                     if (AddToOutput(generated.Clone()) && ModContent.GetInstance<ConfigCommon>().ShowTransferAnimation)
                     {
                         Vector2 start = (Position.ToVector2() + new Vector2(1.5f, 1.5f)) * 16;
@@ -171,8 +187,8 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private bool AddToOutput(Item newItem)
         {
-            if (BiomeExtractorsMod.MS_loaded && outputType == OutputType.MS_ENVIRONMENTACCESS) return MagicStorageHook.AddItemToStorage(newItem, outputPos);
-            if (outputType == OutputType.CHEST) return AddToChest(newItem);
+            if (BiomeExtractorsMod.MS_loaded && OutType == OutputType.MS_ENVIRONMENTACCESS) return MagicStorageHook.AddItemToStorage(newItem, outputPos);
+            if (OutType == OutputType.CHEST) return AddToChest(newItem);
             return false;
         }
 
@@ -206,9 +222,9 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private bool IsOutputDataValid()
         {
-            if (BiomeExtractorsMod.MS_loaded && outputType == OutputType.MS_ENVIRONMENTACCESS)
+            if (BiomeExtractorsMod.MS_loaded && OutType == OutputType.MS_ENVIRONMENTACCESS)
                 return MagicStorageHook.IsOutputValid(outputPos);
-            if (outputType == OutputType.CHEST)
+            if (OutType == OutputType.CHEST)
                 return IsChestValid();
             return false;
         }
@@ -246,6 +262,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             return output;
         }
 
+        //Looks for a Storage Configuration Interface in the adjacent spaces to the left, right or top of this machine
         private OutData GetAdjacentMSAccess()
         {
             bool prioritizeLeft = Main.rand.NextBool();
@@ -310,14 +327,6 @@ namespace BiomeExtractorsMod.Content.TileEntities
         //toggles the machine on and off
         internal void ToggleState() {
             Active = !Active;
-            if (Main.netMode == NetmodeID.Server)
-            {
-                ModPacket statePacket = ModContent.GetInstance<BiomeExtractorsMod>().GetPacket(6);
-                statePacket.Write(Position.X);
-                statePacket.Write(Position.Y);
-                statePacket.Write(Active);
-                statePacket.Send();
-            }
             if (Active) UpdatePoolList(); //must refresh when turned back on
         }
 
@@ -368,13 +377,64 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 return Language.GetTextValue($"{baseText}Off");
         }
 
-        internal WeightedList<ItemEntry> GetDropList() => BES.JoinPools(PoolList);
+        internal WeightedList<ItemEntry> GetDropList() => Instance.JoinPools(PoolList);
 
-        // Spawning related code
+        public override void OnKill() => SendUpdatePacket(ServerMessageType.EXTRACTOR_REMOVE);
+
+        #region Netcode
+        private readonly static List<int> msgSize = [9, 5, 4];
+        internal void SendUpdatePacket(ServerMessageType msgType)
+        {
+            if (Main.netMode == NetmodeID.Server)
+            {
+                byte msgId = (byte)msgType;
+                ModPacket statePacket = ModContent.GetInstance<BiomeExtractorsMod>().GetPacket(msgSize[msgId]);
+                statePacket.Write(msgId);
+                statePacket.Write(Position.X);
+                statePacket.Write(Position.Y);
+                if (msgType != ServerMessageType.EXTRACTOR_REMOVE)
+                {
+                    if (msgType == ServerMessageType.EXTRACTOR_REGISTER) statePacket.Write(Tier);
+                    statePacket.Write((byte)IconMapSystem.StateOf(this));
+                }
+                statePacket.Send();
+                NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
+            }
+            else if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                switch (msgType)
+                {
+                    case ServerMessageType.EXTRACTOR_REGISTER: IconMapSystem.AddExtractorData(this);    break;
+                    case ServerMessageType.EXTRACTOR_UPDATE:   IconMapSystem.UpdateExtractorData(this); break;
+                    case ServerMessageType.EXTRACTOR_REMOVE:   IconMapSystem.RemoveExtractorData(this); break;
+                }
+                
+            }
+        }
+
+        public override void NetSend(BinaryWriter writer)
+        {
+            writer.Write(outputPos.X);
+            writer.Write(outputPos.Y);
+            writer.Write((byte)OutType);
+            writer.Write(Active);
+        }
+
+        public override void NetReceive(BinaryReader reader)
+        {
+            outputPos = new(reader.ReadInt32(), reader.ReadInt32());
+            OutType = (OutputType)reader.ReadByte();
+            Active = reader.ReadBoolean();
+        }
+        #endregion
+
+        #region Placing
         public override bool IsTileValidForEntity(int x, int y)
         {
             Tile tile = Main.tile[x, y];
-            return tile.HasTile && tile.TileType == TileType;
+            bool valid = tile.HasTile && tile.TileType == TileType;
+            if (!valid) SendUpdatePacket(ServerMessageType.EXTRACTOR_REMOVE);
+            return valid;
         }
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
@@ -400,8 +460,16 @@ namespace BiomeExtractorsMod.Content.TileEntities
             }
             
             int placedEntity = Place(topLeftX, topLeftY);
+            Position = new((short)topLeftX, (short)topLeftY);
+            if (placedEntity != -1)
+                SendUpdatePacket(ServerMessageType.EXTRACTOR_REGISTER);
             return placedEntity;
         }
 
+        public override void OnNetPlace()
+        {
+            SendUpdatePacket(ServerMessageType.EXTRACTOR_REGISTER);
+        }
+        #endregion
     }
 }

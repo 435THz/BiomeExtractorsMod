@@ -1,15 +1,12 @@
-using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Content.Tiles;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria.ModLoader;
+using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
 
 namespace BiomeExtractorsMod.Content.TileEntities
 {
     public class BiomeExtractorEntSteampunk : BiomeExtractorEnt
     {
-        internal override Asset<Texture2D> MapIcon => Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconSteampunk");
-        protected internal override BiomeExtractionSystem.ExtractionTier ExtractionTier => BES.GetTier((int)EnumTiers.STEAMPUNK, true);
+        protected internal override ExtractionTier ExtractionTier => Instance.GetTier((int)EnumTiers.STEAMPUNK, true);
         protected internal override int TileType => ModContent.TileType<BiomeExtractorTileSteampunk>();
     }
 }

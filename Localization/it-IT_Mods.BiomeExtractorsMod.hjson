@@ -341,4 +341,5 @@ Map: {
 	TileName: "{$Items.BiomeExtractorItemIron.DisplayName}"
 	IconInactive: Spento
 	IconNoOutput: No Output
+	IconError: Rotto
 }

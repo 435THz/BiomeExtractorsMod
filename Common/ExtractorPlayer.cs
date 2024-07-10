@@ -3,6 +3,7 @@ using BiomeExtractorsMod.Common.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -54,6 +55,16 @@ namespace BiomeExtractorsMod.Common
                 ExtractorWindowPos = new Vector2(x, y);
             }
             else ExtractorWindowPos = Defaultpos;
+        }
+
+        public static void SendUpdateRequest()
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                ModPacket statePacket = ModContent.GetInstance<BiomeExtractorsMod>().GetPacket(1);
+                statePacket.Write((byte)ClientMessageType.UPDATE_REQUEST);
+                statePacket.Send();
+            }
         }
     }
 }
