@@ -283,7 +283,7 @@ Text: {
 		caverns: "{$Bestiary_Biomes.Caverns}"
 		snow: "{$Bestiary_Biomes.Snow}"
 		desert: "{$Bestiary_Biomes.Desert}"
-		jungle: "{$Bestiary_Biomes.TheJungle}"
+		jungle: "{$Bestiary_Biomes.Jungle}"
 		sky: "{$Bestiary_Biomes.Sky}"
 		hallowed_forest: "{$Bestiary_Biomes.TheHallow}"
 		hallowed_desert: "{$Bestiary_Biomes.HallowDesert}"
