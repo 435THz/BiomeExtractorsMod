@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
@@ -67,15 +69,13 @@ namespace BiomeExtractorsMod.Common.UI
         public void InitElements(WeightedList<ItemEntry> pool)
         {
             List<ItemEntry> entries = new(pool.Keys);
-            entries.Sort(delegate(ItemEntry key1, ItemEntry key2) {
-                int w1 = pool[key1], w2 = pool[key2];
-                int a1 = key1.Min + key1.Max, a2 = key2.Min + key2.Max;
-                if (w1 != w2)
-                    return w2 - w1;
-                else if (a1 != a2)
-                    return a2 - a1;
-                return key2.Id - key1.Id;
-            });
+            entries = entries.AsEnumerable()
+                .Where((e) => e.Id != ItemID.None)
+                .OrderBy((e) => e.Id)
+                .OrderBy((e) => -(e.Min+e.Max))
+                .OrderBy((e) => -pool[e])
+                .ToList();
+            
             SlotData = new SlotData[entries.Count];
             for (int n = 0; n < entries.Count; n++)
             {
@@ -120,11 +120,17 @@ namespace BiomeExtractorsMod.Common.UI
 
         private void UpdateSlots()
         {
+            int offset = 0;
             for (int y = 0; y < Rows; y++)
             {
                 for (int x = 0; x < Columns; x++)
                 {
-                    int slot = ((y + TopRow) * Columns) + x;
+                    int slot = ((y + TopRow) * Columns) + x + offset;
+                    while (slot < SlotData.Length && SlotData[slot].Item.type == ItemID.None)
+                    {
+                        offset++;
+                        slot = ((y + TopRow) * Columns) + x + offset;
+                    }
                     int min = 0, max = 0;
                     Item item = new();
                     if (slot<SlotData.Length)

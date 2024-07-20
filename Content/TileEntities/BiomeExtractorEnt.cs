@@ -187,6 +187,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private bool AddToOutput(Item newItem)
         {
+            if (newItem.type == ItemID.None) return false;
             if (BiomeExtractorsMod.MS_loaded && OutType == OutputType.MS_ENVIRONMENTACCESS) return MagicStorageHook.AddItemToStorage(newItem, outputPos);
             if (OutType == OutputType.CHEST) return AddToChest(newItem);
             return false;
