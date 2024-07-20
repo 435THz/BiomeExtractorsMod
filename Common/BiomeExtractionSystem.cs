@@ -1147,6 +1147,7 @@ namespace BiomeExtractorsMod.Common.Systems
 
         private void PopulatePools()
         {
+            AddItemInPool(forest, ItemID.None, 30);
             //TERRAIN:18
             AddItemInPool(forest, ItemID.DirtBlock,                 70);
             AddItemInPool(forest, ItemID.StoneBlock,                18);
@@ -1154,7 +1155,7 @@ namespace BiomeExtractorsMod.Common.Systems
             //MATERIALS:40
             AddItemInPool(forest, ItemID.Gel,                       60);
             AddItemInPool(forest, ItemID.PinkGel,                   10);
-            AddItemInPool(forest, new ItemEntry(ItemID.Wood, 1, 3), 150);
+            AddItemInPool(forest, new ItemEntry(ItemID.Wood, 1, 3), 120);
             AddItemInPool(forest, ItemID.Acorn,                     20);
             //VEGETATION:11
             AddItemInPool(forest, ItemID.GrassSeeds,                16);
@@ -1180,6 +1181,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(forest, ItemID.Worm,                      3);
             AddItemInPool(forest, ItemID.Stinkbug,                  4);
 
+            AddItemInPool(sky,    ItemID.None,         30);
             AddItemInPool(sky,    ItemID.Cloud,        7);
             AddItemInPool(sky,    ItemID.RainCloud,    3);
             AddItemInPool(sky,    ItemID.Feather,      20);
@@ -1243,9 +1245,10 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(hm_ores, ItemID.TitaniumOre,   16);
             AddItemInPool(hm_ores, ItemID.AdamantiteOre, 16);
 
+            AddItemInPool(snow, ItemID.None,                            27);
             AddItemInPool(snow, ItemID.SnowBlock,                       12);
             AddItemInPool(snow, ItemID.IceBlock,                        6);
-            AddItemInPool(snow, new ItemEntry(ItemID.BorealWood, 1, 3), 40);
+            AddItemInPool(snow, new ItemEntry(ItemID.BorealWood, 1, 3), 13);
             AddItemInPool(snow, ItemID.Shiverthorn,                     7);
 
             AddItemInPool(desert, ItemID.SandBlock,       75);
@@ -1258,6 +1261,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(desert, ItemID.BlackDragonfly,  4);
             AddItemInPool(desert, ItemID.OrangeDragonfly, 4);
 
+            AddItemInPool(jungle, ItemID.None, 63);
             AddItemInPool(jungle, ItemID.MudBlock,                          10);
             AddItemInPool(jungle, ItemID.JungleGrassSeeds,                  5);
             AddItemInPool(jungle, new ItemEntry(ItemID.RichMahogany, 1, 3), 35);
@@ -1270,6 +1274,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(jungle, ItemID.Buggy,                             2);
             AddItemInPool(shells, ItemID.TurtleShell,                       5);
 
+            AddItemInPool(hallowed_forest, ItemID.None,                           72);
             AddItemInPool(hallowed_forest, ItemID.DirtBlock,                      26);
             AddItemInPool(hallowed_forest, ItemID.PearlstoneBlock,                7);
             AddItemInPool(hallowed_forest, ItemID.MudBlock,                       8);
@@ -1293,61 +1298,69 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(hallowed_desert, ItemID.PinkPricklyPear, 16);
             AddItemInPool(hallowed_desert, ItemID.Scorpion,        4);
             AddItemInPool(hallowed_desert, ItemID.BlackScorpion,   3);
+            AddItemInPool(hallowed_snow, ItemID.None, 33);
             AddItemInPool(hallowed_snow, ItemID.SnowBlock,                       27);
             AddItemInPool(hallowed_snow, ItemID.PinkIceBlock,                    14);
             AddItemInPool(hallowed_snow, ItemID.PixieDust,                       15);
             AddItemInPool(hallowed_snow, ItemID.UnicornHorn,                     5);
             AddItemInPool(hallowed_snow, ItemID.RainbowBrick,                    10);
-            AddItemInPool(hallowed_snow, new ItemEntry(ItemID.BorealWood, 1, 3), 50);
+            AddItemInPool(hallowed_snow, new ItemEntry(ItemID.BorealWood, 1, 3), 17);
             AddItemInPool(hallowed_snow, ItemID.Shiverthorn,                     25);
-            AddItemInPool(hallowed_bars_forest, ItemID.HallowedBar, 5);
-            AddItemInPool(hallowed_bars_desert, ItemID.HallowedBar, 5);
-            AddItemInPool(hallowed_bars_snow,   ItemID.HallowedBar, 5);
+            AddItemInPool(hallowed_bars_forest, ItemID.HallowedBar, 1);
+            AddItemInPool(hallowed_bars_desert, ItemID.HallowedBar, 1);
+            AddItemInPool(hallowed_bars_snow,   ItemID.HallowedBar, 1);
 
+            AddItemInPool(mushroom, ItemID.None,               36);
             AddItemInPool(mushroom, ItemID.MudBlock,           5);
             AddItemInPool(mushroom, ItemID.MushroomGrassSeeds, 1);
             AddItemInPool(mushroom, ItemID.GlowingMushroom,    30);
 
+            AddItemInPool(crimson_forest, ItemID.None, 15);
             AddItemInPool(crimson_forest, ItemID.DirtBlock,                      26);
             AddItemInPool(crimson_forest, ItemID.CrimstoneBlock,                 7);
             AddItemInPool(crimson_forest, ItemID.MudBlock,                       8);
             AddItemInPool(crimson_forest, ItemID.Vertebrae,                      25);
             AddItemInPool(crimson_forest, ItemID.CrimsonSeeds,                   7);
-            AddItemInPool(crimson_forest, new ItemEntry(ItemID.Shadewood, 1, 3), 50);
+            AddItemInPool(crimson_forest, new ItemEntry(ItemID.Shadewood, 1, 3), 35);
             AddItemInPool(crimson_forest, ItemID.ViciousMushroom,                12);
             AddItemInPool(crimson_forest, ItemID.Deathweed,                      25);
-            AddItemInPool(crimson_desert, ItemID.CrimsandBlock, 41);
-            AddItemInPool(crimson_desert, ItemID.Cactus,        25);
-            AddItemInPool(crimson_desert, ItemID.Vertebrae,     25);
-            AddItemInPool(crimson_dark_shard, ItemID.DarkShard, 10);
+            AddItemInPool(crimson_desert, ItemID.None, 30);
+            AddItemInPool(crimson_desert, ItemID.CrimsandBlock, 40);
+            AddItemInPool(crimson_desert, ItemID.Cactus,        10);
+            AddItemInPool(crimson_desert, ItemID.Vertebrae,     10);
+            AddItemInPool(crimson_snow, ItemID.None, 30);
             AddItemInPool(crimson_snow, ItemID.SnowBlock,                       27);
             AddItemInPool(crimson_snow, ItemID.RedIceBlock,                     14);
-            AddItemInPool(crimson_snow, ItemID.Vertebrae,                       25);
-            AddItemInPool(crimson_snow, new ItemEntry(ItemID.BorealWood, 1, 3), 50);
+            AddItemInPool(crimson_snow, ItemID.Vertebrae,                       10);
+            AddItemInPool(crimson_snow, new ItemEntry(ItemID.BorealWood, 1, 3), 25);
 
+            AddItemInPool(corrupt_forest, ItemID.None, 15);
             AddItemInPool(corrupt_forest, ItemID.DirtBlock,                     26);
             AddItemInPool(corrupt_forest, ItemID.EbonstoneBlock,                7);
             AddItemInPool(corrupt_forest, ItemID.MudBlock,                      8);
             AddItemInPool(corrupt_forest, ItemID.RottenChunk,                   15);
             AddItemInPool(corrupt_forest, ItemID.WormTooth,                     10);
             AddItemInPool(corrupt_forest, ItemID.CorruptSeeds,                  7);
-            AddItemInPool(corrupt_forest, new ItemEntry(ItemID.Ebonwood, 1, 3), 50);
+            AddItemInPool(corrupt_forest, new ItemEntry(ItemID.Ebonwood, 1, 3), 35);
             AddItemInPool(corrupt_forest, ItemID.VileMushroom,                  12);
             AddItemInPool(corrupt_forest, ItemID.Deathweed,                     25);
-            AddItemInPool(corrupt_desert, ItemID.EbonsandBlock, 41);
-            AddItemInPool(corrupt_desert, ItemID.RottenChunk,   15);
-            AddItemInPool(corrupt_desert, ItemID.WormTooth,     10);
-            AddItemInPool(corrupt_desert, ItemID.Cactus,        25);
+            AddItemInPool(corrupt_desert, ItemID.None,          30);
+            AddItemInPool(corrupt_desert, ItemID.EbonsandBlock, 40);
+            AddItemInPool(corrupt_desert, ItemID.RottenChunk,   7);
+            AddItemInPool(corrupt_desert, ItemID.WormTooth,     3);
+            AddItemInPool(corrupt_desert, ItemID.Cactus,        10);
+            AddItemInPool(corrupt_snow, ItemID.None, 30);
             AddItemInPool(corrupt_snow, ItemID.SnowBlock,                       27);
             AddItemInPool(corrupt_snow, ItemID.PurpleIceBlock,                  14);
-            AddItemInPool(corrupt_snow, ItemID.RottenChunk,                     15);
+            AddItemInPool(corrupt_snow, ItemID.RottenChunk,                     10);
             AddItemInPool(corrupt_snow, ItemID.WormTooth,                       10);
-            AddItemInPool(corrupt_snow, new ItemEntry(ItemID.BorealWood, 1, 3), 50);
+            AddItemInPool(corrupt_snow, new ItemEntry(ItemID.BorealWood, 1, 3), 25);
             AddItemInPool(corrupt_forest_hm, ItemID.CursedFlame, 18);
             AddItemInPool(corrupt_desert_hm, ItemID.CursedFlame, 18);
-            AddItemInPool(corrupt_desert_hm, ItemID.DarkShard,   10);
+            AddItemInPool(corrupt_desert_hm, ItemID.DarkShard,   5);
             AddItemInPool(corrupt_snow_hm, ItemID.CursedFlame,   18);
 
+            AddItemInPool(graveyard, ItemID.None,   423);
             AddItemInPool(graveyard, ItemID.Lens,   40);
             AddItemInPool(graveyard, ItemID.Mouse,  4);
             AddItemInPool(graveyard, ItemID.Maggot, 3);
@@ -1361,24 +1374,27 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(shimmer, ItemID.Shimmerfly, 44);
             AddItemInPool(marble,  ItemID.Marble,     75);
             AddItemInPool(granite, ItemID.Granite,    75);
-            AddItemInPool(granite, ItemID.Geode,      50);
+            AddItemInPool(granite, ItemID.Geode,      10);
             AddItemInPool(cobweb,  ItemID.Cobweb,     50);
-            AddItemInPool(spider,  ItemID.SpiderFang, 25);
+            AddItemInPool(spider,  ItemID.SpiderFang, 3);
 
-            AddItemInPool(ug_snow, ItemID.SnowBlock,  12);
-            AddItemInPool(ug_snow, ItemID.IceBlock,   6);
-            AddItemInPool(ug_snow, ItemID.SlushBlock, 8);
-            AddItemInPool(ug_snow, ItemID.FlinxFur,   6);
-            AddItemInPool(ug_snow, ItemID.CyanHusk,   8);
+            AddItemInPool(ug_snow, ItemID.None,       40);
+            AddItemInPool(ug_snow, ItemID.SnowBlock,  6);
+            AddItemInPool(ug_snow, ItemID.IceBlock,   3);
+            AddItemInPool(ug_snow, ItemID.SlushBlock, 4);
+            AddItemInPool(ug_snow, ItemID.FlinxFur,   3);
+            AddItemInPool(ug_snow, ItemID.CyanHusk,   4);
 
+            AddItemInPool(ug_desert, ItemID.None, 20);
             AddItemInPool(ug_desert, ItemID.SandBlock,       12);
             AddItemInPool(ug_desert, ItemID.HardenedSand,    12);
             AddItemInPool(ug_desert, ItemID.Sandstone,       12);
             AddItemInPool(ug_desert, ItemID.DesertFossil,    12);
-            AddItemInPool(ug_desert, ItemID.AntlionMandible, 30);
+            AddItemInPool(ug_desert, ItemID.AntlionMandible, 10);
             AddItemInPool(ug_desert, ItemID.Amber,           8);
             AddItemInPool(ug_desert_hm, ItemID.FossilOre, 10);
 
+            AddItemInPool(ug_jungle,   ItemID.None, 50);
             AddItemInPool(ug_jungle,   ItemID.MudBlock,                          16);
             AddItemInPool(ug_jungle,   ItemID.Stinger,                           6);
             AddItemInPool(ug_jungle,   ItemID.Vine,                              5);
@@ -1393,61 +1409,68 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(ug_jungle,   ItemID.Buggy,                             2);
             AddItemInPool(ug_shells,   ItemID.TurtleShell, 4);
             AddItemInPool(life_fruit,  ItemID.LifeFruit, 1);
-            AddItemInPool(chlorophyte, ItemID.ChlorophyteOre, 30);
-            AddItemInPool(hive,        ItemID.Hive,         50);
-            AddItemInPool(hive,        ItemID.HoneyBlock,   100);
-            AddItemInPool(hive,        ItemID.BottledHoney, 150);
+            AddItemInPool(chlorophyte, ItemID.ChlorophyteOre, 20);
+            AddItemInPool(hive,        ItemID.Hive,         25);
+            AddItemInPool(hive,        ItemID.HoneyBlock,   50);
+            AddItemInPool(hive,        ItemID.BottledHoney, 75);
 
+            AddItemInPool(ug_hallowed_caverns, ItemID.None, 70);
             AddItemInPool(ug_hallowed_caverns, ItemID.DirtBlock,       20);
             AddItemInPool(ug_hallowed_caverns, ItemID.PearlstoneBlock, 6);
             AddItemInPool(ug_hallowed_caverns, ItemID.SoulofLight,     24);
-            AddItemInPool(ug_hallowed_caverns, ItemID.CrystalShard,    40);
+            AddItemInPool(ug_hallowed_caverns, ItemID.CrystalShard,    20);
             AddItemInPool(ug_hallowed_desert,  ItemID.PearlsandBlock,     8);
             AddItemInPool(ug_hallowed_desert,  ItemID.HallowHardenedSand, 8);
             AddItemInPool(ug_hallowed_desert,  ItemID.HallowSandstone,    8);
             AddItemInPool(ug_hallowed_desert,  ItemID.SoulofLight,        18);
-            AddItemInPool(ug_hallowed_desert,  ItemID.CrystalShard,       30);
+            AddItemInPool(ug_hallowed_desert,  ItemID.CrystalShard,       20);
             AddItemInPool(ug_hallowed_desert,  ItemID.LightShard,         18);
+            AddItemInPool(ug_hallowed_snow,    ItemID.None,         69);
             AddItemInPool(ug_hallowed_snow,    ItemID.SnowBlock,    12);
             AddItemInPool(ug_hallowed_snow,    ItemID.PinkIceBlock, 12);
             AddItemInPool(ug_hallowed_snow,    ItemID.SoulofLight,  25);
-            AddItemInPool(ug_hallowed_snow,    ItemID.CrystalShard, 41);
-            AddItemInPool(ug_hallowed_bars_caverns, ItemID.HallowedBar, 5);
-            AddItemInPool(ug_hallowed_bars_snow,    ItemID.HallowedBar, 5);
-            AddItemInPool(ug_hallowed_bars_desert,  ItemID.HallowedBar, 5);
+            AddItemInPool(ug_hallowed_snow,    ItemID.CrystalShard, 20);
+            AddItemInPool(ug_hallowed_bars_caverns, ItemID.HallowedBar, 1);
+            AddItemInPool(ug_hallowed_bars_snow,    ItemID.HallowedBar, 1);
+            AddItemInPool(ug_hallowed_bars_desert,  ItemID.HallowedBar, 1);
 
+            AddItemInPool(ug_mushroom,  ItemID.None, 36);
             AddItemInPool(ug_mushroom,  ItemID.MudBlock,           5);
             AddItemInPool(ug_mushroom,  ItemID.MushroomGrassSeeds, 1);
             AddItemInPool(ug_mushroom,  ItemID.GlowingMushroom,    30);
             AddItemInPool(truffle_worm, ItemID.TruffleWorm,        1);
 
+            AddItemInPool(ug_crimson_caverns, ItemID.None,           100);
             AddItemInPool(ug_crimson_caverns, ItemID.DirtBlock,      20);
             AddItemInPool(ug_crimson_caverns, ItemID.CrimstoneBlock, 6);
             AddItemInPool(ug_crimson_caverns, ItemID.Vertebrae,      36);
             AddItemInPool(ug_crimson_caverns, ItemID.CrimtaneOre,    8);
-            AddItemInPool(ug_crimson_caverns_hm, ItemID.Ichor,       20);
+            AddItemInPool(ug_crimson_caverns_hm, ItemID.Ichor,       10);
             AddItemInPool(ug_crimson_caverns_hm, ItemID.SoulofNight, 20);
+            AddItemInPool(ug_crimson_desert, ItemID.None,                108);
             AddItemInPool(ug_crimson_desert, ItemID.CrimsandBlock,       8);
             AddItemInPool(ug_crimson_desert, ItemID.CrimsonHardenedSand, 8);
             AddItemInPool(ug_crimson_desert, ItemID.CrimsonSandstone,    8);
             AddItemInPool(ug_crimson_desert, ItemID.Vertebrae,           36);
             AddItemInPool(ug_crimson_desert, ItemID.CrimtaneOre,         8);
-            AddItemInPool(ug_crimson_desert_hm, ItemID.Ichor,       16);
+            AddItemInPool(ug_crimson_desert_hm, ItemID.Ichor,       8);
             AddItemInPool(ug_crimson_desert_hm, ItemID.SoulofNight, 16);
-            AddItemInPool(ug_crimson_desert_hm, ItemID.DarkShard,   16);
+            AddItemInPool(ug_crimson_desert_hm, ItemID.DarkShard,   8);
+            AddItemInPool(ug_crimson_snow, ItemID.None,        98);
             AddItemInPool(ug_crimson_snow, ItemID.SnowBlock,   12);
             AddItemInPool(ug_crimson_snow, ItemID.RedIceBlock, 12);
             AddItemInPool(ug_crimson_snow, ItemID.Vertebrae,   36);
             AddItemInPool(ug_crimson_snow, ItemID.CrimtaneOre, 8);
-            AddItemInPool(ug_crimson_snow_hm, ItemID.Ichor,       20);
+            AddItemInPool(ug_crimson_snow_hm, ItemID.Ichor,       10);
             AddItemInPool(ug_crimson_snow_hm, ItemID.SoulofNight, 20);
 
+            AddItemInPool(ug_corrupt_caverns, ItemID.None, 100);
             AddItemInPool(ug_corrupt_caverns, ItemID.DirtBlock,      20);
             AddItemInPool(ug_corrupt_caverns, ItemID.EbonstoneBlock, 6);
             AddItemInPool(ug_corrupt_caverns, ItemID.RottenChunk,    18);
             AddItemInPool(ug_corrupt_caverns, ItemID.WormTooth,      18);
             AddItemInPool(ug_corrupt_caverns, ItemID.DemoniteOre,    8);
-            AddItemInPool(ug_corrupt_caverns_hm, ItemID.CursedFlame, 20);
+            AddItemInPool(ug_corrupt_caverns_hm, ItemID.CursedFlame, 10);
             AddItemInPool(ug_corrupt_caverns_hm, ItemID.SoulofNight, 20);
             AddItemInPool(ug_corrupt_desert, ItemID.EbonsandBlock,       8);
             AddItemInPool(ug_corrupt_desert, ItemID.CorruptHardenedSand, 8);
@@ -1455,30 +1478,34 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(ug_corrupt_desert, ItemID.RottenChunk,         18);
             AddItemInPool(ug_corrupt_desert, ItemID.WormTooth,           18);
             AddItemInPool(ug_corrupt_desert, ItemID.DemoniteOre,         8);
-            AddItemInPool(ug_corrupt_desert_hm, ItemID.CursedFlame, 16);
+            AddItemInPool(ug_corrupt_desert_hm, ItemID.CursedFlame, 8);
             AddItemInPool(ug_corrupt_desert_hm, ItemID.SoulofNight, 16);
-            AddItemInPool(ug_corrupt_desert_hm, ItemID.DarkShard,   16);
+            AddItemInPool(ug_corrupt_desert_hm, ItemID.DarkShard,   8);
+            AddItemInPool(ug_corrupt_snow, ItemID.None, 98);
             AddItemInPool(ug_corrupt_snow, ItemID.SnowBlock,      12);
             AddItemInPool(ug_corrupt_snow, ItemID.PurpleIceBlock, 12);
             AddItemInPool(ug_corrupt_snow, ItemID.RottenChunk,    18);
             AddItemInPool(ug_corrupt_snow, ItemID.WormTooth,      18);
             AddItemInPool(ug_corrupt_snow, ItemID.DemoniteOre,    8);
-            AddItemInPool(ug_corrupt_snow_hm, ItemID.CursedFlame, 20);
+            AddItemInPool(ug_corrupt_snow_hm, ItemID.CursedFlame, 10);
             AddItemInPool(ug_corrupt_snow_hm, ItemID.SoulofNight, 20);
 
-            AddItemInPool(dungeon_p, ItemID.PinkBrick,  12);
-            AddItemInPool(dungeon_g, ItemID.GreenBrick, 12);
-            AddItemInPool(dungeon_b, ItemID.BlueBrick,  12);
-            AddItemInPool(dungeon, ItemID.Spike,     6);
-            AddItemInPool(dungeon, ItemID.Bone,      36);
+            AddItemInPool(dungeon_p, ItemID.PinkBrick,  6);
+            AddItemInPool(dungeon_g, ItemID.GreenBrick, 6);
+            AddItemInPool(dungeon_b, ItemID.BlueBrick,  6);
+            AddItemInPool(dungeon, ItemID.None, 40);
+            AddItemInPool(dungeon, ItemID.Spike,     3);
+            AddItemInPool(dungeon, ItemID.Bone,      18);
             AddItemInPool(dungeon, ItemID.GoldenKey, 1);
-            AddItemInPool(ectoplasm, ItemID.Ectoplasm, 20);
+            AddItemInPool(ectoplasm, ItemID.Ectoplasm, 15);
 
-            AddItemInPool(temple, ItemID.LihzahrdBrick,       12);
-            AddItemInPool(temple, ItemID.WoodenSpike,         6);
-            AddItemInPool(temple, ItemID.LunarTabletFragment, 30);
-            AddItemInPool(temple, ItemID.LihzahrdPowerCell,   10);
+            AddItemInPool(temple, ItemID.None, 48);
+            AddItemInPool(temple, ItemID.LihzahrdBrick,       6);
+            AddItemInPool(temple, ItemID.WoodenSpike,         2);
+            AddItemInPool(temple, ItemID.LunarTabletFragment, 1);
+            AddItemInPool(temple, ItemID.LihzahrdPowerCell,   1);
 
+            AddItemInPool(ocean, ItemID.None,                          84);
             AddItemInPool(ocean, ItemID.SandBlock,                     16);
             AddItemInPool(ocean, ItemID.ShellPileBlock,                6);
             AddItemInPool(ocean, ItemID.Coral,                         4);
@@ -1487,13 +1514,14 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(ocean, ItemID.TulipShell,                    2);
             AddItemInPool(ocean, ItemID.LightningWhelkShell,           2);
             AddItemInPool(ocean, ItemID.JunoniaShell,                  1);
-            AddItemInPool(ocean, new ItemEntry(ItemID.PalmWood, 1, 3), 64);
+            AddItemInPool(ocean, new ItemEntry(ItemID.PalmWood, 1, 3), 30);
             AddItemInPool(ocean, ItemID.LimeKelp,                      6);
             AddItemInPool(ocean, ItemID.BlackInk,                      6);
             AddItemInPool(ocean, ItemID.PurpleMucos,                   6);
             AddItemInPool(ocean, ItemID.SharkFin,                      16);
             AddItemInPool(pirate, ItemID.PirateMap, 4);
 
+            AddItemInPool(space, ItemID.None,       15);
             AddItemInPool(space, ItemID.Cloud,      4);
             AddItemInPool(space, ItemID.RainCloud,  2);
             AddItemInPool(space, ItemID.FallenStar, 5);
@@ -1503,19 +1531,21 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(pillar, ItemID.FragmentSolar,    8);
             AddItemInPool(pillar, ItemID.FragmentStardust, 8);
             AddItemInPool(pillar, ItemID.FragmentVortex,   8);
-            AddItemInPool(luminite, new ItemEntry(ItemID.LunarOre, 1,5), 10);
+            AddItemInPool(luminite, new ItemEntry(ItemID.LunarOre, 1,5), 5);
 
-            AddItemInPool(underworld, ItemID.AshBlock,      20);
-            AddItemInPool(underworld, ItemID.Hellstone,     15);
-            AddItemInPool(underworld, ItemID.Obsidian,      5);
-            AddItemInPool(underworld, ItemID.AshWood,       25);
-            AddItemInPool(underworld, ItemID.Fireblossom,   8);
-            AddItemInPool(underworld, ItemID.AshGrassSeeds, 3);
-            AddItemInPool(underworld, ItemID.HellButterfly, 3);
-            AddItemInPool(underworld, ItemID.Lavafly,       3);
-            AddItemInPool(underworld, ItemID.MagmaSnail,    2);
+            AddItemInPool(underworld, ItemID.None,                          42);
+            AddItemInPool(underworld, new ItemEntry(ItemID.AshBlock, 1, 2), 20);
+            AddItemInPool(underworld, ItemID.Hellstone,                     15);
+            AddItemInPool(underworld, ItemID.Obsidian,                      5);
+            AddItemInPool(underworld, ItemID.AshWood,                       25);
+            AddItemInPool(underworld, ItemID.Fireblossom,                   8);
+            AddItemInPool(underworld, ItemID.AshGrassSeeds,                 3);
+            AddItemInPool(underworld, ItemID.HellButterfly,                 3);
+            AddItemInPool(underworld, ItemID.Lavafly,                       3);
+            AddItemInPool(underworld, ItemID.MagmaSnail,                    2);
             AddItemInPool(uw_fire, new ItemEntry(ItemID.LivingFireBlock, 4, 10), 5);
 
+            AddItemInPool(meteorite, ItemID.None, 2);
             AddItemInPool(meteorite, ItemID.Meteorite);
         }
         #endregion
