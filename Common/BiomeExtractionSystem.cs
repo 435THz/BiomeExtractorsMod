@@ -317,7 +317,6 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly string crimson_snow = "crimson_snow";
         public static readonly string crimson_desert = "crimson_desert";
         public static readonly string crimson_forest = "crimson_forest";
-        public static readonly string crimson_dark_shard = "crimson_dark_shard";
         public static readonly string graveyard = "graveyard";
         public static readonly string caverns = "caverns";
         public static readonly string underground = "underground";
@@ -983,7 +982,6 @@ namespace BiomeExtractorsMod.Common.Systems
 
             AddPool(mushroom, 200);
 
-            AddPool(crimson_dark_shard, 300, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK);
             AddPool(corrupt_forest_hm,  300, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK);
             AddPool(corrupt_desert_hm,  300, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK);
             AddPool(corrupt_snow_hm,    300, (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK);
@@ -1120,7 +1118,6 @@ namespace BiomeExtractorsMod.Common.Systems
 
             AddPoolRequirements(graveyard, surfaceLayer, tombstone5);
 
-            AddPoolRequirements(crimson_dark_shard, hardmodeOnly, evil300.Invoke(crimsonSandBlocks));
             AddPoolRequirements(corrupt_forest_hm,  hardmodeOnly, evil300.Invoke(corruptForestBlocks));
             AddPoolRequirements(corrupt_desert_hm,  hardmodeOnly, evil300.Invoke(corruptSandBlocks));
             AddPoolRequirements(corrupt_snow_hm,    hardmodeOnly, evil300.Invoke(corruptIceBlocks));
