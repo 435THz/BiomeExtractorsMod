@@ -1,7 +1,9 @@
 using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Content.TileEntities;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace BiomeExtractorsMod.Content.Tiles
 {
@@ -15,10 +17,15 @@ namespace BiomeExtractorsMod.Content.Tiles
 
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntSteampunk>();
 
-        public override void SetStaticDefaults()
+        protected override void SetupTileData()
         {
-            base.SetStaticDefaults();
             Main.tileObsidianKill[Type] = true;
+            TileObjectData.newTile.LavaDeath = false;
+        }
+        public override bool CreateDust(int i, int j, ref int type)
+        {
+            type = TileObjectData.GetTileStyle(Main.tile[i, j]) == 0 ? DustID.Adamantite : DustID.Titanium;
+            return true;
         }
 
         protected override void CreateMapEntries()

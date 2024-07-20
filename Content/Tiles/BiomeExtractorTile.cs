@@ -82,12 +82,8 @@ namespace BiomeExtractorsMod.Content.Tiles
 
         public override void SetStaticDefaults()
         {
-            //Main.tileLavaDeath[Type] = true; before Infernal. Not enforced to let addons make their own rules.
-            //Main.tileObsidianKill[Type] = true; before Lunar. Not enforced to let addons make their own rules.
             Main.tileNoAttach[Type] = true;
             Main.tileFrameImportant[Type] = true;
-
-            DustType = DustID.Iron;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
             TileObjectData.newTile.Width  = 3;
@@ -95,6 +91,7 @@ namespace BiomeExtractorsMod.Content.Tiles
 
             TileObjectData.newTile.Origin = origin;
             TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
+            TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.CoordinatePadding = 2;
 
@@ -103,12 +100,26 @@ namespace BiomeExtractorsMod.Content.Tiles
 
             TileObjectData.newTile.StyleHorizontal = true;
 
+            SetupTileData();
             TileObjectData.addTile(Type);
 
             CreateMapEntries();
 
             TileID.Sets.PreventsSandfall[Type] = true;
             TileID.Sets.AvoidedByMeteorLanding[Type] = true;
+        }
+
+        /// <summary>
+        /// Called just before TileObjetData.NewTile is added. Make changes to tile behavior here.<br/>
+        /// See the base method to know what happens here normally and <see cref="SetStaticDefaults"/> to<br/>
+        /// know what is done regardless of this method being overridden.
+        /// </summary>
+        protected virtual void SetupTileData()
+        {
+            //DustType should be preferred if overriding CreateDust is not necessary
+
+            //Main.tileObsidianKill[Type] = true; before Lunar. Not enforced to let addons make their own rules.
+            //TileObjectData.newTile.LavaDeath = true; before Infernal. Not enforced to let addons make their own rules.
         }
 
         public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)

@@ -1,7 +1,9 @@
 using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Content.TileEntities;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace BiomeExtractorsMod.Content.Tiles
 {
@@ -10,10 +12,12 @@ namespace BiomeExtractorsMod.Content.Tiles
         protected override int FrameCount => 8;
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntInfernal>();
 
-        public override void SetStaticDefaults()
+        protected override void SetupTileData()
         {
-            base.SetStaticDefaults();
+            DustType = DustID.Torch;
+
             Main.tileObsidianKill[Type] = true;
+            TileObjectData.newTile.LavaDeath = false;
         }
 
         protected override void CreateMapEntries()

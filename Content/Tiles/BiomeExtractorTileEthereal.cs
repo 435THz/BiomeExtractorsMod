@@ -1,7 +1,9 @@
 using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Content.TileEntities;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace BiomeExtractorsMod.Content.Tiles
 {
@@ -12,11 +14,14 @@ namespace BiomeExtractorsMod.Content.Tiles
         protected override string GlowAsset => "Content/Tiles/BiomeExtractorTileEthereal_Glow";
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<BiomeExtractorEntEthereal>();
 
-        public override void SetStaticDefaults()
+        protected override void SetupTileData()
         {
-            base.SetStaticDefaults();
+            DustType = DustID.ShimmerTorch;
+
+            TileObjectData.newTile.LavaDeath = false;
             Main.tileLighted[Type] = true;
         }
+
         protected override void CreateMapEntries()
         {
             AddMapEntry(new(213, 20, 201), MapEntryName);
