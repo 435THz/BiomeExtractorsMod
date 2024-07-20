@@ -81,7 +81,7 @@ namespace BiomeExtractorsMod
                 ClientMessageType msgType = (ClientMessageType)reader.ReadByte();
                 switch (msgType)
                 {
-                    case ClientMessageType.UPDATE_REQUEST: //TODO see if we can avoid this using IconMapSystem.NetSend/Receive directly
+                    case ClientMessageType.UPDATE_REQUEST:
                         IEnumerable<BiomeExtractorEnt> extractors = TileEntity.ByPosition
                             .Where(pair => pair.Value is BiomeExtractorEnt)
                             .Select(pair => pair.Value as BiomeExtractorEnt);

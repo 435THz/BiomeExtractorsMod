@@ -94,7 +94,7 @@ namespace BiomeExtractorsMod.Content.Tiles
             TileObjectData.newTile.Height = 3;
 
             TileObjectData.newTile.Origin = origin;
-            TileObjectData.newTile.CoordinateHeights = [16, 16, 16]; // Extend into grass tiles?
+            TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.CoordinatePadding = 2;
 

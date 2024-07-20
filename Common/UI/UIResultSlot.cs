@@ -8,7 +8,6 @@ namespace BiomeExtractorsMod.Common.UI
 {
     internal struct SlotData(Item item, int min, int max, decimal chance)
     {
-
         internal Item Item = item;
         internal int Min = min;
         internal int Max = max;
