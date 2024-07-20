@@ -76,48 +76,48 @@ namespace BiomeExtractorsMod.Common.Configs
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4RateTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4RateTooltip")]
         [Range(1, 86400)]
-        [DefaultValue(120)] //720 attempts/day
+        [DefaultValue(150)] //576 attempts/day
         public int Tier4ExtractorRate;
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4ChanceTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4ChanceTooltip")]
         [Range(1, 100)]
-        [DefaultValue(90)] //648 extractions/day
+        [DefaultValue(90)] //518.4 extractions/day
         public int Tier4ExtractorChance;
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5Header")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5RateTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5RateTooltip")]
         [Range(1, 86400)]
-        [DefaultValue(90)] //960 attempts/day
+        [DefaultValue(120)] //720 attempts/day
         public int Tier5ExtractorRate;
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5ChanceTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5ChanceTooltip")]
         [Range(1, 100)]
-        [DefaultValue(94)] //902.4 extractions/day
+        [DefaultValue(94)] //676.8 extractions/day
         public int Tier5ExtractorChance;
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6Header")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6RateTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6RateTooltip")]
         [Range(1, 86400)]
-        [DefaultValue(60)] //1440 attempts/day
+        [DefaultValue(90)] //960 attempts/day
         public int Tier6ExtractorRate;
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6ChanceTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6ChanceTooltip")]
         [Range(1, 100)]
-        [DefaultValue(97)] //1396.8 extractions/day
+        [DefaultValue(97)] //931.2 extractions/day
         public int Tier6ExtractorChance;
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7Header")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7RateTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7RateTooltip")]
         [Range(1, 86400)]
-        [DefaultValue(45)] //1920 attempts/day
+        [DefaultValue(75)] //1152 attempts/day
         public int Tier7ExtractorRate;
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7ChanceTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7ChanceTooltip")]
         [Range(1, 100)]
-        [DefaultValue(100)] //1920 extractions/day
+        [DefaultValue(100)] //1152 extractions/day
         public int Tier7ExtractorChance;
 
         // A method annotated with OnDeserialized will run after deserialization. You can use it for enforcing things like ranges, since Range and Increment are UI suggestions.
