@@ -1205,6 +1205,8 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(underground, ItemID.Emerald,         9);
             AddItemInPool(underground, ItemID.Ruby,            8);
             AddItemInPool(underground, ItemID.Diamond,         6);
+            //VEGETATION
+            AddItemInPool(underground, ItemID.Blinkroot, 25);
             //COLORS
             AddItemInPool(underground, ItemID.OrangeBloodroot, 7);
             AddItemInPool(underground, ItemID.GreenMushroom,   7);
@@ -1226,6 +1228,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(caverns, ItemID.Emerald, 9);
             AddItemInPool(caverns, ItemID.Ruby, 8);
             AddItemInPool(caverns, ItemID.Diamond, 6);
+            AddItemInPool(caverns, ItemID.Blinkroot, 25);
             AddItemInPool(caverns, ItemID.OrangeBloodroot, 7);
             AddItemInPool(caverns, ItemID.GreenMushroom, 7);
             AddItemInPool(caverns, ItemID.TealMushroom, 7);
