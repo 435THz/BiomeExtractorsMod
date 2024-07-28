@@ -1181,11 +1181,11 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(forest, ItemID.Worm,                      3);
             AddItemInPool(forest, ItemID.Stinkbug,                  4);
 
-            AddItemInPool(sky,    ItemID.None,         30);
+            AddItemInPool(sky,    ItemID.None,         33);
             AddItemInPool(sky,    ItemID.Cloud,        7);
             AddItemInPool(sky,    ItemID.RainCloud,    3);
             AddItemInPool(sky,    ItemID.Feather,      20);
-            AddItemInPool(flight, ItemID.SoulofFlight, 5);
+            AddItemInPool(flight, ItemID.SoulofFlight, 2);
 
             //TERRAIN
             AddItemInPool(underground, ItemID.StoneBlock,      69);
@@ -1493,11 +1493,11 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(dungeon_p, ItemID.PinkBrick,  6);
             AddItemInPool(dungeon_g, ItemID.GreenBrick, 6);
             AddItemInPool(dungeon_b, ItemID.BlueBrick,  6);
-            AddItemInPool(dungeon, ItemID.None, 40);
+            AddItemInPool(dungeon, ItemID.None, 48);
             AddItemInPool(dungeon, ItemID.Spike,     3);
             AddItemInPool(dungeon, ItemID.Bone,      18);
             AddItemInPool(dungeon, ItemID.GoldenKey, 1);
-            AddItemInPool(ectoplasm, ItemID.Ectoplasm, 15);
+            AddItemInPool(ectoplasm, ItemID.Ectoplasm, 5);
 
             AddItemInPool(temple, ItemID.None, 48);
             AddItemInPool(temple, ItemID.LihzahrdBrick,       6);
@@ -1521,12 +1521,12 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(ocean, ItemID.SharkFin,                      16);
             AddItemInPool(pirate, ItemID.PirateMap, 4);
 
-            AddItemInPool(space, ItemID.None,       15);
+            AddItemInPool(space, ItemID.None,       16);
             AddItemInPool(space, ItemID.Cloud,      4);
             AddItemInPool(space, ItemID.RainCloud,  2);
             AddItemInPool(space, ItemID.FallenStar, 5);
             AddItemInPool(space, ItemID.Feather,    4);
-            AddItemInPool(spc_flight, ItemID.SoulofFlight, 2);
+            AddItemInPool(spc_flight, ItemID.SoulofFlight, 1);
             AddItemInPool(pillar, ItemID.FragmentNebula,   8);
             AddItemInPool(pillar, ItemID.FragmentSolar,    8);
             AddItemInPool(pillar, ItemID.FragmentStardust, 8);
