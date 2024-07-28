@@ -263,11 +263,12 @@ namespace BiomeExtractorsMod.Common.Systems
         /// An identifier object that details an extraction tier's tier number, localization key and efficiency stats. 
         /// </summary>
         /// <param name="tier">The tier number of this tier</param>
-        /// <param name="locKey">The localization key of this tier</param>
+        /// <param name="articleKey">The localization key of this tier's indeterminate article</param>
+        /// <param name="localizationKey">The localization key of this tier</param>
         /// <param name="rate">A <see cref="Func{TResult}"/> that returns the extraction rate of this Extraction Tier, in frames.</param>
         /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>
         /// Example: 35 would be 35%</param>
-        public class ExtractionTier(int tier, string localizationKey, Func<int> rate, Func<int> chance, string iconPath)
+        public class ExtractionTier(int tier, string articleKey, string localizationKey, Func<int> rate, Func<int> chance, string iconPath)
         {
             private readonly Func<int> _rate = rate;
             private readonly Func<int> _chance = chance;
@@ -275,7 +276,7 @@ namespace BiomeExtractorsMod.Common.Systems
             /// <summary>
             /// An empty ExtractionTier object.
             /// </summary>
-            public readonly static ExtractionTier NULL = new(int.MinValue, "", null, null, "");
+            public readonly static ExtractionTier NULL = new(int.MinValue, "", "", null, null, "");
 
             /// <summary>
             /// Returns the path containing this Tile's map icon file.
@@ -285,6 +286,15 @@ namespace BiomeExtractorsMod.Common.Systems
             /// The tier number of this tier.
             /// </summary>
             public readonly int Tier = tier;
+            /// <summary>
+            /// The loclization key associated to this Exraction Tier's indeterminate article.
+            /// This is used specifically when displaying Upgrade Kit tooltips.<br/>
+            /// Using a separate key for every tier is higly recommended for more localization freedom.<br/>
+            /// Some languages may have some articles that require a whitespace separating it
+            /// from their noun and some that do not, so it is recommended to instead include
+            /// that whitespace in the localization value when applicable.
+            /// </summary>
+            public readonly string ArticleKey = articleKey;
             /// <summary>
             /// The loclization key associated to this Exraction Tier.
             /// </summary>
@@ -303,6 +313,7 @@ namespace BiomeExtractorsMod.Common.Systems
             /// and by the Biome Scanner to show the tier names.
             /// </summary>
             public string Name => Language.GetTextValue(LocalizationKey);
+            public string Article => Language.GetTextValue(ArticleKey);
             public override bool Equals(object obj)
             {
                 if (obj is not ExtractionTier) return false;
@@ -315,7 +326,7 @@ namespace BiomeExtractorsMod.Common.Systems
             /// </summary>
             /// <param name="newTier">The new tier to give to the copy of this tier</param>
             /// <returns>A copy of this tier but with <c>newTier</c> as its tier number</returns>
-            public ExtractionTier CloneAndMove(int newTier) => new(newTier, LocalizationKey, _rate, _chance, IconPath);
+            public ExtractionTier CloneAndMove(int newTier) => new(newTier, ArticleKey, LocalizationKey, _rate, _chance, IconPath);
         }
         #endregion
 
@@ -557,13 +568,14 @@ namespace BiomeExtractorsMod.Common.Systems
         /// If an ExtractionTier with that tier number already exists, this method does nothing.
         /// </summary>
         /// <param name="tier">The tier number of this tier</param>
+        /// <param name="artKey">The localization key of this tier's indeterminate article. Used in Upgrade Kit tooltips</param>
         /// <param name="locKey">The localization key of this tier</param>
         /// <param name="rate">A <see cref="Func{TResult}"/> that returns the extraction rate of this Extraction Tier, in frames.</param>
         /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>
         /// <param name="icon"/>A string path that points to the file containing the icon asset for this ExtractonTier's Extractors.
         /// Example: 35 would be 35%</param>
         /// <returns><see langword="true"/> if the tier number was not occupied yet, <see langword="false"/> otherwise</returns>
-        public bool AddTier(int tier, string locKey, Func<int> rate, Func<int> chance, string icon) => AddTier(new(tier, locKey, rate, chance, icon));
+        public bool AddTier(int tier, string artKey, string locKey, Func<int> rate, Func<int> chance, string icon) => AddTier(new(tier, artKey, locKey, rate, chance, icon));
         /// <summary>
         /// Registers an ExtractionTier.<br></br>
         /// If an ExtractionTier with that tier number already exists, this method does nothing.
@@ -976,13 +988,13 @@ namespace BiomeExtractorsMod.Common.Systems
         {
             ConfigCommon cfg = ModContent.GetInstance<ConfigCommon>();
             string asset = "Content/MapIcons/BiomeExtractorIcon";
-            AddTier((int)BiomeExtractorEnt.EnumTiers.BASIC,     $"{BiomeExtractorsMod.LocExtractorPrefix}Iron.DisplayName",       delegate { return cfg.Tier1ExtractorRate; }, delegate { return cfg.Tier1ExtractorChance; }, $"{asset}Basic");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.DEMONIC,   $"{BiomeExtractorsMod.LocExtractorPrefix}Corruption.DisplayName", delegate { return cfg.Tier2ExtractorRate; }, delegate { return cfg.Tier2ExtractorChance; }, $"{asset}Demonic");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.INFERNAL,  $"{BiomeExtractorsMod.LocExtractorPrefix}Infernal.DisplayName",   delegate { return cfg.Tier3ExtractorRate; }, delegate { return cfg.Tier3ExtractorChance; }, $"{asset}Infernal");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, $"{BiomeExtractorsMod.LocExtractorPrefix}Adamantite.DisplayName", delegate { return cfg.Tier4ExtractorRate; }, delegate { return cfg.Tier4ExtractorChance; }, $"{asset}Steampunk");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.CYBER,     $"{BiomeExtractorsMod.LocExtractorPrefix}Cyber.DisplayName",      delegate { return cfg.Tier5ExtractorRate; }, delegate { return cfg.Tier5ExtractorChance; }, $"{asset}Cyber");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.LUNAR,     $"{BiomeExtractorsMod.LocExtractorPrefix}Lunar.DisplayName",      delegate { return cfg.Tier6ExtractorRate; }, delegate { return cfg.Tier6ExtractorChance; }, $"{asset}Lunar");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.ETHEREAL,  $"{BiomeExtractorsMod.LocExtractorPrefix}Ethereal.DisplayName",   delegate { return cfg.Tier7ExtractorRate; }, delegate { return cfg.Tier7ExtractorChance; }, $"{asset}Ethereal");
+            AddTier((int)BiomeExtractorEnt.EnumTiers.BASIC,     $"{BiomeExtractorsMod.LocArticles}.Basic",     $"{BiomeExtractorsMod.LocExtractorPrefix}Iron.DisplayName",       delegate { return cfg.Tier1ExtractorRate; }, delegate { return cfg.Tier1ExtractorChance; }, $"{asset}Basic");
+            AddTier((int)BiomeExtractorEnt.EnumTiers.DEMONIC,   $"{BiomeExtractorsMod.LocArticles}.Demonic",   $"{BiomeExtractorsMod.LocExtractorPrefix}Corruption.DisplayName", delegate { return cfg.Tier2ExtractorRate; }, delegate { return cfg.Tier2ExtractorChance; }, $"{asset}Demonic");
+            AddTier((int)BiomeExtractorEnt.EnumTiers.INFERNAL,  $"{BiomeExtractorsMod.LocArticles}.Infernal",  $"{BiomeExtractorsMod.LocExtractorPrefix}Infernal.DisplayName",   delegate { return cfg.Tier3ExtractorRate; }, delegate { return cfg.Tier3ExtractorChance; }, $"{asset}Infernal");
+            AddTier((int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, $"{BiomeExtractorsMod.LocArticles}.Steampunk", $"{BiomeExtractorsMod.LocExtractorPrefix}Adamantite.DisplayName", delegate { return cfg.Tier4ExtractorRate; }, delegate { return cfg.Tier4ExtractorChance; }, $"{asset}Steampunk");
+            AddTier((int)BiomeExtractorEnt.EnumTiers.CYBER,     $"{BiomeExtractorsMod.LocArticles}.Cyber",     $"{BiomeExtractorsMod.LocExtractorPrefix}Cyber.DisplayName",      delegate { return cfg.Tier5ExtractorRate; }, delegate { return cfg.Tier5ExtractorChance; }, $"{asset}Cyber");
+            AddTier((int)BiomeExtractorEnt.EnumTiers.LUNAR,     $"{BiomeExtractorsMod.LocArticles}.Lunar",     $"{BiomeExtractorsMod.LocExtractorPrefix}Lunar.DisplayName",      delegate { return cfg.Tier6ExtractorRate; }, delegate { return cfg.Tier6ExtractorChance; }, $"{asset}Lunar");
+            AddTier((int)BiomeExtractorEnt.EnumTiers.ETHEREAL,  $"{BiomeExtractorsMod.LocArticles}.Ethereal",  $"{BiomeExtractorsMod.LocExtractorPrefix}Ethereal.DisplayName",   delegate { return cfg.Tier7ExtractorRate; }, delegate { return cfg.Tier7ExtractorChance; }, $"{asset}Ethereal");
         }
 
         private void InitializePools()
