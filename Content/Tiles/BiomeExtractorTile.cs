@@ -47,6 +47,7 @@ namespace BiomeExtractorsMod.Content.Tiles
         /// Returns the template instance of this Extractor's TileEntity type (not the clone/new instance it is bound to during gameplay)
         /// </summary>
         protected abstract BiomeExtractorEnt TileEntity { get; }
+        internal BiomeExtractorEnt GetTileEntity => TileEntity;
 
         /// <summary>
         /// Returns the id of the BiomeExtractorItem this Tile is bound to.<br/>
