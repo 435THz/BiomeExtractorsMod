@@ -9,10 +9,11 @@ using Terraria.ModLoader;
 using System.Linq;
 using BiomeExtractorsMod.Common.Systems;
 using Terraria.DataStructures;
+using BiomeExtractorsMod.Content.Tiles;
 
 namespace BiomeExtractorsMod
 {
-    internal enum ClientMessageType {UPDATE_REQUEST}
+    internal enum ClientMessageType {UPDATE_REQUEST, KILL_REQUEST}
     internal enum ServerMessageType {EXTRACTOR_REGISTER, EXTRACTOR_UPDATE, EXTRACTOR_REMOVE}
 
 
@@ -81,6 +82,11 @@ namespace BiomeExtractorsMod
                 ClientMessageType msgType = (ClientMessageType)reader.ReadByte();
                 switch (msgType)
                 {
+                    case ClientMessageType.KILL_REQUEST:
+                        int x = reader.ReadInt32(), y = reader.ReadInt32();
+                        if(TileUtils.TryGetTileEntityAs(x, y, out BiomeExtractorEnt ent))
+                            ent.Kill(x, y);
+                        break;
                     case ClientMessageType.UPDATE_REQUEST:
                         IEnumerable<BiomeExtractorEnt> extractors = TileEntity.ByPosition
                             .Where(pair => pair.Value is BiomeExtractorEnt)
