@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
-using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
@@ -42,7 +41,6 @@ namespace BiomeExtractorsMod.Content.Items
             Item.width = 28;
             Item.height = 28;
             Item.maxStack = 1;
-            Item.rare = ItemRarityID.Green;
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.useAnimation = 15;
             Item.useTime = 15;
