@@ -519,7 +519,7 @@ namespace BiomeExtractorsMod.Common.Systems
             return ret;
         }
         /// <summary>
-        /// Returns the lowest registered tier whose tier number is striictly higher than the requested one.
+        /// Returns the lowest registered tier whose tier number is strictly higher than the requested one.
         /// </summary>
         /// <param name="tier">A tier number</param>
         /// <returns>The closest ExtractionTier whose tier number is strictly higher than the requested one if one exists, <see langword="null"/> otherwise.</returns>
@@ -535,7 +535,7 @@ namespace BiomeExtractorsMod.Common.Systems
             return ret;
         }
         /// <summary>
-        /// Returns the highest registered tier whose tier number is striictly lower than the requested one.
+        /// Returns the highest registered tier whose tier number is strictly lower than the requested one.
         /// </summary>
         /// <param name="tier">A tier number</param>
         /// <returns>The closest ExtractionTier whose tier number is strictly lower than the requested one if one exists, <see langword="null"/> otherwise.</returns>
@@ -547,7 +547,7 @@ namespace BiomeExtractorsMod.Common.Systems
             for (int i = keys.Count - 2; i >= 0; i--)
             {
                 int key = keys[i];
-                if (key > tier) return _tiers[keys[i+1]][0];
+                if (key >= tier) return _tiers[keys[i+1]][0];
             }
             return _tiers[keys[0]][0];
         }
