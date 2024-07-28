@@ -1,6 +1,6 @@
-using BiomeExtractorsMod.Common;
 using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Common.Configs;
+using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Common.UI;
 using BiomeExtractorsMod.CrossMod;
 using Microsoft.Xna.Framework;
@@ -409,7 +409,6 @@ namespace BiomeExtractorsMod.Content.TileEntities
                     case ServerMessageType.EXTRACTOR_UPDATE:   IconMapSystem.UpdateExtractorData(this); break;
                     case ServerMessageType.EXTRACTOR_REMOVE:   IconMapSystem.RemoveExtractorData(this); break;
                 }
-                
             }
         }
 

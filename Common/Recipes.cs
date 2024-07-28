@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using Terraria;
 using Terraria.Localization;
 
-namespace BiomeExtractorsMod.Common
+namespace BiomeExtractorsMod.Common.Systems
 {
     public class Recipes : ModSystem
     {

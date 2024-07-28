@@ -7,7 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace BiomeExtractorsMod.Common
+namespace BiomeExtractorsMod.Common.Players
 {
     internal class ExtractorPlayer : ModPlayer
     {

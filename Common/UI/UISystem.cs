@@ -13,6 +13,7 @@ using BiomeExtractorsMod.Common.Configs;
 using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
 using Terraria.Localization;
 using BiomeExtractorsMod.Content.Items;
+using BiomeExtractorsMod.Common.Players;
 
 namespace BiomeExtractorsMod.Common.UI
 {

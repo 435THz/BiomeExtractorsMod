@@ -7,7 +7,7 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using System.Linq;
-using BiomeExtractorsMod.Common;
+using BiomeExtractorsMod.Common.Systems;
 using Terraria.DataStructures;
 
 namespace BiomeExtractorsMod

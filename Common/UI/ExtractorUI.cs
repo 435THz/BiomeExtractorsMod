@@ -8,6 +8,7 @@ using Terraria.GameInput;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using BiomeExtractorsMod.Common.Players;
 
 namespace BiomeExtractorsMod.Common.UI
 {
