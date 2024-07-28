@@ -90,6 +90,46 @@ Items: {
 			Può estrarre Luminite dallo spazio dopo che l'Evento Lunare è stato completato.
 			'''
 	}
+
+	UpgradeKitAdamantite: {
+		DisplayName: Kit di miglioramento steampunk
+		Tooltip: <right> su {0}{1} con questo oggetto per trasformarlo in {2}{3}.
+	}
+
+	UpgradeKitCorruption: {
+		DisplayName: Kit di miglioramento demoniaco
+		Tooltip: "{$UpgradeKitAdamantite.Tooltip}"
+	}
+
+	UpgradeKitCrimson: {
+		DisplayName: "{$UpgradeKitCorruption.DisplayName}"
+		Tooltip: "{$UpgradeKitAdamantite.Tooltip}"
+	}
+
+	UpgradeKitCyber: {
+		DisplayName: Kit di miglioramento cibernetico
+		Tooltip: "{$UpgradeKitAdamantite.Tooltip}"
+	}
+
+	UpgradeKitEthereal: {
+		DisplayName: Kit di miglioramento etereo
+		Tooltip: "{$UpgradeKitAdamantite.Tooltip}"
+	}
+
+	UpgradeKitInfernal: {
+		DisplayName: Kit di miglioramento infernale
+		Tooltip: "{$UpgradeKitAdamantite.Tooltip}"
+	}
+
+	UpgradeKitLunar: {
+		DisplayName: Kit di miglioramento lunare
+		Tooltip: "{$UpgradeKitAdamantite.Tooltip}"
+	}
+
+	UpgradeKitTitanium: {
+		DisplayName: "{$UpgradeKitAdamantite.DisplayName}"
+		Tooltip: "{$UpgradeKitAdamantite.Tooltip}"
+	}
 }
 
 Configs: {
