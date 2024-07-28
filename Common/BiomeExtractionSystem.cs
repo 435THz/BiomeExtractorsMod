@@ -295,6 +295,7 @@ namespace BiomeExtractorsMod.Common.Systems
 
         #region IDs
         public static readonly string forest = "forest";
+        public static readonly string forest_town = "forest_town";
         public static readonly string sky = "sky";
         public static readonly string flight = "flight";
         public static readonly string snow = "snow";
@@ -435,6 +436,7 @@ namespace BiomeExtractorsMod.Common.Systems
         static readonly Predicate<ScanData> shimmer300 = scan => scan.Liquids(LiquidID.Shimmer) >= 300;
 
         //BLOCKS
+        static readonly Predicate<ScanData> pylon = scan => scan.Tiles(TileID.TeleportationPylon) > 0;
         static readonly Func<List<ushort>, Predicate<ScanData>> evil300 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(hallowBlocks) - scan.Tiles(TileID.Sunflower) * 10 >= 300;
         static readonly Func<List<ushort>, Predicate<ScanData>> hallow125 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(crimsonBlocks) - scan.Tiles(corruptBlocks) >= 125;
         static readonly Predicate<ScanData> meteorite75 = scan => scan.Tiles(TileID.Meteorite) >= 75;
@@ -960,6 +962,7 @@ namespace BiomeExtractorsMod.Common.Systems
         private void InitializePools()
         {
             AddPool(forest, 0, LocalizeAs(forest));
+            AddPool(forest_town, 0);
 
             AddPool(caverns,     10, LocalizeAs(caverns));
             AddPool(underground, 10, LocalizeAs(underground));
@@ -1143,6 +1146,8 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPoolRequirements(snow,                 frost1500);
             AddPoolRequirements(flight, hardmodeOnly, skyLayer);
             AddPoolRequirements(sky,                  skyLayer);
+
+            AddPoolRequirements(forest_town, pylon);
         }
 
         private void PopulatePools()
@@ -1180,6 +1185,7 @@ namespace BiomeExtractorsMod.Common.Systems
             AddItemInPool(forest, ItemID.Firefly,                   3);
             AddItemInPool(forest, ItemID.Worm,                      3);
             AddItemInPool(forest, ItemID.Stinkbug,                  4);
+            AddItemInPool(forest_town, ItemID.LadyBug, 2);
 
             AddItemInPool(sky,    ItemID.None,         33);
             AddItemInPool(sky,    ItemID.Cloud,        7);
