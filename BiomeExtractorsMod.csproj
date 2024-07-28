@@ -16,6 +16,7 @@
     <None Remove="Content\Items\BiomeExtractorItemLunar.png" />
     <None Remove="Content\Items\BiomeExtractorItemTitanium.png" />
     <None Remove="Content\Items\BiomeScanner.png" />
+    <None Remove="Content\Items\UpgradeKitCrimson.png" />
     <None Remove="Content\Tiles\BiomeExtractorTileCyber.png" />
     <None Remove="Content\Tiles\BiomeExtractorTileDemonic.png" />
     <None Remove="Content\Tiles\BiomeExtractorTileEthereal.png" />
