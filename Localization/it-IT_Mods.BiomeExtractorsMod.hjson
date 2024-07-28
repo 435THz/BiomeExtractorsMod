@@ -335,6 +335,16 @@ Text: {
 		Chance: Chance
 		Percent: %
 	}
+
+	Articles: {
+		Basic: "un "
+		Demonic: "{$Basic}"
+		Infernal: "{$Basic}"
+		Steampunk: "{$Basic}"
+		Cyber: "{$Basic}"
+		Lunar: "{$Basic}"
+		Ethereal: "{$Basic}"
+	}
 }
 
 Map: {
