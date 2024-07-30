@@ -1,5 +1,4 @@
 using BiomeExtractorsMod.Common.Collections;
-using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Content.TileEntities;
 using Microsoft.Xna.Framework;
@@ -987,24 +986,23 @@ namespace BiomeExtractorsMod.Common.Systems
 
         public override void PostSetupContent()
         {
-            InitializeTiers();
             InitializePools();
             SetRequirements();
             PopulatePools();
             GenerateLocalizationKeys();
         }
 
-        private void InitializeTiers()
+        public override void AddRecipeGroups()
         {
-            ConfigCommon cfg = ModContent.GetInstance<ConfigCommon>();
-            string asset = "Content/MapIcons/BiomeExtractorIcon";
-            AddTier((int)BiomeExtractorEnt.EnumTiers.BASIC,     $"{BiomeExtractorsMod.LocArticles}.Basic",     $"{BiomeExtractorsMod.LocExtractorPrefix}Iron.DisplayName",       delegate { return cfg.Tier1ExtractorRate; }, delegate { return cfg.Tier1ExtractorChance; }, $"{asset}Basic");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.DEMONIC,   $"{BiomeExtractorsMod.LocArticles}.Demonic",   $"{BiomeExtractorsMod.LocExtractorPrefix}Corruption.DisplayName", delegate { return cfg.Tier2ExtractorRate; }, delegate { return cfg.Tier2ExtractorChance; }, $"{asset}Demonic");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.INFERNAL,  $"{BiomeExtractorsMod.LocArticles}.Infernal",  $"{BiomeExtractorsMod.LocExtractorPrefix}Infernal.DisplayName",   delegate { return cfg.Tier3ExtractorRate; }, delegate { return cfg.Tier3ExtractorChance; }, $"{asset}Infernal");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.STEAMPUNK, $"{BiomeExtractorsMod.LocArticles}.Steampunk", $"{BiomeExtractorsMod.LocExtractorPrefix}Adamantite.DisplayName", delegate { return cfg.Tier4ExtractorRate; }, delegate { return cfg.Tier4ExtractorChance; }, $"{asset}Steampunk");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.CYBER,     $"{BiomeExtractorsMod.LocArticles}.Cyber",     $"{BiomeExtractorsMod.LocExtractorPrefix}Cyber.DisplayName",      delegate { return cfg.Tier5ExtractorRate; }, delegate { return cfg.Tier5ExtractorChance; }, $"{asset}Cyber");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.LUNAR,     $"{BiomeExtractorsMod.LocArticles}.Lunar",     $"{BiomeExtractorsMod.LocExtractorPrefix}Lunar.DisplayName",      delegate { return cfg.Tier6ExtractorRate; }, delegate { return cfg.Tier6ExtractorChance; }, $"{asset}Lunar");
-            AddTier((int)BiomeExtractorEnt.EnumTiers.ETHEREAL,  $"{BiomeExtractorsMod.LocArticles}.Ethereal",  $"{BiomeExtractorsMod.LocExtractorPrefix}Ethereal.DisplayName",   delegate { return cfg.Tier7ExtractorRate; }, delegate { return cfg.Tier7ExtractorChance; }, $"{asset}Ethereal");
+            foreach(KeyValuePair<int, ExtractionTier> tierPair in _tiers.EnumerateInOrder())
+            {
+                ExtractionTier tier = tierPair.Value;
+                if(tier.Items.Count > 1)
+                {
+                    RecipeGroup group = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(tier.Items[0].Type)}", tier.Items.Select((item) => item.Type).ToArray());
+                    RecipeGroup.RegisterGroup(tier.RecipeGroup, group);
+                }
+            }
         }
 
         private void InitializePools()
