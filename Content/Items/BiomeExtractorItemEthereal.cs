@@ -11,6 +11,7 @@ namespace BiomeExtractorsMod.Content.Items
     class BiomeExtractorItemEthereal : BiomeExtractorItem
     {
         protected override int TileId => ModContent.TileType<BiomeExtractorTileEthereal>();
+        protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitEthereal>();
 
         public override void SetDefaults()
         {

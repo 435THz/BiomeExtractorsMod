@@ -20,6 +20,11 @@ namespace BiomeExtractorsMod.Content.Items
         /// </summary>
         protected virtual int TileStyle => 0;
 
+        /// <summary>
+        /// Returns the ExtractorUpgradeKit required to craft this item.
+        /// </summary>
+        protected abstract ExtractorUpgradeKit UpgradeItemToCraftThis { get; }
+
         private BiomeExtractionSystem.ExtractionTier Tier => BiomeExtractionSystem.Instance.GetTier(((BiomeExtractorTile)ModContent.GetModTile(TileId)).GetTileEntity.Tier);
 
         public override void SetStaticDefaults()

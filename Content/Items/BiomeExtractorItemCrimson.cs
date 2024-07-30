@@ -12,6 +12,7 @@ namespace BiomeExtractorsMod.Content.Items
     {
         protected override int TileId => ModContent.TileType<BiomeExtractorTileDemonic>();
         protected override int TileStyle => 1;
+        protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitCrimson>();
 
         public override void SetDefaults()
         {
