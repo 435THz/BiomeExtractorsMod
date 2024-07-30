@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using Terraria;
+using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace BiomeExtractorsMod.Common.Configs
@@ -24,6 +25,7 @@ namespace BiomeExtractorsMod.Common.Configs
 
     public class ConfigCommon : ModConfig
     {
+        public static ConfigCommon Instance => ModContent.GetInstance<ConfigCommon>();
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
 
