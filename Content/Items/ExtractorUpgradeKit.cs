@@ -12,7 +12,7 @@ using Stubble.Core.Imported;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    abstract class ExtractorUpgradeKit : ModItem
+    public abstract class ExtractorUpgradeKit : ModItem
     {
         /// <summary>
         /// The tier that this kit is an upgrade to.
