@@ -8,7 +8,6 @@ using BiomeExtractorsMod.Content.TileEntities;
 
 using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
 using Terraria.Localization;
-using Stubble.Core.Imported;
 
 namespace BiomeExtractorsMod.Content.Items
 {
@@ -26,8 +25,8 @@ namespace BiomeExtractorsMod.Content.Items
         /// The style of the tile that will replace the current one.
         /// </summary>
         protected virtual int TileStyle => 0;
-        private ExtractionTier UpgradedTier => Instance.GetTier(Tier, true);
-        private ExtractionTier LowerTier => Instance.GetClosestLowerTier(Tier);
+        internal ExtractionTier UpgradedTier => Instance.GetTier(Tier, true);
+        internal ExtractionTier LowerTier => Instance.GetClosestLowerTier(Tier);
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(LowerTier.Article, LowerTier.Name, UpgradedTier.Article, UpgradedTier.Name);
 
 
