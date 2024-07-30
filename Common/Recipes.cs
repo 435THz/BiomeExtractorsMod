@@ -18,15 +18,6 @@ namespace BiomeExtractorsMod.Common.Systems
         {
             RecipeGroup goldBar = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.GoldBar)}", ItemID.GoldBar, ItemID.PlatinumBar);
             RecipeGroup.RegisterGroup(goldBarGroupName, goldBar);
-
-            RecipeGroup basicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocExtractorPrefix}Iron.DisplayName")}", ModContent.ItemType<BiomeExtractorItemIron>(), ModContent.ItemType<BiomeExtractorItemLead>());
-            RecipeGroup.RegisterGroup(basicExtractorGroupName, basicExtractor);
-
-            RecipeGroup demonicExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocExtractorPrefix}Corruption.DisplayName")}", ModContent.ItemType<BiomeExtractorItemCorruption>(), ModContent.ItemType<BiomeExtractorItemCrimson>());
-            RecipeGroup.RegisterGroup(demonicExtractorGroupName, demonicExtractor);
-
-            RecipeGroup steampunkExtractor = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Language.GetTextValue($"{BiomeExtractorsMod.LocExtractorPrefix}Adamantite.DisplayName")}", ModContent.ItemType<BiomeExtractorItemAdamantite>(), ModContent.ItemType<BiomeExtractorItemTitanium>());
-            RecipeGroup.RegisterGroup(steampunkExtractorGroupName, steampunkExtractor);
         }
 
 
@@ -38,61 +29,6 @@ namespace BiomeExtractorsMod.Common.Systems
                 .AddRecipeGroup(goldBarGroupName, 2)
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
-
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemIron>())
-                .AddIngredient(ItemID.Extractinator)
-                .AddIngredient(ItemID.IronBar, 5)
-                .AddIngredient(ItemID.Chain, 12)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemLead>())
-                .AddIngredient(ItemID.Extractinator)
-                .AddIngredient(ItemID.LeadBar, 5)
-                .AddIngredient(ItemID.Chain, 12)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemCorruption>())
-                .AddRecipeGroup(basicExtractorGroupName)
-                .AddIngredient(ModContent.ItemType<UpgradeKitCorruption>())
-                .Register();
-
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemCrimson>())
-                .AddRecipeGroup(basicExtractorGroupName)
-                .AddIngredient(ModContent.ItemType<UpgradeKitCrimson>())
-                .Register();
-
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemInfernal>())
-                .AddRecipeGroup(demonicExtractorGroupName)
-                .AddIngredient(ModContent.ItemType<UpgradeKitInfernal>())
-                .Register();
-
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemAdamantite>())
-                .AddIngredient(ModContent.ItemType<BiomeExtractorItemInfernal>())
-                .AddIngredient(ModContent.ItemType<UpgradeKitAdamantite>())
-                .Register();
-
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemTitanium>())
-                .AddIngredient(ModContent.ItemType<BiomeExtractorItemInfernal>())
-                .AddIngredient(ModContent.ItemType<UpgradeKitTitanium>())
-                .Register();
-
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemCyber>())
-                .AddRecipeGroup(steampunkExtractorGroupName)
-                .AddIngredient(ModContent.ItemType<UpgradeKitCyber>())
-                .Register();
-
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemLunar>())
-                .AddIngredient(ModContent.ItemType<BiomeExtractorItemCyber>())
-                .AddIngredient(ModContent.ItemType<UpgradeKitLunar>())
-                .Register();
-
-            Recipe.Create(ModContent.ItemType<BiomeExtractorItemEthereal>())
-                .AddIngredient(ModContent.ItemType<BiomeExtractorItemLunar>())
-                .AddIngredient(ModContent.ItemType<UpgradeKitEthereal>())
-                .Register();
-
 
 
             Recipe.Create(ModContent.ItemType<UpgradeKitCorruption>())

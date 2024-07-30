@@ -4,6 +4,7 @@ using BiomeExtractorsMod.Content.TileEntities;
 using BiomeExtractorsMod.Content.Tiles;
 using Terraria;
 using Terraria.Enums;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
@@ -19,6 +20,16 @@ namespace BiomeExtractorsMod.Content.Items
             base.SetDefaults();
             BiomeExtractionSystem.Instance.AddTier((int)BiomeExtractorEnt.EnumTiers.BASIC, $"{BiomeExtractorsMod.LocArticles}.Basic", $"{BiomeExtractorsMod.LocExtractorPrefix}Iron.DisplayName", delegate { return ConfigCommon.Instance.Tier1ExtractorRate; }, delegate { return ConfigCommon.Instance.Tier1ExtractorChance; }, "Content/MapIcons/BiomeExtractorIconBasic");
             Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(gold: 10)); // sell at 2
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Extractinator)
+                .AddIngredient(ItemID.LeadBar, 5)
+                .AddIngredient(ItemID.Chain, 12)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

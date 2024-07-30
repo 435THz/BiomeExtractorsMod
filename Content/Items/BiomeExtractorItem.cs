@@ -36,5 +36,24 @@ namespace BiomeExtractorsMod.Content.Items
         {
             Item.DefaultToPlaceableTile(TileId, TileStyle);
         }
+
+        public override void AddRecipes()
+        {
+            BiomeExtractionSystem.ExtractionTier t = UpgradeItemToCraftThis.LowerTier;
+            Recipe recipe = CreateRecipe();
+            if (t.Items.Count == 0)
+            {
+                throw new InvalidOperationException($"The Tier \"{t.Name}\", tier number {t.Tier}, contains no items. Possible solutions:" +
+                    "- Add items to this tier" +
+                   $"- Override {GetType().Name}.AddRecipes() with a manually generated recipe" +
+                    "- Remove the tier entirely");
+            }
+            if (t.Items.Count > 1)
+                recipe.AddRecipeGroup(t.RecipeGroup); 
+            else
+                recipe.AddIngredient(t.Items[0]);
+            recipe.AddIngredient(UpgradeItemToCraftThis);
+            recipe.Register();
+        }
     }
 }
