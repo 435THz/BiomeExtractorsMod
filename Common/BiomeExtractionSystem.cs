@@ -1,5 +1,6 @@
 using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Common.Configs;
+using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Content.TileEntities;
 using Microsoft.Xna.Framework;
 using System;
@@ -272,6 +273,15 @@ namespace BiomeExtractorsMod.Common.Systems
         {
             private readonly Func<int> _rate = rate;
             private readonly Func<int> _chance = chance;
+
+            //list of items in this tier. It should never be empty on recipe generation, but,
+            //if it is, a manually generated recipe should be provioded to avoid errors
+            internal readonly List<BiomeExtractorItem> Items = [];
+            internal void Register(BiomeExtractorItem item)
+            {
+                if (!Items.Contains(item)) Items.Add(item);
+            }
+            internal string RecipeGroup => $"{nameof(BiomeExtractorsMod)}:{Items[0].GetType().Name}";
 
             /// <summary>
             /// An empty ExtractionTier object.
