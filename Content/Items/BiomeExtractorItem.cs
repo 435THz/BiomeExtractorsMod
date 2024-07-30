@@ -1,4 +1,8 @@
-﻿using Terraria.ModLoader;
+﻿using BiomeExtractorsMod.Common.Systems;
+using BiomeExtractorsMod.Content.Tiles;
+using System;
+using Terraria;
+using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
@@ -16,9 +20,12 @@ namespace BiomeExtractorsMod.Content.Items
         /// </summary>
         protected virtual int TileStyle => 0;
 
+        private BiomeExtractionSystem.ExtractionTier Tier => BiomeExtractionSystem.Instance.GetTier(((BiomeExtractorTile)ModContent.GetModTile(TileId)).GetTileEntity.Tier);
+
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 5;
+            Tier.Register(this);
         }
         public override void SetDefaults()
         {
