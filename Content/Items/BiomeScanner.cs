@@ -26,14 +26,14 @@ namespace BiomeExtractorsMod.Content.Items
         {
             get
             {
-                BiomeExtractionSystem.ExtractionTier tier = BES.GetClosestLowerTier(currentTier);
+                BiomeExtractionSystem.ExtractionTier tier = BES.GetTier(currentTier, lower: true);
                 if (tier is not null) CurrentTier = tier;
                 return tier;
             }
             set
             {
                 if (value is not null) currentTier = value.Tier;
-                else currentTier = int.MinValue;
+                else currentTier = BES.GetTier(int.MinValue, higher: true).Tier; // set to lowest possible
             }
         }
         public override void SetDefaults()
@@ -76,7 +76,7 @@ namespace BiomeExtractorsMod.Content.Items
                         if (tier is not null) newTier = tier.Tier;
                         if (tier is null || newTier > highestTier)
                         {
-                            tier = BES.GetTier(int.MinValue, true) ?? //wrap back around
+                            tier = BES.GetTier(int.MinValue, higher: true) ?? //wrap back around
                                 throw new IndexOutOfRangeException("Could not find a valid registered tier");
                             newTier = tier.Tier;
                             if (newTier > highestTier)
@@ -87,7 +87,7 @@ namespace BiomeExtractorsMod.Content.Items
                     }
                     return true;
                 }
-                else //unneeded, added for clarity
+                else //unneeded, only here for clarity
                 {
                     BiomeExtractionSystem.ExtractionTier tier = CurrentTier ??
                         throw new IndexOutOfRangeException("Could not find a valid registered tier");
