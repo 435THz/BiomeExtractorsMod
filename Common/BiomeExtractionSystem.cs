@@ -430,83 +430,83 @@ namespace BiomeExtractorsMod.Common.Systems
 
         #region Checks
         //WALL AND BLOCK LISTS
-        static readonly List<ushort> dungeonWalls =      [WallID.BlueDungeonUnsafe,  WallID.BlueDungeonSlabUnsafe,  WallID.BlueDungeonTileUnsafe, WallID.GreenDungeonUnsafe, WallID.GreenDungeonSlabUnsafe, WallID.GreenDungeonTileUnsafe, WallID.PinkDungeonUnsafe, WallID.PinkDungeonSlabUnsafe, WallID.PinkDungeonTileUnsafe];
-        static readonly List<ushort> dungeonWallsPink =  [WallID.PinkDungeonUnsafe,  WallID.PinkDungeonSlabUnsafe,  WallID.PinkDungeonTileUnsafe];
-        static readonly List<ushort> dungeonWallsGreen = [WallID.GreenDungeonUnsafe, WallID.GreenDungeonSlabUnsafe, WallID.GreenDungeonTileUnsafe];
-        static readonly List<ushort> dungeonWallsBlue =  [WallID.BlueDungeonUnsafe,  WallID.BlueDungeonSlabUnsafe,  WallID.BlueDungeonTileUnsafe];
-        static readonly List<ushort> dungeonBricks = [TileID.BlueDungeonBrick, TileID.GreenDungeonBrick, TileID.PinkDungeonBrick];
-        static readonly List<ushort> crimsonSandBlocks = [TileID.Crimsand,  TileID.CrimsonHardenedSand, TileID.CrimsonSandstone];
-        static readonly List<ushort> corruptSandBlocks = [TileID.Ebonsand,  TileID.CorruptHardenedSand, TileID.CorruptSandstone];
-        static readonly List<ushort> hallowSandBlocks =  [TileID.Pearlsand, TileID.HallowHardenedSand,  TileID.HallowSandstone];
-        static readonly List<ushort> crimsonIceBlocks = [TileID.FleshIce];
-        static readonly List<ushort> corruptIceBlocks = [TileID.CorruptIce];
-        static readonly List<ushort> hallowIceBlocks =  [TileID.HallowedIce];
-        static readonly List<ushort> crimsonForestBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass, TileID.CrimsonThorns,                          TileID.Crimstone];
-        static readonly List<ushort> corruptForestBlocks = [TileID.CorruptGrass,  TileID.CorruptJungleGrass, TileID.CorruptThorns,  TileID.CorruptPlants,   TileID.Ebonstone];
-        static readonly List<ushort> hallowForestBlocks =  [TileID.HallowedGrass, TileID.GolfGrassHallowed,  TileID.HallowedPlants, TileID.HallowedPlants2, TileID.Pearlstone];
-        static readonly List<ushort> crimsonBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass, TileID.CrimsonThorns,                         TileID.Crimstone,  TileID.Crimsand,  TileID.CrimsonHardenedSand, TileID.CrimsonSandstone, TileID.FleshIce];
-        static readonly List<ushort> corruptBlocks = [TileID.CorruptGrass,  TileID.CorruptJungleGrass, TileID.CorruptThorns,   TileID.CorruptPlants, TileID.Ebonstone,  TileID.Ebonsand,  TileID.CorruptHardenedSand, TileID.CorruptSandstone, TileID.CorruptIce];
-        static readonly List<ushort> hallowBlocks =  [TileID.HallowedGrass, TileID.HallowedPlants,     TileID.HallowedPlants2,                       TileID.Pearlstone, TileID.Pearlsand, TileID.HallowHardenedSand,  TileID.HallowSandstone,  TileID.HallowedIce];
-        static readonly List<ushort> glowMushroomBlocks = [TileID.MushroomGrass, TileID.MushroomPlants, TileID.MushroomTrees, TileID.MushroomVines];
-        static readonly List<ushort> jungleBlocks = [TileID.JungleGrass, TileID.JunglePlants, TileID.JunglePlants2, TileID.PlantDetritus, TileID.JungleVines, TileID.Hive, TileID.LihzahrdBrick];
-        static readonly List<ushort> frostBlocks = [TileID.SnowBlock, TileID.SnowBrick, TileID.IceBlock, TileID.BreakableIce, TileID.FleshIce, TileID.CorruptIce, TileID.HallowedIce];
-        static readonly List<ushort> desertBlocks = [TileID.Sand, TileID.Crimsand, TileID.Ebonsand, TileID.Pearlsand, TileID.HardenedSand, TileID.CrimsonHardenedSand, TileID.CorruptHardenedSand, TileID.HallowHardenedSand, TileID.Sandstone, TileID.CrimsonSandstone, TileID.CorruptSandstone, TileID.HallowSandstone];
+        public static readonly List<ushort> dungeonWalls =      [WallID.BlueDungeonUnsafe,  WallID.BlueDungeonSlabUnsafe,  WallID.BlueDungeonTileUnsafe, WallID.GreenDungeonUnsafe, WallID.GreenDungeonSlabUnsafe, WallID.GreenDungeonTileUnsafe, WallID.PinkDungeonUnsafe, WallID.PinkDungeonSlabUnsafe, WallID.PinkDungeonTileUnsafe];
+        public static readonly List<ushort> dungeonWallsPink =  [WallID.PinkDungeonUnsafe,  WallID.PinkDungeonSlabUnsafe,  WallID.PinkDungeonTileUnsafe];
+        public static readonly List<ushort> dungeonWallsGreen = [WallID.GreenDungeonUnsafe, WallID.GreenDungeonSlabUnsafe, WallID.GreenDungeonTileUnsafe];
+        public static readonly List<ushort> dungeonWallsBlue =  [WallID.BlueDungeonUnsafe,  WallID.BlueDungeonSlabUnsafe,  WallID.BlueDungeonTileUnsafe];
+        public static readonly List<ushort> dungeonBricks = [TileID.BlueDungeonBrick, TileID.GreenDungeonBrick, TileID.PinkDungeonBrick];
+        public static readonly List<ushort> crimsonSandBlocks = [TileID.Crimsand,  TileID.CrimsonHardenedSand, TileID.CrimsonSandstone];
+        public static readonly List<ushort> corruptSandBlocks = [TileID.Ebonsand,  TileID.CorruptHardenedSand, TileID.CorruptSandstone];
+        public static readonly List<ushort> hallowSandBlocks =  [TileID.Pearlsand, TileID.HallowHardenedSand,  TileID.HallowSandstone];
+        public static readonly List<ushort> crimsonIceBlocks = [TileID.FleshIce];
+        public static readonly List<ushort> corruptIceBlocks = [TileID.CorruptIce];
+        public static readonly List<ushort> hallowIceBlocks =  [TileID.HallowedIce];
+        public static readonly List<ushort> crimsonForestBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass, TileID.CrimsonThorns,                          TileID.Crimstone];
+        public static readonly List<ushort> corruptForestBlocks = [TileID.CorruptGrass,  TileID.CorruptJungleGrass, TileID.CorruptThorns,  TileID.CorruptPlants,   TileID.Ebonstone];
+        public static readonly List<ushort> hallowForestBlocks =  [TileID.HallowedGrass, TileID.GolfGrassHallowed,  TileID.HallowedPlants, TileID.HallowedPlants2, TileID.Pearlstone];
+        public static readonly List<ushort> crimsonBlocks = [TileID.CrimsonGrass,  TileID.CrimsonJungleGrass, TileID.CrimsonThorns,                         TileID.Crimstone,  TileID.Crimsand,  TileID.CrimsonHardenedSand, TileID.CrimsonSandstone, TileID.FleshIce];
+        public static readonly List<ushort> corruptBlocks = [TileID.CorruptGrass,  TileID.CorruptJungleGrass, TileID.CorruptThorns,   TileID.CorruptPlants, TileID.Ebonstone,  TileID.Ebonsand,  TileID.CorruptHardenedSand, TileID.CorruptSandstone, TileID.CorruptIce];
+        public static readonly List<ushort> hallowBlocks =  [TileID.HallowedGrass, TileID.HallowedPlants,     TileID.HallowedPlants2,                       TileID.Pearlstone, TileID.Pearlsand, TileID.HallowHardenedSand,  TileID.HallowSandstone,  TileID.HallowedIce];
+        public static readonly List<ushort> glowMushroomBlocks = [TileID.MushroomGrass, TileID.MushroomPlants, TileID.MushroomTrees, TileID.MushroomVines];
+        public static readonly List<ushort> jungleBlocks = [TileID.JungleGrass, TileID.JunglePlants, TileID.JunglePlants2, TileID.PlantDetritus, TileID.JungleVines, TileID.Hive, TileID.LihzahrdBrick];
+        public static readonly List<ushort> frostBlocks = [TileID.SnowBlock, TileID.SnowBrick, TileID.IceBlock, TileID.BreakableIce, TileID.FleshIce, TileID.CorruptIce, TileID.HallowedIce];
+        public static readonly List<ushort> desertBlocks = [TileID.Sand, TileID.Crimsand, TileID.Ebonsand, TileID.Pearlsand, TileID.HardenedSand, TileID.CrimsonHardenedSand, TileID.CorruptHardenedSand, TileID.HallowHardenedSand, TileID.Sandstone, TileID.CrimsonSandstone, TileID.CorruptSandstone, TileID.HallowSandstone];
 
         //PROGRESSION
-        static readonly Predicate<ScanData> hardmodeOnly = scan => Main.hardMode;
-        static readonly Predicate<ScanData> postMech = scan => Condition.DownedMechBossAny.IsMet();
-        static readonly Predicate<ScanData> postMechs = scan => Condition.DownedMechBossAll.IsMet();
-        static readonly Predicate<ScanData> postPlantera = scan => Condition.DownedPlantera.IsMet();
-        static readonly Predicate<ScanData> postGolem = scan => Condition.DownedGolem.IsMet();
-        static readonly Predicate<ScanData> postPillars = scan => Condition.DownedNebulaPillar.IsMet() && Condition.DownedSolarPillar.IsMet() && Condition.DownedStardustPillar.IsMet() && Condition.DownedVortexPillar.IsMet();
-        static readonly Predicate<ScanData> postML = scan => Condition.DownedMoonLord.IsMet();
+        public static readonly Predicate<ScanData> hardmodeOnly = scan => Main.hardMode;
+        public static readonly Predicate<ScanData> postMech = scan => Condition.DownedMechBossAny.IsMet();
+        public static readonly Predicate<ScanData> postMechs = scan => Condition.DownedMechBossAll.IsMet();
+        public static readonly Predicate<ScanData> postPlantera = scan => Condition.DownedPlantera.IsMet();
+        public static readonly Predicate<ScanData> postGolem = scan => Condition.DownedGolem.IsMet();
+        public static readonly Predicate<ScanData> postPillars = scan => Condition.DownedNebulaPillar.IsMet() && Condition.DownedSolarPillar.IsMet() && Condition.DownedStardustPillar.IsMet() && Condition.DownedVortexPillar.IsMet();
+        public static readonly Predicate<ScanData> postML = scan => Condition.DownedMoonLord.IsMet();
 
         //WORLDLAYER
-        static readonly Predicate<ScanData> spaceLayer = scan => scan.Y < Main.worldSurface * 0.3;
-        static readonly Predicate<ScanData> skyLayer = scan => scan.Y < Main.worldSurface * 0.35;
-        static readonly Predicate<ScanData> surfaceLayer = scan => scan.Y < Main.worldSurface + 1;
-        static readonly Predicate<ScanData> belowSurfaceLayer = scan => scan.Y > Main.worldSurface + 1;
-        static readonly Predicate<ScanData> middleUnderground = scan => scan.Y > (Main.worldSurface + Main.rockLayer) / 2;
-        static readonly Predicate<ScanData> cavernLayer = scan => scan.Y > Main.rockLayer + 1;
-        static readonly Predicate<ScanData> notCavernLayer = scan => scan.Y <= Main.rockLayer;
-        static readonly Predicate<ScanData> underworldLayer = scan => scan.Y > Main.maxTilesY - 200;
+        public static readonly Predicate<ScanData> spaceLayer = scan => scan.Y < Main.worldSurface * 0.3;
+        public static readonly Predicate<ScanData> skyLayer = scan => scan.Y < Main.worldSurface * 0.35;
+        public static readonly Predicate<ScanData> surfaceLayer = scan => scan.Y < Main.worldSurface + 1;
+        public static readonly Predicate<ScanData> belowSurfaceLayer = scan => scan.Y > Main.worldSurface + 1;
+        public static readonly Predicate<ScanData> middleUnderground = scan => scan.Y > (Main.worldSurface + Main.rockLayer) / 2;
+        public static readonly Predicate<ScanData> cavernLayer = scan => scan.Y > Main.rockLayer + 1;
+        public static readonly Predicate<ScanData> notCavernLayer = scan => scan.Y <= Main.rockLayer;
+        public static readonly Predicate<ScanData> underworldLayer = scan => scan.Y > Main.maxTilesY - 200;
 
         //SPECIFIC POSITIONS
-        static readonly Predicate<ScanData> oceanArea = scan => scan.Y <= (Main.worldSurface + Main.rockLayer) / 2 && (scan.X < 339 || scan.X > Main.maxTilesX - 339);
+        public static readonly Predicate<ScanData> oceanArea = scan => scan.Y <= (Main.worldSurface + Main.rockLayer) / 2 && (scan.X < 339 || scan.X > Main.maxTilesX - 339);
 
         //WALLS
-        static readonly Predicate<ScanData> lihzahrd_bg = scan => scan.ValidWalls(WallID.LihzahrdBrickUnsafe);
-        static readonly Predicate<ScanData> hive_bg = scan => scan.ValidWalls(WallID.HiveUnsafe);
-        static readonly Predicate<ScanData> granite_bg = scan => scan.ValidWalls(WallID.GraniteUnsafe);
-        static readonly Predicate<ScanData> marble_bg = scan => scan.ValidWalls(WallID.MarbleUnsafe);
-        static readonly Predicate<ScanData> spider_bg = scan => scan.ValidWalls(WallID.SpiderUnsafe);
-        static readonly Predicate<ScanData> dungeon_bg = scan => scan.ValidWalls(dungeonWalls);
-        static readonly Predicate<ScanData> dungeon_bg_p = scan => scan.ValidWalls(dungeonWallsPink);
-        static readonly Predicate<ScanData> dungeon_bg_g = scan => scan.ValidWalls(dungeonWallsGreen);
-        static readonly Predicate<ScanData> dungeon_bg_b = scan => scan.ValidWalls(dungeonWallsBlue);
+        public static readonly Predicate<ScanData> lihzahrd_bg = scan => scan.ValidWalls(WallID.LihzahrdBrickUnsafe);
+        public static readonly Predicate<ScanData> hive_bg = scan => scan.ValidWalls(WallID.HiveUnsafe);
+        public static readonly Predicate<ScanData> granite_bg = scan => scan.ValidWalls(WallID.GraniteUnsafe);
+        public static readonly Predicate<ScanData> marble_bg = scan => scan.ValidWalls(WallID.MarbleUnsafe);
+        public static readonly Predicate<ScanData> spider_bg = scan => scan.ValidWalls(WallID.SpiderUnsafe);
+        public static readonly Predicate<ScanData> dungeon_bg = scan => scan.ValidWalls(dungeonWalls);
+        public static readonly Predicate<ScanData> dungeon_bg_p = scan => scan.ValidWalls(dungeonWallsPink);
+        public static readonly Predicate<ScanData> dungeon_bg_g = scan => scan.ValidWalls(dungeonWallsGreen);
+        public static readonly Predicate<ScanData> dungeon_bg_b = scan => scan.ValidWalls(dungeonWallsBlue);
 
         //LIQUIDS
-        static readonly Predicate<ScanData> water1k = scan => scan.Liquids(LiquidID.Water) >= 1000;
-        static readonly Predicate<ScanData> honey100 = scan => scan.Liquids(LiquidID.Honey) >= 100;
-        static readonly Predicate<ScanData> shimmer300 = scan => scan.Liquids(LiquidID.Shimmer) >= 300;
+        public static readonly Predicate<ScanData> water1k = scan => scan.Liquids(LiquidID.Water) >= 1000;
+        public static readonly Predicate<ScanData> honey100 = scan => scan.Liquids(LiquidID.Honey) >= 100;
+        public static readonly Predicate<ScanData> shimmer300 = scan => scan.Liquids(LiquidID.Shimmer) >= 300;
 
         //BLOCKS
-        static readonly Predicate<ScanData> pylon = scan => scan.Tiles(TileID.TeleportationPylon) > 0;
-        static readonly Func<List<ushort>, Predicate<ScanData>> evil300 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(hallowBlocks) - scan.Tiles(TileID.Sunflower) * 10 >= 300;
-        static readonly Func<List<ushort>, Predicate<ScanData>> hallow125 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(crimsonBlocks) - scan.Tiles(corruptBlocks) >= 125;
-        static readonly Predicate<ScanData> meteorite75 = scan => scan.Tiles(TileID.Meteorite) >= 75;
-        static readonly Predicate<ScanData> hive100 = scan => scan.Tiles(TileID.Hive) > 100;
-        static readonly Predicate<ScanData> marble150 = scan => scan.Tiles(TileID.Marble) > 150;
-        static readonly Predicate<ScanData> granite150 = scan => scan.Tiles(TileID.Granite) > 150;
-        static readonly Predicate<ScanData> dungeon_p250 = scan => scan.Tiles(TileID.PinkDungeonBrick) >= 250;
-        static readonly Predicate<ScanData> dungeon_g250 = scan => scan.Tiles(TileID.GreenDungeonBrick) >= 250;
-        static readonly Predicate<ScanData> dungeon_b250 = scan => scan.Tiles(TileID.BlueDungeonBrick) >= 250;
-        static readonly Predicate<ScanData> dungeon250 = scan => scan.Tiles(dungeonBricks) >= 250;
-        static readonly Predicate<ScanData> mush100 = scan => scan.Tiles(glowMushroomBlocks) >= 100;
-        static readonly Predicate<ScanData> jungle140 = scan => scan.Tiles(jungleBlocks) > 140;
-        static readonly Predicate<ScanData> desert1500 = scan => scan.Tiles(desertBlocks) > 1500;
-        static readonly Predicate<ScanData> frost1500 = scan => scan.Tiles(frostBlocks) > 1500;
-        static readonly Predicate<ScanData> tombstone5 = scan => scan.Tiles(TileID.Tombstones) > 20;
+        public static readonly Predicate<ScanData> pylon = scan => scan.Tiles(TileID.TeleportationPylon) > 0;
+        public static readonly Func<List<ushort>, Predicate<ScanData>> evil300 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(hallowBlocks) - scan.Tiles(TileID.Sunflower) * 10 >= 300;
+        public static readonly Func<List<ushort>, Predicate<ScanData>> hallow125 = tiles => scan => scan.Tiles(tiles) - scan.Tiles(crimsonBlocks) - scan.Tiles(corruptBlocks) >= 125;
+        public static readonly Predicate<ScanData> meteorite75 = scan => scan.Tiles(TileID.Meteorite) >= 75;
+        public static readonly Predicate<ScanData> hive100 = scan => scan.Tiles(TileID.Hive) > 100;
+        public static readonly Predicate<ScanData> marble150 = scan => scan.Tiles(TileID.Marble) > 150;
+        public static readonly Predicate<ScanData> granite150 = scan => scan.Tiles(TileID.Granite) > 150;
+        public static readonly Predicate<ScanData> dungeon_p250 = scan => scan.Tiles(TileID.PinkDungeonBrick) >= 250;
+        public static readonly Predicate<ScanData> dungeon_g250 = scan => scan.Tiles(TileID.GreenDungeonBrick) >= 250;
+        public static readonly Predicate<ScanData> dungeon_b250 = scan => scan.Tiles(TileID.BlueDungeonBrick) >= 250;
+        public static readonly Predicate<ScanData> dungeon250 = scan => scan.Tiles(dungeonBricks) >= 250;
+        public static readonly Predicate<ScanData> mush100 = scan => scan.Tiles(glowMushroomBlocks) >= 100;
+        public static readonly Predicate<ScanData> jungle140 = scan => scan.Tiles(jungleBlocks) > 140;
+        public static readonly Predicate<ScanData> desert1500 = scan => scan.Tiles(desertBlocks) > 1500;
+        public static readonly Predicate<ScanData> frost1500 = scan => scan.Tiles(frostBlocks) > 1500;
+        public static readonly Predicate<ScanData> tombstone5 = scan => scan.Tiles(TileID.Tombstones) > 20;
         #endregion
 
         #region API
