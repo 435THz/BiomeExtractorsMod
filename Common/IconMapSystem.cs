@@ -162,16 +162,33 @@ namespace BiomeExtractorsMod.Common.Systems
 
                 for (int i = 0; i < Positions.Count; i++)
                 {
-                    BiomeExtractionSystem.ExtractionTier tier = BiomeExtractionSystem.Instance.GetTier(Tiers[i]);
-                    string hoverText = Language.GetTextValue(tier.Name);
-                    Asset<Texture2D> asset = Mod.Assets.Request<Texture2D>(tier.IconPath);
                     Tile tile = Main.tile[Positions[i]];
-                    byte row = 0;
-                    byte column = (byte)TileObjectData.GetTileStyle(Main.tile[Positions[i]]);
                     ModTile tileObj = ModContent.GetModTile(tile.TileType);
-                    if (tileObj is null) continue;
+                    if (tileObj is null || !tile.HasTile) continue;
+                    TileUtils.TryGetTileEntityAs<BiomeExtractorEnt>(Positions[i].X, Positions[i].Y, out BiomeExtractorEnt extractor);
+                    if (extractor is null) continue;
 
-                    byte columns = (byte)((BiomeExtractorTile)tileObj).TileStyles(tile);
+                    string hoverText;
+                    Asset<Texture2D> asset;
+                    byte row = 0;
+                    byte column;
+                    byte columns;
+                    if (extractor.HasIconOverride)
+                    {
+                        hoverText = Language.GetTextValue(extractor.IconOverride.HoverTextKey);
+                        asset = Mod.Assets.Request<Texture2D>(extractor.IconOverride.IconPath);
+                        column = extractor.IconOverride.Column;
+                        columns = extractor.IconOverride.FileColumns;
+                    }
+                    else
+                    {
+                        BiomeExtractionSystem.ExtractionTier tier = BiomeExtractionSystem.Instance.GetTier(Tiers[i]);
+                        hoverText = Language.GetTextValue(tier.Name);
+                        asset = Mod.Assets.Request<Texture2D>(tier.IconPath);
+                        column = (byte)TileObjectData.GetTileStyle(Main.tile[Positions[i]]);
+                        columns = (byte)((BiomeExtractorTile)tileObj).TileStyles(tile);
+                    }
+
                     Color drawColor = Color.White;
                     switch (States[i])
                     {

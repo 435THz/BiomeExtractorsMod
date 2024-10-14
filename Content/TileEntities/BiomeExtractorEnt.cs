@@ -25,6 +25,23 @@ namespace BiomeExtractorsMod.Content.TileEntities
     /// </summary>
     public abstract class BiomeExtractorEnt : ModTileEntity
     {
+        /// <summary>
+        /// A structure that contains map icon drawing data. Used to allow specific extractor types to override the tier icon.
+        /// </summary>
+        /// <param name="hoverTextKey">The name that will be displayed on the map when hovering this icon.</param>
+        /// <param name="assetPath">The path to the icon to be used, starting from the mod's base folder.</param>
+        /// <param name="file_columns"></param> The number of columnts the icon file is divided into.
+        /// <param name="column">The specific column of the icon file that will be used for the icon.</param>
+        public readonly struct ExtractorIconOverride(string hoverTextKey, string assetPath, byte column, byte file_columns)
+        {
+            public static ExtractorIconOverride Invalid { get; private set; } = new ExtractorIconOverride();
+
+            public ExtractorIconOverride() : this("", "", 0, 0) { }
+            public readonly string HoverTextKey = hoverTextKey;
+            public readonly string IconPath = assetPath;
+            public readonly byte Column = column;
+            public readonly byte FileColumns = file_columns;
+        }
         private struct OutData(OutputType type, Point point)
         {
             public OutputType Type { get; private set; } = type;
@@ -102,6 +119,11 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         internal Asset<Texture2D> MapIcon => Mod.Assets.Request<Texture2D>(MapIconAsset);
 
+        /// <summary>
+        /// If set, this extractor will have a custom icon that is different from the one normally used for its tier.
+        /// </summary>
+        protected internal ExtractorIconOverride IconOverride = ExtractorIconOverride.Invalid;
+        internal bool HasIconOverride => !IconOverride.Equals(ExtractorIconOverride.Invalid);
         /// <summary>
         /// Returns the tier of this Extractor.
         /// </summary>
