@@ -22,6 +22,7 @@ namespace BiomeExtractorsMod.Content.Items
 
         /// <summary>
         /// Returns the ExtractorUpgradeKit required to craft this item.
+        /// Feel free to completely ignore this value if you intend to override AddRecipes.
         /// </summary>
         protected abstract ExtractorUpgradeKit UpgradeItemToCraftThis { get; }
 
