@@ -10,7 +10,7 @@ namespace BiomeExtractorsMod.Content.Items
 {
     public class BiomeExtractorItemLunar : BiomeExtractorItem
     {
-        protected override int TileId => ModContent.TileType<BiomeExtractorTileLunar>();
+        protected internal override int TileId => ModContent.TileType<BiomeExtractorTileLunar>();
         protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitLunar>();
 
         public override void SetDefaults()

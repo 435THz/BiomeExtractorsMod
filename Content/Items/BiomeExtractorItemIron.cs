@@ -11,7 +11,7 @@ namespace BiomeExtractorsMod.Content.Items
 {
     public class BiomeExtractorItemIron : BiomeExtractorItem
     {
-        protected override int TileId => ModContent.TileType<BiomeExtractorTileBasic>();
+        protected internal override int TileId => ModContent.TileType<BiomeExtractorTileBasic>();
         protected override ExtractorUpgradeKit UpgradeItemToCraftThis => throw new System.NotImplementedException(); //it should never be referenced anyway
 
         public override void SetDefaults()

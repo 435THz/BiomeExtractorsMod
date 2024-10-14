@@ -10,7 +10,7 @@ namespace BiomeExtractorsMod.Content.Items
 {
     public class BiomeExtractorItemTitanium : BiomeExtractorItem
     {
-        protected override int TileId => ModContent.TileType<BiomeExtractorTileSteampunk>();
+        protected internal override int TileId => ModContent.TileType<BiomeExtractorTileSteampunk>();
         protected override int TileStyle => 1;
         protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitTitanium>();
 

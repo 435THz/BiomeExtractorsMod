@@ -14,7 +14,7 @@ namespace BiomeExtractorsMod.Content.Items
         /// <summary>
         /// Returns the id of the BiomeExtractorTile this Item is bound to.
         /// </summary>
-        protected abstract int TileId { get; }
+        protected internal abstract int TileId { get; }
         /// <summary>
         /// Returns the style index of the tile this Item creates.
         /// </summary>
