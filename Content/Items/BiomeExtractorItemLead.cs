@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    class BiomeExtractorItemLead : BiomeExtractorItem
+    public class BiomeExtractorItemLead : BiomeExtractorItem
     {
         protected override int TileId => ModContent.TileType<BiomeExtractorTileBasic>();
         protected override int TileStyle => 1;

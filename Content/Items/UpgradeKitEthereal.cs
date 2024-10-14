@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    internal class UpgradeKitEthereal : ExtractorUpgradeKit
+    public class UpgradeKitEthereal : ExtractorUpgradeKit
     {
         protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.ETHEREAL;
         protected override int TileID => ModContent.TileType<BiomeExtractorTileEthereal>();

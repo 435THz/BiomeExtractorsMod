@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    class BiomeExtractorItemInfernal : BiomeExtractorItem
+    public class BiomeExtractorItemInfernal : BiomeExtractorItem
     {
         protected override int TileId => ModContent.TileType<BiomeExtractorTileInfernal>();
         protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitInfernal>();

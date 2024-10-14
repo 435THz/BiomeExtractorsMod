@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    class BiomeExtractorItemCorruption : BiomeExtractorItem
+    public class BiomeExtractorItemCorruption : BiomeExtractorItem
     {
         protected override int TileId => ModContent.TileType<BiomeExtractorTileDemonic>();
         protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitCorruption>();

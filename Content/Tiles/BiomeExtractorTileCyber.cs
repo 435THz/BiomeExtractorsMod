@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace BiomeExtractorsMod.Content.Tiles
 {
-    class BiomeExtractorTileCyber : BiomeExtractorTile
+    public class BiomeExtractorTileCyber : BiomeExtractorTile
     {
         protected override int FrameCount => 8;
         protected override int IdleFrame => 4;

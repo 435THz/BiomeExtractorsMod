@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    internal class UpgradeKitTitanium : ExtractorUpgradeKit
+    public class UpgradeKitTitanium : ExtractorUpgradeKit
     {
         protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK;
         protected override int TileID => ModContent.TileType<BiomeExtractorTileSteampunk>();

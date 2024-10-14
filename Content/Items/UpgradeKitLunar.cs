@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    internal class UpgradeKitLunar : ExtractorUpgradeKit
+    public class UpgradeKitLunar : ExtractorUpgradeKit
     {
         protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.LUNAR;
         protected override int TileID => ModContent.TileType<BiomeExtractorTileLunar>();

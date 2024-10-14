@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    class BiomeExtractorItemTitanium : BiomeExtractorItem
+    public class BiomeExtractorItemTitanium : BiomeExtractorItem
     {
         protected override int TileId => ModContent.TileType<BiomeExtractorTileSteampunk>();
         protected override int TileStyle => 1;

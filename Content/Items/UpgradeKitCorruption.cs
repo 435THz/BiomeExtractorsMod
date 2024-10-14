@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    internal class UpgradeKitCorruption : ExtractorUpgradeKit
+    public class UpgradeKitCorruption : ExtractorUpgradeKit
     {
         protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.DEMONIC;
         protected override int TileID => ModContent.TileType<BiomeExtractorTileDemonic>();

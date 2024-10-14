@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    class BiomeExtractorItemIron : BiomeExtractorItem
+    public class BiomeExtractorItemIron : BiomeExtractorItem
     {
         protected override int TileId => ModContent.TileType<BiomeExtractorTileBasic>();
         protected override ExtractorUpgradeKit UpgradeItemToCraftThis => throw new System.NotImplementedException(); //it should never be referenced anyway

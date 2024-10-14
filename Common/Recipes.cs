@@ -9,10 +9,10 @@ namespace BiomeExtractorsMod.Common.Systems
 {
     public class Recipes : ModSystem
     {
-        readonly string goldBarGroupName =            nameof(ItemID.GoldBar);
-        readonly string basicExtractorGroupName =     $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemIron)}";
-        readonly string demonicExtractorGroupName =   $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemCorruption)}";
-        readonly string steampunkExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemAdamantite)}";
+        public readonly string goldBarGroupName =            nameof(ItemID.GoldBar);
+        public readonly string basicExtractorGroupName =     $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemIron)}";
+        public readonly string demonicExtractorGroupName =   $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemCorruption)}";
+        public readonly string steampunkExtractorGroupName = $"{nameof(BiomeExtractorsMod)}:{nameof(BiomeExtractorItemAdamantite)}";
 
         public override void AddRecipeGroups()
         {

@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    class BiomeExtractorItemCrimson : BiomeExtractorItem
+    public class BiomeExtractorItemCrimson : BiomeExtractorItem
     {
         protected override int TileId => ModContent.TileType<BiomeExtractorTileDemonic>();
         protected override int TileStyle => 1;

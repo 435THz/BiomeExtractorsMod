@@ -17,7 +17,7 @@ using Terraria.ModLoader.IO;
 
 namespace BiomeExtractorsMod.Content.Items
 {
-    internal class BiomeScanner : ModItem
+    public class BiomeScanner : ModItem
     {
         static readonly BiomeExtractionSystem BES = ModContent.GetInstance<BiomeExtractionSystem>();
         int highestTier = (int)BiomeExtractorEnt.EnumTiers.BASIC;
