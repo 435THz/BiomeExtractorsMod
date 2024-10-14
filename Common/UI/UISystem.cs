@@ -25,13 +25,14 @@ namespace BiomeExtractorsMod.Common.UI
         private List<PoolEntry> _pools;
         internal List<PoolEntry> PoolList { get
             {
-                _pools ??= ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(tier, position);
+                _pools ??= ModContent.GetInstance<BiomeExtractionSystem>().CheckValidBiomes(tier, position, isScanner);
                 return _pools;
             }
         }
-            
+
         internal Point16 position;
         internal ExtractionTier tier;
+        internal bool isScanner { get => Extractor == null; }
         internal bool active;
 
         private GameTime _lastUpdateUiGameTime;
@@ -85,7 +86,7 @@ namespace BiomeExtractorsMod.Common.UI
             active = false;
         }
 
-        internal void OpenInterface(BiomeExtractorEnt clicked)
+        internal void OpenExtractorInterface(BiomeExtractorEnt clicked)
         {
             _pools = null;
             SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -98,7 +99,7 @@ namespace BiomeExtractorsMod.Common.UI
             UIHolder?.SetState(Interface);
             Interface.OnActivate();
         }
-        internal void OpenInterface(Point16 position, ExtractionTier tier)
+        internal void OpenScannerInterface(Point16 position, ExtractionTier tier)
         {
             _pools = null;
             SoundEngine.PlaySound(SoundID.MenuOpen);

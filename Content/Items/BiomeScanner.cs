@@ -94,7 +94,7 @@ namespace BiomeExtractorsMod.Content.Items
 
                     Point16 pCenter = new((int)((player.position.X + player.width * 0.5) / 16.0),
                                            (int)((player.position.Y + player.height * 0.5) / 16.0));
-                    ModContent.GetInstance<UISystem>().OpenInterface(pCenter, tier);
+                    ModContent.GetInstance<UISystem>().OpenScannerInterface(pCenter, tier);
                     return true;
                 }
             }

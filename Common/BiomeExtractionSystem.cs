@@ -20,10 +20,11 @@ namespace BiomeExtractorsMod.Common.Systems
     /// </summary>
     /// <param name="tier">The tier of the extractor requesting a scan</param>
     /// <param name="origin">The origin of the scan in tile coordinates</param>
-    public class ScanData(BiomeExtractionSystem.ExtractionTier tier, Point16 origin)
+    public class ScanData(BiomeExtractionSystem.ExtractionTier tier, Point16 origin, bool isScanner)
     {
 
         private readonly BiomeExtractionSystem.ExtractionTier _tier = tier;
+        private readonly bool _isScanner = isScanner;
         private Point _origin = origin.ToPoint() + new Point(1, 1);
         private Point _size = new(Main.buffScanAreaWidth, Main.buffScanAreaHeight);
         private readonly Dictionary<int, int> _tileCounts = [];
@@ -37,6 +38,14 @@ namespace BiomeExtractorsMod.Common.Systems
         /// The Y position of this scan's origin in tile coordinates.
         /// </summary>
         public float Y => _origin.Y;
+        /// <summary>
+        /// True if the scan was requested by an Extractor. False otherwise.
+        /// </summary>
+        public bool IsExtractor => !_isScanner;
+        /// <summary>
+        /// True if the scan was requested by a Scanner. False otherwise.
+        /// </summary>
+        public bool IsScanner => _isScanner;
 
         /// <summary>
         /// Returns the amount of tiles in the scan area that correspond to any of the requested tile ids.
@@ -887,9 +896,9 @@ namespace BiomeExtractorsMod.Common.Systems
             return false;
         }
 
-        internal List<PoolEntry> CheckValidBiomes(ExtractionTier tier, Point16 position)
+        internal List<PoolEntry> CheckValidBiomes(ExtractionTier tier, Point16 position, bool isScanner = false)
         {
-            ScanData scan = new(tier, position);
+            ScanData scan = new(tier, position, isScanner);
             scan.Scan();
 
             int last_p = int.MaxValue;

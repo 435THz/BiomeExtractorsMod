@@ -186,7 +186,7 @@ namespace BiomeExtractorsMod.Content.Tiles
             if (Main.LocalPlayer.HeldItem.type == ModContent.GetInstance<BiomeScanner>().Type) return false;
             if (TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity))
             {
-                ModContent.GetInstance<UISystem>().OpenInterface(entity);
+                ModContent.GetInstance<UISystem>().OpenExtractorInterface(entity);
                 return true;
             }
             Main.NewText(Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.MachineStateBroken"));
