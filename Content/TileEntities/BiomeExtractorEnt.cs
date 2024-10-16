@@ -104,7 +104,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             set { BTimer = (value + BiomeScanRate) % BiomeScanRate; }
         }
         private bool _active = true;
-        internal bool Active
+        public bool Active
         {
             get => _active;
             set
@@ -409,7 +409,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         }
 
         //toggles the machine on and off
-        internal void ToggleState() {
+        public void ToggleState() {
             Active = !Active;
             if (Active) UpdatePoolList(); //must refresh when turned back on
         }
