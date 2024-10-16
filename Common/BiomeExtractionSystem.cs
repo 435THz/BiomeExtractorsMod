@@ -589,9 +589,8 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="artKey">The localization key of this tier's indeterminate article. Used in Upgrade Kit tooltips</param>
         /// <param name="locKey">The localization key of this tier</param>
         /// <param name="rate">A <see cref="Func{TResult}"/> that returns the extraction rate of this Extraction Tier, in frames.</param>
-        /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>
-        /// <param name="icon"/>A string path that points to the file containing the icon asset for this ExtractonTier's Extractors.
-        /// Example: 35 would be 35%</param>
+        /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>Example: 35 would be 35%</param>
+        /// <param name="icon">A string path that points to the file containing the icon asset for this ExtractonTier's Extractors.</param>
         /// <returns><see langword="true"/> if the tier number was not occupied yet, <see langword="false"/> otherwise</returns>
         public bool AddTier(int tier, string artKey, string locKey, Func<int> rate, Func<int> chance, string icon) => AddTier(new(tier, artKey, locKey, rate, chance, icon));
         /// <summary>
