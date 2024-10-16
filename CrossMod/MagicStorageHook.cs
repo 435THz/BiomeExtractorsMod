@@ -49,7 +49,7 @@ namespace BiomeExtractorsMod.CrossMod
             int limit = DepositableAmount(heart, newItem);
             newItem.stack = Utils.Clamp(newItem.stack, 0, limit);
             if(newItem.stack == 0) return false;
-            heart.DepositItem(newItem);
+            heart.DepositItem(newItem.Clone());
             return true;
         }
 

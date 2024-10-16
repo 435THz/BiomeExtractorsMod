@@ -9,6 +9,7 @@ using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -42,8 +43,23 @@ namespace BiomeExtractorsMod.Content.TileEntities
             public readonly byte Column = column;
             public readonly byte FileColumns = file_columns;
         }
-        private struct OutData(OutputType type, Point point)
+        internal struct OutData(OutputType type, Point point) : TagSerializable
         {
+            public static readonly Func<TagCompound, OutData> DESERIALIZER = Load;
+
+            public TagCompound SerializeData()
+            {
+                return new TagCompound
+                {
+                    ["Type"] = (byte)Type,
+                    ["Point"] = Point.ToVector2()
+                };
+            }
+            public static OutData Load(TagCompound tag)
+            {
+                return new OutData((OutputType)tag.GetByte("Type"), tag.Get<Vector2>("Point").ToPoint());
+            }
+
             public OutputType Type { get; private set; } = type;
             public Point Point { get; private set; } = point;
             public OutData() : this(OutputType.NONE, new Point()) { }
@@ -62,30 +78,18 @@ namespace BiomeExtractorsMod.Content.TileEntities
             NONE, CHEST, MS_ENVIRONMENTACCESS
         }
 
-        private static readonly string tagXTimer = "extraction_timer";
-        private static readonly string tagBTimer = "biome_scan_timer";
-        private static readonly string tagState = "isActive";
-        private static readonly string tagTType = "targetType";
-        private static readonly string tagOutputX = "chest_x";
-        private static readonly string tagOutputY = "chest_y";
+        private static readonly string tagXTimer  = "extraction_timer";
+        private static readonly string tagBTimer  = "biome_scan_timer";
+        private static readonly string tagState   = "isActive";
+        private static readonly string tagOutputs = "outputList";
         private static readonly Point[] PosOffsets = [new(-1,2), new(3, 2), new(-1, 0), new(3, 0), new(0, -1), new(2, -1)];
 
         private int XTimer = 0;
         private int BTimer = 0;
-        private Point outputPos;
-        private OutputType _outType;
-        internal OutputType OutType
-        {
-            get => _outType;
-            set
-            {
-                _outType = value;
-                SendUpdatePacket(ServerMessageType.EXTRACTOR_UPDATE);
-            }
-        }
-        public bool HasOutput => OutType != OutputType.NONE;
+        private List<OutData> outputs = new(6);
+        public bool HasOutput => outputs.Count > 0;
 
-        private int ChestIndex { get => Chest.FindChest(outputPos.X, outputPos.Y); }
+        private int ChestIndex(Point chestPos) => Chest.FindChest(chestPos.X, chestPos.Y);
 
         protected List<PoolEntry> PoolList { get; private set; } = [];
 
@@ -144,12 +148,10 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         public override void SaveData(TagCompound tag)
         {
-            tag.Add(tagXTimer, ExtractionTimer);
-            tag.Add(tagBTimer, ScanningTimer);
-            tag.Add(tagState,  Active);
-            tag.Add(tagTType,  (int)OutType);
-            tag.Add(tagOutputX, outputPos.X);
-            tag.Add(tagOutputY, outputPos.Y);
+            tag.Add(tagXTimer,  ExtractionTimer);
+            tag.Add(tagBTimer,  ScanningTimer);
+            tag.Add(tagState,   Active);
+            tag.Add(tagOutputs, outputs);
         }
 
         public override void LoadData(TagCompound tag)
@@ -157,15 +159,11 @@ namespace BiomeExtractorsMod.Content.TileEntities
             tag.TryGet(tagXTimer, out int xtimer);
             tag.TryGet(tagBTimer, out int btimer);
             tag.TryGet(tagState, out bool active);
-            tag.TryGet(tagOutputX, out int x);
-            tag.TryGet(tagOutputY, out int y);
-            tag.TryGet(tagTType, out int type);
 
             ExtractionTimer = xtimer;
             ScanningTimer   = btimer;
             Active          = active;
-            outputPos       = new Point(x, y);
-            OutType      = (OutputType)type;
+            outputs         = tag.GetList<OutData>(tagOutputs).ToList();
             UpdatePoolList(); //always run on loading
         }
 
@@ -176,23 +174,54 @@ namespace BiomeExtractorsMod.Content.TileEntities
             ExtractionTimer++; //never run immediately upon placement
             if (ExtractionTimer == 0)
             {
-                //Discard the output if it is not valid
-                if (!IsOutputDataValid()) {
-
-                    //If the output data is not valid, a new one will be searched for
-                    OutData output = GetNewOutput();
-                    OutType = output.Type;
-                    outputPos = output.Point;
-                }
-
-                if (Main.rand.Next(100) < ExtractionChance)
+                byte o = 0;
+                for (byte i = 0; i < outputs.Count; i++)
                 {
-                    Item generated = Instance.RollItem(PoolList);
-                    if (AddToOutput(generated.Clone()) && ModContent.GetInstance<ConfigCommon>().ShowTransferAnimation)
+                    OutData output = outputs[i - o];
+                    //Discard the output if it is not valid
+                    if (!IsOutputDataValid(output))
                     {
-                        Vector2 start = (Position.ToVector2() + new Vector2(1.5f, 1.5f)) * 16;
-                        Vector2 end = (outputPos.ToVector2() + Vector2.One) * 16;
-                        Chest.VisualizeChestTransfer(start, end, generated, 1);
+                        outputs.RemoveAt(i - o);
+                        o++;
+                    }
+                }
+                if (outputs.Count == 0)
+                {
+                    //If no valid ouput exists, a new one will be searched for
+                    OutData output = GetNewOutput();
+                    if(output.Type != OutputType.NONE)
+                        outputs.Add(output);
+                }
+                //if at least one valid output exists
+                if (HasOutput)
+                {
+                    if (Main.rand.Next(100) < ExtractionChance)
+                    {
+                        // generate the new item
+                        Item generated = Instance.RollItem(PoolList);
+                        for (int i = 0; i<6; i++)
+                        {
+                            //try to put it in an output 
+                            OutData output = outputs[i];
+                            if (AddToOutput(output, generated.Clone()))
+                            {
+                                //success. Let's stop
+                                break;
+                            }
+                            else
+                            {
+                                //did we run out of outputs?
+                                if (i + 1 >= outputs.Count)
+                                {
+                                    //look for a new one. If none are found, stop
+                                    OutData newOutput = GetNewOutput();
+                                    if (output.Type == OutputType.NONE)
+                                        break;
+
+                                    outputs.Add(newOutput);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -207,17 +236,26 @@ namespace BiomeExtractorsMod.Content.TileEntities
             ScanningTimer++; //always run immediately upon placement
         }
 
-        private bool AddToOutput(Item newItem)
+        private bool AddToOutput(OutData dest, Item newItem)
         {
-            if (newItem.type == ItemID.None) return false;
-            if (BiomeExtractorsMod.MS_loaded && OutType == OutputType.MS_ENVIRONMENTACCESS) return MagicStorageHook.AddItemToStorage(newItem, outputPos);
-            if (OutType == OutputType.CHEST) return AddToChest(newItem);
+            if (newItem.type == ItemID.None) return true;
+            if (BiomeExtractorsMod.MS_loaded && dest.Type == OutputType.MS_ENVIRONMENTACCESS) return AddToStorage(newItem, dest.Point);
+            if (dest.Type == OutputType.CHEST) return AddToChest(newItem, dest.Point);
             return false;
         }
-
-        private bool AddToChest(Item newItem)
+        private bool AddToStorage(Item newItem, Point storagePos)
         {
-            Chest chest = Main.chest[ChestIndex];
+            if (MagicStorageHook.AddItemToStorage(newItem, storagePos) && newItem.stack > 0)
+            {
+                AnimateItemMovement(storagePos, newItem);
+            }
+            return true;
+        }
+
+        private bool AddToChest(Item newItem, Point chestPos)
+        {
+            Item clone = newItem.Clone();
+            Chest chest = Main.chest[ChestIndex(chestPos)];
 
             int starting = newItem.stack;
             for (int inventoryIndex = 0; inventoryIndex < Chest.maxItems; inventoryIndex++)
@@ -237,24 +275,42 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 }
                 if (newItem.stack < 1)
                 {
-                    return true;
+                    newItem.stack = Math.Max(newItem.stack, 0);
+                    break;
                 }
             }
-            return starting != newItem.stack;
-        }
-
-        private bool IsOutputDataValid()
-        {
-            if (BiomeExtractorsMod.MS_loaded && OutType == OutputType.MS_ENVIRONMENTACCESS)
-                return MagicStorageHook.IsOutputValid(outputPos);
-            if (OutType == OutputType.CHEST)
-                return IsChestValid();
+            
+            clone.stack = starting - newItem.stack;
+            if (clone.stack > 0)
+            {
+                AnimateItemMovement(chestPos, clone);
+                return true;
+            }
             return false;
         }
 
-        private bool IsChestValid()
+        private void AnimateItemMovement(Point target, Item item)
         {
-            int index = ChestIndex;
+            if (ModContent.GetInstance<ConfigCommon>().ShowTransferAnimation)
+            {
+                Vector2 start = (Position.ToVector2() + new Vector2(1.5f, 1.5f)) * 16;
+                Vector2 end = (target.ToVector2() + Vector2.One) * 16;
+                Chest.VisualizeChestTransfer(start, end, item, 1);
+            }
+        }
+
+        private bool IsOutputDataValid(OutData output)
+        {
+            if (BiomeExtractorsMod.MS_loaded && output.Type == OutputType.MS_ENVIRONMENTACCESS)
+                return MagicStorageHook.IsOutputValid(output.Point);
+            if (output.Type == OutputType.CHEST)
+                return IsChestValid(output.Point);
+            return false;
+        }
+
+        private bool IsChestValid(Point chestPos)
+        {
+            int index = ChestIndex(chestPos);
             if (index < 0) return false; //if the chest does not exist
             Chest chest = Main.chest[index];
             if (!IsUnlocked(chest)) return false; //if the chest is locked
@@ -265,7 +321,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 int X = Position.X + pos.X;
                 int Y = Position.Y + pos.Y;
 
-                if (outputPos.X > X - 2 && outputPos.X <= X && outputPos.Y > Y - 2 && outputPos.Y <= Y)
+                if (chestPos.X > X - 2 && chestPos.X <= X && chestPos.Y > Y - 2 && chestPos.Y <= Y)
                 {
                     return true;
                 }
@@ -275,20 +331,18 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private OutData GetNewOutput()
         {
-            OutData output;
             if (BiomeExtractorsMod.MS_loaded)
             {
-                output = GetAdjacentMSAccess();
+                OutData output = GetAdjacentMSAccess();
                 if (output.Type != OutputType.NONE) return output;
             }
-            output = GetAdjacentChest();
-            return output;
+            return GetAdjacentChest();
         }
 
         //Looks for a Storage Configuration Interface in the adjacent spaces to the left, right or top of this machine
         private OutData GetAdjacentMSAccess()
         {
-            bool prioritizeLeft = Main.rand.NextBool();
+            bool prioritizeLeft = Position.X % 2 == 0;
 
             for (int i = 0; i < 6; i++)
             {
@@ -308,7 +362,8 @@ namespace BiomeExtractorsMod.Content.TileEntities
         //Looks for a chest in the adjacent spaces to the left or right of this machine
         private OutData GetAdjacentChest()
         {
-            bool prioritizeLeft = Main.rand.NextBool();
+            
+            bool prioritizeLeft = Position.X%2==0;
 
             Chest[] chests = new Chest[4];
             for (int i = 0; i < 8000; i++)
@@ -335,7 +390,13 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 if (chests[i] != default(Chest))
                 {
                     Chest chest = chests[i];
-                    return new(OutputType.CHEST, new(chest.x, chest.y));
+                    bool newChest = true;
+                    foreach (OutData output in outputs)
+                    {
+                        if (output.Point == new Point(chest.x, chest.y)) { newChest = false; }
+                    }
+                    if (newChest)
+                        return new(OutputType.CHEST, new(chest.x, chest.y));
                 }
             }
             return new();
@@ -436,17 +497,25 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         public override void NetSend(BinaryWriter writer)
         {
-            writer.Write(outputPos.X);
-            writer.Write(outputPos.Y);
-            writer.Write((byte)OutType);
             writer.Write(Active);
+            writer.Write((byte)outputs.Count);
+            for (int i = 0; i < outputs.Count; i++)
+            {
+                writer.Write((byte)outputs[i].Type);
+                writer.Write(outputs[i].Point.X);
+                writer.Write(outputs[i].Point.Y);
+            }
         }
 
         public override void NetReceive(BinaryReader reader)
         {
-            outputPos = new(reader.ReadInt32(), reader.ReadInt32());
-            OutType = (OutputType)reader.ReadByte();
             Active = reader.ReadBoolean();
+            byte len = reader.ReadByte();
+            outputs = new List<OutData>(6);
+            for (int i = 0; i < len; i++)
+            {
+                outputs.Add(new OutData((OutputType)reader.ReadByte(), new Point(reader.ReadInt32(), reader.ReadInt32())));
+            }
         }
         #endregion
 
