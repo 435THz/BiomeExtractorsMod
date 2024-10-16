@@ -134,9 +134,18 @@ namespace BiomeExtractorsMod.Content.TileEntities
         protected internal abstract ExtractionTier ExtractionTier { get; }
 
         protected internal int Tier => ExtractionTier.Tier;
-        protected internal string LocalName => ExtractionTier.Name;
-        protected internal int ExtractionRate => ExtractionTier.Rate;
-        protected internal int ExtractionChance => ExtractionTier.Chance;
+        /// <summary>
+        /// Returns the name that appears in the ui when opening right clicking this extractor.
+        /// </summary>
+        protected internal virtual string LocalName => ExtractionTier.Name;
+        /// <summary>
+        /// Returns the extraction rate of this extractor, in frames.
+        /// </summary>
+        protected internal virtual int ExtractionRate => ExtractionTier.Rate;
+        /// <summary>
+        /// Returns the extraction chance of this extractor.
+        /// </summary>
+        protected internal virtual int ExtractionChance => ExtractionTier.Chance;
         internal string MapIconAsset => ExtractionTier.IconPath;
 
         private static int BiomeScanRate => ModContent.GetInstance<ConfigCommon>().BiomeScanRate;

@@ -143,7 +143,7 @@ namespace BiomeExtractorsMod.Common.UI
             UISystem uisys = ModContent.GetInstance<UISystem>();
             if (uisys is not null)
             {
-                header.SetText(uisys.GetTierName());
+                header.SetText(uisys.GetWindowTitle());
                 string status = uisys.GetExtractorStatus();
                 biomeText.SetText(status);
 

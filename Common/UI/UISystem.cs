@@ -133,8 +133,9 @@ namespace BiomeExtractorsMod.Common.UI
             }
         }
 
-        internal string GetTierName()
+        internal string GetWindowTitle()
         {
+            if (Extractor != null) return Extractor.LocalName;
             return tier.Name;
         }
 
