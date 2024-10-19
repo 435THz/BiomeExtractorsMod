@@ -12,7 +12,10 @@ namespace BiomeExtractorsMod.Content.Items
 {
     public abstract class ExtractorModificationKit : ModItem
     {
-        protected abstract int[] TargetTiles { get;}
+        protected abstract int[] TargetTiles { get; }
+        /// <summary>
+        /// The id of the tile that will replace the current one.
+        /// </summary>
         protected abstract int ResultTile { get; }
         /// <summary>
         /// The style of the tile that will replace the current one.

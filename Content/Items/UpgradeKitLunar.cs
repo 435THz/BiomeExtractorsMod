@@ -9,7 +9,7 @@ namespace BiomeExtractorsMod.Content.Items
     public class UpgradeKitLunar : ExtractorUpgradeKit
     {
         protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.LUNAR;
-        protected override int TileID => ModContent.TileType<BiomeExtractorTileLunar>();
+        protected override int ResultTile => ModContent.TileType<BiomeExtractorTileLunar>();
         public override void SetDefaults()
         {
             base.SetDefaults();

@@ -9,7 +9,7 @@ namespace BiomeExtractorsMod.Content.Items
     public class UpgradeKitCyber : ExtractorUpgradeKit
     {
         protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.CYBER;
-        protected override int TileID => ModContent.TileType<BiomeExtractorTileCyber>();
+        protected override int ResultTile => ModContent.TileType<BiomeExtractorTileCyber>();
         public override void SetDefaults()
         {
             base.SetDefaults();

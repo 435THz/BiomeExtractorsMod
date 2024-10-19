@@ -9,7 +9,7 @@ namespace BiomeExtractorsMod.Content.Items
     public class UpgradeKitInfernal : ExtractorUpgradeKit
     {
         protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.INFERNAL;
-        protected override int TileID => ModContent.TileType<BiomeExtractorTileInfernal>();
+        protected override int ResultTile => ModContent.TileType<BiomeExtractorTileInfernal>();
         public override void SetDefaults()
         {
             base.SetDefaults();

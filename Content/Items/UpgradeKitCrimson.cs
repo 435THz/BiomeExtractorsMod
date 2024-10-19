@@ -9,7 +9,7 @@ namespace BiomeExtractorsMod.Content.Items
     public class UpgradeKitCrimson : ExtractorUpgradeKit
     {
         protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.DEMONIC;
-        protected override int TileID => ModContent.TileType<BiomeExtractorTileDemonic>();
+        protected override int ResultTile => ModContent.TileType<BiomeExtractorTileDemonic>();
         protected override int TileStyle => 1;
         public override void SetDefaults()
         {

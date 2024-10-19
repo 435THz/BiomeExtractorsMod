@@ -9,7 +9,7 @@ namespace BiomeExtractorsMod.Content.Items
     public class UpgradeKitAdamantite : ExtractorUpgradeKit
     {
         protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.STEAMPUNK;
-        protected override int TileID => ModContent.TileType<BiomeExtractorTileSteampunk>();
+        protected override int ResultTile => ModContent.TileType<BiomeExtractorTileSteampunk>();
         public override void SetDefaults()
         {
             base.SetDefaults();
