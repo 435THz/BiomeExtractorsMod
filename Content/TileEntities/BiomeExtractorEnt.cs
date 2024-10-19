@@ -126,7 +126,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         /// <summary>
         /// If set, this extractor will have a custom icon that is different from the one normally used for its tier.
         /// </summary>
-        protected internal ExtractorIconOverride IconOverride = ExtractorIconOverride.Invalid;
+        protected internal virtual ExtractorIconOverride IconOverride => ExtractorIconOverride.Invalid;
         internal bool HasIconOverride => !IconOverride.Equals(ExtractorIconOverride.Invalid);
         /// <summary>
         /// Returns the tier of this Extractor.
