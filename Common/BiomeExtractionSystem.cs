@@ -281,15 +281,35 @@ namespace BiomeExtractorsMod.Common.Systems
         {
             private readonly Func<int> _rate = rate;
             private readonly Func<int> _chance = chance;
-
             //list of items in this tier. It should never be empty on recipe generation, but,
             //if it is, a manually generated recipe should be provioded to avoid errors
-            internal readonly List<BiomeExtractorItem> Items = [];
-            internal void Register(BiomeExtractorItem item)
+            private readonly List<BiomeExtractorItem> _items = [];
+
+            /// <summary>
+            /// Returns the list of <see cref="BiomeExtractorItem"/> objexts registered to this tier.
+            /// This list is a copy of the real list of items, meaning that any change will not affect the original list at all.
+            /// </summary>
+            public List<BiomeExtractorItem> Items
             {
-                if (!Items.Contains(item)) Items.Add(item);
+                get
+                {
+                    BiomeExtractorItem[] arr = new BiomeExtractorItem[_items.Count];
+                    _items.CopyTo(arr);
+                    return arr.ToList();
+                }
             }
-            internal string RecipeGroup => $"{nameof(BiomeExtractorsMod)}:{Items[0].GetType().Name}";
+            /// <summary>
+            /// Registers a new <see cref="BiomeExtractorItem"/> to this tier.
+            /// </summary>
+            public void Register(BiomeExtractorItem item)
+            {
+                if (!_items.Contains(item)) _items.Add(item);
+            }
+
+            /// <summary>
+            /// Returns the recipe group's name for the <see cref="BiomeExtractorItem"/> objexts registered to this tier.
+            /// </summary>
+            public string RecipeGroup => $"{nameof(BiomeExtractorsMod)}:{_items[0].GetType().Name}";
 
             /// <summary>
             /// An empty ExtractionTier object.
