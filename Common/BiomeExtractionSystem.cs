@@ -1139,10 +1139,10 @@ namespace BiomeExtractorsMod.Common.Systems
             AddPool(ug_corrupt_desert,     1300, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, LocalizeAs(ug_corrupt_desert));
             AddPool(ug_crimson_desert,     1300, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, LocalizeAs(ug_crimson_desert));
             
-            AddPool(dungeon,   2000, (int)BiomeExtractorEnt.EnumTiers.DEMONIC, LocalizeAs(dungeon));
-            AddPool(dungeon_p, 2000, (int)BiomeExtractorEnt.EnumTiers.DEMONIC);
-            AddPool(dungeon_g, 2000, (int)BiomeExtractorEnt.EnumTiers.DEMONIC);
-            AddPool(dungeon_b, 2000, (int)BiomeExtractorEnt.EnumTiers.DEMONIC);
+            AddPool(dungeon,   2000, [scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.DEMONIC), postSkeletron], LocalizeAs(dungeon));
+            AddPool(dungeon_p, 2000, [scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.DEMONIC), postSkeletron]);
+            AddPool(dungeon_g, 2000, [scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.DEMONIC), postSkeletron]);
+            AddPool(dungeon_b, 2000, [scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.DEMONIC), postSkeletron]);
             AddPool(ectoplasm, 2000, [scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.CYBER), postPlantera]);
             AddPool(temple,    2000, [scan => scan.MinTier((int)BiomeExtractorEnt.EnumTiers.CYBER), postGolem], LocalizeAs(temple));
 
