@@ -531,7 +531,7 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly Predicate<ScanData> jungle140 = scan => scan.Tiles(jungleBlocks) > 140;
         public static readonly Predicate<ScanData> desert1500 = scan => scan.Tiles(desertBlocks) > 1500;
         public static readonly Predicate<ScanData> frost1500 = scan => scan.Tiles(frostBlocks) > 1500;
-        public static readonly Predicate<ScanData> tombstone5 = scan => scan.Tiles(TileID.Tombstones) > 20;
+        public static readonly Predicate<ScanData> tombstone5 = scan => scan.Tiles(TileID.Tombstones) >= 20;
         #endregion
 
         #region API
