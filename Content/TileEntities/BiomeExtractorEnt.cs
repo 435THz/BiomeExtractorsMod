@@ -183,6 +183,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             //Every time the timer wraps back to 0 the extraction routine is performed
             ExtractionTimer++; //never run immediately upon placement
             if (ExtractionTimer == 0)
+            int state_old = (int)IconMapSystem.StateOf(this);
             {
                 byte o = 0;
                 for (byte i = 0; i < outputs.Count; i++)
@@ -199,7 +200,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 {
                     //If no valid ouput exists, a new one will be searched for
                     OutData output = GetNewOutput();
-                    if(output.Type != OutputType.NONE)
+                    if (output.Type != OutputType.NONE)
                         outputs.Add(output);
                 }
                 //if at least one valid output exists
@@ -209,7 +210,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
                     {
                         // generate the new item
                         Item generated = Instance.RollItem(PoolList);
-                        for (int i = 0; i<6; i++)
+                        for (int i = 0; i < 6; i++)
                         {
                             //try to put it in an output 
                             OutData output = outputs[i];
@@ -235,6 +236,8 @@ namespace BiomeExtractorsMod.Content.TileEntities
                     }
                 }
             }
+            if (state_old != (int)IconMapSystem.StateOf(this))
+                SendUpdatePacket(ServerMessageType.EXTRACTOR_UPDATE);
 
             //Every time this timer wraps back to 0 the scanning routine is performed
             if (ScanningTimer == 0)
