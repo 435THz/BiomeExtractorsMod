@@ -1,5 +1,4 @@
-﻿using BiomeExtractorsMod.Common.Systems;
-using BiomeExtractorsMod.Content.Items;
+﻿using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Content.TileEntities;
 using BiomeExtractorsMod.Content.Tiles;
 using Microsoft.Xna.Framework;

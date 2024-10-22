@@ -911,14 +911,34 @@ namespace BiomeExtractorsMod.Common.Systems
         /// Adds a new ItemEntry to a pool.
         /// </summary>
         /// <param name="poolName">The name of the pool to add the item to.</param>
+        /// <param name="itemId">The id of the item to add</param>
+        /// <param name="count">The amount of the given item this entry will contain.<br/>
+        /// Use <see cref="AddItemInPool(string, ItemEntry, int, int)"/> if you need to make it a range.</param>
+        /// <param name="numerator">The numerator of the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
+        /// <param name="denominator">The denominator of the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
+        /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
+        public bool AddItemInPool(string poolName, short itemId, int count, int numerator, int denominator) => AddItemInPool(poolName, new ItemEntry(itemId, count), numerator, denominator);
+        /// <summary>
+        /// Adds a new ItemEntry to a pool.
+        /// </summary>
+        /// <param name="poolName">The name of the pool to add the item to.</param>
         /// <param name="item">The ItemEntry to add</param>
         /// <param name="weight">The weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
         /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
-        public bool AddItemInPool(string poolName, ItemEntry item, int weight)
+        public bool AddItemInPool(string poolName, ItemEntry item, int weight) => AddItemInPool(poolName, item, weight, 1);
+        /// <summary>
+        /// Adds a new ItemEntry to a pool.
+        /// </summary>
+        /// <param name="poolName">The name of the pool to add the item to.</param>
+        /// <param name="item">The ItemEntry to add</param>
+        /// <param name="numerator">The numerator of the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
+        /// <param name="denominator">The denominator of the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
+        /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
+        public bool AddItemInPool(string poolName, ItemEntry item, int numerator, int denominator)
         {
             PoolEntry pool = GetPoolEntry(poolName);
             if (pool == null) return false;
-            _itemPools[poolName].Add(item, weight);
+            _itemPools[poolName].Add(item, numerator, denominator);
             return true;
         }
 

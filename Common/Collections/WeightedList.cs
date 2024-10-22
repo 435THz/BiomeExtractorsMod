@@ -9,6 +9,10 @@ namespace BiomeExtractorsMod.Common.Collections
     {
         private readonly Dictionary<T, int> dictionary;
         public int TotalWeight { get; private set; }
+        /// <summary>
+        /// How much the weights have been multiplied compared to this list's original state.
+        /// </summary>
+        public int Scale { get; private set; }
         public int Count => dictionary.Count;
 
         public bool IsReadOnly => false;
@@ -27,19 +31,16 @@ namespace BiomeExtractorsMod.Common.Collections
         {
             dictionary = [];
             TotalWeight = 0;
+            Scale = 1;
         }
 
-        public void Add(T element)
+        public void Add(T element) => Add(element, 1);
+        public void Add(T element, int weight) => Add(element, weight, 1);
+        public void Add(T element, int weight_num, int weight_den)
         {
-            if (dictionary.ContainsKey(element))
-                dictionary[element]++;
-            else
-                dictionary.Add(element, 1);
-            TotalWeight++;
-        }
-        public void Add(T element, int weight)
-        {
-            if (weight <= 0) return;
+            if (weight_num <= 0 || weight_den <= 0) return;
+            int scale = ApplyScale(weight_den);
+            int weight = weight_num * scale;
             if (dictionary.ContainsKey(element))
                 dictionary[element]+=weight;
             else
@@ -123,6 +124,26 @@ namespace BiomeExtractorsMod.Common.Collections
             if (Contains(item))
                 return dictionary.Remove(item.Key);
             return false;
+        }
+
+        public int ApplyScale(int scale)
+        {
+            if(scale <= 0) return -1;
+            int s = scale;
+            int p = Scale;
+            while (s > 0 && p > 0)
+            {
+                if (s > p) s %= p;
+                else p %= s;
+            }
+            int mcm = Scale * scale / (p | s);
+            int newscaling = mcm / scale;
+            foreach(T key in dictionary.Keys)
+            {
+                dictionary[key] = dictionary[key] * newscaling;
+            }
+            TotalWeight *= newscaling;
+            return newscaling;
         }
     }
 }
