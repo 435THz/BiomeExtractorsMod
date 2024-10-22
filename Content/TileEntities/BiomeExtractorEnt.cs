@@ -33,13 +33,14 @@ namespace BiomeExtractorsMod.Content.TileEntities
         /// <param name="assetPath">The path to the icon to be used, starting from the mod's base folder.</param>
         /// <param name="file_columns"></param> The number of columnts the icon file is divided into.
         /// <param name="column">The specific column of the icon file that will be used for the icon.</param>
-        public readonly struct ExtractorIconOverride(string hoverTextKey, string assetPath, byte column, byte file_columns)
+        public readonly struct ExtractorIconOverride(string hoverTextKey, Func<Asset<Texture2D>> icon, byte column, byte file_columns)
         {
             public static ExtractorIconOverride Invalid { get; private set; } = new ExtractorIconOverride();
 
-            public ExtractorIconOverride() : this("", "", 0, 0) { }
+            public ExtractorIconOverride() : this("", null, 0, 0) { }
             public readonly string HoverTextKey = hoverTextKey;
-            public readonly string IconPath = assetPath;
+            private readonly Func<Asset<Texture2D>> _icon = icon;
+            public Asset<Texture2D> Icon => _icon.Invoke();
             public readonly byte Column = column;
             public readonly byte FileColumns = file_columns;
         }
@@ -121,7 +122,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         protected internal abstract int TileType { get; }
         internal int TileStyle => TileObjectData.GetTileStyle(Main.tile[Position]);
 
-        internal Asset<Texture2D> MapIcon => Mod.Assets.Request<Texture2D>(MapIconAsset);
+        internal Asset<Texture2D> MapIcon => MapIconAsset;
 
         /// <summary>
         /// If set, this extractor will have a custom icon that is different from the one normally used for its tier.
@@ -146,7 +147,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         /// Returns the extraction chance of this extractor.
         /// </summary>
         protected internal virtual int ExtractionChance => ExtractionTier.Chance;
-        internal string MapIconAsset => ExtractionTier.IconPath;
+        internal Asset<Texture2D> MapIconAsset => ExtractionTier.Icon;
 
         private static int BiomeScanRate => ModContent.GetInstance<ConfigCommon>().BiomeScanRate;
 

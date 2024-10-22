@@ -176,7 +176,7 @@ namespace BiomeExtractorsMod.Common.Systems
                     if (extractor.HasIconOverride)
                     {
                         hoverText = Language.GetTextValue(extractor.IconOverride.HoverTextKey);
-                        asset = Mod.Assets.Request<Texture2D>(extractor.IconOverride.IconPath);
+                        asset = extractor.IconOverride.Icon;
                         column = extractor.IconOverride.Column;
                         columns = extractor.IconOverride.FileColumns;
                     }
@@ -184,7 +184,7 @@ namespace BiomeExtractorsMod.Common.Systems
                     {
                         BiomeExtractionSystem.ExtractionTier tier = BiomeExtractionSystem.Instance.GetTier(Tiers[i]);
                         hoverText = Language.GetTextValue(tier.Name);
-                        asset = Mod.Assets.Request<Texture2D>(tier.IconPath);
+                        asset = tier.Icon;
                         column = (byte)TileObjectData.GetTileStyle(Main.tile[Positions[i]]);
                         columns = (byte)((BiomeExtractorTile)tileObj).TileStyles(tile);
                     }

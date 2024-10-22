@@ -2,6 +2,7 @@ using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Content.TileEntities;
 using BiomeExtractorsMod.Content.Tiles;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Enums;
 using Terraria.ID;
@@ -18,7 +19,7 @@ namespace BiomeExtractorsMod.Content.Items
         public override void SetDefaults()
         {
             base.SetDefaults();
-            BiomeExtractionSystem.Instance.AddTier((int)BiomeExtractorEnt.EnumTiers.BASIC, $"{BiomeExtractorsMod.LocArticles}.Basic", $"{BiomeExtractorsMod.LocExtractorPrefix}Iron.DisplayName", delegate { return ConfigCommon.Instance.Tier1ExtractorRate; }, delegate { return ConfigCommon.Instance.Tier1ExtractorChance; }, "Content/MapIcons/BiomeExtractorIconBasic");
+            BiomeExtractionSystem.Instance.AddTier((int)BiomeExtractorEnt.EnumTiers.BASIC, $"{BiomeExtractorsMod.LocArticles}.Basic", $"{BiomeExtractorsMod.LocExtractorPrefix}Iron.DisplayName", delegate { return ConfigCommon.Instance.Tier1ExtractorRate; }, delegate { return ConfigCommon.Instance.Tier1ExtractorChance; }, delegate { return Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconBasic"); });
             Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(gold: 10)); // sell at 2
         }
 

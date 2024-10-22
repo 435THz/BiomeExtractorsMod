@@ -2,6 +2,8 @@ using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Content.TileEntities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -277,10 +279,12 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="rate">A <see cref="Func{TResult}"/> that returns the extraction rate of this Extraction Tier, in frames.</param>
         /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>
         /// Example: 35 would be 35%</param>
-        public class ExtractionTier(int tier, string articleKey, string localizationKey, Func<int> rate, Func<int> chance, string iconPath)
+        /// <param name="icon">A <see cref="Func{TResult}"/> that returns this tier's map icon.</param>
+        public class ExtractionTier(int tier, string articleKey, string localizationKey, Func<int> rate, Func<int> chance, Func<Asset<Texture2D>> icon)
         {
             private readonly Func<int> _rate = rate;
             private readonly Func<int> _chance = chance;
+            private readonly Func<Asset<Texture2D>> _icon = icon;
             //list of items in this tier. It should never be empty on recipe generation, but,
             //if it is, a manually generated recipe should be provioded to avoid errors
             private readonly List<BiomeExtractorItem> _items = [];
@@ -314,12 +318,8 @@ namespace BiomeExtractorsMod.Common.Systems
             /// <summary>
             /// An empty ExtractionTier object.
             /// </summary>
-            public readonly static ExtractionTier NULL = new(int.MinValue, "", "", null, null, "");
+            public readonly static ExtractionTier NULL = new(int.MinValue, "", "", null, null, null);
 
-            /// <summary>
-            /// Returns the path containing this Tile's map icon file.
-            /// </summary>
-            public readonly string IconPath = iconPath;
             /// <summary>
             /// The tier number of this tier.
             /// </summary>
@@ -347,6 +347,10 @@ namespace BiomeExtractorsMod.Common.Systems
             /// </summary>
             public int Chance => _chance is null ? 0 : _chance.Invoke();
             /// <summary>
+            /// Returns this tier's map icon.
+            /// </summary>
+            public Asset<Texture2D> Icon => _icon.Invoke();
+            /// <summary>
             /// Returns the localized name of this Extractor. This call is used by the UI to set up its header
             /// and by the Biome Scanner to show the tier names.
             /// </summary>
@@ -364,7 +368,7 @@ namespace BiomeExtractorsMod.Common.Systems
             /// </summary>
             /// <param name="newTier">The new tier to give to the copy of this tier</param>
             /// <returns>A copy of this tier but with <c>newTier</c> as its tier number</returns>
-            public ExtractionTier CloneAndMove(int newTier) => new(newTier, ArticleKey, LocalizationKey, _rate, _chance, IconPath);
+            public ExtractionTier CloneAndMove(int newTier) => new(newTier, ArticleKey, LocalizationKey, _rate, _chance, _icon);
         }
         #endregion
 
@@ -610,9 +614,10 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="locKey">The localization key of this tier</param>
         /// <param name="rate">A <see cref="Func{TResult}"/> that returns the extraction rate of this Extraction Tier, in frames.</param>
         /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>Example: 35 would be 35%</param>
-        /// <param name="icon">A string path that points to the file containing the icon asset for this ExtractonTier's Extractors.</param>
+        /// <param name="icon">A <see cref="Func{TResult}"/> that returns the icon asset for this ExtractonTier's Extractors.</param>
         /// <returns><see langword="true"/> if the tier number was not occupied yet, <see langword="false"/> otherwise</returns>
         public bool AddTier(int tier, string artKey, string locKey, Func<int> rate, Func<int> chance, string icon) => AddTier(new(tier, artKey, locKey, rate, chance, icon));
+        public bool AddTier(int tier, string artKey, string locKey, Func<int> rate, Func<int> chance, Func<Asset<Texture2D>> icon) => AddTier(new(tier, artKey, locKey, rate, chance, icon));
         /// <summary>
         /// Registers an ExtractionTier.<br></br>
         /// If an ExtractionTier with that tier number already exists, this method does nothing.
