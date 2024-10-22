@@ -477,6 +477,7 @@ namespace BiomeExtractorsMod.Common.Systems
         public static readonly List<ushort> desertBlocks = [TileID.Sand, TileID.Crimsand, TileID.Ebonsand, TileID.Pearlsand, TileID.HardenedSand, TileID.CrimsonHardenedSand, TileID.CorruptHardenedSand, TileID.HallowHardenedSand, TileID.Sandstone, TileID.CrimsonSandstone, TileID.CorruptSandstone, TileID.HallowSandstone];
 
         //PROGRESSION
+        public static readonly Predicate<ScanData> postSkeletron = scan => Condition.DownedSkeletron.IsMet();
         public static readonly Predicate<ScanData> hardmodeOnly = scan => Main.hardMode;
         public static readonly Predicate<ScanData> postMech = scan => Condition.DownedMechBossAny.IsMet();
         public static readonly Predicate<ScanData> postMechs = scan => Condition.DownedMechBossAll.IsMet();
@@ -616,7 +617,6 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>Example: 35 would be 35%</param>
         /// <param name="icon">A <see cref="Func{TResult}"/> that returns the icon asset for this ExtractonTier's Extractors.</param>
         /// <returns><see langword="true"/> if the tier number was not occupied yet, <see langword="false"/> otherwise</returns>
-        public bool AddTier(int tier, string artKey, string locKey, Func<int> rate, Func<int> chance, string icon) => AddTier(new(tier, artKey, locKey, rate, chance, icon));
         public bool AddTier(int tier, string artKey, string locKey, Func<int> rate, Func<int> chance, Func<Asset<Texture2D>> icon) => AddTier(new(tier, artKey, locKey, rate, chance, icon));
         /// <summary>
         /// Registers an ExtractionTier.<br></br>

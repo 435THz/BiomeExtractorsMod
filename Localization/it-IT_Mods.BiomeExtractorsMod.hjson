@@ -32,7 +32,8 @@ Items: {
 		Tooltip:
 			'''
 			Piazzalo in qualsiasi punto del mondo per estrarre i materiali più comuni trovabili nell'area circostante.
-			Può estrarre materiali dai biomi malvagi e dal Dungeon.
+			Può estrarre materiali dai biomi malvagi.
+			Può estrarre materiali dal Dungeon dopo che Skeletron è stato sconfitto.
 			'''
 	}
 
@@ -179,7 +180,7 @@ Configs: {
 		Tier1ChanceTooltip:
 			'''
 			La chance di successo, in percentuale, di ogni estrazione fatta
-			da Estrattori semplici.
+			         da Estrattori semplici.
 			Il valore predefinito è 60.
 			'''
 		Tier1RateTitle: Intervallo di estrazione

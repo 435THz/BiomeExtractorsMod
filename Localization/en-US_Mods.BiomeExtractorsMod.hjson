@@ -32,7 +32,8 @@ Items: {
 		Tooltip:
 			'''
 			Place it anywhere in the world to extract common materials from the area around it.
-			It can extract materials from the evil biomes and the dungeon.
+			It can extract materials from the evil biomes.
+			It can extract materials from the dungeon after Skeletron has been defeated.
 			'''
 	}
 
