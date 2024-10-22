@@ -160,6 +160,20 @@ Configs: {
 	ConfigCommon: {
 		DisplayName: Extractors Settings
 		GeneralConfigHeader: Impostazioni generali
+		FollowDayRateTitle: Segui la velocità dei giorni
+		FollowDayRateTooltip:
+			'''
+			Questa impostazione permette agli Estrattori di lavorare
+			più velocemente quando le giornate si velocizzano, come
+			quando si dorme su un letto
+			Il valore predefinito è RIDOTTO.
+
+			SÌ - Gli estrattori accelerano insieme alle giornate,
+			estraendo più di una volta per frame se necessario.
+			RIDOTTO - Gli estrattori accelerano insieme alle giornate,
+			ma non estrarranno mai più di una volta per frame.
+			NO - Gli estrattori non accelerano insieme alle giornate.
+			'''
 		TransferAnimationTitle: Mostra animazione di deposito
 		TransferAnimationTooltip:
 			'''
@@ -279,20 +293,6 @@ Configs: {
 			Quanto spesso gli Estrattori eterei cercano di estrarre qualcosa.
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 45, che corrisponde a 3/4 di secondo.
-			'''
-		FollowDayRateTitle: Segui la velocità dei giorni
-		FollowDayRateTooltip:
-			'''
-			Questa impostazione permette agli Estrattori di lavorare
-			più velocemente quando le giornate si velocizzano, come
-			quando si dorme su un letto
-			Il valore predefinito è RIDOTTO.
-
-			SÌ - Gli estrattori accelerano insieme alle giornate,
-			estraendo più di una volta per frame se necessario.
-			RIDOTTO - Gli estrattori accelerano insieme alle giornate,
-			ma non estrarranno mai più di una volta per frame.
-			NO - Gli estrattori non accelerano insieme alle giornate.
 			'''
 	}
 
