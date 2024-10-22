@@ -157,6 +157,19 @@ Configs: {
 	ConfigCommon: {
 		DisplayName: Extractors Settings
 		GeneralConfigHeader: General Settings
+		FollowDayRateTitle: Follow Day Speed
+		FollowDayRateTooltip:
+			'''
+			This setting allows extractors to accelerate their work
+			when the day speed increases, like when sleeping on a bed.
+			Defaults to REDUCED.
+
+			YES - Extractors will accelerate with the day speed,
+			extracting more than once per frame if necessary.
+			REDUCED - Extractors will accelerate with the day speed, but
+			it will never extract more than once per frame.
+			NO - Extractors will not accelerate with the day speed.
+			'''
 		TransferAnimationTitle: Show Transfer Animation
 		TransferAnimationTooltip:
 			'''
@@ -303,6 +316,13 @@ Configs: {
 			tools, weapons and equipment.
 			Defaults to 5.
 			'''
+	}
+
+	FollowRateValues: {
+		Tooltip: ""
+		NO.Label: NO
+		REDUCED.Label: REDUCED
+		YES.Label: YES
 	}
 }
 

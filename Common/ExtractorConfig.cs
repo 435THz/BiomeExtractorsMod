@@ -27,9 +27,16 @@ namespace BiomeExtractorsMod.Common.Configs
     {
         public static ConfigCommon Instance => ModContent.GetInstance<ConfigCommon>();
         public override ConfigScope Mode => ConfigScope.ServerSide;
-
+        public enum FollowRateValues {NO, REDUCED, YES}
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.GeneralConfigHeader")]
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.FollowDayRateTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.FollowDayRateTooltip")]
+        [DefaultValue(FollowRateValues.REDUCED)]
+        [DrawTicks]
+        public FollowRateValues FollowDayRate;
+
+
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.TransferAnimationTitle")]
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.TransferAnimationTooltip")]
         [DefaultValue(true)]

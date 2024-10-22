@@ -181,9 +181,13 @@ namespace BiomeExtractorsMod.Content.TileEntities
         {
             if (!Active) { return; }
             //Every time the timer wraps back to 0 the extraction routine is performed
-            ExtractionTimer++; //never run immediately upon placement
-            if (ExtractionTimer == 0)
+            int tick_increase = ConfigCommon.Instance.FollowDayRate == ConfigCommon.FollowRateValues.NO ? 1 : (int)Main.dayRate;
+            int checks_this_frame = (ExtractionTimer + tick_increase) / ExtractionRate;
+            ExtractionTimer += tick_increase; //never run immediately upon placement
+            if (ConfigCommon.Instance.FollowDayRate != ConfigCommon.FollowRateValues.YES)
+                checks_this_frame = Math.Min(checks_this_frame, 1);
             int state_old = (int)IconMapSystem.StateOf(this);
+            for (int check = 0; check < checks_this_frame; check++)
             {
                 byte o = 0;
                 for (byte i = 0; i < outputs.Count; i++)
