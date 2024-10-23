@@ -81,7 +81,7 @@ namespace BiomeExtractorsMod.Common.UI
             {
                 ItemEntry entry = entries[n];
                 Item item = new(entry.Id);
-                decimal chance = pool[entry] * 100 / (decimal)pool.TotalWeight;
+                decimal chance = (decimal)(pool[entry] * 100 / pool.TotalWeight);
                 SlotData data = new(item, entry.Min, entry.Max, chance);
                 SlotData[n] = data;
             }

@@ -771,7 +771,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="name">The name of the new PoolEntry</param>
         /// <param name="priority">The Priority value of this pool entry. Higher priorities are evaluated first.<br/>
         /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same <br/>priority, ignoring everything else.</param>
-        /// <param name="tier">The minimum Extractor tier required to access this pool.</param>
+        /// <param name="requirements">A list of <see cref="Predicate{T}"/> objexts that the scan must pass to access this pool.</param>
         /// <param name="localizationKey">The localization key that is used by this pool. </param>
         /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
         public bool AddPool(string name, int priority, Predicate<ScanData>[] requirements, string localizationKey) => AddPool(new PoolEntry(name, requirements, localizationKey), priority);
@@ -806,7 +806,7 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="name">The name of the new PoolEntry</param>
         /// <param name="priority">The Priority value of this pool entry. Higher priorities are evaluated first.<br/>
         /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same <br/>priority, ignoring everything else.</param>
-        /// <param name="tier">The minimum Extractor tier required to access this pool.</param>
+        /// <param name="requirements">A list of <see cref="Predicate{T}"/> objexts that the scan must pass to access this pool.</param>
         /// <param name="nonBlocking">If this is true, the priority system will keep checking for pools with lower <br/>priority even if this pool is valid.</param>
         /// <param name="localizationKey">The localization key that is used by this pool. </param>
         /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
@@ -898,6 +898,14 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
         public bool AddItemInPool(string poolName, short itemId, int weight) => AddItemInPool(poolName, new ItemEntry(itemId, 1), weight);
         /// <summary>
+        /// Adds a new ItemEntry to a pool.<br/>The item will be registered with a count equal to 1.
+        /// </summary>
+        /// <param name="poolName">The name of the pool to add the item to.</param>
+        /// <param name="itemId">The id of the item to add</param>
+        /// <param name="weight">A fraction that corresponds to the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
+        /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
+        public bool AddItemInPool(string poolName, short itemId, Fraction weight) => AddItemInPool(poolName, new ItemEntry(itemId, 1), weight);
+        /// <summary>
         /// Adds a new ItemEntry to a pool.
         /// </summary>
         /// <param name="poolName">The name of the pool to add the item to.</param>
@@ -914,10 +922,9 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="itemId">The id of the item to add</param>
         /// <param name="count">The amount of the given item this entry will contain.<br/>
         /// Use <see cref="AddItemInPool(string, ItemEntry, int, int)"/> if you need to make it a range.</param>
-        /// <param name="numerator">The numerator of the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
-        /// <param name="denominator">The denominator of the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
+        /// <param name="numerator">A fraction that corresponds to the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
         /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
-        public bool AddItemInPool(string poolName, short itemId, int count, int numerator, int denominator) => AddItemInPool(poolName, new ItemEntry(itemId, count), numerator, denominator);
+        public bool AddItemInPool(string poolName, short itemId, int count, Fraction weight) => AddItemInPool(poolName, new ItemEntry(itemId, count), weight);
         /// <summary>
         /// Adds a new ItemEntry to a pool.
         /// </summary>
@@ -925,20 +932,19 @@ namespace BiomeExtractorsMod.Common.Systems
         /// <param name="item">The ItemEntry to add</param>
         /// <param name="weight">The weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
         /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
-        public bool AddItemInPool(string poolName, ItemEntry item, int weight) => AddItemInPool(poolName, item, weight, 1);
+        public bool AddItemInPool(string poolName, ItemEntry item, int weight) => AddItemInPool(poolName, item, new Fraction(weight));
         /// <summary>
         /// Adds a new ItemEntry to a pool.
         /// </summary>
         /// <param name="poolName">The name of the pool to add the item to.</param>
         /// <param name="item">The ItemEntry to add</param>
-        /// <param name="numerator">The numerator of the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
-        /// <param name="denominator">The denominator of the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
+        /// <param name="weight">A fraction that corresponds to the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
         /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
-        public bool AddItemInPool(string poolName, ItemEntry item, int numerator, int denominator)
+        public bool AddItemInPool(string poolName, ItemEntry item, Fraction weight)
         {
             PoolEntry pool = GetPoolEntry(poolName);
             if (pool == null) return false;
-            _itemPools[poolName].Add(item, numerator, denominator);
+            _itemPools[poolName].Add(item, weight.Num, weight.Den);
             return true;
         }
 
@@ -1019,18 +1025,18 @@ namespace BiomeExtractorsMod.Common.Systems
                 return new(entry.Id, entry.Roll);
             }
 
-            int totalWeight = 0;
+            Fraction totalWeight = Fraction.Zero;
             foreach (PoolEntry pool in pools)
                 totalWeight += _itemPools[pool.Name].TotalWeight;
-            int roll = Main.rand.Next(totalWeight);
-            int current = 0;
+            Fraction roll = new(Main.rand.Next(totalWeight.Num), totalWeight.Den);
+            Fraction current = Fraction.Zero;
             ItemEntry result = new(ItemID.None, 1);
             foreach (PoolEntry pool in pools)
             {
                 current += _itemPools[pool.Name].TotalWeight;
                 if (current > roll)
                 {
-                    int weight = roll - (current - _itemPools[pool.Name].TotalWeight);
+                    Fraction weight = roll - (current - _itemPools[pool.Name].TotalWeight);
                     result = _itemPools[pool.Name].FromWeight(weight);
                     break;
                 }
@@ -1049,7 +1055,7 @@ namespace BiomeExtractorsMod.Common.Systems
                 foreach (PoolEntry pool in pools)
                 {
                     WeightedList<ItemEntry> items = _itemPools[pool.Name];
-                    foreach (KeyValuePair<ItemEntry, int> entry in items)
+                    foreach (KeyValuePair<ItemEntry, Fraction> entry in items)
                         joinedPool.Add(entry);
                 }
             }
