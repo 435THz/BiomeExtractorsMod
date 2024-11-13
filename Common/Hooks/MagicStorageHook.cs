@@ -6,7 +6,7 @@ using System;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace BiomeExtractorsMod.CrossMod
+namespace BiomeExtractorsMod.Common.Hooks
 {
     [JITWhenModsEnabled("MagicStorage")]
     internal abstract class MagicStorageHook
@@ -48,7 +48,7 @@ namespace BiomeExtractorsMod.CrossMod
 
             int limit = DepositableAmount(heart, newItem);
             newItem.stack = Utils.Clamp(newItem.stack, 0, limit);
-            if(newItem.stack == 0) return false;
+            if (newItem.stack == 0) return false;
             heart.DepositItem(newItem.Clone());
             return true;
         }
