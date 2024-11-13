@@ -20,8 +20,8 @@ namespace BiomeExtractorsMod.Content.Items
     public class BiomeScanner : ModItem
     {
         static readonly BiomeExtractionSystem BES = ModContent.GetInstance<BiomeExtractionSystem>();
-        int highestTier = (int)BiomeExtractorEnt.EnumTiers.BASIC;
-        int currentTier = (int)BiomeExtractorEnt.EnumTiers.BASIC;
+        int highestTier = ExtractionTiers.BASIC;
+        int currentTier = ExtractionTiers.BASIC;
         BiomeExtractionSystem.ExtractionTier CurrentTier
         {
             get

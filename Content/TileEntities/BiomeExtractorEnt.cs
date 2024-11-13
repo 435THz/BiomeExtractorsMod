@@ -1,8 +1,8 @@
 using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Common.Database;
+using BiomeExtractorsMod.Common.Hooks;
 using BiomeExtractorsMod.Common.UI;
-using BiomeExtractorsMod.CrossMod;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -64,14 +64,6 @@ namespace BiomeExtractorsMod.Content.TileEntities
             public OutputType Type { get; private set; } = type;
             public Point Point { get; private set; } = point;
             public OutData() : this(OutputType.NONE, new Point()) { }
-        }
-
-        /// <summary>
-        /// A list of all Tier values used by the mod. They have huge gaps in between each other for addons to fit in.
-        /// </summary>
-        public enum EnumTiers
-        {
-            BASIC = 1, DEMONIC = 1000, INFERNAL = 2000, STEAMPUNK = 3000, CYBER = 4000, LUNAR = 5000, ETHEREAL = 6000
         }
 
         internal enum OutputType

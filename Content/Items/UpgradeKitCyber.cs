@@ -1,4 +1,4 @@
-﻿using BiomeExtractorsMod.Content.TileEntities;
+﻿using BiomeExtractorsMod.Common.Database;
 using BiomeExtractorsMod.Content.Tiles;
 using Terraria;
 using Terraria.Enums;
@@ -8,7 +8,7 @@ namespace BiomeExtractorsMod.Content.Items
 {
     public class UpgradeKitCyber : ExtractorUpgradeKit
     {
-        protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.CYBER;
+        protected override int Tier => ExtractionTiers.CYBER;
         protected override int ResultTile => ModContent.TileType<BiomeExtractorTileCyber>();
         public override void SetDefaults()
         {

@@ -7,7 +7,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 {
     public class BiomeExtractorEntEthereal : BiomeExtractorEnt
     {
-        protected internal override ExtractionTier ExtractionTier => Instance.GetTier((int)EnumTiers.ETHEREAL, true);
+        protected internal override ExtractionTier ExtractionTier => Instance.GetTier(ExtractionTiers.ETHEREAL, true);
         protected internal override int TileType => ModContent.TileType<BiomeExtractorTileEthereal>();
     }
 }

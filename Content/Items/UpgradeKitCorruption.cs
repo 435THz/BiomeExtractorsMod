@@ -1,4 +1,4 @@
-﻿using BiomeExtractorsMod.Content.TileEntities;
+﻿using BiomeExtractorsMod.Common.Database;
 using BiomeExtractorsMod.Content.Tiles;
 using Terraria;
 using Terraria.Enums;
@@ -8,7 +8,7 @@ namespace BiomeExtractorsMod.Content.Items
 {
     public class UpgradeKitCorruption : ExtractorUpgradeKit
     {
-        protected override int Tier => (int)BiomeExtractorEnt.EnumTiers.DEMONIC;
+        protected override int Tier => ExtractionTiers.DEMONIC;
         protected override int ResultTile => ModContent.TileType<BiomeExtractorTileDemonic>();
 
         public override void SetDefaults()

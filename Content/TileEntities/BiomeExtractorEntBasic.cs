@@ -7,7 +7,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 {
     public class BiomeExtractorEntBasic : BiomeExtractorEnt
     {
-        protected internal override ExtractionTier ExtractionTier => Instance.GetTier((int)EnumTiers.BASIC, true);
+        protected internal override ExtractionTier ExtractionTier => Instance.GetTier(ExtractionTiers.BASIC, true);
         protected internal override int TileType => ModContent.TileType<BiomeExtractorTileBasic>();
     }
 }

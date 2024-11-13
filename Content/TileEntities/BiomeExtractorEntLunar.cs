@@ -7,7 +7,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 {
     public class BiomeExtractorEntLunar : BiomeExtractorEnt
     {
-        protected internal override ExtractionTier ExtractionTier => Instance.GetTier((int)EnumTiers.LUNAR, true);
+        protected internal override ExtractionTier ExtractionTier => Instance.GetTier(ExtractionTiers.LUNAR, true);
         protected internal override int TileType => ModContent.TileType<BiomeExtractorTileLunar>();
     }
 }
