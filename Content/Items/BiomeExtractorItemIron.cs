@@ -1,6 +1,6 @@
 using BiomeExtractorsMod.Common.Configs;
-using BiomeExtractorsMod.Common.Systems;
 using BiomeExtractorsMod.Content.TileEntities;
+using BiomeExtractorsMod.Common.Database;
 using BiomeExtractorsMod.Content.Tiles;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;

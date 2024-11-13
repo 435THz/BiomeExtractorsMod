@@ -8,7 +8,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
-using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
+using static BiomeExtractorsMod.Common.Database.BiomeExtractionSystem;
 
 namespace BiomeExtractorsMod.Common.UI
 {

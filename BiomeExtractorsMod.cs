@@ -18,7 +18,8 @@ namespace BiomeExtractorsMod
 
 
     public class BiomeExtractorsMod : Mod
-	{
+    {
+        public static BiomeExtractorsMod Instance => ModContent.GetInstance<BiomeExtractorsMod>();
         static string GetModName(SupportedMods mod) => Enum.GetName(typeof(SupportedMods), mod);
         enum SupportedMods
         {

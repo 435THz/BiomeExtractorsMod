@@ -1,4 +1,4 @@
-﻿using BiomeExtractorsMod.Common.Systems;
+﻿using BiomeExtractorsMod.Common.Database;
 using BiomeExtractorsMod.Content.Tiles;
 using System;
 using Terraria;

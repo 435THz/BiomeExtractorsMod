@@ -1,6 +1,6 @@
 using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Common.Configs;
-using BiomeExtractorsMod.Common.Systems;
+using BiomeExtractorsMod.Common.Database;
 using BiomeExtractorsMod.Common.UI;
 using BiomeExtractorsMod.CrossMod;
 using Microsoft.Xna.Framework;
@@ -17,7 +17,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
-using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
+using static BiomeExtractorsMod.Common.Database.BiomeExtractionSystem;
 
 namespace BiomeExtractorsMod.Content.TileEntities
 {

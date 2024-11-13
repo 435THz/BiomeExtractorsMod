@@ -1,4 +1,4 @@
-﻿using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
+﻿using static BiomeExtractorsMod.Common.Database.BiomeExtractionSystem;
 using Terraria.Localization;
 using System.Linq;
 

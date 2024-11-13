@@ -1,6 +1,7 @@
+using BiomeExtractorsMod.Common.Database;
 using BiomeExtractorsMod.Content.Tiles;
 using Terraria.ModLoader;
-using static BiomeExtractorsMod.Common.Systems.BiomeExtractionSystem;
+using static BiomeExtractorsMod.Common.Database.BiomeExtractionSystem;
 
 namespace BiomeExtractorsMod.Content.TileEntities
 {

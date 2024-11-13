@@ -16,7 +16,7 @@ using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 using Terraria.UI;
 
-namespace BiomeExtractorsMod.Common.Systems
+namespace BiomeExtractorsMod.Common.Database
 {
     internal enum ExtractorState { ACTIVE, INACTIVE, NO_OUTPUT, BROKEN }
     internal class IconMapSystem : ModSystem
