@@ -131,6 +131,109 @@ Items: {
 		DisplayName: "{$UpgradeKitAdamantite.DisplayName}"
 		Tooltip: "{$UpgradeKitAdamantite.Tooltip}"
 	}
+
+	SpectralExtractorItem: {
+		DisplayName: Spectral Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can extract Moon event energy when placed in a graveyard in specific biomes
+			after the Devourer of Gods has been defeated.
+			'''
+	}
+
+	AuricExtractorItem: {
+		DisplayName: Auric Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can extract Auric Ore in the Cavern layer after Yharon has been defeated.
+			'''
+	}
+
+	ExoExtractorItem: {
+		DisplayName: XX-01 Hephaestus
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			It can generate Exo Prisms when in space after the Exo Mechs have been defeated.
+			'''
+	}
+
+	SulphuricExtractorItem: {
+		DisplayName: Sulphuric Extractor
+		Tooltip:
+			'''
+			Place it anywhere in the world to extract common materials from the area around it.
+			Necessary to extract items from the Sulphurous Depths, the first layer of the Abyss.
+			It functions better underwater.
+			'''
+	}
+
+	PressurizedExtractorItem: {
+		DisplayName: Pressurized Extractor
+		Tooltip:
+			'''
+			Specialized Extractor that can only extract Abyss materials.
+			It works up until the Murky Waters, the second layer of the Abyss.
+			It only functions underwater, and only in the Abyss.
+			'''
+	}
+
+	ThermoresistantExtractorItem: {
+		DisplayName: Thermoresistant Extractor
+		Tooltip:
+			'''
+			Specialized Extractor that can only extract Abyss materials.
+			It works up until the Thermal Vents, the third layer of the Abyss.
+			It only functions underwater, and only in the Abyss.
+			'''
+	}
+
+	AbyssalExtractorItem: {
+		DisplayName: Abyssal Extractor
+		Tooltip:
+			'''
+			Specialized Extractor built to withstand even the greatest pressures.
+			It works anywhere in the Abyss, Void included.
+			It only functions underwater, and only in the Abyss.
+			'''
+	}
+
+	SpectralUpgradeKit: {
+		DisplayName: Spectral Upgrade Kit
+		Tooltip: "{$BiomeExtractorsMod.Items.UpgradeKitAdamantite.Tooltip}"
+	}
+
+	AuricUpgradeKit: {
+		DisplayName: Auric Upgrade Kit
+		Tooltip: "{$BiomeExtractorsMod.Items.UpgradeKitAdamantite.Tooltip}"
+	}
+
+	ExoUpgradeKit: {
+		DisplayName: Exo Upgrade Kit
+		Tooltip: "{$BiomeExtractorsMod.Items.UpgradeKitAdamantite.Tooltip}"
+	}
+
+	SulphuricUpgradeKit: {
+		DisplayName: Sulphuric Upgrade Kit
+		Tooltip: <right> a {$BiomeExtractorsMod.Items.BiomeExtractorItemDemonic.DisplayName} with this item to upgrade it to a {$SulphuricExtractorItem.DisplayName}
+	}
+
+	PressurizedUpgradeKit: {
+		DisplayName: Pressurized Upgrade Kit
+		Tooltip: <right> a {$SulphuricExtractorItem.DisplayName} with this item to upgrade it to a {$PressurizedExtractorItem.DisplayName}
+	}
+
+	ThermoresistantUpgradeKit: {
+		DisplayName: Thermoresistant Upgrade Kit
+		Tooltip: <right> a {$PressurizedExtractorItem.DisplayName} with this item to upgrade it to a {$ThermoresistantExtractorItem.DisplayName}
+	}
+
+	AbyssalUpgradeKit: {
+		DisplayName: Abyssal Upgrade Kit
+		Tooltip: <right> a {$ThermoresistantExtractorItem.DisplayName} with this item to upgrade it to an {$AbyssalExtractorItem.DisplayName}
+	}
 }
 
 Configs: {
@@ -325,6 +428,174 @@ Configs: {
 		REDUCED.Label: REDUCED
 		YES.Label: YES
 	}
+
+	CalamityConfigs: {
+		DisplayName: Calamity Configs
+
+		AbyssExtractors: {
+			Header: Abyss Extractors
+
+			Sulphuric: {
+				Rate: {
+					Title: Sulphuric Extractor Rate
+					Tooltip:
+						'''
+						How often Sulphuric Extractors try to generate something.
+						This value is the number of frames between each attempt.
+						Defaults to 250, which corresponds to 4.167 seconds.
+						'''
+				}
+
+				Chance: {
+					Title: Sulphuric Extractor Chance
+					Tooltip:
+						'''
+						The % chance Sulphuric Extractors have of generating anything for every Extraction.
+						Defaults to 75.
+						'''
+				}
+
+				DryEfficiency: {
+					Title: Sulphuric Extractor Dry Efficiency
+					Tooltip:
+						'''
+						The % speed Sulphuric Extractors have when they are placed out of water.
+						Defaults to 50.
+						'''
+				}
+			}
+
+			Pressurized: {
+				Rate: {
+					Title: Pressurized Extractor Rate
+					Tooltip:
+						'''
+						How often Pressurized Extractors try to generate something.
+						This value is the number of frames between each attempt.
+						Defaults to 200, which corresponds to 3.333 seconds.
+						'''
+				}
+
+				Chance: {
+					Title: Pressurized Extractor Chance
+					Tooltip:
+						'''
+						The % chance Pressurized Extractors have of generating anything for every Extraction.
+						Defaults to 85.
+						'''
+				}
+			}
+
+			Thermoresistant: {
+				Rate: {
+					Title: Thermoresistant Extractor Rate
+					Tooltip:
+						'''
+						How often Thermoresistant Extractors try to generate something.
+						This value is the number of frames between each attempt.
+						Defaults to 150, which corresponds to 2.5 seconds.
+						'''
+				}
+
+				Chance: {
+					Title: Thermoresistant Extractor Chance
+					Tooltip:
+						'''
+						The % chance Thermoresistant Extractors have of generating anything for every Extraction.
+						Defaults to 94.
+						'''
+				}
+			}
+
+			Abyssal: {
+				Rate: {
+					Title: Abyssal Extractor Rate
+					Tooltip:
+						'''
+						How often Abyssal Extractors try to generate something.
+						This value is the number of frames between each attempt.
+						Defaults to 100, which corresponds to 1.667 seconds.
+						'''
+				}
+
+				Chance: {
+					Title: Abyssal Extractor Chance
+					Tooltip:
+						'''
+						The % chance Abyssal Extractors have of generating anything for every Extraction.
+						Defaults to 100.
+						'''
+				}
+			}
+		}
+
+		PostMoonLordExtractors: {
+			Header: Post Moon Lord Extractor
+
+			Spectral: {
+				Rate: {
+					Title: Spectral Extractor Rate
+					Tooltip:
+						'''
+						How often Spectral Extractors try to generate something.
+						This value is the number of frames between each attempt.
+						Defaults to 70, which corresponds to 1.167 seconds.
+						'''
+				}
+
+				Chance: {
+					Title: Spectral Extractor Chance
+					Tooltip:
+						'''
+						The % chance Spectral Extractors have of generating anything for every Extraction.
+						Defaults to 100.
+						'''
+				}
+			}
+
+			Auric: {
+				Rate: {
+					Title: Auric Extractor Rate
+					Tooltip:
+						'''
+						How often Auric Extractors try to generate something.
+						This value is the number of frames between each attempt.
+						Defaults to 65, which corresponds to 1.083 seconds.
+						'''
+				}
+
+				Chance: {
+					Title: Auric Extractor Chance
+					Tooltip:
+						'''
+						The % chance Auric Extractors have of generating anything for every Extraction.
+						Defaults to 100.
+						'''
+				}
+			}
+
+			Exo: {
+				Rate: {
+					Title: Exo Extractor Rate
+					Tooltip:
+						'''
+						How often Exo Extractors try to generate something.
+						This value is the number of frames between each attempt.
+						Defaults to 60, which corresponds to 1 second.
+						'''
+				}
+
+				Chance: {
+					Title: Exo Extractor Chance
+					Tooltip:
+						'''
+						The % chance Exo Extractors have of generating anything for every Extraction.
+						Defaults to 100.
+						'''
+				}
+			}
+		}
+	}
 }
 
 Text: {
@@ -371,6 +642,20 @@ Text: {
 		space: Space
 		underworld: "{$Bestiary_Biomes.TheUnderworld}"
 		meteorite: "{$Bestiary_Biomes.Meteor}"
+		#Calamity
+		sunken_sea: Sunken Sea
+		sulphur_sea: Sulphurous Sea
+		sulphur_depths: Sulphuric Depths
+		murky_waters: Murky Waters
+		thermal_vents: Thermal Vents
+		the_void: The Void
+		brimstone_crag: Brimstone Crag
+		astral_forest: Astral Infection
+		astral_snow: Astral Snow
+		astral_desert: Astral Desert
+		ug_astral_forest: Underground Astral Infection
+		ug_astral_snow: Underground Astral Snow
+		ug_astral_desert: Underground Astral Desert
 	}
 
 	Diagnostics: {
@@ -395,7 +680,14 @@ Text: {
 		Cyber: "{$Basic}"
 		Lunar: "{$Basic}"
 		Ethereal: "{$Infernal}"
+		#Calamity
+		Spectral: "{$BiomeExtractorsMod.Text.Articles.Basic}"
+		Auric: "{$BiomeExtractorsMod.Text.Articles.Infernal}"
+		Exo: "{$BiomeExtractorsMod.Text.Articles.Infernal}"
 	}
+
+	#Calamity
+	Tiers.Exo: Exo Extractor
 }
 
 Map: {

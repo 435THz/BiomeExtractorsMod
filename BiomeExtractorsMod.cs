@@ -23,16 +23,18 @@ namespace BiomeExtractorsMod
         static string GetModName(SupportedMods mod) => Enum.GetName(typeof(SupportedMods), mod);
         enum SupportedMods
         {
-            MagicStorage
+            MagicStorage, CalamityMod
         }
 
         static readonly private Dictionary<SupportedMods, bool> supportedModsLoaded = [];
         static internal bool MS_loaded => supportedModsLoaded[SupportedMods.MagicStorage] && ModContent.GetInstance<ConfigCompat>().MS;
+        static internal bool CLM_loaded => supportedModsLoaded[SupportedMods.CalamityMod];
 
         private static readonly object LocBase = "Mods.BiomeExtractorsMod";
 
         private static string LocItemsCategory => $"{LocBase}.Items";
         public static string LocExtractorPrefix => $"{LocItemsCategory}.BiomeExtractorItem";
+        public static string LocExtractorSuffix(string suffix) => $"{LocItemsCategory}.{suffix}ExtractorItem";
         private static string LocConfigCategory => $"{LocBase}.Config";
         public static string LocClientConfig => $"{LocConfigCategory}.ConfigClient";
         public static string LocCommonConfig => $"{LocConfigCategory}.ConfigCommon";
@@ -41,7 +43,8 @@ namespace BiomeExtractorsMod
         private static string LocTextCategory => $"{LocBase}.Text";
         public static string LocDiagnostics => $"{LocTextCategory}.Diagnostics";
         public static string LocPoolNames => $"{LocTextCategory}.PoolNames";
-        public static object LocArticles => $"{LocTextCategory}.Articles";
+        public static string LocArticles => $"{LocTextCategory}.Articles";
+        public static string LocTiers => $"{LocTextCategory}.Tiers";
         private static string LocMapCategory => $"{LocBase}.Map";
         public static string LocMapTileName => $"{LocMapCategory}.TileName";
         public static string LocIconInactive => $"{LocMapCategory}.IconInactive";

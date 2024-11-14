@@ -27,11 +27,15 @@
     <None Remove="Localization\it-IT_Mods.BiomeExtractorsMod.hjson" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="CalamityMod">
+      <HintPath>..\ModAssemblies\CalamityMod_v2.0.4.4.dll</HintPath>
+    </Reference>
     <Reference Include="MagicStorage">
       <HintPath>..\ModAssemblies\MagicStorage_v0.6.0.3.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\MapIcons\" />
+    <Folder Include="CrossMod\" />
   </ItemGroup>
 </Project>
