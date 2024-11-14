@@ -1084,6 +1084,7 @@ namespace BiomeExtractorsMod.Common.Database
             InitializePools();
             SetRequirements();
             PopulatePools();
+            WeakReferenceLoader.LoadWeakReferences();
             GenerateLocalizationKeys();
         }
 
