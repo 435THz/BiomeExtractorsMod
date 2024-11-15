@@ -642,6 +642,7 @@ Text: {
 		space: Space
 		underworld: "{$Bestiary_Biomes.TheUnderworld}"
 		meteorite: "{$Bestiary_Biomes.Meteor}"
+		ash_forest: Ash Forest
 		#Calamity
 		sunken_sea: Sunken Sea
 		sulphur_sea: Sulphurous Sea
