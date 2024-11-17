@@ -34,7 +34,7 @@ namespace BiomeExtractorsMod
 
         private static string LocItemsCategory => $"{LocBase}.Items";
         public static string LocExtractorPrefix => $"{LocItemsCategory}.BiomeExtractorItem";
-        public static string LocExtractorSuffix(string suffix) => $"{LocItemsCategory}.{suffix}ExtractorItem";
+        public static string LocExtractorSuffix(string suffix) => $"{LocItemsCategory}.{suffix}ExtractorItem.DisplayName";
         private static string LocConfigCategory => $"{LocBase}.Config";
         public static string LocClientConfig => $"{LocConfigCategory}.ConfigClient";
         public static string LocCommonConfig => $"{LocConfigCategory}.ConfigCommon";
