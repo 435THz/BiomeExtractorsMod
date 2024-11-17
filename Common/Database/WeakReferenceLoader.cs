@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader;
+﻿using BiomeExtractorsMod.Calamity.Common.Database;
+using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Common.Database
 {
@@ -6,8 +7,8 @@ namespace BiomeExtractorsMod.Common.Database
     {
         internal static void LoadWeakReferences()
         {
-            if(ModContent.TryFind("BiomeExtractorsMod", "CalamityExtractionSystem", out ExtractionSystemExtension calamity))
-                calamity.LoadDatabase();
+            if(ModLoader.HasMod("CalamityMod"))
+                CalamityExtractionSystem.Instance.LoadDatabase();
         }
     }
 }
