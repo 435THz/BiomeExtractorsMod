@@ -1,6 +1,5 @@
 using BiomeExtractorsMod.Common.Collections;
 using BiomeExtractorsMod.Content.Items;
-using BiomeExtractorsMod.Content.TileEntities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -457,14 +456,8 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly string desert_remix = "desert_remix";
         public static readonly string ug_desert_remix = "ug_desert_remix";
         public static readonly string ug_desert_hm_remix = "ug_desert_hm_remix";
-        public static readonly string snow_remix = "snow_hm_remix";
-        public static readonly string ug_snow_remix = "ug_snow_hm_remix";
-        public static readonly string jungle_remix = "jungle_remix";
-        public static readonly string shells_remix = "shells_remix";
-        public static readonly string ug_jungle_remix = "ug_jungle_remix";
-        public static readonly string ug_shells_remix = "ug_shells_remix";
-        public static readonly string life_fruit_remix = "life_fruit_remix";
-        public static readonly string chlorophyte_remix = "chlorophyte_remix";
+        public static readonly string snow_remix = "snow_remix";
+        public static readonly string ug_snow_remix = "ug_snow_remix";
         public static readonly string mushroom_remix = "mushroom_remix";
         public static readonly string ug_mushroom_remix = "ug_mushroom_remix";
         public static readonly string truffle_worm_remix = "truffle_worm_remix";
@@ -501,7 +494,6 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly string corrupt_snow_hm_remix = "corrupt_snow_hm_remix";
         public static readonly string ug_corrupt_snow_remix = "ug_corrupt_snow_remix";
         public static readonly string ug_corrupt_snow_hm_remix = "ug_corrupt_snow_hm_remix";
-
         public static readonly string ocean_remix = "ocean_remix";
         public static readonly string pirate_remix = "pirate_remix";
         public static readonly string ocean_caverns = "ocean_caverns";
@@ -559,13 +551,12 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly Predicate<ScanData> skyLayer = scan => scan.Y < Main.worldSurface * 0.35;
         public static readonly Predicate<ScanData> surfaceLayer = scan => scan.Y <= Main.worldSurface;
         public static readonly Predicate<ScanData> belowSurfaceLayer = scan => scan.Y > Main.worldSurface;
-        public static readonly Predicate<ScanData> middleUnderground = scan => scan.Y > (Main.worldSurface + Main.rockLayer) / 2;
         public static readonly Predicate<ScanData> cavernLayer = scan => scan.Y > Main.rockLayer;
         public static readonly Predicate<ScanData> notCavernLayer = scan => scan.Y <= Main.rockLayer;
         public static readonly Predicate<ScanData> underworldLayer = scan => scan.Y > Main.maxTilesY - 200;
 
         //SPECIFIC POSITIONS
-        public static readonly Func<float, Predicate<ScanData>> not_world_center = f => scan => scan.X < Main.maxTilesX * (1 - f) / 2 && scan.X > Main.maxTilesX * (1 + f) / 2;
+        public static readonly Func<float, Predicate<ScanData>> not_world_center = f => scan => scan.X < Main.maxTilesX * (1 - f) / 2 || scan.X > Main.maxTilesX * (1 + f) / 2;
         public static readonly Func<float, Predicate<ScanData>> world_center = f => scan => scan.X >= Main.maxTilesX * (1 - f) / 2 && scan.X <= Main.maxTilesX * (1 + f) / 2;
         public static readonly Predicate<ScanData> oceanArea = scan => scan.Y <= (Main.worldSurface + Main.rockLayer) / 2 && (scan.X < 339 || scan.X > Main.maxTilesX - 339);
 
@@ -1186,6 +1177,14 @@ namespace BiomeExtractorsMod.Common.Database
         #region Database Setup
         internal static string LocalizeAs(string suffix) => $"{BiomeExtractorsMod.LocPoolNames}.{suffix}";
 
+        public override void OnModUnload()
+        {
+            _tiers.Clear();
+            _poolNames.Clear();
+            _itemPools.Clear();
+            _poolRequirements.Clear();
+            _priorityList.Clear();
+        }
         public override void PostSetupContent()
         {
             SetupForest();
@@ -1206,6 +1205,7 @@ namespace BiomeExtractorsMod.Common.Database
             SetupTemple();
             SetupOcean();
             SetupUnderworld();
+            SetupMeteorite();
             WeakReferenceLoader.LoadWeakReferences();
             GenerateLocalizationKeys();
         }
@@ -1268,8 +1268,8 @@ namespace BiomeExtractorsMod.Common.Database
         private void SetupUnderground()
         {
             AddPool(underground, 10, LocalizeAs(underground));
-            AddPool(caverns_remix, 0, LocalizeAs(caverns));
-            AddPool(cavern_town_remix, 0);
+            AddPool(caverns_remix, 10, LocalizeAs(caverns_remix));
+            AddPool(cavern_town_remix, 10);
 
             AddPoolRequirements(underground, belowSurfaceLayer, notCavernLayer, notremix);
             AddPoolRequirements(caverns_remix, cavernLayer, remix);
@@ -1294,7 +1294,6 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(underground, ItemID.Emerald, 9);
             AddItemInPool(underground, ItemID.Ruby, 8);
             AddItemInPool(underground, ItemID.Diamond, 6);
-            CopyPoolItems(caverns_remix, underground);
             //TERRAIN
             AddItemInPool(underground, ItemID.StoneBlock, 69);
             AddItemInPool(underground, ItemID.DirtBlock, 18);
@@ -1306,6 +1305,21 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(underground, ItemID.GreenMushroom, 7);
             AddItemInPool(underground, ItemID.TealMushroom, 7);
 
+            AddItemInPool(caverns_remix, ItemID.CopperOre, 30);
+            AddItemInPool(caverns_remix, ItemID.TinOre, 30);
+            AddItemInPool(caverns_remix, ItemID.IronOre, 25);
+            AddItemInPool(caverns_remix, ItemID.LeadOre, 25);
+            AddItemInPool(caverns_remix, ItemID.SilverOre, 22);
+            AddItemInPool(caverns_remix, ItemID.TungstenOre, 22);
+            AddItemInPool(caverns_remix, ItemID.GoldOre, 20);
+            AddItemInPool(caverns_remix, ItemID.PlatinumOre, 20);
+            //GEMS
+            AddItemInPool(underground, ItemID.Amethyst, 12);
+            AddItemInPool(underground, ItemID.Topaz, 11);
+            AddItemInPool(underground, ItemID.Sapphire, 10);
+            AddItemInPool(underground, ItemID.Emerald, 9);
+            AddItemInPool(underground, ItemID.Ruby, 8);
+            AddItemInPool(underground, ItemID.Diamond, 6);
         }
         private void SetupCaverns()
         {
@@ -1359,7 +1373,7 @@ namespace BiomeExtractorsMod.Common.Database
         private void SetupDesert()
         {
             AddPool(desert, 50, LocalizeAs(desert));
-            AddPool(desert_remix, 50, LocalizeAs(desert));
+            AddPool(desert_remix, 51, LocalizeAs(desert));
             AddPool(ug_desert, 1050, LocalizeAs(ug_desert));
             AddPool(ug_desert_remix, 1050, LocalizeAs(ug_desert));
             AddPool(ug_desert_hm, 1050, [steampunk, hardmodeOnly]);
@@ -1397,14 +1411,14 @@ namespace BiomeExtractorsMod.Common.Database
         private void SetupSnow()
         {
             AddPool(snow, 50, LocalizeAs(snow));
-            AddPool(snow_remix, 50, LocalizeAs(snow));
+            AddPool(snow_remix, 51, LocalizeAs(snow));
             AddPool(ug_snow, 1050, LocalizeAs(ug_snow));
             AddPool(ug_snow_remix, 1050, LocalizeAs(ug_snow));
 
-            AddPoolRequirements(snow, frost1500, notremix);
-            AddPoolRequirements(snow_remix, frost1500, remix);
+            AddPoolRequirements(snow, frost1500);
+            AddPoolRequirements(snow_remix, cavernLayer, frost1500, remix);
             AddPoolRequirements(ug_snow, belowSurfaceLayer, frost1500, notremix);
-            AddPoolRequirements(ug_snow_remix, belowSurfaceLayer, frost1500, remix);
+            AddPoolRequirements(ug_snow_remix, belowSurfaceLayer, notCavernLayer, frost1500, remix);
 
             AddItemInPool(snow, ItemID.None, 27);
             AddItemInPool(snow, ItemID.SnowBlock, 12);
@@ -1429,25 +1443,13 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_shells, 1050, [steampunk, hardmodeOnly]);
             AddPool(life_fruit, 1050, [steampunk, postMech]);
             AddPool(chlorophyte, 1050, [cyber, postMechs]);
-            AddPool(jungle_remix, 50, LocalizeAs(jungle));
-            AddPool(shells_remix, 50, [steampunk, hardmodeOnly]);
-            AddPool(ug_jungle_remix, 50, LocalizeAs(ug_jungle));
-            AddPool(ug_shells_remix, 50, [steampunk, hardmodeOnly]);
-            AddPool(life_fruit_remix, 1050, [steampunk, postMech]);
-            AddPool(chlorophyte_remix, 1050, [cyber, postMechs]);
 
-            AddPoolRequirements(jungle, jungle140, notremix);
-            AddPoolRequirements(shells, jungle140, notremix);
-            AddPoolRequirements(ug_jungle, middleUnderground, jungle140, notremix);
-            AddPoolRequirements(ug_shells, middleUnderground, jungle140, notremix);
-            AddPoolRequirements(life_fruit, middleUnderground, jungle140, notremix);
-            AddPoolRequirements(chlorophyte, middleUnderground, jungle140, notremix);
-            AddPoolRequirements(jungle_remix, cavernLayer, jungle140, remix);
-            AddPoolRequirements(shells_remix, cavernLayer, jungle140, remix);
-            AddPoolRequirements(ug_jungle_remix, belowSurfaceLayer, notCavernLayer, jungle140, remix);
-            AddPoolRequirements(ug_shells_remix, belowSurfaceLayer, notCavernLayer, jungle140, remix);
-            AddPoolRequirements(life_fruit_remix, belowSurfaceLayer, notCavernLayer, jungle140, remix);
-            AddPoolRequirements(chlorophyte_remix, belowSurfaceLayer, notCavernLayer, jungle140, remix);
+            AddPoolRequirements(jungle, jungle140);
+            AddPoolRequirements(shells, jungle140);
+            AddPoolRequirements(ug_jungle, belowSurfaceLayer, jungle140);
+            AddPoolRequirements(ug_shells, belowSurfaceLayer, jungle140);
+            AddPoolRequirements(life_fruit, belowSurfaceLayer, jungle140);
+            AddPoolRequirements(chlorophyte, belowSurfaceLayer, jungle140);
 
             AddItemInPool(jungle, ItemID.None, 63);
             AddItemInPool(jungle, ItemID.MudBlock, 10);
@@ -1461,8 +1463,6 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(jungle, ItemID.Sluggy, 3);
             AddItemInPool(jungle, ItemID.Buggy, 2);
             AddItemInPool(shells, ItemID.TurtleShell, 5);
-            AliasItemPool(jungle_remix, jungle);
-            AliasItemPool(shells_remix, shells);
 
             AddItemInPool(ug_jungle, ItemID.None, 50);
             AddItemInPool(ug_jungle, ItemID.MudBlock, 16);
@@ -1480,10 +1480,6 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(ug_shells, ItemID.TurtleShell, 4);
             AddItemInPool(life_fruit, ItemID.LifeFruit, 1);
             AddItemInPool(chlorophyte, ItemID.ChlorophyteOre, 20);
-            AliasItemPool(ug_jungle_remix, ug_jungle);
-            AliasItemPool(ug_shells_remix, ug_shells);
-            AliasItemPool(life_fruit_remix, life_fruit);
-            AliasItemPool(chlorophyte_remix, chlorophyte);
         }
         private void SetupSkyAndSpace()
         {
@@ -1521,16 +1517,16 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupMushroomBiome()
         {
-            AddPool(mushroom, 200);
+            AddPool(mushroom, 200, LocalizeAs(mushroom));
             AddPool(ug_mushroom, 1200, LocalizeAs(ug_mushroom));
             AddPool(truffle_worm, 1200, [steampunk, hardmodeOnly]);
-            AddPool(mushroom_remix, 200);
+            AddPool(mushroom_remix, 201, LocalizeAs(mushroom));
             AddPool(ug_mushroom_remix, 1200, LocalizeAs(ug_mushroom));
             AddPool(truffle_worm_remix, 1200, [steampunk, hardmodeOnly]);
 
             AddPoolRequirements(mushroom, mush100);
             AddPoolRequirements(ug_mushroom, cavernLayer, mush100, notremix);
-            AddPoolRequirements(truffle_worm, cavernLayer, mush100);
+            AddPoolRequirements(truffle_worm, cavernLayer, mush100, notremix);
             AddPoolRequirements(mushroom_remix, cavernLayer, mush100, remix);
             AddPoolRequirements(ug_mushroom_remix, belowSurfaceLayer, notCavernLayer, mush100, remix);
             AddPoolRequirements(truffle_worm_remix, belowSurfaceLayer, notCavernLayer, mush100, remix);
@@ -1564,8 +1560,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(hallowed_bars_forest, 100, [steampunk, postMechs]);
             AddPool(ug_hallowed_caverns, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_caverns));
             AddPool(ug_hallowed_bars_caverns, 1100, [steampunk, postMechs]);
-            AddPool(hallowed_forest_remix, 100, [steampunk, hardmodeOnly], LocalizeAs(hallowed_forest));
-            AddPool(hallowed_bars_forest_remix, 100, [steampunk, postMechs]);
+            AddPool(hallowed_forest_remix, 101, [steampunk, hardmodeOnly], LocalizeAs(hallowed_forest));
+            AddPool(hallowed_bars_forest_remix, 101, [steampunk, postMechs]);
             AddPool(ug_hallowed_caverns_remix, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_caverns));
             AddPool(ug_hallowed_bars_caverns_remix, 1100, [steampunk, postMechs]);
 
@@ -1611,8 +1607,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(hallowed_bars_desert, 100, [steampunk, postMechs]);
             AddPool(ug_hallowed_desert, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_desert));
             AddPool(ug_hallowed_bars_desert, 1100, [steampunk, postMechs]);
-            AddPool(hallowed_desert_remix, 100, [steampunk, hardmodeOnly], LocalizeAs(hallowed_desert));
-            AddPool(hallowed_bars_desert_remix, 100, [steampunk, postMechs]);
+            AddPool(hallowed_desert_remix, 101, [steampunk, hardmodeOnly], LocalizeAs(hallowed_desert));
+            AddPool(hallowed_bars_desert_remix, 101, [steampunk, postMechs]);
             AddPool(ug_hallowed_desert_remix, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_desert));
             AddPool(ug_hallowed_bars_desert_remix, 1100, [steampunk, postMechs]);
 
@@ -1655,8 +1651,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(hallowed_bars_snow, 100, [steampunk, postMechs]);
             AddPool(ug_hallowed_snow, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_snow));
             AddPool(ug_hallowed_bars_snow, 1100, [steampunk, postMechs]);
-            AddPool(hallowed_snow_remix, 100, [steampunk, hardmodeOnly], LocalizeAs(hallowed_snow));
-            AddPool(hallowed_bars_snow_remix, 100, [steampunk, postMechs]);
+            AddPool(hallowed_snow_remix, 101, [steampunk, hardmodeOnly], LocalizeAs(hallowed_snow));
+            AddPool(hallowed_bars_snow_remix, 101, [steampunk, postMechs]);
             AddPool(ug_hallowed_snow_remix, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_snow));
             AddPool(ug_hallowed_bars_snow_remix, 1100, [steampunk, postMechs]);
 
@@ -1701,7 +1697,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(crimson_forest, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_forest));
             AddPool(ug_crimson_caverns, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_caverns));
             AddPool(ug_crimson_caverns_hm, 1300, ExtractionTiers.STEAMPUNK);
-            AddPool(crimson_forest_remix, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_forest));
+            AddPool(crimson_forest_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(crimson_forest));
             AddPool(ug_crimson_caverns_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_caverns));
             AddPool(ug_crimson_caverns_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
 
@@ -1738,7 +1734,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(crimson_desert, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_desert));
             AddPool(ug_crimson_desert, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_desert));
             AddPool(ug_crimson_desert_hm, 1300, ExtractionTiers.STEAMPUNK);
-            AddPool(crimson_desert_remix, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_desert));
+            AddPool(crimson_desert_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(crimson_desert));
             AddPool(ug_crimson_desert_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_desert));
             AddPool(ug_crimson_desert_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
 
@@ -1772,7 +1768,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(crimson_snow, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_snow));
             AddPool(ug_crimson_snow, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_snow));
             AddPool(ug_crimson_snow_hm, 1300, ExtractionTiers.STEAMPUNK);
-            AddPool(crimson_snow_remix, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_snow));
+            AddPool(crimson_snow_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(crimson_snow));
             AddPool(ug_crimson_snow_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_snow));
             AddPool(ug_crimson_snow_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
 
@@ -1812,8 +1808,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(corrupt_forest_hm, 300, [steampunk, hardmodeOnly]);
             AddPool(ug_corrupt_caverns, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_caverns));
             AddPool(ug_corrupt_caverns_hm, 1300, ExtractionTiers.STEAMPUNK);
-            AddPool(corrupt_forest_remix, 300, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_forest));
-            AddPool(corrupt_forest_hm_remix, 300, [steampunk, hardmodeOnly]);
+            AddPool(corrupt_forest_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_forest));
+            AddPool(corrupt_forest_hm_remix, 301, [steampunk, hardmodeOnly]);
             AddPool(ug_corrupt_caverns_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_caverns));
             AddPool(ug_corrupt_caverns_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
 
@@ -1857,8 +1853,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(corrupt_desert_hm, 300, [steampunk, hardmodeOnly]);
             AddPool(ug_corrupt_desert, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_desert));
             AddPool(ug_corrupt_desert_hm, 1300, ExtractionTiers.STEAMPUNK);
-            AddPool(corrupt_desert_remix, 300, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_desert));
-            AddPool(corrupt_desert_hm_remix, 300, [steampunk, hardmodeOnly]);
+            AddPool(corrupt_desert_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_desert));
+            AddPool(corrupt_desert_hm_remix, 301, [steampunk, hardmodeOnly]);
             AddPool(ug_corrupt_desert_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_desert));
             AddPool(ug_corrupt_desert_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
 
@@ -1899,8 +1895,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(corrupt_snow_hm, 300, [steampunk, hardmodeOnly]);
             AddPool(ug_corrupt_snow, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_snow));
             AddPool(ug_corrupt_snow_hm, 1300, ExtractionTiers.STEAMPUNK);
-            AddPool(corrupt_snow, 300, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_snow));
-            AddPool(corrupt_snow_hm, 300, [steampunk, hardmodeOnly]);
+            AddPool(corrupt_snow, 301, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_snow));
+            AddPool(corrupt_snow_hm, 301, [steampunk, hardmodeOnly]);
             AddPool(ug_corrupt_snow, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_snow));
             AddPool(ug_corrupt_snow_hm, 1300, ExtractionTiers.STEAMPUNK);
 
@@ -1937,7 +1933,7 @@ namespace BiomeExtractorsMod.Common.Database
         private void SetupGraveyard()
         {
             AddPool(graveyard, 500, LocalizeAs(graveyard));
-            //TODO test for remix cavern graveyard
+
             AddPoolRequirements(graveyard, surfaceLayer, tombstone5);
 
             AddItemInPool(graveyard, ItemID.None, 423);
@@ -1955,10 +1951,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(hive, 3000, true, LocalizeAs(hive));
 
             AddPoolRequirements(shimmer, shimmer300);
-            AddPoolRequirements(marble, cavernLayer, marble150, marble_bg);
-            AddPoolRequirements(granite, cavernLayer, granite150, granite_bg);
-            AddPoolRequirements(cobweb, cavernLayer, spider_bg);
-            AddPoolRequirements(spider, cavernLayer, hardmodeOnly, spider_bg);
+            AddPoolRequirements(marble, belowSurfaceLayer, marble150, marble_bg);
+            AddPoolRequirements(granite, belowSurfaceLayer, granite150, granite_bg);
+            AddPoolRequirements(cobweb, belowSurfaceLayer, spider_bg);
+            AddPoolRequirements(spider, belowSurfaceLayer, hardmodeOnly, spider_bg);
             AddPoolRequirements(hive, belowSurfaceLayer, hive100, honey100, hive_bg);
 
             AddItemInPool(shimmer, ItemID.Amethyst, 12);
@@ -2018,8 +2014,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(pirate, 2500, [steampunk, hardmodeOnly]);
             AddPool(ocean_remix,  75, LocalizeAs(ocean));
             AddPool(pirate_remix, 75, [steampunk, hardmodeOnly]);
-            AddPool(ocean_caverns,  75, true);
-            AddPool(pirate_caverns, 75, [steampunk, hardmodeOnly], false);
+            AddPool(ocean_caverns,  10, true);
+            AddPool(pirate_caverns, 10, [steampunk, hardmodeOnly], true);
 
             AddPoolRequirements(ocean, water1k, oceanArea, notremix);
             AddPoolRequirements(pirate, water1k, oceanArea, notremix);
@@ -2059,7 +2055,7 @@ namespace BiomeExtractorsMod.Common.Database
 
             AddPoolRequirements(underworld, underworldLayer);
             AddPoolRequirements(uw_fire, underworldLayer);
-            AddPoolRequirements(ash_forest, world_center.Invoke(0.24f), remix);//TODO items
+            AddPoolRequirements(ash_forest, underworldLayer, world_center.Invoke(0.24f), remix);
 
             AddItemInPool(underworld, ItemID.None, 42);
             AddItemInPool(underworld, new ItemEntry(ItemID.AshBlock, 1, 2), 20);
@@ -2072,6 +2068,15 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(underworld, ItemID.Lavafly, 3);
             AddItemInPool(underworld, ItemID.MagmaSnail, 2);
             AddItemInPool(uw_fire, new ItemEntry(ItemID.LivingFireBlock, 4, 10), 5);
+
+            AddItemInPool(ash_forest, ItemID.None, 62);
+            AddItemInPool(ash_forest, new ItemEntry(ItemID.AshBlock, 1, 2), 20);
+            AddItemInPool(ash_forest, new ItemEntry(ItemID.AshWood, 1, 3), 20);
+            AddItemInPool(ash_forest, ItemID.Fireblossom, 8);
+            AddItemInPool(ash_forest, ItemID.AshGrassSeeds, 3);
+            AddItemInPool(ash_forest, ItemID.HellButterfly, 3);
+            AddItemInPool(ash_forest, ItemID.Lavafly, 3);
+            AddItemInPool(ash_forest, ItemID.MagmaSnail, 2);
         }
         private void SetupMeteorite()
         {
