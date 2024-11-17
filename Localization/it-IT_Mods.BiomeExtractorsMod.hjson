@@ -654,6 +654,7 @@ Text: {
 		underworld: "{$Bestiary_Biomes.TheUnderworld}"
 		meteorite: "{$Bestiary_Biomes.Meteor}"
 		ash_forest: Foresta di cenere
+		caverns_remix: Foresta
 		#Calamity
 		// sunken_sea: Sunken Sea
 		// sulphur_sea: Sulphurous Sea
