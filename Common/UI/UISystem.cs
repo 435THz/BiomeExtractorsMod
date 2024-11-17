@@ -96,8 +96,8 @@ namespace BiomeExtractorsMod.Common.UI
             tier = clicked.ExtractionTier;
             active = clicked.Active;
 
-            UIHolder?.SetState(Interface);
             Interface.OnActivate();
+            UIHolder?.SetState(Interface);
         }
         internal void OpenScannerInterface(Point16 position, ExtractionTier tier)
         {
@@ -109,8 +109,8 @@ namespace BiomeExtractorsMod.Common.UI
             this.tier = tier;
             this.active = true;
 
-            UIHolder?.SetState(Interface);
             Interface.OnActivate();
+            UIHolder?.SetState(Interface);
         }
 
         internal WeightedList<ItemEntry> GetDropList()
@@ -161,7 +161,11 @@ namespace BiomeExtractorsMod.Common.UI
                     {
                         string key = pool.LocalizationKey;
                         string entry = Language.GetTextValue(key);
-                        if (entry != "" && !entries.Contains(entry)) entries.Add(entry);
+                        if (entry != "" && !entries.Contains(entry)) {
+                            if (ModContent.GetInstance<ConfigClient>().DiagnosticPrintPools)
+                                entry = $"{entry} ({pool.Name})";
+                            entries.Add(entry);
+                        }
                         else if (ModContent.GetInstance<ConfigClient>().DiagnosticPrintPools)
                             entries.Add(pool.Name);
                     }

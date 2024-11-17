@@ -155,9 +155,12 @@ namespace BiomeExtractorsMod.Common.UI
                 slotArea.Top.Set(40f + height, 0f);
                 slotArea.InitElements(uisys.GetDropList());
 
-                Vector2 pos = ExtractorPlayer.LocalPlayer.ExtractorWindowPos;
-                panel.Top.Set(pos.Y, 0f);
-                panel.Left.Set(pos.X, 0f);
+                if (uisys.UIHolder.CurrentState is null)
+                {
+                    Vector2 pos = ExtractorPlayer.LocalPlayer.ExtractorWindowPos;
+                    panel.Top.Set(pos.Y, 0f);
+                    panel.Left.Set(pos.X, 0f);
+                }
                 panel.Width.Set(PanelWidth, 0f);
             }
             panel.Height.Set(slotArea.Top.Pixels + slotArea.Height.Pixels + 30f, 0f);
