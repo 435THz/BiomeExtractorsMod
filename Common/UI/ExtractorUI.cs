@@ -9,6 +9,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using BiomeExtractorsMod.Common.Players;
+using Terraria.ID;
 
 namespace BiomeExtractorsMod.Common.UI
 {
@@ -179,7 +180,7 @@ namespace BiomeExtractorsMod.Common.UI
             Item fakeItem = new();
             fakeItem.SetDefaults(0, noMatCheck: true);
             fakeItem.SetNameOverride(text);
-            fakeItem.type = 1;
+            fakeItem.type = ItemID.IronPickaxe;
             fakeItem.scale = 0f;
             fakeItem.rare = rarity;
             fakeItem.value = -1;
