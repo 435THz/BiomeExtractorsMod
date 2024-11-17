@@ -1520,7 +1520,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(mushroom, 200, LocalizeAs(mushroom));
             AddPool(ug_mushroom, 1200, LocalizeAs(ug_mushroom));
             AddPool(truffle_worm, 1200, [steampunk, hardmodeOnly]);
-            AddPool(mushroom_remix, 201, LocalizeAs(mushroom));
+            AddPool(mushroom_remix, 201, LocalizeAs(ug_mushroom));
             AddPool(ug_mushroom_remix, 1200, LocalizeAs(ug_mushroom));
             AddPool(truffle_worm_remix, 1200, [steampunk, hardmodeOnly]);
 
