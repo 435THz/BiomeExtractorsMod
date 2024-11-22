@@ -8,6 +8,8 @@ All recipes and loot tables can be found in the mod's [url=https://github.com/43
 
 [u]Disclaimer:[/u] by "extracting from the biome" we mean "generating items related to the biome from nothing".
 
+Now with remix world support!
+
 [b][u][h2]Compatibility notes:[/h2][/u][/b]
 This mod shouldn't break anything no matter of what you install. If that is not the case, please create an issue in the mod's [url=https://github.com/435THz/BiomeExtractorsMod]github page[/url].
 
