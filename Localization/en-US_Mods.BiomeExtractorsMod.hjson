@@ -672,6 +672,7 @@ Text: {
 		Per_day: items/day
 		Chance: Chance
 		Percent: %
+		InactiveSlot: Inactive
 	}
 
 	Articles: {

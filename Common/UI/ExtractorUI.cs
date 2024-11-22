@@ -10,11 +10,13 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using BiomeExtractorsMod.Common.Players;
 using Terraria.ID;
+using Terraria.Audio;
 
 namespace BiomeExtractorsMod.Common.UI
 {
     internal class ExtractorUI : UIState
     {
+        private static UISystem uisys => ModContent.GetInstance<UISystem>();
         internal static float PanelWidth => UISlotArea.AreaWidth + 24f;
         UIPanel panel;
         UIText header;
@@ -67,6 +69,7 @@ namespace BiomeExtractorsMod.Common.UI
 
             slotArea = new();
             slotArea.HAlign = 0.5f;
+            slotArea.OnLeftClick += ToggleClickedItem;
             panel.Append(slotArea);
 
             panel.Width.Set(PanelWidth, 0f);
@@ -75,7 +78,7 @@ namespace BiomeExtractorsMod.Common.UI
 
         private void OnButtonClick(UIMouseEvent evt, UIElement listeningElement)
         {
-            ModContent.GetInstance<UISystem>().CloseInterface();
+            uisys.CloseInterface();
         }
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
@@ -97,14 +100,16 @@ namespace BiomeExtractorsMod.Common.UI
                     string name = data.Item.Name;
                     string chance = Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Chance") + $": {data.ChanceString}";
                     string daily = "";
-                    UISystem uisys = ModContent.GetInstance<UISystem>();
                     if (uisys is not null)
                     {
                         double rolls = (86400 / uisys.tier.Rate) * (uisys.tier.Chance / 100.0);
                         daily = data.DailyString(rolls) + " " + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Per_day");
                     }
 
-                    SetTooltip($"{name}\n[c/FFFFFF:{chance}]\n[c/FFFFFF:{daily}]", data.Item.rare);
+                    string tooltip = $"{name}\n[c/FFFFFF:{chance}]\n[c/FFFFFF:{daily}]";
+                    if (!data.IsActive)
+                        tooltip += $"\n[c/828282:{Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.InactiveSlot")}]";
+                    SetTooltip(tooltip, data.Item.rare);
                 }
             }
             if (Dragging)
@@ -141,7 +146,6 @@ namespace BiomeExtractorsMod.Common.UI
 
         public override void OnActivate()
         {
-            UISystem uisys = ModContent.GetInstance<UISystem>();
             if (uisys is not null)
             {
                 header.SetText(uisys.GetWindowTitle());
@@ -154,7 +158,7 @@ namespace BiomeExtractorsMod.Common.UI
                 float height = (visibleText.Split('\n').Length * spacing);
 
                 slotArea.Top.Set(40f + height, 0f);
-                slotArea.InitElements(uisys.GetDropList());
+                slotArea.InitElements();
 
                 if (uisys.UIHolder.CurrentState is null)
                 {
@@ -187,6 +191,30 @@ namespace BiomeExtractorsMod.Common.UI
             Main.HoverItem = fakeItem;
             Main.instance.MouseText("");
             Main.mouseText = true;
+        }
+
+        private void ToggleClickedItem(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (slotArea.Hovered >= 0 && uisys.Extractor is not null)
+            {
+                int slot = slotArea.Hovered + slotArea.TopRow * UISlotArea.Columns;
+                if (slot < slotArea.SlotData.Length)
+                {
+                    Item item = slotArea.SlotData[slot].Item;
+                    if (uisys.Extractor.FilterContains(item))
+                    {
+                        uisys.Extractor.RemoveFilter(slotArea.SlotData[slot].Item);
+                        slotArea.SlotData[slot].IsActive = true;
+                    }
+                    else
+                    {
+                        uisys.Extractor.AddFilter(slotArea.SlotData[slot].Item);
+                        slotArea.SlotData[slot].IsActive = false;
+                    }
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+                    slotArea.UpdateSlots();
+                }
+            }
         }
     }
 }

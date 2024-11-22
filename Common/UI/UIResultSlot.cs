@@ -6,11 +6,12 @@ using Terraria.UI;
 
 namespace BiomeExtractorsMod.Common.UI
 {
-    internal struct SlotData(Item item, int min, int max, decimal chance)
+    internal struct SlotData(Item item, int min, int max, decimal chance, bool filtered)
     {
         internal Item Item = item;
         internal int Min = min;
         internal int Max = max;
+        internal bool IsActive = !filtered;
         private decimal _chance = chance;
         internal decimal Chance {
             readonly get => decimal.Truncate(_chance * 100) / 100;

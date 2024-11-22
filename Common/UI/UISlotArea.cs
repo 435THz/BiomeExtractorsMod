@@ -14,6 +14,7 @@ namespace BiomeExtractorsMod.Common.UI
 {
     internal class UISlotArea : UIElement
     {
+        private static UISystem uisys => ModContent.GetInstance<UISystem>();
         private static readonly int Padding = 4;
 
         internal static int Columns = 8;
@@ -66,8 +67,9 @@ namespace BiomeExtractorsMod.Common.UI
             Height.Set(AreaHeight, 1f);
         }
 
-        public void InitElements(WeightedList<ItemEntry> pool)
+        public void InitElements()
         {
+            WeightedList<ItemEntry> pool = uisys.GetDropList();
             List<ItemEntry> entries = new(pool.Keys);
             entries = entries.AsEnumerable()
                 .Where((e) => e.Id != ItemID.None)
@@ -82,7 +84,7 @@ namespace BiomeExtractorsMod.Common.UI
                 ItemEntry entry = entries[n];
                 Item item = new(entry.Id);
                 decimal chance = (decimal)(pool[entry] * 100 / pool.TotalWeight);
-                SlotData data = new(item, entry.Min, entry.Max, chance);
+                SlotData data = new(item, entry.Min, entry.Max, chance, uisys.Extractor is null ? false : uisys.Extractor.FilterContains(item));
                 SlotData[n] = data;
             }
             scrollbar.SetView(Rows, MaxRows);
@@ -92,7 +94,6 @@ namespace BiomeExtractorsMod.Common.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
             if (scrollbar.ViewPosition != _previousViewPosition)
             {
                 _previousViewPosition = scrollbar.ViewPosition;
@@ -118,7 +119,7 @@ namespace BiomeExtractorsMod.Common.UI
             }
         }
 
-        private void UpdateSlots()
+        internal void UpdateSlots()
         {
             int offset = 0;
             for (int y = 0; y < Rows; y++)
@@ -140,7 +141,7 @@ namespace BiomeExtractorsMod.Common.UI
                         max = SlotData[slot].Max;
                     }
                     UISystem uisys = ModContent.GetInstance<UISystem>();
-                    Slots[y, x].SetItem(item, uisys is not null && !uisys.active);
+                    Slots[y, x].SetItem(item, uisys is null || !uisys.active || slot<SlotData.Length ? !SlotData[slot].IsActive : false);
                     Slots[y, x].SetAmount(min, max);
                 }
             }

@@ -683,6 +683,7 @@ Text: {
 		Per_day: copie/g
 		Chance: Chance
 		Percent: %
+		InactiveSlot: Disattivato
 	}
 
 	Articles: {
