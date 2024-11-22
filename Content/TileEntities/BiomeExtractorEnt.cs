@@ -30,7 +30,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         /// A structure that contains map icon drawing data. Used to allow specific extractor types to override the tier icon.
         /// </summary>
         /// <param name="hoverTextKey">The name that will be displayed on the map when hovering this icon.</param>
-        /// <param name="assetPath">The path to the icon to be used, starting from the mod's base folder.</param>
+        /// <param name="icon">The icon asset to be used.</param>
         /// <param name="file_columns"></param> The number of columnts the icon file is divided into.
         /// <param name="column">The specific column of the icon file that will be used for the icon.</param>
         public readonly struct ExtractorIconOverride(string hoverTextKey, Func<Asset<Texture2D>> icon, byte column, byte file_columns)
