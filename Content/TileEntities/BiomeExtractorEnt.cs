@@ -75,6 +75,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private static readonly string tagBTimer  = "biome_scan_timer";
         private static readonly string tagState   = "isActive";
         private static readonly string tagOutputs = "outputList";
+        private static readonly string tagFilter  = "filterList";
         private static readonly Point[] PosOffsets = [new(-1,2), new(3, 2), new(-1, 0), new(3, 0), new(0, -1), new(2, -1)];
 
         private int XTimer = 0;
@@ -85,6 +86,8 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private int ChestIndex(Point chestPos) => Chest.FindChest(chestPos.X, chestPos.Y);
 
         protected List<PoolEntry> PoolList { get; private set; } = [];
+
+        protected List<Item> Filter { get; private set; } = [];
 
         protected int ExtractionTimer
         {
@@ -154,18 +157,20 @@ namespace BiomeExtractorsMod.Content.TileEntities
             tag.Add(tagBTimer,  ScanningTimer);
             tag.Add(tagState,   Active);
             tag.Add(tagOutputs, outputs);
+            tag.Add(tagFilter,  Filter);
         }
 
         public override void LoadData(TagCompound tag)
         {
             tag.TryGet(tagXTimer, out int xtimer);
             tag.TryGet(tagBTimer, out int btimer);
-            tag.TryGet(tagState, out bool active);
+            tag.TryGet(tagState,  out bool active);
 
             ExtractionTimer = xtimer;
             ScanningTimer   = btimer;
             Active          = active;
             outputs         = tag.GetList<OutData>(tagOutputs).ToList();
+            Filter          = tag.GetList<Item>(tagFilter).ToList();
             UpdatePoolList(); //always run on loading
         }
 
@@ -247,7 +252,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         private bool AddToOutput(OutData dest, Item newItem)
         {
-            if (newItem.type == ItemID.None) return true;
+            if (newItem.type == ItemID.None || FilterContains(newItem)) return true;
             if (BiomeExtractorsMod.MS_loaded && dest.Type == OutputType.MS_ENVIRONMENTACCESS) return AddToStorage(newItem, dest.Point);
             if (dest.Type == OutputType.CHEST) return AddToChest(newItem, dest.Point);
             return false;
@@ -473,6 +478,39 @@ namespace BiomeExtractorsMod.Content.TileEntities
         internal WeightedList<ItemEntry> GetDropList() => Instance.JoinPools(PoolList);
 
         public override void OnKill() => SendUpdatePacket(ServerMessageType.EXTRACTOR_REMOVE);
+
+        internal bool FilterContains(Item item)
+        {
+            for (int i = 0; i < Filter.Count; i++)
+            {
+                if (Filter[i].type == item.type) return true;
+            }
+            return false;
+        }
+
+        internal void RemoveFilter(Item item)
+        {
+            for (int i = 0; i <= Filter.Count; i++)
+            {
+                if (Filter[i].type == item.type)
+                {
+                    Filter.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        internal void AddFilter(Item item)
+        {
+            foreach (Item item2 in Filter)
+            {
+                if (item2.type == item.type)
+                {
+                    return;
+                }
+            }
+            Filter.Add(item);
+        }
 
         #region Netcode
         private readonly static List<int> msgSize = [9, 5, 4];
