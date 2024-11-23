@@ -491,9 +491,9 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<Navystone>(), 7);
             BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<SeaPrism>(), 13);
             BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<PrismShard>(), 13);
-            BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<PrismShard>(), 10);
-            BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<PrismShard>(), 3);
-            BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<PrismShard>(), 1);
+            BES.AddItemInPool(sunken_sea, ItemID.WhitePearl, 5);
+            BES.AddItemInPool(sunken_sea, ItemID.BlackPearl, new Fraction(3,2));
+            BES.AddItemInPool(sunken_sea, ItemID.PinkPearl,  new Fraction(1,2));
             BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<BabyGhostBellItem>(), 3);
             BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<SeaMinnowItem>(), 4);
         }
@@ -520,7 +520,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddItemInPool(sulphur_sea, ItemID.Coral, 5);
             BES.AddItemInPool(sulphur_sea, ItemID.Seashell, 4);
             BES.AddItemInPool(sulphur_sea, ItemID.Starfish, 3);
-            BES.AddItemInPool(sulphur_sea, ItemID.Cactus, 20);
+            BES.AddItemInPool(sulphur_sea, (short)ModContent.ItemType<Acidwood>(), 20);
             BES.AddItemInPool(acid_rain, (short)ModContent.ItemType<SulphuricScale>(), 8);
             BES.AddItemInPool(sulphur_sea_hm, ItemID.TurtleShell, 5);
             BES.AddItemInPool(sulphur_sea_as, (short)ModContent.ItemType<BabyFlakCrabItem>(), 6);
