@@ -1161,6 +1161,17 @@ namespace BiomeExtractorsMod.Common.Database
             return joinedPool;
         }
 
+        internal static void PrintPools(CommandCaller caller)
+        {
+            PriorityList<string> poolList = Instance._priorityList;
+            string pools = "Priority - Pool ID";
+            foreach (KeyValuePair<int, string> elem in poolList.EnumerateInOrder())
+            {
+                pools = $"{pools}\n{elem.Key} - {elem.Value}";
+            }
+            caller.Reply(pools);
+        }
+
         /// <summary>Makes tModLoader iterate through all registered pools and check for all registered
         /// localization keys.<br/> Any undefined localization key will be added to its respective mod's localization file.</summary>
         public void GenerateLocalizationKeys()
