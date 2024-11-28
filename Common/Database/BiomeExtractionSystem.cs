@@ -525,6 +525,7 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly List<ushort> jungleBlocks = [TileID.JungleGrass, TileID.JunglePlants, TileID.JunglePlants2, TileID.PlantDetritus, TileID.JungleVines, TileID.Hive];
         public static readonly List<ushort> frostBlocks = [TileID.SnowBlock, TileID.SnowBrick, TileID.IceBlock, TileID.BreakableIce, TileID.FleshIce, TileID.CorruptIce, TileID.HallowedIce];
         public static readonly List<ushort> desertBlocks = [TileID.Sand, TileID.Crimsand, TileID.Ebonsand, TileID.Pearlsand, TileID.HardenedSand, TileID.CrimsonHardenedSand, TileID.CorruptHardenedSand, TileID.HallowHardenedSand, TileID.Sandstone, TileID.CrimsonSandstone, TileID.CorruptSandstone, TileID.HallowSandstone];
+        public static readonly List<ushort> purityBlocks = [TileID.Grass, TileID.GolfGrass, TileID.Plants, TileID.Plants2, TileID.Vines, TileID.Stone];
 
         //SEED
         public static readonly Predicate<ScanData> notremix = scan => !Main.remixWorld;
@@ -591,6 +592,7 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly Predicate<ScanData> dungeon_b250 = scan => scan.Tiles(TileID.BlueDungeonBrick) >= 250;
         public static readonly Predicate<ScanData> dungeon250 = scan => scan.Tiles(dungeonBricks) >= 250;
         public static readonly Predicate<ScanData> mush100 = scan => scan.Tiles(glowMushroomBlocks) >= 100;
+        public static readonly Predicate<ScanData> purity100 = scan => scan.Tiles(purityBlocks) >= 100;
         public static readonly Predicate<ScanData> jungle140 = scan => scan.Tiles(jungleBlocks) + (Main.remixWorld ? 0 : scan.Tiles(TileID.LihzahrdBrick)) > 140;
         public static readonly Predicate<ScanData> desert1500 = scan => scan.Tiles(desertBlocks) > 1500;
         public static readonly Predicate<ScanData> frost1500 = scan => scan.Tiles(frostBlocks) > 1500;
@@ -1339,8 +1341,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(caverns, 10, LocalizeAs(caverns));
             AddPool(underground_remix, 10, LocalizeAs(underground));
 
-            AddPoolRequirements(caverns, cavernLayer, notremix);
-            AddPoolRequirements(underground_remix, belowSurfaceLayer, notCavernLayer, remix);
+            AddPoolRequirements(caverns, purity100, cavernLayer, notremix);
+            AddPoolRequirements(underground_remix, purity100, belowSurfaceLayer, notCavernLayer, remix);
 
             AddItemInPool(caverns, ItemID.StoneBlock, 69);
             AddItemInPool(caverns, ItemID.DirtBlock, 18);
@@ -1371,8 +1373,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(evil_ores, 10, ExtractionTiers.DEMONIC, true);
             AddPool(hm_ores, 10, [steampunk, hardmodeOnly], true);
 
-            AddPoolRequirements(evil_ores, belowSurfaceLayer);
-            AddPoolRequirements(hm_ores, belowSurfaceLayer);
+            AddPoolRequirements(evil_ores, purity100, belowSurfaceLayer);
+            AddPoolRequirements(hm_ores, purity100, belowSurfaceLayer);
 
             AddItemInPool(evil_ores, ItemID.CrimtaneOre, 8);
             AddItemInPool(evil_ores, ItemID.DemoniteOre, 8);
@@ -2034,8 +2036,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPoolRequirements(pirate, water1k, oceanArea, notremix);
             AddPoolRequirements(ocean_remix, water1k, oceanArea, remix);
             AddPoolRequirements(pirate_remix, water1k, oceanArea, remix);
-            AddPoolRequirements(ocean_caverns, not_world_center.Invoke(0.14f), cavernLayer, remix);
-            AddPoolRequirements(pirate_caverns, not_world_center.Invoke(0.14f), cavernLayer, remix);
+            AddPoolRequirements(ocean_caverns, purity100, not_world_center.Invoke(0.14f), cavernLayer, remix);
+            AddPoolRequirements(pirate_caverns, purity100, not_world_center.Invoke(0.14f), cavernLayer, remix);
 
             AddItemInPool(ocean, ItemID.None, 84);
             AddItemInPool(ocean, ItemID.SandBlock, 16);
