@@ -1329,12 +1329,12 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(caverns_remix, ItemID.GoldOre, 20);
             AddItemInPool(caverns_remix, ItemID.PlatinumOre, 20);
             //GEMS
-            AddItemInPool(underground, ItemID.Amethyst, 12);
-            AddItemInPool(underground, ItemID.Topaz, 11);
-            AddItemInPool(underground, ItemID.Sapphire, 10);
-            AddItemInPool(underground, ItemID.Emerald, 9);
-            AddItemInPool(underground, ItemID.Ruby, 8);
-            AddItemInPool(underground, ItemID.Diamond, 6);
+            AddItemInPool(caverns_remix, ItemID.Amethyst, 12);
+            AddItemInPool(caverns_remix, ItemID.Topaz, 11);
+            AddItemInPool(caverns_remix, ItemID.Sapphire, 10);
+            AddItemInPool(caverns_remix, ItemID.Emerald, 9);
+            AddItemInPool(caverns_remix, ItemID.Ruby, 8);
+            AddItemInPool(caverns_remix, ItemID.Diamond, 6);
         }
         private void SetupCaverns()
         {
