@@ -1,4 +1,5 @@
 using BiomeExtractorsMod.Common.Collections;
+using BiomeExtractorsMod.Common.Hooks;
 using BiomeExtractorsMod.Content.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -1228,7 +1229,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(forest, 0, LocalizeAs(forest));
             AddPool(forest_town, 0);
 
-            AddPoolRequirements(forest_town, pylon, notremix);
+            AddPoolRequirements(forest, purity100, surfaceLayer);
+            AddPoolRequirements(forest_town, purity100, surfaceLayer, pylon);
 
             AddItemInPool(forest, ItemID.None, 30);
             //TERRAIN:18
@@ -1271,9 +1273,9 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(caverns_remix, 10, LocalizeAs(caverns_remix));
             AddPool(cavern_town_remix, 10);
 
-            AddPoolRequirements(underground, belowSurfaceLayer, notCavernLayer, notremix);
-            AddPoolRequirements(caverns_remix, cavernLayer, remix);
-            AddPoolRequirements(cavern_town_remix, cavernLayer, pylon, remix);
+            AddPoolRequirements(underground, purity100, belowSurfaceLayer, notCavernLayer, notremix);
+            AddPoolRequirements(caverns_remix, purity100, cavernLayer, remix);
+            AddPoolRequirements(cavern_town_remix, purity100, cavernLayer, pylon, remix);
 
             CopyPoolItems(caverns_remix, forest);
             CopyPoolItems(cavern_town_remix, forest_town);
