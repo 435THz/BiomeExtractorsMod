@@ -2025,17 +2025,13 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupOcean()
         {
-            AddPool(ocean, 2500, LocalizeAs(ocean));
-            AddPool(pirate, 2500, [steampunk, hardmodeOnly]);
-            AddPool(ocean_remix,  75, LocalizeAs(ocean));
-            AddPool(pirate_remix, 75, [steampunk, hardmodeOnly]);
+            AddPool(ocean, 75, LocalizeAs(ocean));
+            AddPool(pirate, 75, [steampunk, hardmodeOnly]);
             AddPool(ocean_caverns,  10, true);
             AddPool(pirate_caverns, 10, [steampunk, hardmodeOnly], true);
 
-            AddPoolRequirements(ocean, water1k, oceanArea, notremix);
-            AddPoolRequirements(pirate, water1k, oceanArea, notremix);
-            AddPoolRequirements(ocean_remix, water1k, oceanArea, remix);
-            AddPoolRequirements(pirate_remix, water1k, oceanArea, remix);
+            AddPoolRequirements(ocean, water1k, oceanArea);
+            AddPoolRequirements(pirate, water1k, oceanArea);
             AddPoolRequirements(ocean_caverns, purity100, not_world_center.Invoke(0.14f), cavernLayer, remix);
             AddPoolRequirements(pirate_caverns, purity100, not_world_center.Invoke(0.14f), cavernLayer, remix);
 
@@ -2054,8 +2050,6 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(ocean, ItemID.PurpleMucos, 6);
             AddItemInPool(ocean, ItemID.SharkFin, 16);
             AddItemInPool(pirate, ItemID.PirateMap, 4);
-            AliasItemPool(ocean_remix, ocean);
-            AliasItemPool(pirate_remix, pirate);
 
             AddItemInPool(ocean_caverns, ItemID.BlackInk, 6);
             AddItemInPool(ocean_caverns, ItemID.PurpleMucos, 6);
