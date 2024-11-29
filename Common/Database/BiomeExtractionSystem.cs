@@ -495,8 +495,6 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly string corrupt_snow_hm_remix = "corrupt_snow_hm_remix";
         public static readonly string ug_corrupt_snow_remix = "ug_corrupt_snow_remix";
         public static readonly string ug_corrupt_snow_hm_remix = "ug_corrupt_snow_hm_remix";
-        public static readonly string ocean_remix = "ocean_remix";
-        public static readonly string pirate_remix = "pirate_remix";
         public static readonly string ocean_caverns = "ocean_caverns";
         public static readonly string pirate_caverns = "pirate_caverns";
         public static readonly string ash_forest = "ash_forest";
