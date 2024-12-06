@@ -18,7 +18,7 @@ namespace BiomeExtractorsMod.Calamity.Content.TileEntities
         private readonly ExtractorIconOverride _iconOverride = new($"{BiomeExtractorsMod.LocExtractorSuffix("Sulphuric")}", delegate { return BiomeExtractorsMod.Instance.Assets.Request<Texture2D>("Calamity/Content/MapIcons/SulphuricExtractorIcon"); }, 0, 1);
         protected internal override ExtractorIconOverride IconOverride => _iconOverride;
         protected internal override string LocalName => Language.GetTextValue(BiomeExtractorsMod.LocExtractorSuffix("Sulphuric"));
-        protected internal override int ExtractionRate => CalamityConfigs.Instance.SulphuricExtractorRate * (BiomeChecker.IsSubmerged((Position + Point16.NegativeOne).ToPoint()) ? 100 : CalamityConfigs.Instance.SulphuricExtractorDryEfficiency) / 100;
+        protected internal override int ExtractionRate => CalamityConfigs.Instance.SulphuricExtractorRate * 100 / (BiomeChecker.IsSubmerged((Position + Point16.NegativeOne).ToPoint()) ? 100 : CalamityConfigs.Instance.SulphuricExtractorDryEfficiency);
         protected internal override int ExtractionChance => CalamityConfigs.Instance.SulphuricExtractorChance;
         protected internal override int TileType => ModContent.TileType<SulphuricExtractorTile>();
 
