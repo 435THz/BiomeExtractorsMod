@@ -19,7 +19,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
         public override void SetDefaults()
         {
             base.SetDefaults();
-            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.AURIC, $"{BiomeExtractorsMod.LocArticles}.Auric", BiomeExtractorsMod.LocExtractorSuffix("Auric"), delegate { return CalamityConfigs.Instance.AuricExtractorRate; }, delegate { return CalamityConfigs.Instance.AuricExtractorChance; }, delegate { return Mod.Assets.Request<Texture2D>("Content/MapIcons/AuricExtractorIcon"); });
+            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.AURIC, $"{BiomeExtractorsMod.LocArticles}.Auric", BiomeExtractorsMod.LocExtractorSuffix("Auric"), delegate { return CalamityConfigs.Instance.AuricExtractorRate; }, delegate { return CalamityConfigs.Instance.AuricExtractorChance; }, delegate { return CalamityConfigs.Instance.AuricExtractorAmount; }, delegate { return Mod.Assets.Request<Texture2D>("Content/MapIcons/AuricExtractorIcon"); });
             Item.rare = ModContent.RarityType<Violet>();
             Item.value = Item.buyPrice(gold: 75); // sell at 15
         }

@@ -16,7 +16,7 @@ namespace BiomeExtractorsMod.Content.Items
         public override void SetDefaults()
         {
             base.SetDefaults();
-            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.CYBER, $"{BiomeExtractorsMod.LocArticles}.Cyber", $"{BiomeExtractorsMod.LocExtractorPrefix}Cyber.DisplayName", delegate { return ConfigCommon.Instance.Tier5ExtractorRate; }, delegate { return ConfigCommon.Instance.Tier5ExtractorChance; }, delegate { return Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconCyber"); });
+            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.CYBER, $"{BiomeExtractorsMod.LocArticles}.Cyber", $"{BiomeExtractorsMod.LocExtractorPrefix}Cyber.DisplayName", delegate { return ConfigCommon.Instance.Tier5ExtractorRate; }, delegate { return ConfigCommon.Instance.Tier5ExtractorChance; }, delegate { return ConfigCommon.Instance.Tier5ExtractorAmount; }, delegate { return Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconCyber"); });
             Item.SetShopValues(ItemRarityColor.Lime7, Item.buyPrice(gold: 30)); // sell at 6
         }
     }

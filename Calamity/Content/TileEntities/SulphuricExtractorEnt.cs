@@ -20,6 +20,7 @@ namespace BiomeExtractorsMod.Calamity.Content.TileEntities
         protected internal override string LocalName => Language.GetTextValue(BiomeExtractorsMod.LocExtractorSuffix("Sulphuric"));
         protected internal override int ExtractionRate => CalamityConfigs.Instance.SulphuricExtractorRate * 100 / (BiomeChecker.IsSubmerged((Position + Point16.NegativeOne).ToPoint()) ? 100 : CalamityConfigs.Instance.SulphuricExtractorDryEfficiency);
         protected internal override int ExtractionChance => CalamityConfigs.Instance.SulphuricExtractorChance;
+        protected internal override int ExtractionAmount => CalamityConfigs.Instance.SulphuricExtractorAmount;
         protected internal override int TileType => ModContent.TileType<SulphuricExtractorTile>();
 
         protected internal override ExtractionTier ExtractionTier => Instance.GetTier(ExtractionTiers.DEMONIC, true);

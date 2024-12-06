@@ -19,7 +19,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
         public override void SetDefaults()
         {
             base.SetDefaults();
-            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.EXO, $"{BiomeExtractorsMod.LocArticles}.Exo", $"{BiomeExtractorsMod.LocTiers}.Exo", delegate { return CalamityConfigs.Instance.ExoExtractorRate; }, delegate { return CalamityConfigs.Instance.ExoExtractorChance; }, delegate { return Mod.Assets.Request<Texture2D>("Calamity/Content/MapIcons/ExoExtractorIcon"); });
+            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.EXO, $"{BiomeExtractorsMod.LocArticles}.Exo", $"{BiomeExtractorsMod.LocTiers}.Exo", delegate { return CalamityConfigs.Instance.ExoExtractorRate; }, delegate { return CalamityConfigs.Instance.ExoExtractorChance; }, delegate { return CalamityConfigs.Instance.ExoExtractorAmount; }, delegate { return Mod.Assets.Request<Texture2D>("Calamity/Content/MapIcons/ExoExtractorIcon"); });
             Item.rare = ModContent.RarityType<DarkOrange>();
             Item.value = Item.buyPrice(platinum: 1); // sell at 20
         }

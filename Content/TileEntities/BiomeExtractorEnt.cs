@@ -142,6 +142,10 @@ namespace BiomeExtractorsMod.Content.TileEntities
         /// Returns the extraction chance of this extractor.
         /// </summary>
         protected internal virtual int ExtractionChance => ExtractionTier.Chance;
+        /// <summary>
+        /// Returns the extraction amount of this extractor.
+        /// </summary>
+        protected internal virtual int ExtractionAmount => ExtractionTier.Amount;
         internal Asset<Texture2D> MapIconAsset => ExtractionTier.Icon;
 
         private static int BiomeScanRate => ModContent.GetInstance<ConfigCommon>().BiomeScanRate;
@@ -179,10 +183,10 @@ namespace BiomeExtractorsMod.Content.TileEntities
             if (!Active) { return; }
             //Every time the timer wraps back to 0 the extraction routine is performed
             int tick_increase = ConfigCommon.Instance.FollowDayRate == ConfigCommon.FollowRateValues.NO ? 1 : (int)Main.dayRate;
-            int checks_this_frame = (ExtractionTimer + tick_increase) / ExtractionRate;
+            int checks_this_frame = (ExtractionTimer + tick_increase) / ExtractionRate * ExtractionAmount;
             ExtractionTimer += tick_increase; //never run immediately upon placement
             if (ConfigCommon.Instance.FollowDayRate != ConfigCommon.FollowRateValues.YES)
-                checks_this_frame = Math.Min(checks_this_frame, 1);
+                checks_this_frame = Math.Min(checks_this_frame, ExtractionAmount);
             int state_old = (int)IconMapSystem.StateOf(this);
             for (int check = 0; check < checks_this_frame; check++)
             {

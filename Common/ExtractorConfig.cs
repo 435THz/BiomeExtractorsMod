@@ -58,6 +58,11 @@ namespace BiomeExtractorsMod.Common.Configs
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier1ChanceTooltip")]
         [DefaultValue(60)]
         public int Tier1ExtractorChance; //172.8 extractions/day
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier1AmountTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier1AmountTooltip")]
+        [Range(1, 99)]
+        [DefaultValue(1)]
+        public int Tier1ExtractorAmount; //172.8 items/day
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2Header")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2RateTitle")]
@@ -69,6 +74,11 @@ namespace BiomeExtractorsMod.Common.Configs
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2ChanceTooltip")]
         [DefaultValue(75)] //270 extractions/day
         public int Tier2ExtractorChance;
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2AmountTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier2AmountTooltip")]
+        [Range(1, 99)]
+        [DefaultValue(1)]
+        public int Tier2ExtractorAmount; //270 items/day
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier3Header")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier3RateTitle")]
@@ -80,6 +90,11 @@ namespace BiomeExtractorsMod.Common.Configs
         [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier3ChanceTooltip")]
         [DefaultValue(85)] //408 extractions/day
         public int Tier3ExtractorChance;
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier3AmountTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier3AmountTooltip")]
+        [Range(1, 99)]
+        [DefaultValue(1)]
+        public int Tier3ExtractorAmount; //408 items/day
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4Header")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4RateTitle")]
@@ -92,6 +107,11 @@ namespace BiomeExtractorsMod.Common.Configs
         [Range(1, 100)]
         [DefaultValue(90)] //518.4 extractions/day
         public int Tier4ExtractorChance;
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4AmountTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier4AmountTooltip")]
+        [Range(1, 99)]
+        [DefaultValue(1)]
+        public int Tier4ExtractorAmount; //518.4 items/day
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5Header")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5RateTitle")]
@@ -104,6 +124,11 @@ namespace BiomeExtractorsMod.Common.Configs
         [Range(1, 100)]
         [DefaultValue(94)] //676.8 extractions/day
         public int Tier5ExtractorChance;
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5AmountTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier5AmountTooltip")]
+        [Range(1, 99)]
+        [DefaultValue(1)]
+        public int Tier5ExtractorAmount; //676.8 items/day
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6Header")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6RateTitle")]
@@ -116,6 +141,11 @@ namespace BiomeExtractorsMod.Common.Configs
         [Range(1, 100)]
         [DefaultValue(97)] //931.2 extractions/day
         public int Tier6ExtractorChance;
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6AmountTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier6AmountTooltip")]
+        [Range(1, 99)]
+        [DefaultValue(1)]
+        public int Tier6ExtractorAmount; //931.2 items/day
 
         [Header("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7Header")]
         [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7RateTitle")]
@@ -128,6 +158,11 @@ namespace BiomeExtractorsMod.Common.Configs
         [Range(1, 100)]
         [DefaultValue(100)] //1152 extractions/day
         public int Tier7ExtractorChance;
+        [LabelKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7AmountTitle")]
+        [TooltipKey("$Mods.BiomeExtractorsMod.Configs.ConfigCommon.Tier7AmountTooltip")]
+        [Range(1, 99)]
+        [DefaultValue(1)]
+        public int Tier7ExtractorAmount; //1152 items/day
 
         // A method annotated with OnDeserialized will run after deserialization. You can use it for enforcing things like ranges, since Range and Increment are UI suggestions.
         [OnDeserialized]
@@ -139,24 +174,31 @@ namespace BiomeExtractorsMod.Common.Configs
 
             Tier1ExtractorRate =   Utils.Clamp(Tier1ExtractorRate,   1, 86400);
             Tier1ExtractorChance = Utils.Clamp(Tier1ExtractorChance, 0, 100);
+            Tier1ExtractorAmount = Utils.Max(Tier1ExtractorAmount, 1);
 
             Tier2ExtractorRate =   Utils.Clamp(Tier2ExtractorRate,   1, 86400);
             Tier2ExtractorChance = Utils.Clamp(Tier2ExtractorChance, 0, 100);
+            Tier2ExtractorAmount = Utils.Max(Tier2ExtractorAmount, 1);
 
             Tier3ExtractorRate =   Utils.Clamp(Tier3ExtractorRate,   1, 86400);
             Tier3ExtractorChance = Utils.Clamp(Tier3ExtractorChance, 0, 100);
+            Tier3ExtractorAmount = Utils.Max(Tier3ExtractorAmount, 1);
 
             Tier4ExtractorRate =   Utils.Clamp(Tier4ExtractorRate,   1, 86400);
             Tier4ExtractorChance = Utils.Clamp(Tier4ExtractorChance, 0, 100);
+            Tier4ExtractorAmount = Utils.Max(Tier4ExtractorAmount, 1);
 
             Tier5ExtractorRate =   Utils.Clamp(Tier5ExtractorRate,   1, 86400);
             Tier5ExtractorChance = Utils.Clamp(Tier5ExtractorChance, 0, 100);
+            Tier5ExtractorAmount = Utils.Max(Tier5ExtractorAmount, 1);
 
             Tier6ExtractorRate =   Utils.Clamp(Tier6ExtractorRate,   1, 86400);
             Tier6ExtractorChance = Utils.Clamp(Tier6ExtractorChance, 0, 100);
+            Tier6ExtractorAmount = Utils.Max(Tier6ExtractorAmount, 1);
 
             Tier7ExtractorRate =   Utils.Clamp(Tier7ExtractorRate,   1, 86400);
-            Tier7ExtractorChance = Utils.Clamp(Tier7ExtractorChance, 0, 100); 
+            Tier7ExtractorChance = Utils.Clamp(Tier7ExtractorChance, 0, 100);
+            Tier7ExtractorAmount = Utils.Max(Tier7ExtractorAmount, 1);
         }
     }
 

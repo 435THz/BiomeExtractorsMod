@@ -17,7 +17,7 @@ namespace BiomeExtractorsMod.Content.Items
         public override void SetDefaults()
         {
             base.SetDefaults();
-            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.DEMONIC, $"{BiomeExtractorsMod.LocArticles}.Demonic", $"{BiomeExtractorsMod.LocExtractorPrefix}Corruption.DisplayName", delegate { return ConfigCommon.Instance.Tier2ExtractorRate; }, delegate { return ConfigCommon.Instance.Tier2ExtractorChance; }, delegate { return Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconDemonic"); });
+            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.DEMONIC, $"{BiomeExtractorsMod.LocArticles}.Demonic", $"{BiomeExtractorsMod.LocExtractorPrefix}Corruption.DisplayName", delegate { return ConfigCommon.Instance.Tier2ExtractorRate; }, delegate { return ConfigCommon.Instance.Tier2ExtractorChance; }, delegate { return ConfigCommon.Instance.Tier2ExtractorAmount; }, delegate { return Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconDemonic"); });
             Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(gold: 15)); // sell at 3
         }
     }

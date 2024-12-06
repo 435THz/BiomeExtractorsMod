@@ -280,10 +280,11 @@ namespace BiomeExtractorsMod.Common.Database
         /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>
         /// Example: 35 would be 35%</param>
         /// <param name="icon">A <see cref="Func{TResult}"/> that returns this tier's map icon.</param>
-        public class ExtractionTier(int tier, string articleKey, string localizationKey, Func<int> rate, Func<int> chance, Func<Asset<Texture2D>> icon)
+        public class ExtractionTier(int tier, string articleKey, string localizationKey, Func<int> rate, Func<int> chance, Func<int> amount, Func<Asset<Texture2D>> icon)
         {
             private readonly Func<int> _rate = rate;
             private readonly Func<int> _chance = chance;
+            private readonly Func<int> _amount = amount;
             private readonly Func<Asset<Texture2D>> _icon = icon;
             //list of items in this tier. It should never be empty on recipe generation, but,
             //if it is, a manually generated recipe should be provioded to avoid errors
@@ -318,7 +319,7 @@ namespace BiomeExtractorsMod.Common.Database
             /// <summary>
             /// An empty ExtractionTier object.
             /// </summary>
-            public readonly static ExtractionTier NULL = new(int.MinValue, "", "", null, null, null);
+            public readonly static ExtractionTier NULL = new(int.MinValue, "", "", null, null, null, null);
 
             /// <summary>
             /// The tier number of this tier.
@@ -343,9 +344,13 @@ namespace BiomeExtractorsMod.Common.Database
             public int Rate => _rate is null ? 0 : _rate.Invoke();
             /// <summary>
             /// Returns the extraction chance of this Extraction Tier, in percentage format.<br/>
-            /// Example: 35 would be 35%</param>
+            /// Example: 35 would be 35%
             /// </summary>
             public int Chance => _chance is null ? 0 : _chance.Invoke();
+            /// <summary>
+            /// Returns the extraction amount of this Extraction Tier.
+            /// </summary>
+            public int Amount => _amount is null ? 0 : _amount.Invoke();
             /// <summary>
             /// Returns this tier's map icon.
             /// </summary>
@@ -368,7 +373,7 @@ namespace BiomeExtractorsMod.Common.Database
             /// </summary>
             /// <param name="newTier">The new tier to give to the copy of this tier</param>
             /// <returns>A copy of this tier but with <c>newTier</c> as its tier number</returns>
-            public ExtractionTier CloneAndMove(int newTier) => new(newTier, ArticleKey, LocalizationKey, _rate, _chance, _icon);
+            public ExtractionTier CloneAndMove(int newTier) => new(newTier, ArticleKey, LocalizationKey, _rate, _chance, _amount, _icon);
         }
         #endregion
 
@@ -394,6 +399,7 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly string corrupt_snow = "corrupt_snow";
         public static readonly string corrupt_desert = "corrupt_desert";
         public static readonly string corrupt_forest = "corrupt_forest";
+        public static readonly string crimson_desert_hm = "crimson_desert_hm";
         public static readonly string crimson_snow = "crimson_snow";
         public static readonly string crimson_desert = "crimson_desert";
         public static readonly string crimson_forest = "crimson_forest";
@@ -478,6 +484,7 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly string ug_crimson_caverns_remix = "ug_crimson_caverns_remix";
         public static readonly string ug_crimson_caverns_hm_remix = "ug_crimson_caverns_hm_remix";
         public static readonly string crimson_desert_remix = "crimson_desert_remix";
+        public static readonly string crimson_desert_hm_remix = "crimson_desert_hm_remix";
         public static readonly string ug_crimson_desert_remix = "ug_crimson_desert_remix";
         public static readonly string ug_crimson_desert_hm_remix = "ug_crimson_desert_hm_remix";
         public static readonly string crimson_snow_remix = "crimson_snow_remix";
@@ -678,9 +685,10 @@ namespace BiomeExtractorsMod.Common.Database
         /// <param name="locKey">The localization key of this tier</param>
         /// <param name="rate">A <see cref="Func{TResult}"/> that returns the extraction rate of this Extraction Tier, in frames.</param>
         /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>Example: 35 would be 35%</param>
+        /// <param name="amount">A <see cref="Func{TResult}"/> that returns the extraction amount of this Extraction tier.</param>
         /// <param name="icon">A <see cref="Func{TResult}"/> that returns the icon asset for this ExtractonTier's Extractors.</param>
         /// <returns><see langword="true"/> if the tier number was not occupied yet, <see langword="false"/> otherwise</returns>
-        public bool AddTier(int tier, string artKey, string locKey, Func<int> rate, Func<int> chance, Func<Asset<Texture2D>> icon) => AddTier(new(tier, artKey, locKey, rate, chance, icon));
+        public bool AddTier(int tier, string artKey, string locKey, Func<int> rate, Func<int> chance, Func<int> amount, Func<Asset<Texture2D>> icon) => AddTier(new(tier, artKey, locKey, rate, chance, amount, icon));
         /// <summary>
         /// Registers an ExtractionTier.<br></br>
         /// If an ExtractionTier with that tier number already exists, this method does nothing.
@@ -1745,16 +1753,20 @@ namespace BiomeExtractorsMod.Common.Database
         private void SetupCrimsonDesert()
         {
             AddPool(crimson_desert, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_desert));
+            AddPool(crimson_desert_hm, 300, [steampunk, hardmodeOnly]);
             AddPool(ug_crimson_desert, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_desert));
-            AddPool(ug_crimson_desert_hm, 1300, ExtractionTiers.STEAMPUNK);
+            AddPool(ug_crimson_desert_hm, 1300, [steampunk, hardmodeOnly]);
             AddPool(crimson_desert_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(crimson_desert));
+            AddPool(crimson_desert_hm_remix, 301, [steampunk, hardmodeOnly]);
             AddPool(ug_crimson_desert_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_desert));
-            AddPool(ug_crimson_desert_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
+            AddPool(ug_crimson_desert_hm_remix, 1300, [steampunk, hardmodeOnly]);
 
             AddPoolRequirements(crimson_desert, evil300.Invoke(crimsonSandBlocks));
+            AddPoolRequirements(crimson_desert_hm, evil300.Invoke(crimsonSandBlocks));
             AddPoolRequirements(ug_crimson_desert, cavernLayer, evil300.Invoke(crimsonSandBlocks), notremix);
             AddPoolRequirements(ug_crimson_desert_hm, cavernLayer, evil300.Invoke(crimsonSandBlocks), notremix);
             AddPoolRequirements(crimson_desert_remix, cavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
+            AddPoolRequirements(crimson_desert_hm_remix, cavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
             AddPoolRequirements(ug_crimson_desert_remix, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
             AddPoolRequirements(ug_crimson_desert_hm_remix, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
 
@@ -1762,7 +1774,9 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(crimson_desert, ItemID.CrimsandBlock, 40);
             AddItemInPool(crimson_desert, ItemID.Cactus, 10);
             AddItemInPool(crimson_desert, ItemID.Vertebrae, 10);
+            AddItemInPool(crimson_desert_hm, ItemID.DarkShard, 5);
             AliasItemPool(crimson_desert_remix, crimson_desert);
+            AliasItemPool(crimson_desert_hm_remix, crimson_desert_hm);
 
             AddItemInPool(ug_crimson_desert, ItemID.None, 108);
             AddItemInPool(ug_crimson_desert, ItemID.CrimsandBlock, 8);
@@ -1865,11 +1879,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(corrupt_desert, 300, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_desert));
             AddPool(corrupt_desert_hm, 300, [steampunk, hardmodeOnly]);
             AddPool(ug_corrupt_desert, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_desert));
-            AddPool(ug_corrupt_desert_hm, 1300, ExtractionTiers.STEAMPUNK);
+            AddPool(ug_corrupt_desert_hm, 1300, [steampunk, hardmodeOnly]);
             AddPool(corrupt_desert_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_desert));
             AddPool(corrupt_desert_hm_remix, 301, [steampunk, hardmodeOnly]);
             AddPool(ug_corrupt_desert_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_desert));
-            AddPool(ug_corrupt_desert_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
+            AddPool(ug_corrupt_desert_hm_remix, 1300, [steampunk, hardmodeOnly]);
 
             AddPoolRequirements(corrupt_desert, evil300.Invoke(corruptSandBlocks));
             AddPoolRequirements(corrupt_desert_hm, evil300.Invoke(corruptSandBlocks));

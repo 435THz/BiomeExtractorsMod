@@ -20,6 +20,7 @@ namespace BiomeExtractorsMod.Calamity.Content.TileEntities
         protected internal override string LocalName => Language.GetTextValue(BiomeExtractorsMod.LocExtractorSuffix("Pressurized"));
         protected internal override int ExtractionRate => CalamityConfigs.Instance.PressurizedExtractorRate;
         protected internal override int ExtractionChance => CalamityConfigs.Instance.PressurizedExtractorChance;
+        protected internal override int ExtractionAmount => CalamityConfigs.Instance.PressurizedExtractorAmount;
         protected internal override int TileType => ModContent.TileType<PressurizedExtractorTile>();
 
         protected internal override ExtractionTier ExtractionTier => Instance.GetTier(ExtractionTiers.INFERNAL, true);

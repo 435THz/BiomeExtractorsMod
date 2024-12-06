@@ -297,7 +297,7 @@ Configs: {
 		Tier1ChanceTooltip:
 			'''
 			La chance di successo, in percentuale, di ogni estrazione fatta
-			         da Estrattori semplici.
+			da Estrattori semplici.
 			Il valore predefinito è 60.
 			'''
 		Tier1RateTitle: Intervallo di estrazione
@@ -307,12 +307,19 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 300, che corrisponde a 5 secondi.
 			'''
+		Tier1AmountTitle: Estrazioni simultanee
+		Tier1AmountTooltip:
+			'''
+			Il numero di oggetti generati simultaneamente ad ogni estrazione
+			da un Estrattore etereo.
+			Il valore predefinito è 1
+			'''
 		Tier2Header: Estrattori demoniaci
 		Tier2ChanceTitle: Probabilità di successo
 		Tier2ChanceTooltip:
 			'''
 			La chance di successo, in percentuale, di ogni estrazione fatta
-			         da Estrattori demoniaci.
+			da Estrattori demoniaci.
 			Il valore predefinito è 75.
 			'''
 		Tier2RateTitle: Intervallo di estrazione
@@ -322,12 +329,18 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 240, che corrisponde a 4 secondi.
 			'''
+		// Tier2AmountTitle: Extraction Amount
+		/* Tier2AmountTooltip:
+			'''
+			The number of items generated at every extraction by a Demonic Extractor.
+			Defaults to 1.
+			''' */
 		Tier3Header: Estrattori infernali
 		Tier3ChanceTitle: Probabilità di successo
 		Tier3ChanceTooltip:
 			'''
 			La chance di successo, in percentuale, di ogni estrazione fatta
-			         da Estrattori infernali.
+			da Estrattori infernali.
 			Il valore predefinito è 85.
 			'''
 		Tier3RateTitle: Intervallo di estrazione
@@ -337,12 +350,18 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 180, che corrisponde a 3 secondi.
 			'''
+		// Tier3AmountTitle: Extraction Amount
+		/* Tier3AmountTooltip:
+			'''
+			The number of items generated at every extraction by a Infernal Extractor.
+			Defaults to 1.
+			''' */
 		Tier4Header: Estrattori steampunk
 		Tier4ChanceTitle: Probabilità di successo
 		Tier4ChanceTooltip:
 			'''
 			La chance di successo, in percentuale, di ogni estrazione fatta
-			         da Estrattori steampunk.
+			da Estrattori steampunk.
 			Il valore predefinito è 90.
 			'''
 		Tier4RateTitle: Intervallo di estrazione
@@ -352,12 +371,18 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 120, che corrisponde a 2 secondi.
 			'''
+		// Tier4AmountTitle: Extraction Amount
+		/* Tier4AmountTooltip:
+			'''
+			The number of items generated at every extraction by a Steampunk Extractor.
+			Defaults to 1.
+			''' */
 		Tier5Header: Estrattori cibernetici
 		Tier5ChanceTitle: Probabilità di successo
 		Tier5ChanceTooltip:
 			'''
 			La chance di successo, in percentuale, di ogni estrazione fatta
-			         da Estrattori cibernetici.
+			da Estrattori cibernetici.
 			Il valore predefinito è 94.
 			'''
 		Tier5RateTitle: Intervallo di estrazione
@@ -367,12 +392,18 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 90, che corrisponde a 1.5 secondi.
 			'''
+		// Tier5AmountTitle: Extraction Amount
+		/* Tier5AmountTooltip:
+			'''
+			The number of items generated at every extraction by a Cybernetic Extractor.
+			Defaults to 1.
+			''' */
 		Tier6Header: Estrattori lunari
 		Tier6ChanceTitle: Probabilità di successo
 		Tier6ChanceTooltip:
 			'''
 			La chance di successo, in percentuale, di ogni estrazione fatta
-			         da Estrattori lunari.
+			da Estrattori lunari.
 			Il valore predefinito è 97.
 			'''
 		Tier6RateTitle: Intervallo di estrazione
@@ -382,12 +413,18 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 60, che corrisponde a 1 secondo.
 			'''
+		// Tier6AmountTitle: Extraction Amount
+		/* Tier6AmountTooltip:
+			'''
+			The number of items generated at every extraction by a Lunar Extractor.
+			Defaults to 1.
+			''' */
 		Tier7Header: Estrattori eterei
 		Tier7ChanceTitle: Probabilità di successo
 		Tier7ChanceTooltip:
 			'''
 			La chance di successo, in percentuale, di ogni estrazione fatta
-			         da Estrattori eterei.
+			da Estrattori eterei.
 			Il valore predefinito è 100.
 			'''
 		Tier7RateTitle: Intervallo di estrazione
@@ -397,6 +434,12 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 45, che corrisponde a 3/4 di secondo.
 			'''
+		// Tier7AmountTitle: Extraction Amount
+		/* Tier7AmountTooltip:
+			'''
+			The number of items generated at every extraction by a Ethereal Extractor.
+			Defaults to 1.
+			''' */
 	}
 
 	ConfigCompat: {
@@ -443,167 +486,236 @@ Configs: {
 	CalamityConfigs: {
 		// DisplayName: Calamity Configs
 
-		AbyssExtractors: {
-			// Header: Abyss Extractors
+		SulphuricExtractor: {
+			// Header: Sulphuric Extractors
 
-			Sulphuric: {
-				Rate: {
-					// Title: Sulphuric Extractor Rate
-					/* Tooltip:
-						'''
-						How often Sulphuric Extractors try to generate something.
-						This value is the number of frames between each attempt.
-						Defaults to 250, which corresponds to 4.167 seconds.
-						''' */
-				}
-
-				Chance: {
-					// Title: Sulphuric Extractor Chance
-					/* Tooltip:
-						'''
-						The % chance Sulphuric Extractors have of generating anything for every Extraction.
-						Defaults to 75.
-						''' */
-				}
-
-				DryEfficiency: {
-					// Title: Sulphuric Extractor Dry Efficiency
-					/* Tooltip:
-						'''
-						The % speed Sulphuric Extractors have when they are placed out of water.
-						Defaults to 50.
-						''' */
-				}
+			Rate: {
+				// Title: Extractor Rate
+				/* Tooltip:
+					'''
+					How often Sulphuric Extractors try to generate something.
+					This value is the number of frames between each attempt.
+					Defaults to 250, which corresponds to 4.167 seconds.
+					''' */
 			}
 
-			Pressurized: {
-				Rate: {
-					// Title: Pressurized Extractor Rate
-					/* Tooltip:
-						'''
-						How often Pressurized Extractors try to generate something.
-						This value is the number of frames between each attempt.
-						Defaults to 200, which corresponds to 3.333 seconds.
-						''' */
-				}
-
-				Chance: {
-					// Title: Pressurized Extractor Chance
-					/* Tooltip:
-						'''
-						The % chance Pressurized Extractors have of generating anything for every Extraction.
-						Defaults to 85.
-						''' */
-				}
+			Chance: {
+				// Title: Extractor Chance
+				/* Tooltip:
+					'''
+					The % chance Sulphuric Extractors have of generating anything for every Extraction.
+					Defaults to 75.
+					''' */
 			}
 
-			Thermoresistant: {
-				Rate: {
-					// Title: Thermoresistant Extractor Rate
-					/* Tooltip:
-						'''
-						How often Thermoresistant Extractors try to generate something.
-						This value is the number of frames between each attempt.
-						Defaults to 150, which corresponds to 2.5 seconds.
-						''' */
-				}
-
-				Chance: {
-					// Title: Thermoresistant Extractor Chance
-					/* Tooltip:
-						'''
-						The % chance Thermoresistant Extractors have of generating anything for every Extraction.
-						Defaults to 94.
-						''' */
-				}
+			Amount: {
+				// Title: Extractor Amount
+				/* Tooltip:
+					'''
+					The number of items generated at every extraction by a Sulphuric Extractor.
+					Defaults to 1.
+					''' */
 			}
 
-			Abyssal: {
-				Rate: {
-					// Title: Abyssal Extractor Rate
-					/* Tooltip:
-						'''
-						How often Abyssal Extractors try to generate something.
-						This value is the number of frames between each attempt.
-						Defaults to 100, which corresponds to 1.667 seconds.
-						''' */
-				}
-
-				Chance: {
-					// Title: Abyssal Extractor Chance
-					/* Tooltip:
-						'''
-						The % chance Abyssal Extractors have of generating anything for every Extraction.
-						Defaults to 100.
-						''' */
-				}
+			DryEfficiency: {
+				// Title: Extractor Dry Efficiency
+				/* Tooltip:
+					'''
+					The % speed Sulphuric Extractors have when they are placed out of water.
+					Defaults to 50.
+					''' */
 			}
 		}
 
-		PostMoonLordExtractors: {
-			// Header: Post Moon Lord Extractor
+		PressurizedExtractor: {
+			// Header: Pressurized Extractors
 
-			Spectral: {
-				Rate: {
-					// Title: Spectral Extractor Rate
-					/* Tooltip:
-						'''
-						How often Spectral Extractors try to generate something.
-						This value is the number of frames between each attempt.
-						Defaults to 70, which corresponds to 1.167 seconds.
-						''' */
-				}
-
-				Chance: {
-					// Title: Spectral Extractor Chance
-					/* Tooltip:
-						'''
-						The % chance Spectral Extractors have of generating anything for every Extraction.
-						Defaults to 100.
-						''' */
-				}
+			Rate: {
+				// Title: Extraction Rate
+				/* Tooltip:
+					'''
+					How often Pressurized Extractors try to generate something.
+					This value is the number of frames between each attempt.
+					Defaults to 200, which corresponds to 3.333 seconds.
+					''' */
 			}
 
-			Auric: {
-				Rate: {
-					// Title: Auric Extractor Rate
-					/* Tooltip:
-						'''
-						How often Auric Extractors try to generate something.
-						This value is the number of frames between each attempt.
-						Defaults to 65, which corresponds to 1.083 seconds.
-						''' */
-				}
-
-				Chance: {
-					// Title: Auric Extractor Chance
-					/* Tooltip:
-						'''
-						The % chance Auric Extractors have of generating anything for every Extraction.
-						Defaults to 100.
-						''' */
-				}
+			Chance: {
+				// Title: Extractor Chance
+				/* Tooltip:
+					'''
+					The % chance Pressurized Extractors have of generating anything for every Extraction.
+					Defaults to 85.
+					''' */
 			}
 
-			Exo: {
-				Rate: {
-					// Title: Exo Extractor Rate
-					/* Tooltip:
-						'''
-						How often Exo Extractors try to generate something.
-						This value is the number of frames between each attempt.
-						Defaults to 60, which corresponds to 1 second.
-						''' */
-				}
+			Amount: {
+				// Title: Extractor Amount
+				/* Tooltip:
+					'''
+					The number of items generated at every extraction by a Pressurized Extractor.
+					Defaults to 1.
+					''' */
+			}
+		}
 
-				Chance: {
-					// Title: Exo Extractor Chance
-					/* Tooltip:
-						'''
-						The % chance Exo Extractors have of generating anything for every Extraction.
-						Defaults to 100.
-						''' */
-				}
+		ThermoresistantExtractor: {
+			// Header: Thermoresistant Extractors
+
+			Rate: {
+				// Title: Extractor Rate
+				/* Tooltip:
+					'''
+					How often Thermoresistant Extractors try to generate something.
+					This value is the number of frames between each attempt.
+					Defaults to 150, which corresponds to 2.5 seconds.
+					''' */
+			}
+
+			Chance: {
+				// Title: Extractor Chance
+				/* Tooltip:
+					'''
+					The % chance Thermoresistant Extractors have of generating anything for every Extraction.
+					Defaults to 94.
+					''' */
+			}
+
+			Amount: {
+				// Title: Extractor Amount
+				/* Tooltip:
+					'''
+					The number of items generated at every extraction by a Thermoresistant Extractor.
+					Defaults to 1.
+					''' */
+			}
+		}
+
+		AbyssalExtractor: {
+			// Header: Abyssal Extractors
+
+			Rate: {
+				// Title: Extractor Rate
+				/* Tooltip:
+					'''
+					How often Abyssal Extractors try to generate something.
+					This value is the number of frames between each attempt.
+					Defaults to 100, which corresponds to 1.667 seconds.
+					''' */
+			}
+
+			Chance: {
+				// Title: Extractor Chance
+				/* Tooltip:
+					'''
+					The % chance Abyssal Extractors have of generating anything for every Extraction.
+					Defaults to 100.
+					''' */
+			}
+
+			Amount: {
+				// Title: Extractor Amount
+				/* Tooltip:
+					'''
+					The number of items generated at every extraction by an Abyssal Extractor.
+					Defaults to 1.
+					''' */
+			}
+		}
+
+		SpectralExtractor: {
+			// Header: Spectral Extractors
+
+			Rate: {
+				// Title: Extractor Rate
+				/* Tooltip:
+					'''
+					How often Spectral Extractors try to generate something.
+					This value is the number of frames between each attempt.
+					Defaults to 70, which corresponds to 1.167 seconds.
+					''' */
+			}
+
+			Chance: {
+				// Title: Extractor Chance
+				/* Tooltip:
+					'''
+					The % chance Spectral Extractors have of generating anything for every Extraction.
+					Defaults to 100.
+					''' */
+			}
+
+			Amount: {
+				// Title: Extractor Amount
+				/* Tooltip:
+					'''
+					The number of items generated at every extraction by a Spectral Extractor.
+					Defaults to 1.
+					''' */
+			}
+		}
+
+		AuricExtractor: {
+			// Header: Auric Extractors
+
+			Rate: {
+				// Title: Extractor Rate
+				/* Tooltip:
+					'''
+					How often Auric Extractors try to generate something.
+					This value is the number of frames between each attempt.
+					Defaults to 65, which corresponds to 1.083 seconds.
+					''' */
+			}
+
+			Chance: {
+				// Title: Extractor Chance
+				/* Tooltip:
+					'''
+					The % chance Auric Extractors have of generating anything for every Extraction.
+					Defaults to 100.
+					''' */
+			}
+
+			Amount: {
+				// Title: Extractor Amount
+				/* Tooltip:
+					'''
+					The number of items generated at every extraction by an Auric Extractor.
+					Defaults to 1.
+					''' */
+			}
+		}
+
+		ExoExtractor: {
+			// Header: Exo Extractors
+
+			Rate: {
+				// Title: Extractor Rate
+				/* Tooltip:
+					'''
+					How often Exo Extractors try to generate something.
+					This value is the number of frames between each attempt.
+					Defaults to 60, which corresponds to 1 second.
+					''' */
+			}
+
+			Chance: {
+				// Title: Extractor Chance
+				/* Tooltip:
+					'''
+					The % chance Exo Extractors have of generating anything for every Extraction.
+					Defaults to 100.
+					''' */
+			}
+
+			Amount: {
+				// Title: Extractor Amount
+				/* Tooltip:
+					'''
+					The number of items generated at every extraction by an Exo Extractor.
+					Defaults to 1.
+					''' */
 			}
 		}
 	}

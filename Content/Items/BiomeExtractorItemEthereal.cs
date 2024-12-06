@@ -16,7 +16,7 @@ namespace BiomeExtractorsMod.Content.Items
         public override void SetDefaults()
         {
             base.SetDefaults();
-            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.ETHEREAL, $"{BiomeExtractorsMod.LocArticles}.Ethereal", $"{BiomeExtractorsMod.LocExtractorPrefix}Ethereal.DisplayName", delegate { return ConfigCommon.Instance.Tier7ExtractorRate; }, delegate { return ConfigCommon.Instance.Tier7ExtractorChance; }, delegate { return Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconEthereal"); });
+            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.ETHEREAL, $"{BiomeExtractorsMod.LocArticles}.Ethereal", $"{BiomeExtractorsMod.LocExtractorPrefix}Ethereal.DisplayName", delegate { return ConfigCommon.Instance.Tier7ExtractorRate; }, delegate { return ConfigCommon.Instance.Tier7ExtractorChance; }, delegate { return ConfigCommon.Instance.Tier7ExtractorAmount; }, delegate { return Mod.Assets.Request<Texture2D>("Content/MapIcons/BiomeExtractorIconEthereal"); });
             Item.SetShopValues(ItemRarityColor.Purple11, Item.buyPrice(gold: 50)); // sell at 10
         }
     }

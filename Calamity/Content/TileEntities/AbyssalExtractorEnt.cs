@@ -20,6 +20,7 @@ namespace BiomeExtractorsMod.Calamity.Content.TileEntities
         protected internal override string LocalName => Language.GetTextValue(BiomeExtractorsMod.LocExtractorSuffix("Abyssal"));
         protected internal override int ExtractionRate => CalamityConfigs.Instance.AbyssalExtractorRate;
         protected internal override int ExtractionChance => CalamityConfigs.Instance.AbyssalExtractorChance;
+        protected internal override int ExtractionAmount => CalamityConfigs.Instance.AbyssalExtractorAmount;
         protected internal override int TileType => ModContent.TileType<AbyssalExtractorTile>();
 
         protected internal override ExtractionTier ExtractionTier => Instance.GetTier(ExtractionTiers.SPECTRAL, true);

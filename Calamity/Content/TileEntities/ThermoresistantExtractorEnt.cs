@@ -20,6 +20,7 @@ namespace BiomeExtractorsMod.Calamity.Content.TileEntities
         protected internal override string LocalName => Language.GetTextValue(BiomeExtractorsMod.LocExtractorSuffix("Thermoresistant"));
         protected internal override int ExtractionRate => CalamityConfigs.Instance.ThermoresistantExtractorRate;
         protected internal override int ExtractionChance => CalamityConfigs.Instance.ThermoresistantExtractorChance;
+        protected internal override int ExtractionAmount => CalamityConfigs.Instance.ThermoresistantExtractorAmount;
         protected internal override int TileType => ModContent.TileType<ThermoresistantExtractorTile>();
 
         protected internal override ExtractionTier ExtractionTier => Instance.GetTier(ExtractionTiers.CYBER, true);
