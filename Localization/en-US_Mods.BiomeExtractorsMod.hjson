@@ -472,7 +472,7 @@ Configs: {
 	}
 
 	CalamityConfigs: {
-		DisplayName: Calamity Configs
+		DisplayName: Calamity Settings
 
 		SulphuricExtractor: {
 			Header: Sulphuric Extractors
