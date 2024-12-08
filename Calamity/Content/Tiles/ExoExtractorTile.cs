@@ -13,7 +13,8 @@ namespace BiomeExtractorsMod.Calamity.Content.Tiles
     [JITWhenModsEnabled("CalamityMod")]
     internal class ExoExtractorTile : BiomeExtractorTile
     {
-        protected override int FrameCount => 1; //TODO
+        protected override int FrameCount => 8;
+        protected override string GlowAsset => "Calamity/Content/Tiles/ExoExtractorTile_Glow";
 
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<ExoExtractorEnt>();
 
@@ -34,14 +35,14 @@ namespace BiomeExtractorsMod.Calamity.Content.Tiles
             bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
             if (!found || !entity.Active)
             {
-                r = 0.4f;
-                g = 0.4f;
-                b = 0.2f;
+                r = 0.3f;
+                g = 0.3f;
+                b = 0.3f;
                 return;
             }
             r = 1.0f;
             g = 1.0f;
-            b = 0.5f;
+            b = 1.0f;
         }
 
         protected override int ItemType(Tile tile)

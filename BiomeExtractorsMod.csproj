@@ -6,6 +6,11 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Calamity\Content\Tiles\AbyssalExtractorTile_Glow.png" />
+    <None Remove="Calamity\Content\Tiles\AuricExtractorTile_Glow.png" />
+    <None Remove="Calamity\Content\Tiles\SpectralExtractorTile_Glow.png" />
+    <None Remove="Calamity\Content\Tiles\SulphuricExtractorTile_Glow.png" />
+    <None Remove="Calamity\Content\Tiles\ThermoresistantExtractorTile_Glow.png" />
     <None Remove="Content\Items\BiomeExtractorItemAdamantite.png" />
     <None Remove="Content\Items\BiomeExtractorItemCorruption.png" />
     <None Remove="Content\Items\BiomeExtractorItemCrimson.png" />

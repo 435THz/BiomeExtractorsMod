@@ -13,7 +13,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Tiles
     [JITWhenModsEnabled("CalamityMod")]
     internal class PressurizedExtractorTile : BiomeExtractorTile
     {
-        protected override int FrameCount => 1; //TODO
+        protected override int FrameCount => 12;
 
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<PressurizedExtractorEnt>();
 

@@ -13,7 +13,9 @@ namespace BiomeExtractorsMod.Calamity.Content.Tiles
     [JITWhenModsEnabled("CalamityMod")]
     internal class AbyssalExtractorTile : BiomeExtractorTile
     {
-        protected override int FrameCount => 1; //TODO
+        protected override int FrameCount => 8;
+        protected override int FrameDuration => 6;
+        protected override string GlowAsset => "Calamity/Content/Tiles/AbyssalExtractorTile_Glow";
 
         protected override BiomeExtractorEnt TileEntity => ModContent.GetInstance<AbyssalExtractorEnt>();
 
