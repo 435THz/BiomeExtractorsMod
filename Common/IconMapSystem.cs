@@ -164,7 +164,7 @@ namespace BiomeExtractorsMod.Common.Database
                     Tile tile = Main.tile[Positions[i]];
                     ModTile tileObj = ModContent.GetModTile(tile.TileType);
                     if (tileObj is null || !tile.HasTile) continue;
-                    TileUtils.TryGetTileEntityAs<BiomeExtractorEnt>(Positions[i].X, Positions[i].Y, out BiomeExtractorEnt extractor);
+                    TileUtils.TryGetTileEntityAs(Positions[i].X, Positions[i].Y, out BiomeExtractorEnt extractor);
                     if (extractor is null) continue;
 
                     string hoverText;

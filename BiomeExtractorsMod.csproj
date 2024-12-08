@@ -6,6 +6,7 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Calamity\Content\MapIcons\ThermoresistantExtractorIcon.png" />
     <None Remove="Calamity\Content\Tiles\AbyssalExtractorTile_Glow.png" />
     <None Remove="Calamity\Content\Tiles\AuricExtractorTile_Glow.png" />
     <None Remove="Calamity\Content\Tiles\SpectralExtractorTile_Glow.png" />

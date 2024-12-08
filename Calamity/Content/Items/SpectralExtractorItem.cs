@@ -19,7 +19,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
         public override void SetDefaults()
         {
             base.SetDefaults();
-            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.SPECTRAL, $"{BiomeExtractorsMod.LocArticles}.Spectral", BiomeExtractorsMod.LocExtractorSuffix("Spectral"), delegate { return CalamityConfigs.Instance.SpectralExtractorRate; }, delegate { return CalamityConfigs.Instance.SpectralExtractorChance; }, delegate { return CalamityConfigs.Instance.SpectralExtractorAmount; }, delegate { return Mod.Assets.Request<Texture2D>("Content/MapIcons/SpectralExtractorIcon"); });
+            BiomeExtractionSystem.Instance.AddTier(ExtractionTiers.SPECTRAL, $"{BiomeExtractorsMod.LocArticles}.Spectral", BiomeExtractorsMod.LocExtractorSuffix("Spectral"), delegate { return CalamityConfigs.Instance.SpectralExtractorRate; }, delegate { return CalamityConfigs.Instance.SpectralExtractorChance; }, delegate { return CalamityConfigs.Instance.SpectralExtractorAmount; }, delegate { return Mod.Assets.Request<Texture2D>("Calamity/Content/MapIcons/SpectralExtractorIcon"); });
             Item.rare = ModContent.RarityType<PureGreen>();
             Item.value = Item.buyPrice(gold: 60); // sell at 12
         }
