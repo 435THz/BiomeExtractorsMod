@@ -28,7 +28,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Tiles
 
         protected override void CreateMapEntries()
         {
-            AddMapEntry(new(231, 166, 79), MapEntryName);
+            AddMapEntry(new(235, 170, 31), MapEntryName);
         }
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)

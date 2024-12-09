@@ -31,7 +31,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Tiles
 
         protected override void CreateMapEntries()
         {
-            AddMapEntry(new(196, 247, 255), MapEntryName);
+            AddMapEntry(new(35, 200, 254), MapEntryName);
         }
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
