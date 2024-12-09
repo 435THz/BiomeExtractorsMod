@@ -92,7 +92,6 @@ namespace BiomeExtractorsMod.Content.Tiles
 
             TileObjectData.newTile.Origin = origin;
             TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
-            TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.CoordinatePadding = 2;
 
