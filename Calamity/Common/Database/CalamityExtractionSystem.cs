@@ -54,6 +54,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string ug_snow_cryo_remix = "ug_snow_cryo_remix";
         public static readonly string jungle_hm = "jungle_hm";
         public static readonly string jungle_glm = "jungle_glm";
+        public static readonly string jungle_ml = "jungle_ml";
         public static readonly string ug_jungle_hm = "ug_jungle_hm";
         public static readonly string ug_jungle_glm = "ug_jungle_glm";
         public static readonly string ug_jungle_prv = "ug_jungle_prv";
@@ -282,12 +283,14 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         {
             BES.AddPool(jungle_hm, 50, [steampunk, hardmodeOnly]);
             BES.AddPool(jungle_glm, 50, [cyber, post_golem]);
+            BES.AddPool(jungle_ml, 50, [ethereal, postML]);
             BES.AddPool(ug_jungle_hm, 1050, [steampunk, hardmodeOnly]);
             BES.AddPool(ug_jungle_glm, 1050, [cyber, post_golem]);
             BES.AddPool(ug_jungle_prv, 1050, [ethereal, post_providence]);
 
             BES.AddPoolRequirements(jungle_hm, jungle140);
             BES.AddPoolRequirements(jungle_glm, jungle140);
+            BES.AddPoolRequirements(jungle_ml, jungle140);
             BES.AddPoolRequirements(ug_jungle_hm, belowSurfaceLayer, jungle140);
             BES.AddPoolRequirements(ug_jungle_glm, belowSurfaceLayer, jungle140);
             BES.AddPoolRequirements(ug_jungle_prv, belowSurfaceLayer, jungle140);
@@ -295,6 +298,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddItemInPool(jungle, (short)ModContent.ItemType<MurkyPaste>(), 10);
             BES.AddItemInPool(jungle_hm, (short)ModContent.ItemType<TrapperBulb>(), 8);
             BES.AddItemInPool(jungle_glm, (short)ModContent.ItemType<PlagueCellCanister>(), 10);
+            BES.AddItemInPool(jungle_ml, (short)ModContent.ItemType<EffulgentFeather>(), 10);
 
             BES.AddItemInPool(ug_jungle, (short)ModContent.ItemType<MurkyPaste>(), 10);
             BES.AddItemInPool(ug_jungle_hm, (short)ModContent.ItemType<TrapperBulb>(), 8);
