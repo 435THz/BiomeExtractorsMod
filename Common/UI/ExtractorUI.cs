@@ -102,7 +102,7 @@ namespace BiomeExtractorsMod.Common.UI
                     string daily = "";
                     if (uisys is not null)
                     {
-                        double rolls = (86400 / uisys.tier.Rate) * (uisys.tier.Chance / 100.0);
+                        double rolls = (86400 / uisys.tier.Rate) * (uisys.tier.Chance / 100.0) * uisys.tier.Amount;
                         daily = $"{data.DailyString(rolls)} {Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Per_day")}";
                     }
 
