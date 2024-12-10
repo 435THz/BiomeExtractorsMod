@@ -141,7 +141,7 @@ namespace BiomeExtractorsMod.Common.UI
                         max = SlotData[slot].Max;
                     }
                     UISystem uisys = ModContent.GetInstance<UISystem>();
-                    Slots[y, x].SetItem(item, uisys is null || !uisys.active || slot<SlotData.Length ? !SlotData[slot].IsActive : false);
+                    Slots[y, x].SetItem(item, uisys is null || !uisys.active || (slot<SlotData.Length ? !SlotData[slot].IsActive : false));
                     Slots[y, x].SetAmount(min, max);
                 }
             }
