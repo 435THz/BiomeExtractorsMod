@@ -13,7 +13,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Tiles
 {
     [ExtendsFromMod("CalamityMod")]
     [JITWhenModsEnabled("CalamityMod")]
-    internal class ThermoresistantExtractorTile : BiomeExtractorTile
+    internal class ThermoresistantExtractorTile : BiomeExtractorTileAbyss
     {
         protected override int FrameCount => 20;
         protected override string GlowAsset => "Calamity/Content/Tiles/ThermoresistantExtractorTile_Glow";

@@ -103,7 +103,7 @@ namespace BiomeExtractorsMod.Common.UI
                     if (uisys is not null)
                     {
                         double rolls = (86400 / uisys.tier.Rate) * (uisys.tier.Chance / 100.0);
-                        daily = data.DailyString(rolls) + " " + Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Per_day");
+                        daily = $"{data.DailyString(rolls)} {Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Per_day")}";
                     }
 
                     string tooltip = $"{name}\n[c/FFFFFF:{chance}]\n[c/FFFFFF:{daily}]";

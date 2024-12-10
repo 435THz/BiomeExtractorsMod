@@ -151,7 +151,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         private static int BiomeScanRate => ModContent.GetInstance<ConfigCommon>().BiomeScanRate;
 
         //loading
-        private void UpdatePoolList() {
+        private protected void UpdatePoolList() {
             PoolList = Instance.CheckValidBiomes(ExtractionTier, Position + new Point16(1, 1));
         }
 

@@ -126,7 +126,7 @@ namespace BiomeExtractorsMod.Content.Tiles
         {
             frameYOffset = GetAnimationFrame(type, i, j) * FrameHeight;
         }
-        protected int GetAnimationFrame(int type, int i, int j)
+        protected virtual int GetAnimationFrame(int type, int i, int j)
         {
             bool found = TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity);
             if (!found || !entity.Active)

@@ -11,7 +11,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Tiles
 {
     [ExtendsFromMod("CalamityMod")]
     [JITWhenModsEnabled("CalamityMod")]
-    internal class AbyssalExtractorTile : BiomeExtractorTile
+    internal class AbyssalExtractorTile : BiomeExtractorTileAbyss
     {
         protected override int FrameCount => 8;
         protected override int FrameDuration => 6;
