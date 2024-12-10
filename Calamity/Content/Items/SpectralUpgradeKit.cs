@@ -15,7 +15,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
     {
         protected override int Tier => ExtractionTiers.SPECTRAL;
 
-        protected override int ResultTile => ModContent.TileType<PressurizedExtractorTile>();
+        protected override int ResultTile => ModContent.TileType<SpectralExtractorTile>();
 
         public override void SetDefaults()
         {
