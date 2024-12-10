@@ -628,11 +628,11 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
 
             BES.AddItemInPool(the_void, ItemID.None, 57);
             BES.AddItemInPool(the_void, (short)ModContent.ItemType<Voidstone>(), 52);
-            BES.AddItemInPool(the_void, ItemID.BlackInk, 2);
+            BES.AddItemInPool(the_void, ItemID.BlackInk, 3);
             BES.AddItemInPool(the_void_pla, ItemID.Ectoplasm, 10);
             BES.AddItemInPool(the_void_lev, (short)ModContent.ItemType<Lumenyl>(), 18);
             BES.AddItemInPool(the_void_lev, (short)ModContent.ItemType<DepthCells>(), 28);
-            BES.AddItemInPool(the_void_pgh, (short)ModContent.ItemType<ReaperTooth>(), 1);
+            BES.AddItemInPool(the_void_pgh, (short)ModContent.ItemType<ReaperTooth>(), 3);
         }
         #endregion
     }
