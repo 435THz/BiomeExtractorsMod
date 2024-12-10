@@ -10,7 +10,7 @@ Now with remix world support!
 
 Mod support:
 - This mod can deposit items inside Magic Storage systems: all you need to do is place them beside a connected Storage Configuration Interface.
-- This mod supports biomes and items added by the Calamity Mod.
+- This mod supports biomes and items added by the Calamity Mod, even adding 7 more machines if Calamity is enabled.
 
 Credits:
 Code: MistressNebula (Me)
