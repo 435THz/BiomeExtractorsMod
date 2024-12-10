@@ -110,6 +110,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
             }
         }
 
+        public virtual bool IsWorking => Active;
 
         /// <summary>
         /// Returns the id of the BiomeExtractorTile this Entity is bound to.
@@ -180,7 +181,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
 
         public override void Update()
         {
-            if (!Active) { return; }
+            if (!IsWorking) { return; }
             //Every time the timer wraps back to 0 the extraction routine is performed
             int tick_increase = ConfigCommon.Instance.FollowDayRate == ConfigCommon.FollowRateValues.NO ? 1 : (int)Main.dayRate;
             int checks_this_frame = (ExtractionTimer + tick_increase) / ExtractionRate * ExtractionAmount;
@@ -433,7 +434,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
         }
 
         // returns the machine's status message
-        internal string GetStatus()
+        internal virtual string GetStatus()
         {
             string baseText = $"{BiomeExtractorsMod.LocDiagnostics}.MachineState";
             if (Active)

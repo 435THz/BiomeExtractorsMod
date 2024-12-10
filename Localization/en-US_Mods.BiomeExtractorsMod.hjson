@@ -774,6 +774,7 @@ Text: {
 	Diagnostics: {
 		MachineStatePrint: Extracting from:
 		MachineStateFail: The machine cannot extract anything from this place.
+		MachineStateDry: The machine cannot function unless it is fully submerged in the water of the Abyss.
 		MachineStateOff: The machine is inactive.
 		MachineStateBroken: This machine failed to load. Please break and replace it.
 		ScannerSuccess: Biomes identified:

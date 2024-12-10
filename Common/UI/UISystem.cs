@@ -94,7 +94,7 @@ namespace BiomeExtractorsMod.Common.UI
             Extractor = clicked;
             position = clicked.Position;
             tier = clicked.ExtractionTier;
-            active = clicked.Active;
+            active = clicked.IsWorking;
 
             Interface.OnActivate();
             UIHolder?.SetState(Interface);

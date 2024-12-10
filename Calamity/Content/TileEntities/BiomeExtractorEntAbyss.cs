@@ -3,6 +3,7 @@ using BiomeExtractorsMod.Content.TileEntities;
 using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Calamity.Content.TileEntities
@@ -12,6 +13,7 @@ namespace BiomeExtractorsMod.Calamity.Content.TileEntities
     public abstract class BiomeExtractorEntAbyss : BiomeExtractorEnt
     {
         protected internal bool PressureLock { get; private set; } = false;
+        public override bool IsWorking => Active && !PressureLock;
 
         public override void Update()
         {
@@ -20,9 +22,15 @@ namespace BiomeExtractorsMod.Calamity.Content.TileEntities
             PressureLock = !BiomeChecker.IsInAbyssArea(point) || !BiomeChecker.IsSubmerged(point);
             if (Locked && !PressureLock)
                 UpdatePoolList(); //must update status if back in water
+            base.Update();
+        }
 
-            if (!PressureLock)
-                base.Update();
+        internal override string GetStatus()
+        {
+            if (Active && PressureLock)
+                return Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.MachineStateDry");
+            else
+                return base.GetStatus();
         }
 
         public override void NetSend(BinaryWriter writer)

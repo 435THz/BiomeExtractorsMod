@@ -786,6 +786,7 @@ Text: {
 	Diagnostics: {
 		MachineStatePrint: Estraendo da:
 		MachineStateFail: Questo macchinario non può estrarre nulla da questo posto.
+		// MachineStateDry: The machine cannot function unless it is fully submerged in the water of the Abyss.
 		MachineStateOff: Questo macchinario è spento.
 		MachineStateBroken: Questo macchinario non è stato caricato coorettamente. Rompilo e ri-piazzalo.
 		ScannerSuccess: Biomi trovati:

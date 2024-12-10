@@ -1,5 +1,4 @@
 ﻿using BiomeExtractorsMod.Content.TileEntities;
-using BiomeExtractorsMod.Content.Tiles;
 using BiomeExtractorsMod.Calamity.Content.Items;
 using BiomeExtractorsMod.Calamity.Content.TileEntities;
 using Terraria;
