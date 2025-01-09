@@ -15,4 +15,4 @@ Now with remix world support!
 
 ## Credits:
 Code: MistressNebula (Me)  
-Spriting: Levviata, nakamurash, MistressNebula
+Spriting: [Levviata](https://github.com/Levviata), nakamurash, MistressNebula
