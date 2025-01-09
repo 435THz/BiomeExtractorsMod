@@ -255,8 +255,11 @@ namespace BiomeExtractorsMod.Common.Database
             public override bool Equals(object obj)
             {
                 if (obj == null) return false;
-                if (obj is not ItemEntry) return false;
-                return Id == ((ItemEntry)obj).Id && Min == ((ItemEntry)obj).Min && Max == ((ItemEntry)obj).Max;
+                if (obj is ItemEntry other)
+                {
+                    return Id == other.Id && Min == other.Min && Max == other.Max;
+                }
+                return false;
             }
 
             public override int GetHashCode()
