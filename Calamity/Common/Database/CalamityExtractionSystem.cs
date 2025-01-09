@@ -1,4 +1,5 @@
 ﻿using BiomeExtractorsMod.Common.Database;
+using BiomeExtractorsMod.Common.Hooks;
 using BiomeExtractorsMod.Content.Tiles;
 using BiomeExtractorsMod.Calamity.Content.TileEntities;
 using CalamityMod;

@@ -1226,7 +1226,7 @@ namespace BiomeExtractorsMod.Common.Database
             SetupOcean();
             SetupUnderworld();
             SetupMeteorite();
-            WeakReferenceLoader.LoadWeakReferences();
+            ExtractionSystemExtension.LoadExtensions();
             GenerateLocalizationKeys();
         }
 
