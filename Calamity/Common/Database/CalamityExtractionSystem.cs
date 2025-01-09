@@ -279,7 +279,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AliasItemPool(snow_hm_remix, snow_hm);
 
             BES.AddItemInPool(ug_snow_hm, (short)ModContent.ItemType<EssenceofEleum>(), 4);
-            BES.AddItemInPool(ug_snow_cryo, (short)ModContent.ItemType<CryonicOre>(), 2);
+            BES.AddItemInPool(ug_snow_cryo, (short)ModContent.ItemType<CryonicOre>(), 4);
             BES.AliasItemPool(ug_snow_hm_remix, ug_snow_hm);
             BES.AliasItemPool(ug_snow_cryo_remix, ug_snow_cryo);
         }
