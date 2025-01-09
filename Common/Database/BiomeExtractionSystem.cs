@@ -1063,6 +1063,28 @@ namespace BiomeExtractorsMod.Common.Database
         /// <param name="count">The amount of the given item the target entry contains.<br/>
         /// <returns><see langword="true"/> if the pool exists and it contained the target entry, <see langword="false"/> otherwise</returns>
         public bool RemoveItemFromPool(string poolName, short itemId, int count) => RemoveItemFromPool(poolName, new ItemEntry(itemId, count));
+
+        /// <summary>
+        /// Removes all ItemEntry objects that correspond to the given <paramref name="itemId"/> from a pool.
+        /// </summary>
+        /// <param name="poolName">The name of the pool to remove the item from.</param>
+        /// <param name="itemId">The id of the item to remove</param>
+        /// <param name="count">The amount of the given item the target entry contains.<br/>
+        /// <returns><see langword="true"/> if the pool exists and it contained the target entry, <see langword="false"/> otherwise</returns>
+        public bool RemoveItemFromPool(string poolName, short itemId)
+        {
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
+            bool result = false;
+            foreach (ItemEntry key in _itemPools[poolName].Keys)
+            {
+                if (key.Id == itemId)
+                {
+                    result = _itemPools[poolName].Remove(key) || result;
+                }
+            }
+            return result;
+        }
         /// <summary>
         /// Removes an ItemEntry from a pool.
         /// </summary>
