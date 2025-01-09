@@ -1441,6 +1441,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(desert, ItemID.YellowDragonfly, 4);
             AddItemInPool(desert, ItemID.BlackDragonfly, 4);
             AddItemInPool(desert, ItemID.OrangeDragonfly, 4);
+            AddItemInPool(desert, ItemID.Oyster, 2);
             AliasItemPool(desert_remix, desert);
 
             AddItemInPool(ug_desert, ItemID.None, 20);
