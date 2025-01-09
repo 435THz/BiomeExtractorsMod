@@ -311,7 +311,7 @@ Configs: {
 		Tier1AmountTooltip:
 			'''
 			Il numero di oggetti generati simultaneamente ad ogni estrazione
-			da un Estrattore etereo.
+			da un Estrattore semplice.
 			Il valore predefinito è 1
 			'''
 		Tier2Header: Estrattori demoniaci
@@ -329,12 +329,13 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 240, che corrisponde a 4 secondi.
 			'''
-		// Tier2AmountTitle: Extraction Amount
-		/* Tier2AmountTooltip:
+		Tier2AmountTitle: Estrazioni simultanee
+		Tier2AmountTooltip:
 			'''
-			The number of items generated at every extraction by a Demonic Extractor.
-			Defaults to 1.
-			''' */
+			Il numero di oggetti generati simultaneamente ad ogni estrazione
+			da un Estrattore demoniaco.
+			Il valore predefinito è 1
+			'''
 		Tier3Header: Estrattori infernali
 		Tier3ChanceTitle: Probabilità di successo
 		Tier3ChanceTooltip:
@@ -350,12 +351,13 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 180, che corrisponde a 3 secondi.
 			'''
-		// Tier3AmountTitle: Extraction Amount
-		/* Tier3AmountTooltip:
+		Tier3AmountTitle: Estrazioni simultanee
+		Tier3AmountTooltip:
 			'''
-			The number of items generated at every extraction by a Infernal Extractor.
-			Defaults to 1.
-			''' */
+			Il numero di oggetti generati simultaneamente ad ogni estrazione
+			da un Estrattore infernale.
+			Il valore predefinito è 1
+			'''
 		Tier4Header: Estrattori steampunk
 		Tier4ChanceTitle: Probabilità di successo
 		Tier4ChanceTooltip:
@@ -371,12 +373,13 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 120, che corrisponde a 2 secondi.
 			'''
-		// Tier4AmountTitle: Extraction Amount
-		/* Tier4AmountTooltip:
+		Tier4AmountTitle: Estrazioni simultanee
+		Tier4AmountTooltip:
 			'''
-			The number of items generated at every extraction by a Steampunk Extractor.
-			Defaults to 1.
-			''' */
+			Il numero di oggetti generati simultaneamente ad ogni estrazione
+			da un Estrattore steampunk.
+			Il valore predefinito è 1
+			'''
 		Tier5Header: Estrattori cibernetici
 		Tier5ChanceTitle: Probabilità di successo
 		Tier5ChanceTooltip:
@@ -392,12 +395,13 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 90, che corrisponde a 1.5 secondi.
 			'''
-		// Tier5AmountTitle: Extraction Amount
-		/* Tier5AmountTooltip:
+		Tier5AmountTitle: Estrazioni simultanee
+		Tier5AmountTooltip:
 			'''
-			The number of items generated at every extraction by a Cybernetic Extractor.
-			Defaults to 1.
-			''' */
+			Il numero di oggetti generati simultaneamente ad ogni estrazione
+			da un Estrattore cibernetico.
+			Il valore predefinito è 1
+			'''
 		Tier6Header: Estrattori lunari
 		Tier6ChanceTitle: Probabilità di successo
 		Tier6ChanceTooltip:
@@ -413,12 +417,13 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 60, che corrisponde a 1 secondo.
 			'''
-		// Tier6AmountTitle: Extraction Amount
-		/* Tier6AmountTooltip:
+		Tier6AmountTitle: Estrazioni simultanee
+		Tier6AmountTooltip:
 			'''
-			The number of items generated at every extraction by a Lunar Extractor.
-			Defaults to 1.
-			''' */
+			Il numero di oggetti generati simultaneamente ad ogni estrazione
+			da un Estrattore lunare.
+			Il valore predefinito è 1
+			'''
 		Tier7Header: Estrattori eterei
 		Tier7ChanceTitle: Probabilità di successo
 		Tier7ChanceTooltip:
@@ -434,12 +439,13 @@ Configs: {
 			Questo valore è il numero di frame tra un'estrazione e l'altra.
 			Il valore predefinito è 45, che corrisponde a 3/4 di secondo.
 			'''
-		// Tier7AmountTitle: Extraction Amount
-		/* Tier7AmountTooltip:
+		Tier7AmountTitle: Estrazioni simultanee
+		Tier7AmountTooltip:
 			'''
-			The number of items generated at every extraction by a Ethereal Extractor.
-			Defaults to 1.
-			''' */
+			Il numero di oggetti generati simultaneamente ad ogni estrazione
+			da un Estrattore etereo.
+			Il valore predefinito è 1
+			'''
 	}
 
 	ConfigCompat: {
@@ -745,14 +751,14 @@ Text: {
 		ug_desert: "{$Bestiary_Biomes.UndergroundDesert}"
 		ug_jungle: "{$Bestiary_Biomes.UndergroundJungle}"
 		hive: Alveare
-		ug_hallowed_caverns: "{$Bestiary_Biomes.UndergroundHallow}"
+		ug_hallowed: "{$Bestiary_Biomes.UndergroundHallow}"
 		ug_hallowed_desert: "{$Bestiary_Biomes.HallowUndergroundDesert}"
 		ug_hallowed_snow: "{$Bestiary_Biomes.HallowIce}"
 		ug_mushroom: "{$Bestiary_Biomes.UndergroundMushroom}"
-		ug_corrupt_caverns: "{$Bestiary_Biomes.UndergroundCorruption}"
+		ug_corrupt: "{$Bestiary_Biomes.UndergroundCorruption}"
 		ug_corrupt_desert: "{$Bestiary_Biomes.CorruptUndergroundDesert}"
 		ug_corrupt_snow: "{$Bestiary_Biomes.CorruptIce}"
-		ug_crimson_caverns: "{$Bestiary_Biomes.UndergroundCrimson}"
+		ug_crimson: "{$Bestiary_Biomes.UndergroundCrimson}"
 		ug_crimson_desert: "{$Bestiary_Biomes.CrimsonUndergroundDesert}"
 		ug_crimson_snow: "{$Bestiary_Biomes.CrimsonIce}"
 		dungeon: "{$Bestiary_Biomes.TheDungeon}"
