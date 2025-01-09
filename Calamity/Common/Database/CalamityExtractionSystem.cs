@@ -82,6 +82,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string graveyard_dog_evil = "graveyard_dog_evil";
 
         public static readonly string sunken_sea = "sunken_sea";
+        public static readonly string sunken_sea_hm = "sunken_sea_hm";
         public static readonly string sulphur_sea = "sulphur_sea";
         public static readonly string sulphur_sea_hm = "sulphur_sea_hm";
         public static readonly string sulphur_sea_as = "sulphur_sea_as";
@@ -493,8 +494,10 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         private static void SetupSunkenSea()
         {
             BES.AddPool(sunken_sea, 1050, LocalizeAs(sunken_sea));
+            BES.AddPool(sunken_sea_hm, 1050, [hardmodeOnly, infernal]);
 
             BES.AddPoolRequirements(sunken_sea, sunken_sea150);
+            BES.AddPoolRequirements(sunken_sea_hm, sunken_sea150);
 
             BES.AddItemInPool(sunken_sea, ItemID.None, 20);
             BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<EutrophicSand>(), 11);
@@ -506,6 +509,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddItemInPool(sunken_sea, ItemID.PinkPearl,  new Fraction(1,2));
             BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<BabyGhostBellItem>(), 3);
             BES.AddItemInPool(sunken_sea, (short)ModContent.ItemType<SeaMinnowItem>(), 4);
+            BES.AddItemInPool(sunken_sea_hm, (short)ModContent.ItemType<MolluskHusk>(), 5);
         }
         private static void SetupSulphurousSea()
         {
