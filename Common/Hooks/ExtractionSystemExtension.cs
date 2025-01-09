@@ -1,12 +1,11 @@
-﻿using BiomeExtractorsMod.Calamity.Common.Database;
-using BiomeExtractorsMod.Common.Database;
+﻿using BiomeExtractorsMod.Common.Database;
 using System;
 using System.Collections.Generic;
 using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Common.Hooks
 {
-    internal abstract class ExtractionSystemExtension : ModSystem
+    public abstract class ExtractionSystemExtension : ModSystem
     {
         private static readonly Dictionary<Type, ExtractionSystemExtension> Extensions = [];
         protected static BiomeExtractionSystem BES => BiomeExtractionSystem.Instance;
@@ -18,7 +17,6 @@ namespace BiomeExtractorsMod.Common.Hooks
             foreach (var extension in Extensions.Values)
                 extension.LoadDatabase();
         }
-
 
         public override sealed void OnModLoad()
         {
