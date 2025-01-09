@@ -76,6 +76,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string underworld_ml = "underworld_ml";
         public static readonly string space_exo = "space_exo";
         public static readonly string graveyard_infernal = "graveyard_infernal";
+        public static readonly string graveyard_cal_clone = "graveyard_cal_clone";
         public static readonly string graveyard_dog = "graveyard_dog";
         public static readonly string graveyard_dog_cold = "graveyard_dog_cold";
         public static readonly string graveyard_dog_evil = "graveyard_dog_evil";
@@ -147,6 +148,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly Predicate<ScanData> post_cryogen = scan => CalamityConditions.DownedCryogen.IsMet();
         public static readonly Predicate<ScanData> post_scourge2 = scan => CalamityConditions.DownedAquaticScourge.IsMet();
         public static readonly Predicate<ScanData> acid_rain2_finished = scan => CalamityConditions.DownedAcidRainT2.IsMet() || acid_rain3_finished.Invoke(scan);
+        public static readonly Predicate<ScanData> post_cal_clone = scan => CalamityConditions.DownedCalamitasClone.IsMet();
         public static readonly Predicate<ScanData> post_plantera = scan => Condition.DownedPlantera.IsMet();
         public static readonly Predicate<ScanData> post_leviathan = scan => CalamityConditions.DownedLeviathan.IsMet();
         public static readonly Predicate<ScanData> post_golem = scan => Condition.DownedGolem.IsMet();
@@ -344,16 +346,19 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         private static void ExpandGraveyard()
         {
             BES.AddPool(graveyard_infernal, 500, [demonic]);
+            BES.AddPool(graveyard_cal_clone, 500, [steampunk, post_cal_clone]);
             BES.AddPool(graveyard_dog, 500, [spectral, post_dog]);
             BES.AddPool(graveyard_dog_cold, 500, [spectral, post_dog]);
             BES.AddPool(graveyard_dog_evil, 500, [spectral, post_dog]);
 
             BES.AddPoolRequirements(graveyard_infernal, surfaceLayer, tombstone5);
+            BES.AddPoolRequirements(graveyard_cal_clone, grass100, surfaceLayer, tombstone5);
             BES.AddPoolRequirements(graveyard_dog, grass100, surfaceLayer, tombstone5);
             BES.AddPoolRequirements(graveyard_dog_cold, frost1500, surfaceLayer, tombstone5);
             BES.AddPoolRequirements(graveyard_dog_evil, anyEvil300, surfaceLayer, tombstone5);
 
             BES.AddItemInPool(graveyard_infernal, (short)ModContent.ItemType<BloodOrb>(), 5);
+            BES.AddItemInPool(graveyard_cal_clone, (short)ModContent.ItemType<SolarVeil>(), 5);
             BES.AddItemInPool(graveyard_dog, (short)ModContent.ItemType<DarksunFragment>(), 50);
             BES.AddItemInPool(graveyard_dog_cold, (short)ModContent.ItemType<EndothermicEnergy>(), 50);
             BES.AddItemInPool(graveyard_dog_evil, (short)ModContent.ItemType<NightmareFuel>(), 50);
