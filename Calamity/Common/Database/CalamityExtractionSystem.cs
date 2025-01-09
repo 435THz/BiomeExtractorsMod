@@ -42,7 +42,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
 {
     [ExtendsFromMod("CalamityMod")]
     [JITWhenModsEnabled("CalamityMod")]
-    internal class CalamityExtractionSystem : ExtractionSystemExtension
+    public class CalamityExtractionSystem : ExtractionSystemExtension
     {
         public static CalamityExtractionSystem Instance => ModContent.GetInstance<CalamityExtractionSystem>();
 
@@ -73,6 +73,12 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string hallowed_forest_ml_remix = "hallowed_forest_ml_remix";
         public static readonly string hallowed_desert_ml_remix = "hallowed_desert_ml_remix";
         public static readonly string hallowed_snow_ml_remix = "hallowed_snow_ml_remix";
+        public static readonly string ug_hallowed_ore = "ug_hallowed_ore";
+        public static readonly string ug_hallowed_ore_desert = "ug_hallowed_ore_desert";
+        public static readonly string ug_hallowed_ore_snow = "ug_hallowed_ore_snow";
+        public static readonly string ug_hallowed_ore_remix = "ug_hallowed_ore_remix";
+        public static readonly string ug_hallowed_ore_desert_remix = "ug_hallowed_ore_desert_remix";
+        public static readonly string ug_hallowed_ore_snow_remix = "ug_hallowed_ore_snow_remix";
         public static readonly string underworld_ml = "underworld_ml";
         public static readonly string space_exo = "space_exo";
         public static readonly string graveyard_infernal = "graveyard_infernal";
@@ -219,6 +225,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             ExpandCrimson();
             ExpandCorruption();
             ExpandHallow();
+            SubstituteHallowOre();
             ExpandGraveyard();
             ExpandDungeon();
             ExpandSpace();
@@ -344,6 +351,44 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AliasItemPool(hallowed_desert_ml_remix, hallowed_desert_ml);
             BES.AliasItemPool(hallowed_snow_ml_remix, hallowed_snow_ml);
         }
+
+        private static void SubstituteHallowOre()
+        {
+            BES.RemovePool(hallowed_bars_forest_remix);
+            BES.RemovePool(hallowed_bars_desert_remix);
+            BES.RemovePool(hallowed_bars_snow_remix);
+            BES.RemovePool(hallowed_bars_forest);
+            BES.RemovePool(hallowed_bars_desert);
+            BES.RemovePool(hallowed_bars_snow);
+            BES.RemovePool(ug_hallowed_bars_remix);
+            BES.RemovePool(ug_hallowed_bars_desert_remix);
+            BES.RemovePool(ug_hallowed_bars_snow_remix);
+            BES.RemovePool(ug_hallowed_bars);
+            BES.RemovePool(ug_hallowed_bars_desert);
+            BES.RemovePool(ug_hallowed_bars_snow);
+
+            BES.AddPool(ug_hallowed_ore, 1100, [steampunk, postMechs]);
+            BES.AddPool(ug_hallowed_ore_desert, 1100, [steampunk, postMechs]);
+            BES.AddPool(ug_hallowed_ore_desert, 1100, [steampunk, postMechs]);
+            BES.AddPool(ug_hallowed_ore_remix, 1100, [steampunk, postMechs]);
+            BES.AddPool(ug_hallowed_ore_desert_remix, 1100, [steampunk, postMechs]);
+            BES.AddPool(ug_hallowed_ore_snow_remix, 1100, [steampunk, postMechs]);
+
+            BES.AddPoolRequirements(ug_hallowed_ore, cavernLayer, hallow125.Invoke(hallowForestBlocks));
+            BES.AddPoolRequirements(ug_hallowed_ore_desert, cavernLayer, hallow125.Invoke(hallowSandBlocks));
+            BES.AddPoolRequirements(ug_hallowed_ore_snow, cavernLayer, hallow125.Invoke(hallowIceBlocks));
+            BES.AddPoolRequirements(ug_hallowed_ore_remix, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
+            BES.AddPoolRequirements(ug_hallowed_ore_desert_remix, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowSandBlocks), remix);
+            BES.AddPoolRequirements(ug_hallowed_ore_snow_remix, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
+            
+            BES.AddItemInPool(ug_hallowed_ore, (short)ModContent.ItemType<HallowedOre>(), 12);
+            BES.AddItemInPool(ug_hallowed_ore_desert, (short)ModContent.ItemType<HallowedOre>(), 12);
+            BES.AddItemInPool(ug_hallowed_ore_snow, (short)ModContent.ItemType<HallowedOre>(), 12);
+            BES.AliasItemPool(ug_hallowed_ore_remix, ug_hallowed_ore);
+            BES.AliasItemPool(ug_hallowed_ore_desert_remix, ug_hallowed_ore_desert);
+            BES.AliasItemPool(ug_hallowed_ore_snow_remix, ug_hallowed_ore_snow);
+        }
+
         private static void ExpandGraveyard()
         {
             BES.AddPool(graveyard_infernal, 500, [demonic]);
