@@ -251,6 +251,7 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 UpdatePoolList();
                 UISystem ui = ModContent.GetInstance<UISystem>();
                 if (ui?.Extractor == this) ui.Interface.OnActivate();
+                SendUpdatePacket(ServerMessageType.EXTRACTOR_REGISTER);
             }
             ScanningTimer++; //always run immediately upon placement
         }
