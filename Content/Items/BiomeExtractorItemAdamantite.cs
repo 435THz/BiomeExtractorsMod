@@ -1,4 +1,3 @@
-using BiomeExtractorsMod.Calamity.Common;
 using BiomeExtractorsMod.Common.Configs;
 using BiomeExtractorsMod.Common.Database;
 using BiomeExtractorsMod.Content.Tiles;

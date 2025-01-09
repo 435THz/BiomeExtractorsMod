@@ -176,8 +176,6 @@ namespace BiomeExtractorsMod.Content.Tiles
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = ItemType(tile);
             player.noThrow = 2;
-
-            base.MouseOver(i, j);
         }
 
         public override bool RightClick(int i, int j)

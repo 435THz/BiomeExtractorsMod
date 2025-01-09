@@ -155,7 +155,7 @@ namespace BiomeExtractorsMod.Common.UI
                 DynamicSpriteFont font = FontAssets.MouseText.Value;
                 float spacing = font.LineSpacing;
                 string visibleText = font.CreateWrappedText(status, panel.Width.Pixels-23f);
-                float height = (visibleText.Split('\n').Length * spacing);
+                float height = visibleText.Split('\n').Length * spacing;
 
                 slotArea.Top.Set(40f + height, 0f);
                 slotArea.InitElements();
