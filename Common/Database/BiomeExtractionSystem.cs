@@ -474,7 +474,7 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly string hallowed_forest_remix = "hallowed_forest_remix";
         public static readonly string hallowed_bars_forest_remix = "hallowed_bars_forest_remix";
         public static readonly string ug_hallowed_caverns_remix = "ug_hallowed_caverns_remix";
-        public static readonly string ug_hallowed_bars_caverns_remix = "ug_hallowed_bars_caverns_remix";
+        public static readonly string ug_hallowed_bars_remix = "ug_hallowed_bars_remix";
         public static readonly string hallowed_desert_remix = "hallowed_desert_remix";
         public static readonly string hallowed_bars_desert_remix = "hallowed_bars_desert_remix";
         public static readonly string ug_hallowed_desert_remix = "ug_hallowed_desert_remix";
@@ -1609,7 +1609,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(hallowed_forest_remix, 101, [steampunk, hardmodeOnly], LocalizeAs(hallowed_forest));
             AddPool(hallowed_bars_forest_remix, 101, [steampunk, postMechs]);
             AddPool(ug_hallowed_caverns_remix, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed));
-            AddPool(ug_hallowed_bars_caverns_remix, 1100, [steampunk, postMechs]);
+            AddPool(ug_hallowed_bars_remix, 1100, [steampunk, postMechs]);
 
             AddPoolRequirements(hallowed_forest, hallow125.Invoke(hallowForestBlocks));
             AddPoolRequirements(hallowed_bars_forest, hallow125.Invoke(hallowForestBlocks));
@@ -1618,7 +1618,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddPoolRequirements(hallowed_forest_remix, cavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
             AddPoolRequirements(hallowed_bars_forest_remix, cavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
             AddPoolRequirements(ug_hallowed_caverns_remix, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
-            AddPoolRequirements(ug_hallowed_bars_caverns_remix, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
+            AddPoolRequirements(ug_hallowed_bars_remix, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
 
             AddItemInPool(hallowed_forest, ItemID.None, 72);
             AddItemInPool(hallowed_forest, ItemID.DirtBlock, 26);
@@ -1645,7 +1645,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(ug_hallowed, ItemID.CrystalShard, 20);
             AddItemInPool(ug_hallowed_bars, ItemID.HallowedBar, 1);
             AliasItemPool(ug_hallowed_caverns_remix, ug_hallowed);
-            AliasItemPool(ug_hallowed_bars_caverns_remix, ug_hallowed_bars);
+            AliasItemPool(ug_hallowed_bars_remix, ug_hallowed_bars);
         }
         private void SetupHallowDesert()
         {
