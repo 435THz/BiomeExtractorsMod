@@ -30,7 +30,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddRecipeGroup(ModContent.GetInstance<Recipes>().demonicExtractorGroupName)
+                .AddRecipeGroup(Recipes.demonicExtractorGroupName)
                 .AddIngredient(ModContent.ItemType<SulphuricUpgradeKit>())
                 .Register();
         }

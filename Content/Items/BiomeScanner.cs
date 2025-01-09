@@ -115,6 +115,16 @@ namespace BiomeExtractorsMod.Content.Items
             }
         }
 
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Lens, 2)
+                .AddIngredient(ItemID.Wire, 5)
+                .AddRecipeGroup(Recipes.goldBarGroupName, 2)
+                .AddTile(TileID.TinkerersWorkbench)
+                .Register();
+        }
+
         public override void SaveData(TagCompound tag)
         {
             tag["current"] = currentTier;

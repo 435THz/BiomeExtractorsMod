@@ -2,6 +2,7 @@
 using BiomeExtractorsMod.Content.Tiles;
 using Terraria;
 using Terraria.Enums;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
@@ -15,6 +16,15 @@ namespace BiomeExtractorsMod.Content.Items
         {
             base.SetDefaults();
             Item.SetShopValues(ItemRarityColor.Pink5, Item.buyPrice(gold: 5)); // sell at 1
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.TitaniumBar, 5)
+                .AddIngredient(ItemID.Cog, 12)
+                .AddTile(TileID.MythrilAnvil) //covers both
+                .Register();
         }
     }
 }

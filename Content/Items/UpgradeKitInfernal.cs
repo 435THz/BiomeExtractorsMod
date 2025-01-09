@@ -2,6 +2,7 @@
 using BiomeExtractorsMod.Content.Tiles;
 using Terraria;
 using Terraria.Enums;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BiomeExtractorsMod.Content.Items
@@ -14,6 +15,15 @@ namespace BiomeExtractorsMod.Content.Items
         {
             base.SetDefaults();
             Item.SetShopValues(ItemRarityColor.Orange3, Item.buyPrice(gold: 5)); // sell at 1
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.HellstoneBar, 5)
+                .AddIngredient(ItemID.Meteorite, 12)
+                .AddTile(TileID.TinkerersWorkbench)
+                .Register();
         }
     }
 }
