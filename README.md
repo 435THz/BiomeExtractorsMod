@@ -1,2 +1,18 @@
 # BiomeExtractorsMod
- Automatically extract resources from biomes all across your world!
+This mod adds a new type of furniture called “Biome Extractor” to the game. When placed, this machine will extract items from the biome it’s in and then store them in an adjacent chest.
+These machines generate items automatically every few seconds. All they need to start working is to have a valid output.
+
+There are seven types of Biome Extractors, each one faster and able to access more loot than the last. All you need to start is an Extractinator and some Iron or Lead.
+Since Extractinators are very hard to come by, this mod also adds them to the Mechanic's shop.
+
+Disclaimer: by “extracting from the biome” we mean “generating items related to the biome from nothing”.
+
+Now with remix world support!
+
+## Mod support:
+- This mod can deposit items inside Magic Storage systems: all you need to do is place them beside a connected Storage Configuration Interface.
+- This mod supports biomes and items added by the Calamity Mod, even adding 7 more machines if Calamity is enabled.
+
+## Credits:
+Code: MistressNebula (Me)  
+Spriting: Levviata, nakamurash, MistressNebula
