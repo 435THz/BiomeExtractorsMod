@@ -424,21 +424,21 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly string ug_shells = "ug_shells";
         public static readonly string life_fruit = "life_fruit";
         public static readonly string chlorophyte = "chlorophyte";
-        public static readonly string ug_hallowed_caverns = "ug_hallowed_caverns";
+        public static readonly string ug_hallowed = "ug_hallowed";
         public static readonly string ug_hallowed_snow = "ug_hallowed_snow";
         public static readonly string ug_hallowed_desert = "ug_hallowed_desert";
-        public static readonly string ug_hallowed_bars_caverns = "ug_hallowed_bars_caverns";
+        public static readonly string ug_hallowed_bars = "ug_hallowed_bars";
         public static readonly string ug_hallowed_bars_snow = "ug_hallowed_bars_snow";
         public static readonly string ug_hallowed_bars_desert = "ug_hallowed_bars_desert";
         public static readonly string ug_mushroom = "ug_mushroom";
         public static readonly string truffle_worm = "truffle_worm";
-        public static readonly string ug_corrupt_caverns = "ug_corrupt_caverns";
+        public static readonly string ug_corrupt = "ug_corrupt";
         public static readonly string ug_corrupt_snow = "ug_corrupt_snow";
         public static readonly string ug_corrupt_desert = "ug_corrupt_desert";
         public static readonly string ug_corrupt_caverns_hm = "ug_corrupt_caverns_hm";
         public static readonly string ug_corrupt_snow_hm = "ug_corrupt_snow_hm";
         public static readonly string ug_corrupt_desert_hm = "ug_corrupt_desert_hm";
-        public static readonly string ug_crimson_caverns = "ug_crimson_caverns";
+        public static readonly string ug_crimson = "ug_crimson";
         public static readonly string ug_crimson_snow = "ug_crimson_snow";
         public static readonly string ug_crimson_desert = "ug_crimson_desert";
         public static readonly string ug_crimson_caverns_hm = "ug_crimson_caverns_hm";
@@ -1604,17 +1604,17 @@ namespace BiomeExtractorsMod.Common.Database
         {
             AddPool(hallowed_forest, 100, [steampunk, hardmodeOnly], LocalizeAs(hallowed_forest));
             AddPool(hallowed_bars_forest, 100, [steampunk, postMechs]);
-            AddPool(ug_hallowed_caverns, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_caverns));
-            AddPool(ug_hallowed_bars_caverns, 1100, [steampunk, postMechs]);
+            AddPool(ug_hallowed, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed));
+            AddPool(ug_hallowed_bars, 1100, [steampunk, postMechs]);
             AddPool(hallowed_forest_remix, 101, [steampunk, hardmodeOnly], LocalizeAs(hallowed_forest));
             AddPool(hallowed_bars_forest_remix, 101, [steampunk, postMechs]);
-            AddPool(ug_hallowed_caverns_remix, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_caverns));
+            AddPool(ug_hallowed_caverns_remix, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed));
             AddPool(ug_hallowed_bars_caverns_remix, 1100, [steampunk, postMechs]);
 
             AddPoolRequirements(hallowed_forest, hallow125.Invoke(hallowForestBlocks));
             AddPoolRequirements(hallowed_bars_forest, hallow125.Invoke(hallowForestBlocks));
-            AddPoolRequirements(ug_hallowed_caverns, cavernLayer, hallow125.Invoke(hallowForestBlocks), notremix);
-            AddPoolRequirements(ug_hallowed_bars_caverns, cavernLayer, hallow125.Invoke(hallowForestBlocks), notremix);
+            AddPoolRequirements(ug_hallowed, belowSurfaceLayer, hallow125.Invoke(hallowForestBlocks), notremix);
+            AddPoolRequirements(ug_hallowed_bars, belowSurfaceLayer, hallow125.Invoke(hallowForestBlocks), notremix);
             AddPoolRequirements(hallowed_forest_remix, cavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
             AddPoolRequirements(hallowed_bars_forest_remix, cavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
             AddPoolRequirements(ug_hallowed_caverns_remix, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
@@ -1638,14 +1638,14 @@ namespace BiomeExtractorsMod.Common.Database
             AliasItemPool(hallowed_forest_remix, hallowed_forest);
             AliasItemPool(hallowed_bars_forest_remix, hallowed_bars_forest);
 
-            AddItemInPool(ug_hallowed_caverns, ItemID.None, 70);
-            AddItemInPool(ug_hallowed_caverns, ItemID.DirtBlock, 20);
-            AddItemInPool(ug_hallowed_caverns, ItemID.PearlstoneBlock, 6);
-            AddItemInPool(ug_hallowed_caverns, ItemID.SoulofLight, 24);
-            AddItemInPool(ug_hallowed_caverns, ItemID.CrystalShard, 20);
-            AddItemInPool(ug_hallowed_bars_caverns, ItemID.HallowedBar, 1);
-            AliasItemPool(ug_hallowed_caverns_remix, ug_hallowed_caverns);
-            AliasItemPool(ug_hallowed_bars_caverns_remix, ug_hallowed_bars_caverns);
+            AddItemInPool(ug_hallowed, ItemID.None, 70);
+            AddItemInPool(ug_hallowed, ItemID.DirtBlock, 20);
+            AddItemInPool(ug_hallowed, ItemID.PearlstoneBlock, 6);
+            AddItemInPool(ug_hallowed, ItemID.SoulofLight, 24);
+            AddItemInPool(ug_hallowed, ItemID.CrystalShard, 20);
+            AddItemInPool(ug_hallowed_bars, ItemID.HallowedBar, 1);
+            AliasItemPool(ug_hallowed_caverns_remix, ug_hallowed);
+            AliasItemPool(ug_hallowed_bars_caverns_remix, ug_hallowed_bars);
         }
         private void SetupHallowDesert()
         {
@@ -1660,8 +1660,8 @@ namespace BiomeExtractorsMod.Common.Database
 
             AddPoolRequirements(hallowed_desert, hallow125.Invoke(hallowSandBlocks));
             AddPoolRequirements(hallowed_bars_desert, hallow125.Invoke(hallowSandBlocks));
-            AddPoolRequirements(ug_hallowed_desert, cavernLayer, hallow125.Invoke(hallowSandBlocks), notremix);
-            AddPoolRequirements(ug_hallowed_bars_desert, cavernLayer, hallow125.Invoke(hallowSandBlocks), notremix);
+            AddPoolRequirements(ug_hallowed_desert, belowSurfaceLayer, hallow125.Invoke(hallowSandBlocks), notremix);
+            AddPoolRequirements(ug_hallowed_bars_desert, belowSurfaceLayer, hallow125.Invoke(hallowSandBlocks), notremix);
             AddPoolRequirements(hallowed_desert_remix, cavernLayer, hallow125.Invoke(hallowSandBlocks), remix);
             AddPoolRequirements(hallowed_bars_desert_remix, cavernLayer, hallow125.Invoke(hallowSandBlocks), remix);
             AddPoolRequirements(ug_hallowed_desert_remix, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowSandBlocks), remix);
@@ -1704,8 +1704,8 @@ namespace BiomeExtractorsMod.Common.Database
 
             AddPoolRequirements(hallowed_snow, hallow125.Invoke(hallowIceBlocks));
             AddPoolRequirements(hallowed_bars_snow, hallow125.Invoke(hallowIceBlocks));
-            AddPoolRequirements(ug_hallowed_snow, cavernLayer, hallow125.Invoke(hallowIceBlocks), notremix);
-            AddPoolRequirements(ug_hallowed_bars_snow, cavernLayer, hallow125.Invoke(hallowIceBlocks), notremix);
+            AddPoolRequirements(ug_hallowed_snow, belowSurfaceLayer, hallow125.Invoke(hallowIceBlocks), notremix);
+            AddPoolRequirements(ug_hallowed_bars_snow, belowSurfaceLayer, hallow125.Invoke(hallowIceBlocks), notremix);
             AddPoolRequirements(hallowed_snow_remix, cavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
             AddPoolRequirements(hallowed_bars_snow_remix, cavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
             AddPoolRequirements(ug_hallowed_snow_remix, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
@@ -1741,15 +1741,15 @@ namespace BiomeExtractorsMod.Common.Database
         private void SetupCrimsonBase()
         {
             AddPool(crimson_forest, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_forest));
-            AddPool(ug_crimson_caverns, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_caverns));
+            AddPool(ug_crimson, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson));
             AddPool(ug_crimson_caverns_hm, 1300, ExtractionTiers.STEAMPUNK);
             AddPool(crimson_forest_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(crimson_forest));
-            AddPool(ug_crimson_caverns_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_caverns));
+            AddPool(ug_crimson_caverns_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson));
             AddPool(ug_crimson_caverns_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
 
             AddPoolRequirements(crimson_forest, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock));
-            AddPoolRequirements(ug_crimson_caverns, cavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), notremix);
-            AddPoolRequirements(ug_crimson_caverns_hm, cavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), notremix);
+            AddPoolRequirements(ug_crimson, belowSurfaceLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), notremix);
+            AddPoolRequirements(ug_crimson_caverns_hm, belowSurfaceLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), notremix);
             AddPoolRequirements(crimson_forest_remix, cavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), remix);
             AddPoolRequirements(ug_crimson_caverns_remix, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), remix);
             AddPoolRequirements(ug_crimson_caverns_hm_remix, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), remix);
@@ -1765,14 +1765,14 @@ namespace BiomeExtractorsMod.Common.Database
             AddItemInPool(crimson_forest, ItemID.Deathweed, 25);
             AliasItemPool(crimson_forest_remix, crimson_forest);
 
-            AddItemInPool(ug_crimson_caverns, ItemID.None, 100);
-            AddItemInPool(ug_crimson_caverns, ItemID.DirtBlock, 20);
-            AddItemInPool(ug_crimson_caverns, ItemID.CrimstoneBlock, 6);
-            AddItemInPool(ug_crimson_caverns, ItemID.Vertebrae, 36);
-            AddItemInPool(ug_crimson_caverns, ItemID.CrimtaneOre, 8);
+            AddItemInPool(ug_crimson, ItemID.None, 100);
+            AddItemInPool(ug_crimson, ItemID.DirtBlock, 20);
+            AddItemInPool(ug_crimson, ItemID.CrimstoneBlock, 6);
+            AddItemInPool(ug_crimson, ItemID.Vertebrae, 36);
+            AddItemInPool(ug_crimson, ItemID.CrimtaneOre, 8);
             AddItemInPool(ug_crimson_caverns_hm, ItemID.Ichor, 10);
             AddItemInPool(ug_crimson_caverns_hm, ItemID.SoulofNight, 20);
-            AliasItemPool(ug_crimson_caverns_remix, ug_crimson_caverns);
+            AliasItemPool(ug_crimson_caverns_remix, ug_crimson);
             AliasItemPool(ug_crimson_caverns_hm_remix, ug_crimson_caverns_hm);
         }
         private void SetupCrimsonDesert()
@@ -1788,8 +1788,8 @@ namespace BiomeExtractorsMod.Common.Database
 
             AddPoolRequirements(crimson_desert, evil300.Invoke(crimsonSandBlocks));
             AddPoolRequirements(crimson_desert_hm, evil300.Invoke(crimsonSandBlocks));
-            AddPoolRequirements(ug_crimson_desert, cavernLayer, evil300.Invoke(crimsonSandBlocks), notremix);
-            AddPoolRequirements(ug_crimson_desert_hm, cavernLayer, evil300.Invoke(crimsonSandBlocks), notremix);
+            AddPoolRequirements(ug_crimson_desert, belowSurfaceLayer, evil300.Invoke(crimsonSandBlocks), notremix);
+            AddPoolRequirements(ug_crimson_desert_hm, belowSurfaceLayer, evil300.Invoke(crimsonSandBlocks), notremix);
             AddPoolRequirements(crimson_desert_remix, cavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
             AddPoolRequirements(crimson_desert_hm_remix, cavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
             AddPoolRequirements(ug_crimson_desert_remix, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
@@ -1825,8 +1825,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_crimson_snow_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
 
             AddPoolRequirements(crimson_snow, evil300.Invoke(crimsonIceBlocks));
-            AddPoolRequirements(ug_crimson_snow, cavernLayer, evil300.Invoke(crimsonIceBlocks), notremix);
-            AddPoolRequirements(ug_crimson_snow_hm, cavernLayer, evil300.Invoke(crimsonIceBlocks), notremix);
+            AddPoolRequirements(ug_crimson_snow, belowSurfaceLayer, evil300.Invoke(crimsonIceBlocks), notremix);
+            AddPoolRequirements(ug_crimson_snow_hm, belowSurfaceLayer, evil300.Invoke(crimsonIceBlocks), notremix);
             AddPoolRequirements(crimson_snow_remix, cavernLayer, evil300.Invoke(crimsonIceBlocks), remix);
             AddPoolRequirements(ug_crimson_snow_remix, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonIceBlocks), remix);
             AddPoolRequirements(ug_crimson_snow_hm_remix, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonIceBlocks), remix);
@@ -1858,17 +1858,17 @@ namespace BiomeExtractorsMod.Common.Database
         {
             AddPool(corrupt_forest, 300, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_forest));
             AddPool(corrupt_forest_hm, 300, [steampunk, hardmodeOnly]);
-            AddPool(ug_corrupt_caverns, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_caverns));
+            AddPool(ug_corrupt, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt));
             AddPool(ug_corrupt_caverns_hm, 1300, ExtractionTiers.STEAMPUNK);
             AddPool(corrupt_forest_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_forest));
             AddPool(corrupt_forest_hm_remix, 301, [steampunk, hardmodeOnly]);
-            AddPool(ug_corrupt_caverns_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_caverns));
+            AddPool(ug_corrupt_caverns_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt));
             AddPool(ug_corrupt_caverns_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
 
             AddPoolRequirements(corrupt_forest, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
             AddPoolRequirements(corrupt_forest_hm, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
-            AddPoolRequirements(ug_corrupt_caverns, cavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), notremix);
-            AddPoolRequirements(ug_corrupt_caverns_hm, cavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), notremix);
+            AddPoolRequirements(ug_corrupt, belowSurfaceLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), notremix);
+            AddPoolRequirements(ug_corrupt_caverns_hm, belowSurfaceLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), notremix);
             AddPoolRequirements(corrupt_forest_remix, cavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), remix);
             AddPoolRequirements(corrupt_forest_hm_remix, cavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), remix);
             AddPoolRequirements(ug_corrupt_caverns_remix, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), remix);
@@ -1888,15 +1888,15 @@ namespace BiomeExtractorsMod.Common.Database
             AliasItemPool(corrupt_forest_remix, corrupt_forest);
             AliasItemPool(corrupt_forest_hm_remix, corrupt_forest_hm);
 
-            AddItemInPool(ug_corrupt_caverns, ItemID.None, 100);
-            AddItemInPool(ug_corrupt_caverns, ItemID.DirtBlock, 20);
-            AddItemInPool(ug_corrupt_caverns, ItemID.EbonstoneBlock, 6);
-            AddItemInPool(ug_corrupt_caverns, ItemID.RottenChunk, 18);
-            AddItemInPool(ug_corrupt_caverns, ItemID.WormTooth, 18);
-            AddItemInPool(ug_corrupt_caverns, ItemID.DemoniteOre, 8);
+            AddItemInPool(ug_corrupt, ItemID.None, 100);
+            AddItemInPool(ug_corrupt, ItemID.DirtBlock, 20);
+            AddItemInPool(ug_corrupt, ItemID.EbonstoneBlock, 6);
+            AddItemInPool(ug_corrupt, ItemID.RottenChunk, 18);
+            AddItemInPool(ug_corrupt, ItemID.WormTooth, 18);
+            AddItemInPool(ug_corrupt, ItemID.DemoniteOre, 8);
             AddItemInPool(ug_corrupt_caverns_hm, ItemID.CursedFlame, 10);
             AddItemInPool(ug_corrupt_caverns_hm, ItemID.SoulofNight, 20);
-            AliasItemPool(ug_corrupt_caverns_remix, ug_corrupt_caverns);
+            AliasItemPool(ug_corrupt_caverns_remix, ug_corrupt);
             AliasItemPool(ug_corrupt_caverns_hm_remix, ug_corrupt_caverns_hm);
         }
         private void SetupCorruptionDesert()
@@ -1912,8 +1912,8 @@ namespace BiomeExtractorsMod.Common.Database
 
             AddPoolRequirements(corrupt_desert, evil300.Invoke(corruptSandBlocks));
             AddPoolRequirements(corrupt_desert_hm, evil300.Invoke(corruptSandBlocks));
-            AddPoolRequirements(ug_corrupt_desert, cavernLayer, evil300.Invoke(corruptSandBlocks), notremix);
-            AddPoolRequirements(ug_corrupt_desert_hm, cavernLayer, evil300.Invoke(corruptSandBlocks), notremix);
+            AddPoolRequirements(ug_corrupt_desert, belowSurfaceLayer, evil300.Invoke(corruptSandBlocks), notremix);
+            AddPoolRequirements(ug_corrupt_desert_hm, belowSurfaceLayer, evil300.Invoke(corruptSandBlocks), notremix);
             AddPoolRequirements(corrupt_desert_remix, cavernLayer, evil300.Invoke(corruptSandBlocks), remix);
             AddPoolRequirements(corrupt_desert_hm_remix, cavernLayer, evil300.Invoke(corruptSandBlocks), remix);
             AddPoolRequirements(ug_corrupt_desert_remix, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptSandBlocks), remix);
@@ -1954,12 +1954,12 @@ namespace BiomeExtractorsMod.Common.Database
 
             AddPoolRequirements(corrupt_snow, evil300.Invoke(corruptIceBlocks));
             AddPoolRequirements(corrupt_snow_hm, evil300.Invoke(corruptIceBlocks));
-            AddPoolRequirements(ug_corrupt_snow, cavernLayer, evil300.Invoke(corruptIceBlocks), notremix);
-            AddPoolRequirements(ug_corrupt_snow_hm, cavernLayer, evil300.Invoke(corruptIceBlocks), notremix);
-            AddPoolRequirements(corrupt_snow, cavernLayer, evil300.Invoke(corruptIceBlocks), remix);
-            AddPoolRequirements(corrupt_snow_hm, cavernLayer, evil300.Invoke(corruptIceBlocks), remix);
-            AddPoolRequirements(ug_corrupt_snow, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptIceBlocks), remix);
-            AddPoolRequirements(ug_corrupt_snow_hm, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptIceBlocks), remix);
+            AddPoolRequirements(ug_corrupt_snow, belowSurfaceLayer, evil300.Invoke(corruptIceBlocks), notremix);
+            AddPoolRequirements(ug_corrupt_snow_hm, belowSurfaceLayer, evil300.Invoke(corruptIceBlocks), notremix);
+            AddPoolRequirements(corrupt_snow_remix, cavernLayer, evil300.Invoke(corruptIceBlocks), remix);
+            AddPoolRequirements(corrupt_snow_hm_remix, cavernLayer, evil300.Invoke(corruptIceBlocks), remix);
+            AddPoolRequirements(ug_corrupt_snow_remix, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptIceBlocks), remix);
+            AddPoolRequirements(ug_corrupt_snow_hm_remix, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptIceBlocks), remix);
 
             AddItemInPool(corrupt_snow, ItemID.None, 30);
             AddItemInPool(corrupt_snow, ItemID.SnowBlock, 27);
