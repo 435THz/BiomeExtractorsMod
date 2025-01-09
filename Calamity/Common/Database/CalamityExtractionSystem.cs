@@ -75,8 +75,10 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string hallowed_snow_ml_remix = "hallowed_snow_ml_remix";
         public static readonly string underworld_ml = "underworld_ml";
         public static readonly string space_exo = "space_exo";
-        public static readonly string acid_rain = "acid_rain";
-        public static readonly string acid_rain_as = "acid_rain_as";
+        public static readonly string graveyard_infernal = "graveyard_infernal";
+        public static readonly string graveyard_dog = "graveyard_dog";
+        public static readonly string graveyard_dog_cold = "graveyard_dog_cold";
+        public static readonly string graveyard_dog_evil = "graveyard_dog_evil";
 
         public static readonly string sunken_sea = "sunken_sea";
         public static readonly string sulphur_sea = "sulphur_sea";
@@ -85,6 +87,8 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string sulphur_sea_ml = "sulphur_sea_ml";
         public static readonly string sulphur_depths = "sulphur_depths";
         public static readonly string sulphur_depths_lev = "sulphur_depths_lev";
+        public static readonly string acid_rain = "acid_rain";
+        public static readonly string acid_rain_as = "acid_rain_as";
         public static readonly string murky_waters = "murky_waters";
         public static readonly string murky_waters_lev = "murky_waters_leb";
         public static readonly string murky_waters_glm = "murky_waters_glm";
@@ -112,10 +116,6 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string ug_astral_ore_snow = "ug_astral_ore_snow";
         public static readonly string ug_astral_desert = "ug_astral_desert";
         public static readonly string ug_astral_ore_desert = "ug_astral_ore_desert";
-        public static readonly string graveyard_infernal = "graveyard_infernal";
-        public static readonly string graveyard_dog = "graveyard_dog";
-        public static readonly string graveyard_dog_cold = "graveyard_dog_cold";
-        public static readonly string graveyard_dog_evil = "graveyard_dog_evil";
         #endregion
 
         #region Checks
