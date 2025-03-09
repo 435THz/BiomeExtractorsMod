@@ -63,6 +63,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string space_evil2 = "space_evil2";
         public static readonly string space_hm = "space_hm";
         public static readonly string space_ml = "space_ml";
+        public static readonly string space_exo = "space_exo";
         public static readonly string caverns_pla = "caverns_pla";
         public static readonly string caverns_yhr = "caverns_yhr";
         public static readonly string caverns_pla_remix = "caverns_pla_remix";
@@ -80,7 +81,6 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string ug_hallowed_ore_desert_remix = "ug_hallowed_ore_desert_remix";
         public static readonly string ug_hallowed_ore_snow_remix = "ug_hallowed_ore_snow_remix";
         public static readonly string underworld_ml = "underworld_ml";
-        public static readonly string space_exo = "space_exo";
         public static readonly string graveyard_infernal = "graveyard_infernal";
         public static readonly string graveyard_cal_clone = "graveyard_cal_clone";
         public static readonly string graveyard_dog = "graveyard_dog";
@@ -259,9 +259,9 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
 
             BES.AddItemInPool(caverns, (short)ModContent.ItemType<AncientBoneDust>(), 10);
             BES.AddItemInPool(caverns_pla, (short)ModContent.ItemType<PerennialOre>(), 12);
-            BES.AddItemInPool(caverns_yhr, (short)ModContent.ItemType<AuricOre>(), 15);
+            BES.AddItemInPool(caverns_yhr, new ItemEntry((short)ModContent.ItemType<AuricOre>(), 5, 15), 15);
             BES.AddItemInPool(caverns_pla_remix, (short)ModContent.ItemType<PerennialOre>(), 25);
-            BES.AddItemInPool(caverns_yhr_remix, (short)ModContent.ItemType<AuricOre>(), 30);
+            BES.AddItemInPool(caverns_yhr_remix, new ItemEntry((short)ModContent.ItemType<AuricOre>(), 5, 15), 30);
         }
         private static void ExpandDesert()
         {
