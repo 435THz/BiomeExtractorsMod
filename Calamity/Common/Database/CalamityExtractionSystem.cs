@@ -112,6 +112,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string brimstone_crag_hm = "brimstone_crag_hm";
         public static readonly string brimstone_crag_mch = "brimstone_crag_mch";
         public static readonly string brimstone_crag_prv = "brimstone_crag_prv";
+        public static readonly string brimstone_crag_swc = "brimstone_crag_swc";
         public static readonly string astral_forest = "astral_forest";
         public static readonly string astral_ore_forest = "astral_ore_forest";
         public static readonly string astral_snow = "astral_snow";
@@ -167,6 +168,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly Predicate<ScanData> post_dog = scan => CalamityConditions.DownedDevourerOfGods.IsMet();
         public static readonly Predicate<ScanData> post_yharon = scan => CalamityConditions.DownedYharon.IsMet();
         public static readonly Predicate<ScanData> post_exo_mechs = scan => CalamityConditions.DownedExoMechs.IsMet();
+        public static readonly Predicate<ScanData> post_calamitas = scan => CalamityConditions.DownedSupremeCalamitas.IsMet();
 
         //TIERS
         static readonly Predicate<ScanData> demonic = scan => scan.MinTier(ExtractionTiers.DEMONIC);
@@ -592,11 +594,13 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(brimstone_crag_hm, 4100, [infernal, hardmodeOnly]);
             BES.AddPool(brimstone_crag_mch, 4100, [steampunk]);
             BES.AddPool(brimstone_crag_prv, 4100, [ethereal, post_providence]);
+            BES.AddPool(brimstone_crag_swc, 4100, [exo, post_calamitas]);
 
             BES.AddPoolRequirements(brimstone_crag, underworldLayer, brimstone100);
             BES.AddPoolRequirements(brimstone_crag_hm, underworldLayer, brimstone100);
             BES.AddPoolRequirements(brimstone_crag_mch, underworldLayer, brimstone100);
             BES.AddPoolRequirements(brimstone_crag_prv, underworldLayer, brimstone100);
+            BES.AddPoolRequirements(brimstone_crag_swc, underworldLayer, brimstone100);
 
             BES.AddItemInPool(brimstone_crag, ItemID.None, 45);
             BES.AddItemInPool(brimstone_crag, (short)ModContent.ItemType<BrimstoneSlag>(), 10);
@@ -606,6 +610,7 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddItemInPool(brimstone_crag_hm, (short)ModContent.ItemType<EssenceofHavoc>(), 6);
             BES.AddItemInPool(brimstone_crag_mch, (short)ModContent.ItemType<InfernalSuevite>(), 6);
             BES.AddItemInPool(brimstone_crag_prv, (short)ModContent.ItemType<Bloodstone>(), 5);
+            BES.AddItemInPool(brimstone_crag_swc, (short)ModContent.ItemType<AshesofAnnihilation>(), new Fraction(1, 2));
         }
         private static void SetupAbyss()
         {
