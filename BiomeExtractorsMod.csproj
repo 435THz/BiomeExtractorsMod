@@ -4,6 +4,7 @@
   <PropertyGroup>
     <AssemblyName>BiomeExtractorsMod</AssemblyName>
     <LangVersion>latest</LangVersion>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Calamity\Content\MapIcons\ThermoresistantExtractorIcon.png" />
