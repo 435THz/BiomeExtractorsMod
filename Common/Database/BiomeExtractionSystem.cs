@@ -22,6 +22,7 @@ namespace BiomeExtractorsMod.Common.Database
     /// </summary>
     /// <param name="tier">The tier of the extractor requesting a scan</param>
     /// <param name="origin">The origin of the scan in tile coordinates</param>
+    /// <param name="isScanner">True if the scan was requested by a Scanner, false if it was requested by an Extractor</param>
     public class ScanData(BiomeExtractionSystem.ExtractionTier tier, Point16 origin, bool isScanner)
     {
 
@@ -70,7 +71,7 @@ namespace BiomeExtractorsMod.Common.Database
         /// <summary>
         /// Returns the amount of liquid tiles in the scan area that correspond to the requested liquid id.
         /// </summary>
-        /// <param name="tileId">The id of the liquid to look for</param>
+        /// <param name="liquidId">The id of the liquid to look for</param>
         /// <returns>The amount of the requested liquid tile</returns>
         public int Liquids(int liquidId) => _liquidCounts.GetValueOrDefault(liquidId);
 
@@ -97,7 +98,7 @@ namespace BiomeExtractorsMod.Common.Database
         /// <see langword="true"/> if they all match at least one of the provided walls. For an Extractor, this
         /// 3x3 area is exactly the space occupied by the Extractor tiles.
         /// </summary>
-        /// <param name="wallId">An array of wall ids to check for</param>
+        /// <param name="wallIds">An array of wall ids to check for</param>
         /// <param name="blacklist">If this is <see langword="true"/>, this method will check if the area does NOT contain any of the requested wall ids</param>
         /// <returns><see langword="true"/> if all walls in the 3x3 area correspond to at least one of the requested wall ids each, <see langword="false"/> otherwise</returns>
         public bool ValidWalls(ushort[] wallIds, bool blacklist = false) => ValidWalls(wallIds.ToList(), blacklist);
@@ -107,7 +108,7 @@ namespace BiomeExtractorsMod.Common.Database
         /// <see langword="true"/> if they all match at least one of the provided walls. For an Extractor, this
         /// 3x3 area is exactly the space occupied by the Extractor tiles.
         /// </summary>
-        /// <param name="wallId">An array of wall ids to check for</param>
+        /// <param name="wallIds">An array of wall ids to check for</param>
         /// <param name="blacklist">If this is <see langword="true"/>, this method will check if the area does NOT contain any of the requested wall ids</param>
         /// <returns><see langword="true"/> if all walls in the 3x3 area correspond to at least one of the requested wall ids each, <see langword="false"/> otherwise</returns>
         public bool ValidWalls(List<ushort> wallIds, bool blacklist = false)
@@ -170,8 +171,14 @@ namespace BiomeExtractorsMod.Common.Database
         }
     }
 
+    /// <summary>
+    /// Main extraction system. It sets up all the necessary data structures and hooks that handle the extraction of vanilla items from vanilla biomes. 
+    /// </summary>
     public class BiomeExtractionSystem : ModSystem
     {
+        /// <summary>
+        /// Gets the singleton instance of the BiomeExtractionSystem.
+        /// </summary>
         public static BiomeExtractionSystem Instance => ModContent.GetInstance<BiomeExtractionSystem>();
 
         #region Data Structures
@@ -207,6 +214,7 @@ namespace BiomeExtractorsMod.Common.Database
             /// </summary>
             /// <param name="name"> The PoolEntry's identification string.</param>
             /// <param name="tier"> The minimum Extractor tier required to access this pool.</param>
+            /// <param name="blocking">If true, finding a match for this pool will block the scan from continuing.</param>
             /// <param name="localizationKey">If set, this pool will use this string to query its localized name.<br/>
             /// If <see langword="null"/>, this pool will not be displayed in the Extractor UI at all.</param>
             public PoolEntry(string name, int tier, bool blocking = true, string localizationKey = null) : this(name, [scan => scan.MinTier(tier)], blocking, localizationKey) { }
@@ -252,6 +260,11 @@ namespace BiomeExtractorsMod.Common.Database
             /// <param name="count"> The amount of copies generated if this entry is chosen.</param>
             public ItemEntry(short item, int count) : this(item, count, count) { }
 
+            /// <summary>
+            /// Determines whether the specified object is equal to the current object.
+            /// </summary>
+            /// <param name="obj">The object to compare with the current object.</param>
+            /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
             public override bool Equals(object obj)
             {
                 if (obj == null) return false;
@@ -262,11 +275,19 @@ namespace BiomeExtractorsMod.Common.Database
                 return false;
             }
 
+            /// <summary>
+            /// Returns a hash code for the current object.
+            /// </summary>
+            /// <returns>A hash code for the current object.</returns>
             public override int GetHashCode()
             {
                 return HashCode.Combine(Id, Min, Max);
             }
 
+            /// <summary>
+            /// Returns a string representation of the current object.
+            /// </summary>
+            /// <returns>A string representation of the current object.</returns>
             public override string ToString()
             {
                 return Id + ": " + Main.item[Id].Name + " (" + Min + "-" + (Max) + ")";
@@ -282,6 +303,7 @@ namespace BiomeExtractorsMod.Common.Database
         /// <param name="rate">A <see cref="Func{TResult}"/> that returns the extraction rate of this Extraction Tier, in frames.</param>
         /// <param name="chance">A <see cref="Func{TResult}"/> that returns the extraction chance of this Extraction Tier, in percentage format.<br/>
         /// Example: 35 would be 35%</param>
+        /// <param name="amount">A <see cref="Func{TResult}"/> that returns the amount of extractions done at once by this Extraction Tier.</param>
         /// <param name="icon">A <see cref="Func{TResult}"/> that returns this tier's map icon.</param>
         public class ExtractionTier(int tier, string articleKey, string localizationKey, Func<int> rate, Func<int> chance, Func<int> amount, Func<Asset<Texture2D>> icon)
         {
@@ -363,13 +385,25 @@ namespace BiomeExtractorsMod.Common.Database
             /// and by the Biome Scanner to show the tier names.
             /// </summary>
             public string Name => Language.GetTextValue(LocalizationKey);
+            /// <summary>
+            /// Returns the localized article of this Extraction Tier.
+            /// </summary>
             public string Article => Language.GetTextValue(ArticleKey);
+            /// <summary>
+            /// Determines whether the specified object is equal to the current object.
+            /// </summary>
+            /// <param name="obj">The object to compare with the current object.</param>
+            /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
             public override bool Equals(object obj)
             {
                 if (obj is not ExtractionTier) return false;
                 ExtractionTier tier = (ExtractionTier)obj;
                 return tier.Tier == Tier && tier.LocalizationKey == LocalizationKey;
             }
+            /// <summary>
+            /// Returns a hash code for the current object.
+            /// </summary>
+            /// <returns>A hash code for the current object.</returns>
             public override int GetHashCode() => HashCode.Combine(Tier, LocalizationKey);
             /// <summary>
             /// Creates a new copy of this ExtracionTier and shifts it tier number.
@@ -997,8 +1031,8 @@ namespace BiomeExtractorsMod.Common.Database
         /// <param name="poolName">The name of the pool to add the item to.</param>
         /// <param name="itemId">The id of the item to add</param>
         /// <param name="count">The amount of the given item this entry will contain.<br/>
-        /// Use <see cref="AddItemInPool(string, ItemEntry, int, int)"/> if you need to make it a range.</param>
-        /// <param name="numerator">A fraction that corresponds to the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
+        /// Use <see cref="AddItemInPool(string, ItemEntry, int)"/> if you need to make it a range.</param>
+        /// <param name="weight">A fraction that corresponds to the weight of probability associated to this ItemEntry.<br/>The higher the weight, the more common the item is.</param>
         /// <returns><see langword="true"/> if the method found a pool to add the item to, <see langword="false"/> otherwise</returns>
         public bool AddItemInPool(string poolName, short itemId, int count, Fraction weight) => AddItemInPool(poolName, new ItemEntry(itemId, count), weight);
         /// <summary>
@@ -1065,7 +1099,7 @@ namespace BiomeExtractorsMod.Common.Database
         /// </summary>
         /// <param name="poolName">The name of the pool to remove the item from.</param>
         /// <param name="itemId">The id of the item to remove</param>
-        /// <param name="count">The amount of the given item the target entry contains.<br/>
+        /// <param name="count">The amount of the given item the target entry contains.</param>
         /// <returns><see langword="true"/> if the pool exists and it contained the target entry, <see langword="false"/> otherwise</returns>
         public bool RemoveItemFromPool(string poolName, short itemId, int count) => RemoveItemFromPool(poolName, new ItemEntry(itemId, count));
 
@@ -1074,7 +1108,6 @@ namespace BiomeExtractorsMod.Common.Database
         /// </summary>
         /// <param name="poolName">The name of the pool to remove the item from.</param>
         /// <param name="itemId">The id of the item to remove</param>
-        /// <param name="count">The amount of the given item the target entry contains.<br/>
         /// <returns><see langword="true"/> if the pool exists and it contained the target entry, <see langword="false"/> otherwise</returns>
         public bool RemoveItemFromPool(string poolName, short itemId)
         {
@@ -1224,6 +1257,10 @@ namespace BiomeExtractorsMod.Common.Database
         #region Database Setup
         internal static string LocalizeAs(string suffix) => $"{BiomeExtractorsMod.LocPoolNames}.{suffix}";
 
+        /// <summary>
+        /// Clears all data registered in the mod, including all pools, tiers, requirements and items.<br/>
+        /// This method is called when the mod is unloaded, and should not be used otherwise.
+        /// </summary>
         public override void OnModUnload()
         {
             _tiers.Clear();
@@ -1232,6 +1269,10 @@ namespace BiomeExtractorsMod.Common.Database
             _poolRequirements.Clear();
             _priorityList.Clear();
         }
+        /// <summary>
+        /// Loads all data in the mod, filling out all vanilla pools, handling all generated extensions and generating the necessary localization keys.<br/>
+        /// This method is called when the mod is loaded, and should not be used otherwise. 
+        /// </summary>
         public override void PostSetupContent()
         {
             SetupForest();
@@ -1257,6 +1298,10 @@ namespace BiomeExtractorsMod.Common.Database
             GenerateLocalizationKeys();
         }
 
+        /// <summary>
+        /// Procedurally generates the necessary recipe groups by hooking all tiers up with the next one.<br/>
+        /// This method is called when the mod is loaded, and should not be used otherwise.
+        /// </summary>
         public override void AddRecipeGroups()
         {
             foreach (KeyValuePair<int, ExtractionTier> tierPair in _tiers.EnumerateInOrder())
