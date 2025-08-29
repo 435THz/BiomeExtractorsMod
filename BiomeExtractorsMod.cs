@@ -23,11 +23,12 @@ namespace BiomeExtractorsMod
         static string GetModName(SupportedMods mod) => Enum.GetName(typeof(SupportedMods), mod);
         enum SupportedMods
         {
-            MagicStorage, CalamityMod
+            MagicStorage, CalamityMod, SubworldLibrary
         }
 
         static readonly private Dictionary<SupportedMods, bool> supportedModsLoaded = [];
         static internal bool MS_loaded => supportedModsLoaded[SupportedMods.MagicStorage] && ModContent.GetInstance<ConfigCompat>().MS;
+        static internal bool SL_loaded => supportedModsLoaded[SupportedMods.SubworldLibrary];
         static internal bool CLM_loaded => supportedModsLoaded[SupportedMods.CalamityMod];
 
         private static readonly object LocBase = "Mods.BiomeExtractorsMod";

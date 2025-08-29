@@ -35,10 +35,13 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CalamityMod">
-      <HintPath>..\ModAssemblies\CalamityMod_v2.0.4.4.dll</HintPath>
+      <HintPath>..\ModAssemblies\CalamityMod_v2.0.5.dll</HintPath>
     </Reference>
     <Reference Include="MagicStorage">
       <HintPath>..\ModAssemblies\MagicStorage_v0.6.0.3.dll</HintPath>
+    </Reference>
+    <Reference Include="SubworldLibrary">
+      <HintPath>..\ModAssemblies\SubworldLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
