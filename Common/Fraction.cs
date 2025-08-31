@@ -1,4 +1,5 @@
 ﻿
+#nullable enable
 using System;
 
 namespace BiomeExtractorsMod.Common
@@ -70,7 +71,7 @@ namespace BiomeExtractorsMod.Common
         public static bool operator >=(Fraction a, int b) => (double)a >= b;
         public static bool operator <=(Fraction a, Fraction b) => (double)a <= (double)b;
         public static bool operator <=(Fraction a, int b) => (double)a <= b;
-        public override readonly bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
             if (obj is Fraction frc) return this == frc;
             return Value.Equals(obj);
