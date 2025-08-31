@@ -103,5 +103,14 @@ namespace BiomeExtractorsMod
                 }
             }
         }
+
+        public static void Debug(string message)
+        {
+            Instance.Logger.Debug(message);
+        }
+        public static void Debug(string message, Exception exception)
+        {
+            Instance.Logger.Debug(message, exception);
+        }
     }
 }
