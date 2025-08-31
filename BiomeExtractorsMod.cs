@@ -55,7 +55,7 @@ namespace BiomeExtractorsMod
         public override void Load()
         {
             foreach(SupportedMods mod in Enum.GetValues(typeof(SupportedMods)))
-            supportedModsLoaded[mod] = ModLoader.HasMod(GetModName(mod));
+                supportedModsLoaded[mod] = ModLoader.HasMod(GetModName(mod));
         }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
@@ -68,8 +68,9 @@ namespace BiomeExtractorsMod
                     case ServerMessageType.EXTRACTOR_REGISTER:
                         Point16 toAdd = new(reader.ReadInt16(), reader.ReadInt16());
                         int tier = reader.ReadInt32();
+                        int style = reader.ReadInt32();
                         ExtractorState state = (ExtractorState)reader.ReadByte();
-                        IconMapSystem.AddExtractorData(toAdd, tier, state);
+                        IconMapSystem.AddExtractorData(toAdd, tier, style, state);
                         break;
                     case ServerMessageType.EXTRACTOR_UPDATE:
                         Point16 toUpdate = new(reader.ReadInt16(), reader.ReadInt16());

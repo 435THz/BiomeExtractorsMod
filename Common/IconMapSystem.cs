@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.Map;
 using Terraria.ModLoader;
@@ -23,21 +24,30 @@ namespace BiomeExtractorsMod.Common.Database
     {
         static List<Point16> Positions = [];
         static List<int> Tiers = [];
+        static List<int> Styles = [];
         static List<ExtractorState> States = [];
 
         public override void SaveWorldData(TagCompound tag)
         {
             tag["extractorPositions"] = Positions;
             tag["extractorTiers"] = Tiers;
+            tag["extractorStyles"] = Styles;
             tag["extractorStates"] = States.Select(state => (byte)state).ToList();
         }
         public override void LoadWorldData(TagCompound tag)
         {
-            Positions = tag.Get<List<Point16>>("extractorPositions");
-            Tiers = tag.Get<List<int>>("extractorTiers");
-            States = tag.Get<List<byte>>("extractorStates").Select(s => (ExtractorState)s).ToList();
-
-            ValidateLists();
+            if (tag.ContainsKey("extractorStyles"))
+            {
+                Positions = tag.Get<List<Point16>>("extractorPositions");
+                Tiers = tag.Get<List<int>>("extractorTiers");
+                Styles = tag.Get<List<int>>("extractorStyles");
+                States = tag.Get<List<byte>>("extractorStates").Select(s => (ExtractorState)s).ToList();
+                ValidateLists();
+            }
+            else
+            {
+                FlushLists(); // let the extractors' routine checks refill the tables
+            }
         }
         public override void ClearWorld() => FlushLists();
 
@@ -45,6 +55,7 @@ namespace BiomeExtractorsMod.Common.Database
         {
             Positions = [];
             Tiers = [];
+            Styles = [];
             States = [];
         }
 
@@ -53,23 +64,25 @@ namespace BiomeExtractorsMod.Common.Database
             return !extractor.Active ? ExtractorState.INACTIVE : !extractor.HasOutput ? ExtractorState.NO_OUTPUT : ExtractorState.ACTIVE;
         }
         internal static void AddExtractorData(BiomeExtractorEnt extractor)
-            => AddExtractorData(extractor.Position, extractor.Tier, StateOf(extractor));
+            => AddExtractorData(extractor.Position, extractor.Tier, extractor.TileStyle, StateOf(extractor));
 
-        internal static void AddExtractorData(Point16 position, int tier, ExtractorState state)
+        internal static void AddExtractorData(Point16 position, int tier, int style, ExtractorState state)
         {
             int index = Positions.IndexOf(position);
-            if (index >= 0) SetState(index, tier, state);
-            else SetState(position, tier, state);
+            if (index >= 0) SetState(index, tier, style, state);
+            else SetState(position, tier, style, state);
         }
-        private static void SetState(int index, int tier, ExtractorState state)
+        private static void SetState(int index, int tier, int style, ExtractorState state)
         {
             Tiers[index] = tier;
+            Styles[index] = style;
             States[index] = state;
         }
-        private static void SetState(Point16 position, int tier, ExtractorState state)
+        private static void SetState(Point16 position, int tier, int style, ExtractorState state)
         {
             Positions.Add(position);
             Tiers.Add(tier);
+            Styles.Add(style);
             States.Add(state);
         }
 
@@ -78,7 +91,7 @@ namespace BiomeExtractorsMod.Common.Database
         internal static void UpdateExtractorData(Point16 position, ExtractorState state)
         {
             int index = Positions.IndexOf(position);
-            if (index >= 0) SetState(index, Tiers[index], state);
+            if (index >= 0) SetState(index, Tiers[index], Styles[index], state);
         }
 
         internal static void RemoveExtractorData(BiomeExtractorEnt extractor)
@@ -90,6 +103,7 @@ namespace BiomeExtractorsMod.Common.Database
             {
                 Positions.RemoveAt(index);
                 Tiers.RemoveAt(index);
+                Styles.RemoveAt(index);
                 States.RemoveAt(index);
             }
         }
@@ -119,6 +133,7 @@ namespace BiomeExtractorsMod.Common.Database
                 writer.Write(Positions[i].X);
                 writer.Write(Positions[i].Y);
                 writer.Write(Tiers[i]);
+                writer.Write(Styles[i]);
                 writer.Write((byte)States[i]);
             }
         }
@@ -131,8 +146,9 @@ namespace BiomeExtractorsMod.Common.Database
             {
                 Point16 position = new(reader.ReadInt16(), reader.ReadInt16());
                 int tier = reader.ReadInt32();
+                int style = reader.ReadInt32();
                 ExtractorState state = (ExtractorState)reader.ReadByte();
-                AddExtractorData(position, tier, state);
+                AddExtractorData(position, tier, style, state);
             }
         }
 
@@ -153,17 +169,11 @@ namespace BiomeExtractorsMod.Common.Database
 
             if (hasScanner)
             {
-                
-                IEnumerable<BiomeExtractorEnt> extractors = TileEntity.ByPosition
-                    .Where(pair => pair.Value is BiomeExtractorEnt)
-                    .Select(pair => pair.Value as BiomeExtractorEnt);
-                List<BiomeExtractorEnt> toDraw = extractors.ToList();
-
                 for (int i = 0; i < Positions.Count; i++)
                 {
                     Tile tile = Main.tile[Positions[i]];
                     ModTile tileObj = ModContent.GetModTile(tile.TileType);
-                    if (tileObj is null || !tile.HasTile) continue;
+                    if (Main.netMode != NetmodeID.MultiplayerClient && (tileObj is null || !tile.HasTile)) continue;
                     TileUtils.TryGetTileEntityAs(Positions[i].X, Positions[i].Y, out BiomeExtractorEnt extractor);
                     if (extractor is null) continue;
 
@@ -184,8 +194,8 @@ namespace BiomeExtractorsMod.Common.Database
                         BiomeExtractionSystem.ExtractionTier tier = BiomeExtractionSystem.Instance.GetTier(Tiers[i]);
                         hoverText = Language.GetTextValue(tier.Name);
                         asset = tier.Icon;
-                        column = (byte)TileObjectData.GetTileStyle(Main.tile[Positions[i]]);
-                        columns = (byte)((BiomeExtractorTile)tileObj).TileStyles(tile);
+                        column = (byte)Styles[i];
+                        columns = (byte)((BiomeExtractorTile)ModContent.GetModTile(extractor.TileType)).TileStyles;
                     }
 
                     Color drawColor = Color.White;

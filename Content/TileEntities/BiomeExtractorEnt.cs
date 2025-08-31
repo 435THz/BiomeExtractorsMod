@@ -531,13 +531,17 @@ namespace BiomeExtractorsMod.Content.TileEntities
                 statePacket.Write(Position.Y);
                 if (msgType != ServerMessageType.EXTRACTOR_REMOVE)
                 {
-                    if (msgType == ServerMessageType.EXTRACTOR_REGISTER) statePacket.Write(Tier);
+                    if (msgType == ServerMessageType.EXTRACTOR_REGISTER)
+                    {
+                        statePacket.Write(Tier);
+                        statePacket.Write(TileStyle);
+                    }
                     statePacket.Write((byte)IconMapSystem.StateOf(this));
                 }
                 statePacket.Send();
                 NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
             }
-            else if (Main.netMode == NetmodeID.SinglePlayer)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 switch (msgType)
                 {

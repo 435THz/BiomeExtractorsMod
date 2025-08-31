@@ -74,7 +74,8 @@ namespace BiomeExtractorsMod.Content.Tiles
         /// Returns the amount of tile styles this Tile has.
         /// </summary>
         protected virtual int _tileStyles => 1;
-        protected internal int TileStyles(Tile tile) => tile.TileType == Type ? _tileStyles : -1;
+
+        protected internal int TileStyles => _tileStyles;
 
         protected int TileStyle(Tile tile)
         {
