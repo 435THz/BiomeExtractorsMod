@@ -313,13 +313,9 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPoolRequirements(ug_jungle_glm, belowSurfaceLayer, jungle140);
             BES.AddPoolRequirements(ug_jungle_prv, belowSurfaceLayer, jungle140);
 
-            BES.AddItemInPool(jungle, (short)ModContent.ItemType<MurkyPaste>(), 10);
-            BES.AddItemInPool(jungle_hm, (short)ModContent.ItemType<TrapperBulb>(), 8);
             BES.AddItemInPool(jungle_glm, (short)ModContent.ItemType<PlagueCellCanister>(), 10);
             BES.AddItemInPool(jungle_ml, (short)ModContent.ItemType<EffulgentFeather>(), 10);
 
-            BES.AddItemInPool(ug_jungle, (short)ModContent.ItemType<MurkyPaste>(), 10);
-            BES.AddItemInPool(ug_jungle_hm, (short)ModContent.ItemType<TrapperBulb>(), 8);
             BES.AddItemInPool(ug_jungle_glm, (short)ModContent.ItemType<PlagueCellCanister>(), 10);
             BES.AddItemInPool(ug_jungle_prv, (short)ModContent.ItemType<UelibloomOre>(), 20);
         }
@@ -448,7 +444,6 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
 
             BES.AddPoolRequirements(underworld_ml, underworldLayer);
 
-            BES.AddItemInPool(underworld, (short)ModContent.ItemType<DemonicBoneAsh>(), 5);
             BES.AddItemInPool(underworld_ml, (short)ModContent.ItemType<UnholyEssence>(), 5);
         }
 
