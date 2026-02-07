@@ -20,7 +20,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Item.rare = ModContent.RarityType<Violet>();
+            Item.rare = ModContent.RarityType<BurnishedAuric>();
             Item.value = Item.buyPrice(gold: 15); // sell at 2
         }
 
