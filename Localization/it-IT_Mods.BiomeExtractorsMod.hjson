@@ -260,6 +260,33 @@ Configs: {
 			'''
 	}
 
+	FollowRateValues: {
+		Tooltip: ""
+
+		NO: {
+			Label: NO
+			Tooltip: Gli estrattori non accelerano insieme alle giornate.
+		}
+
+		REDUCED: {
+			Label: RIDOTTO
+			Tooltip:
+				'''
+				Gli estrattori accelerano insieme alle giornate,
+				ma non estrarranno mai più di una volta per frame.
+				'''
+		}
+
+		YES: {
+			Label: SÌ
+			Tooltip:
+				'''
+				Gli estrattori accelerano insieme alle giornate,
+				estraendo più di una volta per frame se necessario.
+				'''
+		}
+	}
+
 	ConfigCommon: {
 		DisplayName: Extractors Settings
 		GeneralConfigHeader: Impostazioni generali
@@ -480,13 +507,6 @@ Configs: {
 			armi ed equipaggiamenti.
 			Valore predefinito: 5.
 			'''
-	}
-
-	FollowRateValues: {
-		Tooltip: ""
-		NO.Label: NO
-		REDUCED.Label: RIDOTTO
-		YES.Label: SÌ
 	}
 
 	CalamityConfigs: {

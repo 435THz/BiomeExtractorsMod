@@ -258,6 +258,33 @@ Configs: {
 			'''
 	}
 
+	FollowRateValues: {
+		Tooltip: Test
+
+		NO: {
+			Label: NO
+			Tooltip: Extractors will not accelerate with the day speed.
+		}
+
+		REDUCED: {
+			Label: REDUCED
+			Tooltip:
+				'''
+				Extractors will accelerate with the day speed,
+				but will never extract more than once per frame.
+				'''
+		}
+
+		YES: {
+			Label: YES
+			Tooltip:
+				'''
+				Extractors will accelerate with the day speed,
+				extracting more than once per frame if necessary.
+				'''
+		}
+	}
+
 	ConfigCommon: {
 		DisplayName: Extractors Settings
 		GeneralConfigHeader: General Settings
@@ -462,13 +489,6 @@ Configs: {
 			tools, weapons and equipment.
 			Defaults to 5.
 			'''
-	}
-
-	FollowRateValues: {
-		Tooltip: ""
-		NO.Label: NO
-		REDUCED.Label: REDUCED
-		YES.Label: YES
 	}
 
 	CalamityConfigs: {
