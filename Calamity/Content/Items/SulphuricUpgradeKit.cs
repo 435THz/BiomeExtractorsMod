@@ -1,7 +1,7 @@
 ﻿using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Content.Tiles;
 using BiomeExtractorsMod.Calamity.Content.Tiles;
-using CalamityMod.Items.Placeables;
+using CalamityMod.Items.Placeables.Abyss;
 using Terraria;
 using Terraria.Enums;
 using Terraria.ID;

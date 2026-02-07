@@ -1,7 +1,7 @@
 ﻿using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Calamity.Content.Tiles;
 using CalamityMod.Items.Materials;
-using CalamityMod.Items.Placeables;
+using CalamityMod.Items.Placeables.Abyss;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Terraria;
