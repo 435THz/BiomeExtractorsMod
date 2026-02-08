@@ -4,6 +4,7 @@ using BiomeExtractorsMod.Calamity.Content.Tiles;
 using Terraria;
 using Terraria.Enums;
 using Terraria.ModLoader;
+using BiomeExtractorsMod.Common.Database;
 
 namespace BiomeExtractorsMod.Calamity.Content.Items
 {
@@ -32,6 +33,12 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
                 .AddIngredient(ModContent.ItemType<SulphuricExtractorItem>())
                 .AddIngredient(ModContent.ItemType<PressurizedUpgradeKit>())
                 .Register();
+            
+            Recipe quickRecipe = CreateRecipe()
+                                    .AddIngredient(ModContent.ItemType<PressurizedUpgradeKit>())
+                                    .AddIngredient(ModContent.ItemType<SulphuricUpgradeKit>());
+            BuildRecipeFromTier(quickRecipe, BiomeExtractionSystem.Instance.GetTier(ExtractionTiers.DEMONIC));
+            quickRecipe.Register();
         }
     }
 }

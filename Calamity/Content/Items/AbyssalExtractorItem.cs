@@ -37,6 +37,14 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
                 .AddIngredient(ModContent.ItemType<ThermoresistantExtractorItem>())
                 .AddIngredient(ModContent.ItemType<AbyssalUpgradeKit>())
                 .Register();
+            
+            Recipe quickRecipe = CreateRecipe()
+                                    .AddIngredient(ModContent.ItemType<AbyssalUpgradeKit>())
+                                    .AddIngredient(ModContent.ItemType<ThermoresistantUpgradeKit>())
+                                    .AddIngredient(ModContent.ItemType<PressurizedUpgradeKit>())
+                                    .AddIngredient(ModContent.ItemType<SulphuricUpgradeKit>());
+            BuildRecipeFromTier(quickRecipe, BiomeExtractionSystem.Instance.GetTier(ExtractionTiers.DEMONIC));
+            quickRecipe.Register();
         }
     }
 }

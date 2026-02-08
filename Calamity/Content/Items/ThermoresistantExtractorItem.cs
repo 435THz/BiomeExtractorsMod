@@ -1,4 +1,5 @@
 ﻿using System;
+using BiomeExtractorsMod.Common.Database;
 using BiomeExtractorsMod.Content.Items;
 using BiomeExtractorsMod.Calamity.Content.Tiles;
 using Terraria;
@@ -32,6 +33,14 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
                 .AddIngredient(ModContent.ItemType<PressurizedExtractorItem>())
                 .AddIngredient(ModContent.ItemType<ThermoresistantUpgradeKit>())
                 .Register();
+            
+            Recipe quickRecipe = CreateRecipe()
+                                    .AddIngredient(ModContent.ItemType<AbyssalUpgradeKit>())
+                                    .AddIngredient(ModContent.ItemType<ThermoresistantUpgradeKit>())
+                                    .AddIngredient(ModContent.ItemType<PressurizedUpgradeKit>())
+                                    .AddIngredient(ModContent.ItemType<SulphuricUpgradeKit>());
+            BuildRecipeFromTier(quickRecipe, BiomeExtractionSystem.Instance.GetTier(ExtractionTiers.DEMONIC));
+            quickRecipe.Register();
         }
     }
 }

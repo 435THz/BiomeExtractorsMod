@@ -33,6 +33,11 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
                 .AddRecipeGroup(Recipes.demonicExtractorGroupName)
                 .AddIngredient(ModContent.ItemType<SulphuricUpgradeKit>())
                 .Register();
+
+            Recipe quickRecipe = CreateRecipe()
+                                    .AddIngredient(ModContent.ItemType<SulphuricUpgradeKit>());
+            BuildRecipeFromTier(quickRecipe, BiomeExtractionSystem.Instance.GetTier(ExtractionTiers.DEMONIC));
+            quickRecipe.Register();
         }
     }
 }
