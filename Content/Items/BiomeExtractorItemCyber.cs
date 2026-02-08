@@ -11,7 +11,7 @@ namespace BiomeExtractorsMod.Content.Items
     public class BiomeExtractorItemCyber : BiomeExtractorItem
     {
         protected internal override int TileId => ModContent.TileType<BiomeExtractorTileCyber>();
-        protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitCyber>();
+        protected internal override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitCyber>();
 
         public override void SetDefaults()
         {

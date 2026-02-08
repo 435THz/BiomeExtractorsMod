@@ -14,7 +14,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
     internal class AuricExtractorItem : BiomeExtractorItem
     {
         protected internal override int TileId => ModContent.TileType<AuricExtractorTile>();
-        protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<AuricUpgradeKit>();
+        protected internal override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<AuricUpgradeKit>();
 
         public override void SetDefaults()
         {

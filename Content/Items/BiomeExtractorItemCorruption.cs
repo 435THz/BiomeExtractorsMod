@@ -11,7 +11,7 @@ namespace BiomeExtractorsMod.Content.Items
     public class BiomeExtractorItemCorruption : BiomeExtractorItem
     {
         protected internal override int TileId => ModContent.TileType<BiomeExtractorTileDemonic>();
-        protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitCorruption>();
+        protected internal override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitCorruption>();
 
         public override void SetDefaults()
         {

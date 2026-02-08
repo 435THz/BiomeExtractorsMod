@@ -14,7 +14,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
     internal class ExoExtractorItem : BiomeExtractorItem
     {
         protected internal override int TileId => ModContent.TileType<ExoExtractorTile>();
-        protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<ExoUpgradeKit>();
+        protected internal override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<ExoUpgradeKit>();
 
         public override void SetDefaults()
         {

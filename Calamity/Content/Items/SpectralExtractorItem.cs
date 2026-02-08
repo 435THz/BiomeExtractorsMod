@@ -14,7 +14,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
     internal class SpectralExtractorItem : BiomeExtractorItem
     {
         protected internal override int TileId => ModContent.TileType<SpectralExtractorTile>();
-        protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<SpectralUpgradeKit>();
+        protected internal override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<SpectralUpgradeKit>();
 
         public override void SetDefaults()
         {

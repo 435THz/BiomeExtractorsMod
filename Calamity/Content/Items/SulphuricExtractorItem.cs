@@ -14,7 +14,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
     {
         protected internal override int TileId => ModContent.TileType<SulphuricExtractorTile>();
 
-        protected override ExtractorUpgradeKit UpgradeItemToCraftThis => throw new NotImplementedException();
+        protected internal override ExtractorUpgradeKit UpgradeItemToCraftThis => throw new NotImplementedException();
 
         public override void SetStaticDefaults()
         {

@@ -11,7 +11,7 @@ namespace BiomeExtractorsMod.Content.Items
     public class BiomeExtractorItemAdamantite : BiomeExtractorItem
     {
         protected internal override int TileId => ModContent.TileType<BiomeExtractorTileSteampunk>();
-        protected override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitAdamantite>();
+        protected internal override ExtractorUpgradeKit UpgradeItemToCraftThis => ModContent.GetInstance<UpgradeKitAdamantite>();
 
         public override void SetDefaults()
         {
