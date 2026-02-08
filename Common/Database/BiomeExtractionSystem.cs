@@ -337,9 +337,14 @@ namespace BiomeExtractorsMod.Common.Database
             }
 
             /// <summary>
-            /// Returns the recipe group's name for the <see cref="BiomeExtractorItem"/> objexts registered to this tier.
+            /// Returns the recipe group's name for the <see cref="BiomeExtractorItem"/> objects registered to this tier.
             /// </summary>
             public string RecipeGroup => $"{nameof(BiomeExtractorsMod)}:{_items[0].GetType().Name}";
+            /// <summary>
+            /// Returns the recipe group's name for the <see cref="ExtractorUpgradeKit"/> objects used to craft the extractors registered to this tier.
+            /// If the extractors of this tier have no kit registered in their "UpgradeItemToCraftThis" property, this value will be null. 
+            /// </summary>
+            public string KitRecipeGroup => _items[0].UpgradeItemToCraftThis == null ? null : $"{nameof(BiomeExtractorsMod)}:{_items[0].UpgradeItemToCraftThis.GetType().Name}";
 
             /// <summary>
             /// An empty ExtractionTier object.
@@ -1299,7 +1304,7 @@ namespace BiomeExtractorsMod.Common.Database
         }
 
         /// <summary>
-        /// Procedurally generates the necessary recipe groups by hooking all tiers up with the next one.<br/>
+        /// Procedurally generates the necessary recipe groups required by the crafting generator.<br/>
         /// This method is called when the mod is loaded, and should not be used otherwise.
         /// </summary>
         public override void AddRecipeGroups()
@@ -1311,6 +1316,10 @@ namespace BiomeExtractorsMod.Common.Database
                 {
                     RecipeGroup group = new(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(tier.Items[0].Type)}", tier.Items.Select((item) => item.Type).ToArray());
                     RecipeGroup.RegisterGroup(tier.RecipeGroup, group);
+                    if(tier.KitRecipeGroup!=null) {
+                        RecipeGroup kitGroup = new(()=> $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(tier.Items[0].UpgradeItemToCraftThis.Type)}", tier.Items.Select((item) => item.UpgradeItemToCraftThis.Type).ToArray());
+                        RecipeGroup.RegisterGroup(tier.KitRecipeGroup, kitGroup);
+                    }
                 }
             }
         }

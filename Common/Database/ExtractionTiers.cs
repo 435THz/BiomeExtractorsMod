@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BiomeExtractorsMod.Common.Database
+﻿namespace BiomeExtractorsMod.Common.Database
 {
     /// <summary>
     /// A list of all Tier values used by the mod. They have huge gaps in between each other for addons to fit in.
