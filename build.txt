@@ -1,6 +1,6 @@
 displayName = Biome Extractors Mod
 author = MistressNebula
-version = 1.4.3
+version = 1.4.4
 weakReferences = MagicStorage@0.7, CalamityMod@2.1, SubworldLibrary
 homepage = https://github.com/435THz/BiomeExtractorsMod/wiki
 hideCode = false
