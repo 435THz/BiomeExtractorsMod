@@ -161,9 +161,18 @@ namespace BiomeExtractorsMod.Common.Database
             }
         }
 
-        internal bool CheckRequirements(BiomeExtractionSystem.PoolEntry pool)
+        internal bool CheckAccessRequirements(BiomeExtractionSystem.PoolEntry pool)
         {
-            foreach(Predicate<ScanData> req in pool.Requirements)
+            foreach(Predicate<ScanData> req in pool.AllAccessRequirements)
+            {
+                if(!req.Invoke(this)) return false;
+            }
+            return true;
+        }
+
+        internal bool RunBiomeChecks(BiomeExtractionSystem.PoolEntry pool)
+        {
+            foreach(Predicate<ScanData> req in pool.AllBiomeChecks)
             {
                 if(!req.Invoke(this)) return false;
             }
@@ -188,19 +197,48 @@ namespace BiomeExtractorsMod.Common.Database
         //        }
 
         /// <summary>
-        /// An identifier object that details an item pool's name, tier and behavior.
+        /// An identifier object that details an item pool's name and behavior.
         /// </summary>
         /// <param name="name"> The PoolEntry's identification string.</param>
-        /// <param name="requirements"> The minimum requirements necessaty to access this pool. A pool that clears its scan requiremnts but not these checks will tell the scan to stop checking for more biomes.</param>
         /// <param name="blocking"> If true, biome scans will not scan priority values lower than the one this pool has if this pool is found.</param>
         /// <param name="localizationKey">If set, this pool will use this string to query its localized name.<br/>
         /// If <see langword="null"/>, this pool will not be displayed in the Extractor UI at all.</param>
-        public class PoolEntry(string name, Predicate<ScanData>[] requirements, bool blocking = true, string localizationKey = null)
+        public class PoolEntry(string name, bool blocking = true, string localizationKey = null)
         {
             /// <summary>The pool's identification string.</summary>
             public string Name { get; private set; } = name;
-            /// <summary>The requirements necessary to access this pool.</summary>
-            public Predicate<ScanData>[] Requirements { get; private set; } = requirements;
+            /// <summary>Requirements necessary to detect this pool. This list exists for requirements that are either always
+            /// or never met in a world no matter one's position in it, like the remix flag.
+            /// If these requirements are not met, this pool will not show up at all in the analyzer.
+            /// In the</summary>
+            public List<Predicate<ScanData>> WorldChecks {get; private set; } = new();
+            /// <summary>Requirements necessary to detect this pool.
+            /// If these requirements are not met, it means that the current biome does not contain this pool, and it should be skipped.
+            /// These checks will have no effect on the pool's visibility in the analyzer.</summary>
+            public List<Predicate<ScanData>> BiomeChecks {get; private set; } = new();
+            /// <summary>Requirements necessary to extract from this pool. This list exists for requirements that are either always
+            /// or never met in a world no matter one's position in it, like the remix flag.
+            /// If these requirements are not met, this pool will appear obfuscated in the analyzer.</summary>
+            public List<Predicate<ScanData>> VisibilityRequirements {get; private set; } = new();
+            /// <summary>The requirements necessary to extract from this pool.
+            /// These checks will have no effect on the pool's visibility in the analyzer.</summary>
+            public List<Predicate<ScanData>> AccessRequirements { get; private set; } = new();
+            public List<Predicate<ScanData>> AllBiomeChecks {
+                get
+                {
+                    var ls = new List<Predicate<ScanData>>(WorldChecks);
+                    ls.AddRange(BiomeChecks);
+                    return ls;
+                }
+            }
+            public List<Predicate<ScanData>> AllAccessRequirements {
+                get
+                {
+                    var ls = new List<Predicate<ScanData>>(VisibilityRequirements);
+                    ls.AddRange(AccessRequirements);
+                    return ls;
+                }
+            }
             /// <summary>The localization key associated to this pool.</summary>
             public bool Blocking { get; private set; } = blocking;
             /// <summary>The localization key associated to this pool.</summary>
@@ -210,30 +248,12 @@ namespace BiomeExtractorsMod.Common.Database
             public bool IsLocalized() => LocalizationKey != null;
 
             /// <summary>
-            /// An identifier object that details an item pool's name, tier and behavior.
+            /// An identifier object that details an item pool's name and behavior.
             /// </summary>
             /// <param name="name"> The PoolEntry's identification string.</param>
-            /// <param name="tier"> The minimum Extractor tier required to access this pool.</param>
-            /// <param name="blocking">If true, finding a match for this pool will block the scan from continuing.</param>
             /// <param name="localizationKey">If set, this pool will use this string to query its localized name.<br/>
             /// If <see langword="null"/>, this pool will not be displayed in the Extractor UI at all.</param>
-            public PoolEntry(string name, int tier, bool blocking = true, string localizationKey = null) : this(name, [scan => scan.MinTier(tier)], blocking, localizationKey) { }
-            /// <summary>
-            /// An identifier object that details an item pool's name, tier and behavior.
-            /// </summary>
-            /// <param name="name"> The PoolEntry's identification string.</param>
-            /// <param name="requirements"> The minimum requirements necessaty to access this pool. A pool that clears its scan requiremnts but not these checks will tell the scan to stop checking for more biomes.</param>
-            /// <param name="localizationKey">If set, this pool will use this string to query its localized name.<br/>
-            /// If <see langword="null"/>, this pool will not be displayed in the Extractor UI at all.</param>
-            public PoolEntry(string name, Predicate<ScanData>[] requirements, string localizationKey) : this(name, requirements, true, localizationKey) { }
-            /// <summary>
-            /// An identifier object that details an item pool's name, tier and behavior.
-            /// </summary>
-            /// <param name="name"> The PoolEntry's identification string.</param>
-            /// <param name="tier"> The minimum Extractor tier required to access this pool.</param>
-            /// <param name="localizationKey">If set, this pool will use this string to query its localized name.<br/>
-            /// If <see langword="null"/>, this pool will not be displayed in the Extractor UI at all.</param>
-            public PoolEntry(string name, int tier, string localizationKey) : this(name, [scan => scan.MinTier(tier)], true, localizationKey) { }
+            public PoolEntry(string name, string localizationKey) : this(name, true, localizationKey) { }
         }
 
         /// <summary>
@@ -411,12 +431,13 @@ namespace BiomeExtractorsMod.Common.Database
             /// <returns>A hash code for the current object.</returns>
             public override int GetHashCode() => HashCode.Combine(Tier, LocalizationKey);
             /// <summary>
-            /// Creates a new copy of this ExtracionTier and shifts it tier number.
+            /// Creates a new copy of this ExtracionTier and shifts its tier number.
             /// </summary>
             /// <param name="newTier">The new tier to give to the copy of this tier</param>
             /// <returns>A copy of this tier but with <c>newTier</c> as its tier number</returns>
             public ExtractionTier CloneAndMove(int newTier) => new(newTier, ArticleKey, LocalizationKey, _rate, _chance, _amount, _icon);
         }
+        
         #endregion
 
         #region IDs
@@ -580,6 +601,7 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly Predicate<ScanData> remix = scan => Main.remixWorld;
 
         //TIER
+        public static readonly Predicate<ScanData> basic = scan => scan.MinTier(ExtractionTiers.BASIC);
         public static readonly Predicate<ScanData> demonic = scan => scan.MinTier(ExtractionTiers.DEMONIC);
         public static readonly Predicate<ScanData> infernal = scan => scan.MinTier(ExtractionTiers.INFERNAL);
         public static readonly Predicate<ScanData> steampunk = scan => scan.MinTier(ExtractionTiers.STEAMPUNK);
@@ -652,7 +674,8 @@ namespace BiomeExtractorsMod.Common.Database
         private readonly PriorityList<ExtractionTier> _tiers = [];
         private readonly Dictionary<string, PoolEntry> _poolNames = [];
         private readonly Dictionary<string, WeightedList<ItemEntry>> _itemPools = [];
-        private readonly Dictionary<string, List<Predicate<ScanData>>> _poolRequirements = [];
+        private readonly Dictionary<short, List<string>> _itemToPool = [];
+        private readonly Dictionary<string, List<string>> _poolAliases = [];
         private readonly PriorityList<string> _priorityList = [];
 
 
@@ -825,9 +848,8 @@ namespace BiomeExtractorsMod.Common.Database
         /// <item><description>Registers it</description></item>
         /// <item><description>Adds it to the main Pool Priority queue</description></item>
         /// <item><description>Creates a new list of ItemEntries assigned to it.</description></item>
-        /// <item><description>Creates a new list of requirements necessary to consider this pool valid.</description></item>
         /// </list>
-        /// This entry will have a minimum tier equal to <see cref="ExtractionTiers.BASIC"/>, and will be registered as blocking.<br/>
+        /// This entry will be registered as blocking.<br/>
         /// If a pool entry with that name already exists, this method does nothing.
         /// </summary>
         /// <param name="name">The name of the new PoolEntry</param>
@@ -835,16 +857,14 @@ namespace BiomeExtractorsMod.Common.Database
         /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same priority, ignoring everything else.</param>
         /// <param name="localizationKey">The localization key that is used by this pool. </param>
         /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
-        public bool AddPool(string name, int priority, string localizationKey) => AddPool(new PoolEntry(name, ExtractionTiers.BASIC, localizationKey), priority);
+        public bool AddPool(string name, int priority, string localizationKey = null) => AddPool(new PoolEntry(name, localizationKey), priority);
         /// <summary>
         /// Creates a new PoolEntry and:
         /// <list type="bullet">
         /// <item><description>Registers it</description></item>
         /// <item><description>Adds it to the main Pool Priority queue</description></item>
         /// <item><description>Creates a new list of ItemEntries assigned to it.</description></item>
-        /// <item><description>Creates a new list of requirements necessary to consider this pool valid.</description></item>
         /// </list>
-        /// This entry will have a minimum tier equal to <see cref="ExtractionTiers.BASIC"/><br/>
         /// If a pool entry with that name already exists, this method does nothing.
         /// </summary>
         /// <param name="name">The name of the new PoolEntry</param>
@@ -853,82 +873,10 @@ namespace BiomeExtractorsMod.Common.Database
         /// <param name="nonBlocking">If this is true, the priority system will keep checking for pools with lower <br/>priority even if this pool is valid.</param>
         /// <param name="localizationKey">The localization key that is used by this pool. </param>
         /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
-        public bool AddPool(string name, int priority, bool nonBlocking, string localizationKey = null) => AddPool(new PoolEntry(name, ExtractionTiers.BASIC, !nonBlocking, localizationKey), priority);
+        public bool AddPool(string name, int priority, bool nonBlocking, string localizationKey = null) => AddPool(new PoolEntry(name, !nonBlocking, localizationKey), priority);
         /// <summary>
-        /// Creates a new PoolEntry and:
-        /// <list type="bullet">
-        /// <item><description>Registers it</description></item>
-        /// <item><description>Adds it to the main Pool Priority queue</description></item>
-        /// <item><description>Creates a new list of ItemEntries assigned to it.</description></item>
-        /// <item><description>Creates a new list of requirements necessary to consider this pool valid.</description></item>
-        /// </list>
-        /// This entry will be registered as blocking.<br/>
-        /// If a pool entry with that name already exists, this method does nothing.
-        /// </summary>
-        /// <param name="name">The name of the new PoolEntry</param>
-        /// <param name="priority">The Priority value of this pool entry. Higher priorities are evaluated first.<br/>
-        /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same <br/>priority, ignoring everything else.</param>
-        /// <param name="tier">The minimum Extractor tier required to access this pool.</param>
-        /// <param name="localizationKey">The localization key that is used by this pool. </param>
-        /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
-        public bool AddPool(string name, int priority, int tier, string localizationKey) => AddPool(new PoolEntry(name, tier, localizationKey), priority);
-        /// <summary>
-        /// Creates a new PoolEntry and:
-        /// <list type="bullet">
-        /// <item><description>Registers it</description></item>
-        /// <item><description>Adds it to the main Pool Priority queue</description></item>
-        /// <item><description>Creates a new list of ItemEntries assigned to it.</description></item>
-        /// <item><description>Creates a new list of requirements necessary to consider this pool valid.</description></item>
-        /// </list>
-        /// This entry will be registered as blocking.<br/>
-        /// If a pool entry with that name already exists, this method does nothing.
-        /// </summary>
-        /// <param name="name">The name of the new PoolEntry</param>
-        /// <param name="priority">The Priority value of this pool entry. Higher priorities are evaluated first.<br/>
-        /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same <br/>priority, ignoring everything else.</param>
-        /// <param name="requirements">A list of <see cref="Predicate{T}"/> objexts that the scan must pass to access this pool.</param>
-        /// <param name="localizationKey">The localization key that is used by this pool. </param>
-        /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
-        public bool AddPool(string name, int priority, Predicate<ScanData>[] requirements, string localizationKey) => AddPool(new PoolEntry(name, requirements, localizationKey), priority);
-        /// <summary>
-        /// Creates a new PoolEntry and:
-        /// <list type="bullet">
-        /// <item><description>Registers it</description></item>
-        /// <item><description>Adds it to the main Pool Priority queue</description></item>
-        /// <item><description>Creates a new list of ItemEntries assigned to it.</description></item>
-        /// <item><description>Creates a new list of requirements necessary to consider this pool valid.</description></item>
-        /// </list>
-        /// If a pool entry with that name already exists, this method does nothing.
-        /// </summary>
-        /// <param name="name">The name of the new PoolEntry</param>
-        /// <param name="priority">The Priority value of this pool entry. Higher priorities are evaluated first.<br/>
-        /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same <br/>priority, ignoring everything else.</param>
-        /// <param name="tier">The minimum Extractor tier required to access this pool.</param>
-        /// <param name="nonBlocking">If this is true, the priority system will keep checking for pools with lower <br/>priority even if this pool is valid.</param>
-        /// <param name="localizationKey">The localization key that is used by this pool. </param>
-        /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
-        public bool AddPool(string name, int priority, int tier = 1, bool nonBlocking = false, string localizationKey = null) => AddPool(new PoolEntry(name, tier, !nonBlocking, localizationKey), priority);
-        /// <summary>
-        /// Creates a new PoolEntry and:
-        /// <list type="bullet">
-        /// <item><description>Registers it</description></item>
-        /// <item><description>Adds it to the main Pool Priority queue</description></item>
-        /// <item><description>Creates a new list of ItemEntries assigned to it.</description></item>
-        /// <item><description>Creates a new list of requirements necessary to consider this pool valid.</description></item>
-        /// </list>
-        /// If a pool entry with that name already exists, this method does nothing.
-        /// </summary>
-        /// <param name="name">The name of the new PoolEntry</param>
-        /// <param name="priority">The Priority value of this pool entry. Higher priorities are evaluated first.<br/>
-        /// Upon finding a valid PoolEntry, the priority system will finish checking other pools with the same <br/>priority, ignoring everything else.</param>
-        /// <param name="requirements">A list of <see cref="Predicate{T}"/> objexts that the scan must pass to access this pool.</param>
-        /// <param name="nonBlocking">If this is true, the priority system will keep checking for pools with lower <br/>priority even if this pool is valid.</param>
-        /// <param name="localizationKey">The localization key that is used by this pool. </param>
-        /// <returns><see langword="true"/> if the PoolEntry didn't exist already, <see langword="false"/> otherwise</returns>
-        public bool AddPool(string name, int priority, Predicate<ScanData>[] requirements, bool nonBlocking = false, string localizationKey = null) => AddPool(new PoolEntry(name, requirements, !nonBlocking, localizationKey), priority);
-        /// <summary>
-        /// Registers a PoolEntry and adds it to the main priority queue, also creating a new list<br/>
-        /// of requirements and ItemEntries for it.<br/>
+        /// Registers a PoolEntry and adds it to the main priority queue, also creating a new list
+        /// of ItemEntries for it.<br/>
         /// If a pool entry with that name already exists, this method does nothing.
         /// </summary>
         /// <param name="pool">The PoolEntry to be registered</param>
@@ -941,7 +889,6 @@ namespace BiomeExtractorsMod.Common.Database
             _poolNames.Add(pool.Name, pool);
             _priorityList.Add(priority, pool.Name);
             _itemPools.Add(pool.Name, []);
-            _poolRequirements.Add(pool.Name, []);
             return true;
         }
         /// <summary>
@@ -972,35 +919,126 @@ namespace BiomeExtractorsMod.Common.Database
                 l.Remove(poolName);
             }
             _itemPools.Remove(poolName);
-            _poolRequirements.Remove(poolName);
             return true;
         }
 
         /// <summary>
-        /// Adds one or more predicates as requirements of a pool. They must all return true
+        /// Adds one or more predicates as world requirements of a pool. They must all return true
         /// for the pool to be considered valid<br/> during a scan. If no predicates are registered,
-        /// the pool is considered valid by default.
+        /// the pool is considered valid by default. If these requirements are not met, the pool will
+        /// not show up in the analyzer.
+        /// A pool deemed invalid by these checks will not stop the scanning process from looking for other biomes.
         /// </summary>
         /// <param name="poolName">The name of the PoolEntry to add the predicates to.</param>
-        /// <param name="conditions">One or more predicates to add to this pool's list of conditions</param>
+        /// <param name="conditions">One or more predicates to add to this pool's list of world checks</param>
         /// <returns><see langword="true"/> if the conditions have succesfully been added to a pool, <see langword="false"/> otherwise</returns>
-        public bool AddPoolRequirements(string poolName, params Predicate<ScanData>[] conditions)
+        public bool AddPoolWorldChecks(string poolName, params Predicate<ScanData>[] conditions)
         {
             PoolEntry pool = GetPoolEntry(poolName);
             if (pool == null) return false;
-            foreach (Predicate<ScanData> condition in conditions) _poolRequirements[pool.Name].Add(condition);
+            pool.WorldChecks.AddRange(conditions);
             return true;
         }
         /// <summary>
-        /// Removes all requirememnts registered to a pool.
+        /// Adds one or more predicates as biome checks of a pool. They must all return true
+        /// for the pool to be considered valid<br/> during a scan. If no predicates are registered,
+        /// the pool is considered valid by default.
+        /// A pool deemed invalid by these checks will not stop the scanning process from looking for other biomes.
         /// </summary>
-        /// <param name="poolName">The name of the PoolEntry to remove all the predicates of.</param>
-        /// <returns><see langword="true"/> if the method found a pool to remove the conditions of, <see langword="false"/> otherwise</returns>
-        public bool FlushPoolRequirements(string poolName)
+        /// <param name="poolName">The name of the PoolEntry to add the predicates to.</param>
+        /// <param name="conditions">One or more predicates to add to this pool's list of biome checks</param>
+        /// <returns><see langword="true"/> if the conditions have succesfully been added to a pool, <see langword="false"/> otherwise</returns>
+        public bool AddPoolBiomeChecks(string poolName, params Predicate<ScanData>[] conditions)
         {
             PoolEntry pool = GetPoolEntry(poolName);
             if (pool == null) return false;
-            _poolRequirements[pool.Name].Clear();
+            pool.BiomeChecks.AddRange(conditions);
+            return true;
+        }
+
+        /// <summary>
+        /// Adds one or more predicates as world requirements of a pool. They must all return true
+        /// for the pool to be considered valid<br/> during a scan. If no predicates are registered,
+        /// the pool is considered valid by default. If these requirements are not met, the pool will
+        /// be obfuscated in the analyzer.
+        /// A pool deemed invalid by these checks will stop the scanning process from looking for other
+        /// biomes, unless the pool is defined as non-blocking.
+        /// </summary>
+        /// <param name="poolName">The name of the PoolEntry to add the predicates to.</param>
+        /// <param name="conditions">One or more predicates to add to this pool's list of visibility requirements</param>
+        /// <returns><see langword="true"/> if the conditions have succesfully been added to a pool, <see langword="false"/> otherwise</returns>
+        public bool AddPoolVisibilityRequirements(string poolName, params Predicate<ScanData>[] conditions)
+        {
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
+            pool.VisibilityRequirements.AddRange(conditions);
+            return true;
+        }
+        /// <summary>
+        /// Adds one or more predicates as access requirements of a pool. They must all return true
+        /// for the pool to be considered valid<br/> during a scan. If no predicates are registered,
+        /// the pool is considered valid by default.
+        /// A pool deemed invalid by these checks will stop the scanning process from looking for other
+        /// biomes, unless the pool is defined as non-blocking.
+        /// </summary>
+        /// <param name="poolName">The name of the PoolEntry to add the predicates to.</param>
+        /// <param name="conditions">One or more predicates to add to this pool's list of access requirements</param>
+        /// <returns><see langword="true"/> if the conditions have succesfully been added to a pool, <see langword="false"/> otherwise</returns>
+        public bool AddPoolAccessRequirements(string poolName, params Predicate<ScanData>[] conditions)
+        {
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
+            pool.AccessRequirements.AddRange(conditions);
+            return true;
+        }
+
+        /// <summary>
+        /// Removes all world checks registered to a pool.
+        /// </summary>
+        /// <param name="poolName">The name of the PoolEntry to remove all world checks of.</param>
+        /// <returns><see langword="true"/> if the method found the requested pool, <see langword="false"/> otherwise</returns>
+        public bool FlushPoolWorldChecks(string poolName)
+        {
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
+            pool.WorldChecks.Clear();
+            return true;
+        }
+        /// <summary>
+        /// Removes all biome checks registered to a pool.
+        /// </summary>
+        /// <param name="poolName">The name of the PoolEntry to remove all biome checks of.</param>
+        /// <returns><see langword="true"/> if the method found the requested pool, <see langword="false"/> otherwise</returns>
+        public bool FlushBiomeChecks(string poolName)
+        {
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
+            pool.BiomeChecks.Clear();
+            return true;
+        }
+
+        /// <summary>
+        /// Removes all visibility requirements registered to a pool.
+        /// </summary>
+        /// <param name="poolName">The name of the PoolEntry to remove all visibility requirements of.</param>
+        /// <returns><see langword="true"/> if the method found the requested pool, <see langword="false"/> otherwise</returns>
+        public bool FlushPoolVisibilityRequirements(string poolName)
+        {
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
+            pool.WorldChecks.Clear();
+            return true;
+        }
+        /// <summary>
+        /// Removes all access requirements registered to a pool.
+        /// </summary>
+        /// <param name="poolName">The name of the PoolEntry to remove all access requirements of.</param>
+        /// <returns><see langword="true"/> if the method found the requested pool, <see langword="false"/> otherwise</returns>
+        public bool FlushAccessRequirements(string poolName)
+        {
+            PoolEntry pool = GetPoolEntry(poolName);
+            if (pool == null) return false;
+            pool.BiomeChecks.Clear();
             return true;
         }
 
@@ -1168,20 +1206,10 @@ namespace BiomeExtractorsMod.Common.Database
                 last_p = elem.Key;
 
                 PoolEntry pool = GetPoolEntry(elem.Value);
-                bool check_passed = true;
 
-                foreach (Predicate<ScanData> check in _poolRequirements[pool.Name])
+                if (scan.RunBiomeChecks(pool) && _itemPools[elem.Value].Count > 0)
                 {
-                    if (!check.Invoke(scan))
-                    {
-                        check_passed = false;
-                        break;
-                    }
-                }
-
-                if (check_passed && _itemPools[elem.Value].Count > 0)
-                {
-                    if (scan.CheckRequirements(pool))
+                    if (scan.CheckAccessRequirements(pool))
                         found.Add(_poolNames[elem.Value]);
                     if (pool.Blocking) stop = true;
                 }
@@ -1271,7 +1299,6 @@ namespace BiomeExtractorsMod.Common.Database
             _tiers.Clear();
             _poolNames.Clear();
             _itemPools.Clear();
-            _poolRequirements.Clear();
             _priorityList.Clear();
         }
         /// <summary>
@@ -1329,8 +1356,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(forest, 0, LocalizeAs(forest));
             AddPool(forest_town, 0);
 
-            AddPoolRequirements(forest, inMainWorld, purity100, surfaceLayer);
-            AddPoolRequirements(forest_town, inMainWorld, purity100, surfaceLayer, pylon);
+            AddPoolVisibilityRequirements(forest, basic);
+            AddPoolVisibilityRequirements(forest_town, basic);
+
+            AddPoolBiomeChecks(forest, inMainWorld, purity100, surfaceLayer);
+            AddPoolBiomeChecks(forest_town, inMainWorld, purity100, surfaceLayer, pylon);
 
             AddItemInPool(forest, ItemID.None, 30);
             //TERRAIN:18
@@ -1373,9 +1403,12 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(caverns_remix, 10, LocalizeAs(caverns_remix));
             AddPool(cavern_town_remix, 10);
 
-            AddPoolRequirements(underground, inMainWorld, purity100, belowSurfaceLayer, notCavernLayer, notremix);
-            AddPoolRequirements(caverns_remix, inMainWorld, purity100, cavernLayer, remix);
-            AddPoolRequirements(cavern_town_remix, inMainWorld, purity100, cavernLayer, pylon, remix);
+            AddPoolWorldChecks(underground, notremix);
+            AddPoolWorldChecks(caverns_remix, remix);
+            AddPoolWorldChecks(cavern_town_remix, remix);
+            AddPoolBiomeChecks(underground, inMainWorld, purity100, belowSurfaceLayer, notCavernLayer);
+            AddPoolBiomeChecks(caverns_remix, inMainWorld, purity100, cavernLayer);
+            AddPoolBiomeChecks(cavern_town_remix, inMainWorld, purity100, cavernLayer, pylon);
 
             CopyPoolItems(caverns_remix, forest);
             CopyPoolItems(cavern_town_remix, forest_town);
@@ -1428,8 +1461,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(caverns, 10, LocalizeAs(caverns));
             AddPool(underground_remix, 10, LocalizeAs(underground));
 
-            AddPoolRequirements(caverns, inMainWorld, purity100, cavernLayer, notremix);
-            AddPoolRequirements(underground_remix, inMainWorld, purity100, belowSurfaceLayer, notCavernLayer, remix);
+            AddPoolWorldChecks(caverns, notremix);
+            AddPoolWorldChecks(underground_remix, remix);
+
+            AddPoolBiomeChecks(caverns, inMainWorld, purity100, cavernLayer);
+            AddPoolBiomeChecks(underground_remix, inMainWorld, purity100, belowSurfaceLayer, notCavernLayer);
 
             AddItemInPool(caverns, ItemID.StoneBlock, 69);
             AddItemInPool(caverns, ItemID.DirtBlock, 18);
@@ -1457,11 +1493,16 @@ namespace BiomeExtractorsMod.Common.Database
             AliasItemPool(underground_remix, caverns);
         }
         private void SetupOreProgression() {
-            AddPool(evil_ores, 10, ExtractionTiers.DEMONIC, true);
-            AddPool(hm_ores, 10, [steampunk, hardmodeOnly], true);
+            AddPool(evil_ores, 10, true);
+            AddPool(hm_ores, 10, true);
 
-            AddPoolRequirements(evil_ores, inMainWorld, purity100, belowSurfaceLayer);
-            AddPoolRequirements(hm_ores, inMainWorld, purity100, belowSurfaceLayer);
+            AddPoolVisibilityRequirements(evil_ores, demonic);
+            AddPoolVisibilityRequirements(hm_ores, steampunk);
+
+            AddPoolAccessRequirements(hm_ores, hardmodeOnly);
+
+            AddPoolBiomeChecks(evil_ores, inMainWorld, purity100, belowSurfaceLayer);
+            AddPoolBiomeChecks(hm_ores, inMainWorld, purity100, belowSurfaceLayer);
 
             AddItemInPool(evil_ores, ItemID.CrimtaneOre, 8);
             AddItemInPool(evil_ores, ItemID.DemoniteOre, 8);
@@ -1478,15 +1519,27 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(desert_remix, 51, LocalizeAs(desert));
             AddPool(ug_desert, 1050, LocalizeAs(ug_desert));
             AddPool(ug_desert_remix, 1050, LocalizeAs(ug_desert));
-            AddPool(ug_desert_hm, 1050, [steampunk, hardmodeOnly]);
-            AddPool(ug_desert_hm_remix, 1050, [steampunk, hardmodeOnly]);
+            AddPool(ug_desert_hm, 1050);
+            AddPool(ug_desert_hm_remix, 1050);
 
-            AddPoolRequirements(desert, inMainWorld, desert1500);
-            AddPoolRequirements(desert_remix, inMainWorld, desert1500, cavernLayer, remix);
-            AddPoolRequirements(ug_desert, inMainWorld, belowSurfaceLayer, desert1500, notremix);
-            AddPoolRequirements(ug_desert_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, desert1500, remix);
-            AddPoolRequirements(ug_desert_hm, inMainWorld, belowSurfaceLayer, desert1500, notremix);
-            AddPoolRequirements(ug_desert_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, desert1500, remix);
+            AddPoolVisibilityRequirements(ug_desert_hm, steampunk);
+            AddPoolVisibilityRequirements(ug_desert_hm_remix, steampunk);
+
+            AddPoolAccessRequirements(ug_desert_hm, hardmodeOnly);
+            AddPoolAccessRequirements(ug_desert_hm_remix, hardmodeOnly);
+
+            AddPoolWorldChecks(desert_remix, remix);
+            AddPoolWorldChecks(ug_desert, notremix);
+            AddPoolWorldChecks(ug_desert_remix, remix);
+            AddPoolWorldChecks(ug_desert_hm, notremix);
+            AddPoolWorldChecks(ug_desert_hm_remix, remix);
+            
+            AddPoolBiomeChecks(desert, inMainWorld, desert1500);
+            AddPoolBiomeChecks(desert_remix, inMainWorld, desert1500, cavernLayer);
+            AddPoolBiomeChecks(ug_desert, inMainWorld, belowSurfaceLayer, desert1500);
+            AddPoolBiomeChecks(ug_desert_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, desert1500);
+            AddPoolBiomeChecks(ug_desert_hm, inMainWorld, belowSurfaceLayer, desert1500);
+            AddPoolBiomeChecks(ug_desert_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, desert1500);
 
             AddItemInPool(desert, ItemID.SandBlock, 75);
             AddItemInPool(desert, ItemID.Cactus, 18);
@@ -1518,10 +1571,14 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_snow, 1050, LocalizeAs(ug_snow));
             AddPool(ug_snow_remix, 1050, LocalizeAs(ug_snow));
 
-            AddPoolRequirements(snow, inMainWorld, frost1500);
-            AddPoolRequirements(snow_remix, inMainWorld, cavernLayer, frost1500, remix);
-            AddPoolRequirements(ug_snow, inMainWorld, belowSurfaceLayer, frost1500, notremix);
-            AddPoolRequirements(ug_snow_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, frost1500, remix);
+            AddPoolWorldChecks(snow_remix, remix);
+            AddPoolWorldChecks(ug_snow, notremix);
+            AddPoolWorldChecks(ug_snow_remix, remix);
+
+            AddPoolBiomeChecks(snow, inMainWorld, frost1500);
+            AddPoolBiomeChecks(snow_remix, inMainWorld, cavernLayer, frost1500);
+            AddPoolBiomeChecks(ug_snow, inMainWorld, belowSurfaceLayer, frost1500);
+            AddPoolBiomeChecks(ug_snow_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, frost1500);
 
             AddItemInPool(snow, ItemID.None, 27);
             AddItemInPool(snow, ItemID.SnowBlock, 12);
@@ -1541,18 +1598,28 @@ namespace BiomeExtractorsMod.Common.Database
         private void SetupJungle()
         {
             AddPool(jungle, 50, LocalizeAs(jungle));
-            AddPool(shells, 50, [steampunk, hardmodeOnly]);
+            AddPool(shells, 50);
             AddPool(ug_jungle, 1050, LocalizeAs(ug_jungle));
-            AddPool(ug_shells, 1050, [steampunk, hardmodeOnly]);
-            AddPool(life_fruit, 1050, [steampunk, postMech]);
-            AddPool(chlorophyte, 1050, [cyber, postMechs]);
+            AddPool(ug_shells, 1050);
+            AddPool(life_fruit, 1050);
+            AddPool(chlorophyte, 1050);
 
-            AddPoolRequirements(jungle, inMainWorld, jungle140);
-            AddPoolRequirements(shells, inMainWorld, jungle140);
-            AddPoolRequirements(ug_jungle, inMainWorld, belowSurfaceLayer, jungle140);
-            AddPoolRequirements(ug_shells, inMainWorld, belowSurfaceLayer, jungle140);
-            AddPoolRequirements(life_fruit, inMainWorld, belowSurfaceLayer, jungle140);
-            AddPoolRequirements(chlorophyte, inMainWorld, belowSurfaceLayer, jungle140);
+            AddPoolVisibilityRequirements(shells, steampunk);
+            AddPoolVisibilityRequirements(ug_shells, steampunk);
+            AddPoolVisibilityRequirements(life_fruit, steampunk);
+            AddPoolVisibilityRequirements(chlorophyte, cyber);
+
+            AddPoolAccessRequirements(shells, hardmodeOnly);
+            AddPoolAccessRequirements(ug_shells, hardmodeOnly);
+            AddPoolAccessRequirements(life_fruit, postMech);
+            AddPoolAccessRequirements(chlorophyte, postMechs);
+
+            AddPoolBiomeChecks(jungle, inMainWorld, jungle140);
+            AddPoolBiomeChecks(shells, inMainWorld, jungle140);
+            AddPoolBiomeChecks(ug_jungle, inMainWorld, belowSurfaceLayer, jungle140);
+            AddPoolBiomeChecks(ug_shells, inMainWorld, belowSurfaceLayer, jungle140);
+            AddPoolBiomeChecks(life_fruit, inMainWorld, belowSurfaceLayer, jungle140);
+            AddPoolBiomeChecks(chlorophyte, inMainWorld, belowSurfaceLayer, jungle140);
 
             AddItemInPool(jungle, ItemID.None, 63);
             AddItemInPool(jungle, ItemID.MudBlock, 10);
@@ -1587,18 +1654,28 @@ namespace BiomeExtractorsMod.Common.Database
         private void SetupSkyAndSpace()
         {
             AddPool(sky, 50, LocalizeAs(sky));
-            AddPool(flight, 50, [steampunk, hardmodeOnly]);
+            AddPool(flight, 50);
             AddPool(space, 4000, LocalizeAs(space));
-            AddPool(spc_flight, 4000, [steampunk, hardmodeOnly]);
-            AddPool(pillar, 4000, [lunar, postPillars]);
-            AddPool(luminite, 4000, [ethereal, postML]);
+            AddPool(spc_flight, 4000);
+            AddPool(pillar, 4000);
+            AddPool(luminite, 4000);
 
-            AddPoolRequirements(sky, inMainWorld, skyLayer);
-            AddPoolRequirements(flight, inMainWorld, skyLayer);
-            AddPoolRequirements(space, inMainWorld, spaceLayer);
-            AddPoolRequirements(spc_flight, inMainWorld, spaceLayer);
-            AddPoolRequirements(pillar, inMainWorld, spaceLayer);
-            AddPoolRequirements(luminite, inMainWorld, spaceLayer);
+            AddPoolVisibilityRequirements(flight, steampunk);
+            AddPoolVisibilityRequirements(spc_flight, steampunk);
+            AddPoolVisibilityRequirements(pillar, lunar);
+            AddPoolVisibilityRequirements(luminite, ethereal);
+
+            AddPoolAccessRequirements(flight, hardmodeOnly);
+            AddPoolAccessRequirements(spc_flight, hardmodeOnly);
+            AddPoolAccessRequirements(pillar, postPillars);
+            AddPoolAccessRequirements(luminite, postML);
+
+            AddPoolBiomeChecks(sky, inMainWorld, skyLayer);
+            AddPoolBiomeChecks(flight, inMainWorld, skyLayer);
+            AddPoolBiomeChecks(space, inMainWorld, spaceLayer);
+            AddPoolBiomeChecks(spc_flight, inMainWorld, spaceLayer);
+            AddPoolBiomeChecks(pillar, inMainWorld, spaceLayer);
+            AddPoolBiomeChecks(luminite, inMainWorld, spaceLayer);
 
             AddItemInPool(sky, ItemID.None, 33);
             AddItemInPool(sky, ItemID.Cloud, 7);
@@ -1622,17 +1699,29 @@ namespace BiomeExtractorsMod.Common.Database
         {
             AddPool(mushroom, 200, LocalizeAs(mushroom));
             AddPool(ug_mushroom, 1200, LocalizeAs(ug_mushroom));
-            AddPool(truffle_worm, 1200, [steampunk, hardmodeOnly]);
+            AddPool(truffle_worm, 1200);
             AddPool(mushroom_remix, 201, LocalizeAs(ug_mushroom));
             AddPool(ug_mushroom_remix, 1200, LocalizeAs(ug_mushroom));
-            AddPool(truffle_worm_remix, 1200, [steampunk, hardmodeOnly]);
+            AddPool(truffle_worm_remix, 1200);
 
-            AddPoolRequirements(mushroom, inMainWorld, mush100);
-            AddPoolRequirements(ug_mushroom, inMainWorld, cavernLayer, mush100, notremix);
-            AddPoolRequirements(truffle_worm, inMainWorld, cavernLayer, mush100, notremix);
-            AddPoolRequirements(mushroom_remix, inMainWorld, cavernLayer, mush100, remix);
-            AddPoolRequirements(ug_mushroom_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, mush100, remix);
-            AddPoolRequirements(truffle_worm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, mush100, remix);
+            AddPoolVisibilityRequirements(truffle_worm, steampunk);
+            AddPoolVisibilityRequirements(truffle_worm_remix, steampunk);
+
+            AddPoolAccessRequirements(truffle_worm, hardmodeOnly);
+            AddPoolAccessRequirements(truffle_worm_remix, hardmodeOnly);
+
+            AddPoolWorldChecks(ug_mushroom, notremix);
+            AddPoolWorldChecks(truffle_worm, notremix);
+            AddPoolWorldChecks(mushroom_remix, remix);
+            AddPoolWorldChecks(ug_mushroom_remix, remix);
+            AddPoolWorldChecks(truffle_worm_remix, remix);
+
+            AddPoolBiomeChecks(mushroom, inMainWorld, mush100);
+            AddPoolBiomeChecks(ug_mushroom, inMainWorld, cavernLayer, mush100);
+            AddPoolBiomeChecks(truffle_worm, inMainWorld, cavernLayer, mush100);
+            AddPoolBiomeChecks(mushroom_remix, inMainWorld, cavernLayer, mush100);
+            AddPoolBiomeChecks(ug_mushroom_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, mush100);
+            AddPoolBiomeChecks(truffle_worm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, mush100);
 
             AddItemInPool(mushroom, ItemID.None, 36);
             AddItemInPool(mushroom, ItemID.MudBlock, 5);
@@ -1659,23 +1748,48 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupHallowBase()
         {
-            AddPool(hallowed_forest, 100, [steampunk, hardmodeOnly], LocalizeAs(hallowed_forest));
-            AddPool(hallowed_bars_forest, 100, [steampunk, postMechs]);
-            AddPool(ug_hallowed, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed));
-            AddPool(ug_hallowed_bars, 1100, [steampunk, postMechs]);
-            AddPool(hallowed_forest_remix, 101, [steampunk, hardmodeOnly], LocalizeAs(hallowed_forest));
-            AddPool(hallowed_bars_forest_remix, 101, [steampunk, postMechs]);
-            AddPool(ug_hallowed_caverns_remix, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed));
-            AddPool(ug_hallowed_bars_remix, 1100, [steampunk, postMechs]);
+            AddPool(hallowed_forest, 100, LocalizeAs(hallowed_forest));
+            AddPool(hallowed_bars_forest, 100);
+            AddPool(ug_hallowed, 1100, LocalizeAs(ug_hallowed));
+            AddPool(ug_hallowed_bars, 1100);
+            AddPool(hallowed_forest_remix, 101, LocalizeAs(hallowed_forest));
+            AddPool(hallowed_bars_forest_remix, 101);
+            AddPool(ug_hallowed_caverns_remix, 1100, LocalizeAs(ug_hallowed));
+            AddPool(ug_hallowed_bars_remix, 1100);
 
-            AddPoolRequirements(hallowed_forest, inMainWorld, hallow125.Invoke(hallowForestBlocks));
-            AddPoolRequirements(hallowed_bars_forest, inMainWorld, hallow125.Invoke(hallowForestBlocks));
-            AddPoolRequirements(ug_hallowed, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowForestBlocks), notremix);
-            AddPoolRequirements(ug_hallowed_bars, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowForestBlocks), notremix);
-            AddPoolRequirements(hallowed_forest_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
-            AddPoolRequirements(hallowed_bars_forest_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
-            AddPoolRequirements(ug_hallowed_caverns_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
-            AddPoolRequirements(ug_hallowed_bars_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
+            AddPoolVisibilityRequirements(hallowed_forest, steampunk);
+            AddPoolVisibilityRequirements(hallowed_bars_forest, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_bars, steampunk);
+            AddPoolVisibilityRequirements(hallowed_forest_remix, steampunk);
+            AddPoolVisibilityRequirements(hallowed_bars_forest_remix, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_caverns_remix, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_bars_remix, steampunk);
+
+            AddPoolAccessRequirements(hallowed_forest, hardmodeOnly);
+            AddPoolAccessRequirements(hallowed_bars_forest, postMechs);
+            AddPoolAccessRequirements(ug_hallowed, hardmodeOnly);
+            AddPoolAccessRequirements(ug_hallowed_bars, postMechs);
+            AddPoolAccessRequirements(hallowed_forest_remix, hardmodeOnly);
+            AddPoolAccessRequirements(hallowed_bars_forest_remix, postMechs);
+            AddPoolAccessRequirements(ug_hallowed_caverns_remix, hardmodeOnly);
+            AddPoolAccessRequirements(ug_hallowed_bars_remix, postMechs);
+
+            AddPoolWorldChecks(ug_hallowed, notremix);
+            AddPoolWorldChecks(ug_hallowed_bars, notremix);
+            AddPoolWorldChecks(hallowed_forest_remix, remix);
+            AddPoolWorldChecks(hallowed_bars_forest_remix, remix);
+            AddPoolWorldChecks(ug_hallowed_caverns_remix, remix);
+            AddPoolWorldChecks(ug_hallowed_bars_remix, remix);
+
+            AddPoolBiomeChecks(hallowed_forest, inMainWorld, hallow125.Invoke(hallowForestBlocks));
+            AddPoolBiomeChecks(hallowed_bars_forest, inMainWorld, hallow125.Invoke(hallowForestBlocks));
+            AddPoolBiomeChecks(ug_hallowed, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowForestBlocks), notremix);
+            AddPoolBiomeChecks(ug_hallowed_bars, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowForestBlocks), notremix);
+            AddPoolBiomeChecks(hallowed_forest_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
+            AddPoolBiomeChecks(hallowed_bars_forest_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
+            AddPoolBiomeChecks(ug_hallowed_caverns_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
+            AddPoolBiomeChecks(ug_hallowed_bars_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowForestBlocks), remix);
 
             AddItemInPool(hallowed_forest, ItemID.None, 72);
             AddItemInPool(hallowed_forest, ItemID.DirtBlock, 26);
@@ -1706,23 +1820,48 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupHallowDesert()
         {
-            AddPool(hallowed_desert, 100, [steampunk, hardmodeOnly], LocalizeAs(hallowed_desert));
-            AddPool(hallowed_bars_desert, 100, [steampunk, postMechs]);
-            AddPool(ug_hallowed_desert, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_desert));
-            AddPool(ug_hallowed_bars_desert, 1100, [steampunk, postMechs]);
-            AddPool(hallowed_desert_remix, 101, [steampunk, hardmodeOnly], LocalizeAs(hallowed_desert));
-            AddPool(hallowed_bars_desert_remix, 101, [steampunk, postMechs]);
-            AddPool(ug_hallowed_desert_remix, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_desert));
-            AddPool(ug_hallowed_bars_desert_remix, 1100, [steampunk, postMechs]);
+            AddPool(hallowed_desert, 100, LocalizeAs(hallowed_desert));
+            AddPool(hallowed_bars_desert, 100);
+            AddPool(ug_hallowed_desert, 1100, LocalizeAs(ug_hallowed_desert));
+            AddPool(ug_hallowed_bars_desert, 1100);
+            AddPool(hallowed_desert_remix, 101, LocalizeAs(hallowed_desert));
+            AddPool(hallowed_bars_desert_remix, 101);
+            AddPool(ug_hallowed_desert_remix, 1100, LocalizeAs(ug_hallowed_desert));
+            AddPool(ug_hallowed_bars_desert_remix, 1100);
 
-            AddPoolRequirements(hallowed_desert, inMainWorld, hallow125.Invoke(hallowSandBlocks));
-            AddPoolRequirements(hallowed_bars_desert, inMainWorld, hallow125.Invoke(hallowSandBlocks));
-            AddPoolRequirements(ug_hallowed_desert, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowSandBlocks), notremix);
-            AddPoolRequirements(ug_hallowed_bars_desert, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowSandBlocks), notremix);
-            AddPoolRequirements(hallowed_desert_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowSandBlocks), remix);
-            AddPoolRequirements(hallowed_bars_desert_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowSandBlocks), remix);
-            AddPoolRequirements(ug_hallowed_desert_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowSandBlocks), remix);
-            AddPoolRequirements(ug_hallowed_bars_desert_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowSandBlocks), remix);
+            AddPoolVisibilityRequirements(hallowed_desert, steampunk);
+            AddPoolVisibilityRequirements(hallowed_bars_desert, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_desert, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_bars_desert, steampunk);
+            AddPoolVisibilityRequirements(hallowed_desert_remix, steampunk);
+            AddPoolVisibilityRequirements(hallowed_bars_desert_remix, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_desert_remix, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_bars_desert_remix, steampunk);
+
+            AddPoolAccessRequirements(hallowed_desert, hardmodeOnly);
+            AddPoolAccessRequirements(hallowed_bars_desert, postMechs);
+            AddPoolAccessRequirements(ug_hallowed_desert, hardmodeOnly);
+            AddPoolAccessRequirements(ug_hallowed_bars_desert, postMechs);
+            AddPoolAccessRequirements(hallowed_desert_remix, hardmodeOnly);
+            AddPoolAccessRequirements(hallowed_bars_desert_remix, postMechs);
+            AddPoolAccessRequirements(ug_hallowed_desert_remix, hardmodeOnly);
+            AddPoolAccessRequirements(ug_hallowed_bars_desert_remix, postMechs);
+
+            AddPoolWorldChecks(ug_hallowed_desert, notremix);
+            AddPoolWorldChecks(ug_hallowed_bars_desert, notremix);
+            AddPoolWorldChecks(hallowed_desert_remix, remix);
+            AddPoolWorldChecks(hallowed_bars_desert_remix, remix);
+            AddPoolWorldChecks(ug_hallowed_desert_remix, remix);
+            AddPoolWorldChecks(ug_hallowed_bars_desert_remix, remix);
+
+            AddPoolBiomeChecks(hallowed_desert, inMainWorld, hallow125.Invoke(hallowSandBlocks));
+            AddPoolBiomeChecks(hallowed_bars_desert, inMainWorld, hallow125.Invoke(hallowSandBlocks));
+            AddPoolBiomeChecks(ug_hallowed_desert, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowSandBlocks));
+            AddPoolBiomeChecks(ug_hallowed_bars_desert, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowSandBlocks));
+            AddPoolBiomeChecks(hallowed_desert_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowSandBlocks));
+            AddPoolBiomeChecks(hallowed_bars_desert_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowSandBlocks));
+            AddPoolBiomeChecks(ug_hallowed_desert_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowSandBlocks));
+            AddPoolBiomeChecks(ug_hallowed_bars_desert_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowSandBlocks));
 
             AddItemInPool(hallowed_desert, ItemID.PearlsandBlock, 41);
             AddItemInPool(hallowed_desert, ItemID.Cactus, 25);
@@ -1750,23 +1889,48 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupHallowSnow()
         {
-            AddPool(hallowed_snow, 100, [steampunk, hardmodeOnly], LocalizeAs(hallowed_snow));
-            AddPool(hallowed_bars_snow, 100, [steampunk, postMechs]);
-            AddPool(ug_hallowed_snow, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_snow));
-            AddPool(ug_hallowed_bars_snow, 1100, [steampunk, postMechs]);
-            AddPool(hallowed_snow_remix, 101, [steampunk, hardmodeOnly], LocalizeAs(hallowed_snow));
-            AddPool(hallowed_bars_snow_remix, 101, [steampunk, postMechs]);
-            AddPool(ug_hallowed_snow_remix, 1100, ExtractionTiers.STEAMPUNK, LocalizeAs(ug_hallowed_snow));
-            AddPool(ug_hallowed_bars_snow_remix, 1100, [steampunk, postMechs]);
+            AddPool(hallowed_snow, 100, LocalizeAs(hallowed_snow));
+            AddPool(hallowed_bars_snow, 100);
+            AddPool(ug_hallowed_snow, 1100, LocalizeAs(ug_hallowed_snow));
+            AddPool(ug_hallowed_bars_snow, 1100);
+            AddPool(hallowed_snow_remix, 101, LocalizeAs(hallowed_snow));
+            AddPool(hallowed_bars_snow_remix, 101);
+            AddPool(ug_hallowed_snow_remix, 1100, LocalizeAs(ug_hallowed_snow));
+            AddPool(ug_hallowed_bars_snow_remix, 1100);
 
-            AddPoolRequirements(hallowed_snow, inMainWorld, hallow125.Invoke(hallowIceBlocks));
-            AddPoolRequirements(hallowed_bars_snow, inMainWorld, hallow125.Invoke(hallowIceBlocks));
-            AddPoolRequirements(ug_hallowed_snow, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowIceBlocks), notremix);
-            AddPoolRequirements(ug_hallowed_bars_snow, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowIceBlocks), notremix);
-            AddPoolRequirements(hallowed_snow_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
-            AddPoolRequirements(hallowed_bars_snow_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
-            AddPoolRequirements(ug_hallowed_snow_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
-            AddPoolRequirements(ug_hallowed_bars_snow_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
+            AddPoolVisibilityRequirements(hallowed_snow, steampunk);
+            AddPoolVisibilityRequirements(hallowed_bars_snow, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_snow, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_bars_snow, steampunk);
+            AddPoolVisibilityRequirements(hallowed_snow_remix, steampunk);
+            AddPoolVisibilityRequirements(hallowed_bars_snow_remix, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_snow_remix, steampunk);
+            AddPoolVisibilityRequirements(ug_hallowed_bars_snow_remix, steampunk);
+
+            AddPoolAccessRequirements(hallowed_snow, hardmodeOnly);
+            AddPoolAccessRequirements(hallowed_bars_snow, postMechs);
+            AddPoolAccessRequirements(ug_hallowed_snow, hardmodeOnly);
+            AddPoolAccessRequirements(ug_hallowed_bars_snow, postMechs);
+            AddPoolAccessRequirements(hallowed_snow_remix, hardmodeOnly);
+            AddPoolAccessRequirements(hallowed_bars_snow_remix, postMechs);
+            AddPoolAccessRequirements(ug_hallowed_snow_remix, hardmodeOnly);
+            AddPoolAccessRequirements(ug_hallowed_bars_snow_remix, postMechs);
+
+            AddPoolWorldChecks(ug_hallowed_snow, notremix);
+            AddPoolWorldChecks(ug_hallowed_bars_snow, notremix);
+            AddPoolWorldChecks(hallowed_snow_remix, remix);
+            AddPoolWorldChecks(hallowed_bars_snow_remix, remix);
+            AddPoolWorldChecks(ug_hallowed_snow_remix, remix);
+            AddPoolWorldChecks(ug_hallowed_bars_snow_remix, remix);
+
+            AddPoolBiomeChecks(hallowed_snow, inMainWorld, hallow125.Invoke(hallowIceBlocks));
+            AddPoolBiomeChecks(hallowed_bars_snow, inMainWorld, hallow125.Invoke(hallowIceBlocks));
+            AddPoolBiomeChecks(ug_hallowed_snow, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowIceBlocks), notremix);
+            AddPoolBiomeChecks(ug_hallowed_bars_snow, inMainWorld, belowSurfaceLayer, hallow125.Invoke(hallowIceBlocks), notremix);
+            AddPoolBiomeChecks(hallowed_snow_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
+            AddPoolBiomeChecks(hallowed_bars_snow_remix, inMainWorld, cavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
+            AddPoolBiomeChecks(ug_hallowed_snow_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
+            AddPoolBiomeChecks(ug_hallowed_bars_snow_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, hallow125.Invoke(hallowIceBlocks), remix);
 
             AddItemInPool(hallowed_snow, ItemID.None, 33);
             AddItemInPool(hallowed_snow, ItemID.SnowBlock, 27);
@@ -1797,19 +1961,35 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupCrimsonBase()
         {
-            AddPool(crimson_forest, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_forest));
-            AddPool(ug_crimson, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson));
-            AddPool(ug_crimson_caverns_hm, 1300, ExtractionTiers.STEAMPUNK);
-            AddPool(crimson_forest_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(crimson_forest));
-            AddPool(ug_crimson_caverns_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson));
-            AddPool(ug_crimson_caverns_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
+            AddPool(crimson_forest, 300, LocalizeAs(crimson_forest));
+            AddPool(ug_crimson, 1300, LocalizeAs(ug_crimson));
+            AddPool(ug_crimson_caverns_hm, 1300);
+            AddPool(crimson_forest_remix, 301, LocalizeAs(crimson_forest));
+            AddPool(ug_crimson_caverns_remix, 1300, LocalizeAs(ug_crimson));
+            AddPool(ug_crimson_caverns_hm_remix, 1300);
 
-            AddPoolRequirements(crimson_forest, inMainWorld, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock));
-            AddPoolRequirements(ug_crimson, inMainWorld, belowSurfaceLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), notremix);
-            AddPoolRequirements(ug_crimson_caverns_hm, inMainWorld, belowSurfaceLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), notremix);
-            AddPoolRequirements(crimson_forest_remix, inMainWorld, cavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), remix);
-            AddPoolRequirements(ug_crimson_caverns_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), remix);
-            AddPoolRequirements(ug_crimson_caverns_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), remix);
+            AddPoolVisibilityRequirements(crimson_forest, demonic);
+            AddPoolVisibilityRequirements(ug_crimson, demonic);
+            AddPoolVisibilityRequirements(ug_crimson_caverns_hm, steampunk);
+            AddPoolVisibilityRequirements(crimson_forest_remix, demonic);
+            AddPoolVisibilityRequirements(ug_crimson_caverns_remix, demonic);
+            AddPoolVisibilityRequirements(ug_crimson_caverns_hm_remix, steampunk);
+
+            AddPoolAccessRequirements(ug_crimson_caverns_hm, hardmodeOnly);
+            AddPoolAccessRequirements(ug_crimson_caverns_hm_remix, hardmodeOnly);
+
+            AddPoolWorldChecks(ug_crimson, notremix);
+            AddPoolWorldChecks(ug_crimson_caverns_hm, notremix);
+            AddPoolWorldChecks(crimson_forest_remix, remix);
+            AddPoolWorldChecks(ug_crimson_caverns_remix, remix);
+            AddPoolWorldChecks(ug_crimson_caverns_hm_remix, remix);
+
+            AddPoolBiomeChecks(crimson_forest, inMainWorld, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock));
+            AddPoolBiomeChecks(ug_crimson, inMainWorld, belowSurfaceLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), notremix);
+            AddPoolBiomeChecks(ug_crimson_caverns_hm, inMainWorld, belowSurfaceLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), notremix);
+            AddPoolBiomeChecks(crimson_forest_remix, inMainWorld, cavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), remix);
+            AddPoolBiomeChecks(ug_crimson_caverns_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), remix);
+            AddPoolBiomeChecks(ug_crimson_caverns_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(crimsonForestBlocks, TileID.FleshBlock), remix);
 
             AddItemInPool(crimson_forest, ItemID.None, 15);
             AddItemInPool(crimson_forest, ItemID.DirtBlock, 26);
@@ -1834,23 +2014,44 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupCrimsonDesert()
         {
-            AddPool(crimson_desert, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_desert));
-            AddPool(crimson_desert_hm, 300, [steampunk, hardmodeOnly]);
-            AddPool(ug_crimson_desert, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_desert));
-            AddPool(ug_crimson_desert_hm, 1300, [steampunk, hardmodeOnly]);
-            AddPool(crimson_desert_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(crimson_desert));
-            AddPool(crimson_desert_hm_remix, 301, [steampunk, hardmodeOnly]);
-            AddPool(ug_crimson_desert_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_desert));
-            AddPool(ug_crimson_desert_hm_remix, 1300, [steampunk, hardmodeOnly]);
+            AddPool(crimson_desert, 300, LocalizeAs(crimson_desert));
+            AddPool(crimson_desert_hm, 300);
+            AddPool(ug_crimson_desert, 1300, LocalizeAs(ug_crimson_desert));
+            AddPool(ug_crimson_desert_hm, 1300);
+            AddPool(crimson_desert_remix, 301, LocalizeAs(crimson_desert));
+            AddPool(crimson_desert_hm_remix, 301);
+            AddPool(ug_crimson_desert_remix, 1300, LocalizeAs(ug_crimson_desert));
+            AddPool(ug_crimson_desert_hm_remix, 1300);
 
-            AddPoolRequirements(crimson_desert, inMainWorld, evil300.Invoke(crimsonSandBlocks));
-            AddPoolRequirements(crimson_desert_hm, inMainWorld, evil300.Invoke(crimsonSandBlocks));
-            AddPoolRequirements(ug_crimson_desert, inMainWorld, belowSurfaceLayer, evil300.Invoke(crimsonSandBlocks), notremix);
-            AddPoolRequirements(ug_crimson_desert_hm, inMainWorld, belowSurfaceLayer, evil300.Invoke(crimsonSandBlocks), notremix);
-            AddPoolRequirements(crimson_desert_remix, inMainWorld, cavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
-            AddPoolRequirements(crimson_desert_hm_remix, inMainWorld, cavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
-            AddPoolRequirements(ug_crimson_desert_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
-            AddPoolRequirements(ug_crimson_desert_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
+            AddPoolVisibilityRequirements(crimson_desert, demonic);
+            AddPoolVisibilityRequirements(crimson_desert_hm, steampunk);
+            AddPoolVisibilityRequirements(ug_crimson_desert, demonic);
+            AddPoolVisibilityRequirements(ug_crimson_desert_hm, steampunk);
+            AddPoolVisibilityRequirements(crimson_desert_remix, demonic);
+            AddPoolVisibilityRequirements(crimson_desert_hm_remix, steampunk);
+            AddPoolVisibilityRequirements(ug_crimson_desert_remix, demonic);
+            AddPoolVisibilityRequirements(ug_crimson_desert_hm_remix, steampunk);
+
+            AddPoolAccessRequirements(crimson_desert_hm, hardmodeOnly);
+            AddPoolAccessRequirements(ug_crimson_desert_hm, hardmodeOnly);
+            AddPoolAccessRequirements(crimson_desert_hm_remix, hardmodeOnly);
+            AddPoolAccessRequirements(ug_crimson_desert_hm_remix, hardmodeOnly);
+
+            AddPoolWorldChecks(ug_crimson_desert, notremix);
+            AddPoolWorldChecks(ug_crimson_desert_hm, notremix);
+            AddPoolWorldChecks(crimson_desert_remix, remix);
+            AddPoolWorldChecks(crimson_desert_hm_remix, remix);
+            AddPoolWorldChecks(ug_crimson_desert_remix, remix);
+            AddPoolWorldChecks(ug_crimson_desert_hm_remix, remix);
+
+            AddPoolBiomeChecks(crimson_desert, inMainWorld, evil300.Invoke(crimsonSandBlocks));
+            AddPoolBiomeChecks(crimson_desert_hm, inMainWorld, evil300.Invoke(crimsonSandBlocks));
+            AddPoolBiomeChecks(ug_crimson_desert, inMainWorld, belowSurfaceLayer, evil300.Invoke(crimsonSandBlocks), notremix);
+            AddPoolBiomeChecks(ug_crimson_desert_hm, inMainWorld, belowSurfaceLayer, evil300.Invoke(crimsonSandBlocks), notremix);
+            AddPoolBiomeChecks(crimson_desert_remix, inMainWorld, cavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
+            AddPoolBiomeChecks(crimson_desert_hm_remix, inMainWorld, cavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
+            AddPoolBiomeChecks(ug_crimson_desert_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
+            AddPoolBiomeChecks(ug_crimson_desert_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonSandBlocks), remix);
 
             AddItemInPool(crimson_desert, ItemID.None, 30);
             AddItemInPool(crimson_desert, ItemID.CrimsandBlock, 40);
@@ -1874,19 +2075,35 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupCrimsonSnow()
         {
-            AddPool(crimson_snow, 300, ExtractionTiers.DEMONIC, LocalizeAs(crimson_snow));
-            AddPool(ug_crimson_snow, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_snow));
-            AddPool(ug_crimson_snow_hm, 1300, ExtractionTiers.STEAMPUNK);
-            AddPool(crimson_snow_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(crimson_snow));
-            AddPool(ug_crimson_snow_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_crimson_snow));
-            AddPool(ug_crimson_snow_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
+            AddPool(crimson_snow, 300, LocalizeAs(crimson_snow));
+            AddPool(ug_crimson_snow, 1300, LocalizeAs(ug_crimson_snow));
+            AddPool(ug_crimson_snow_hm, 1300);
+            AddPool(crimson_snow_remix, 301, LocalizeAs(crimson_snow));
+            AddPool(ug_crimson_snow_remix, 1300, LocalizeAs(ug_crimson_snow));
+            AddPool(ug_crimson_snow_hm_remix, 1300);
 
-            AddPoolRequirements(crimson_snow, inMainWorld, evil300.Invoke(crimsonIceBlocks));
-            AddPoolRequirements(ug_crimson_snow, inMainWorld, belowSurfaceLayer, evil300.Invoke(crimsonIceBlocks), notremix);
-            AddPoolRequirements(ug_crimson_snow_hm, inMainWorld, belowSurfaceLayer, evil300.Invoke(crimsonIceBlocks), notremix);
-            AddPoolRequirements(crimson_snow_remix, inMainWorld, cavernLayer, evil300.Invoke(crimsonIceBlocks), remix);
-            AddPoolRequirements(ug_crimson_snow_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonIceBlocks), remix);
-            AddPoolRequirements(ug_crimson_snow_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonIceBlocks), remix);
+            AddPoolVisibilityRequirements(crimson_snow, demonic);
+            AddPoolVisibilityRequirements(ug_crimson_snow, demonic);
+            AddPoolVisibilityRequirements(ug_crimson_snow_hm, steampunk);
+            AddPoolVisibilityRequirements(crimson_snow_remix, demonic);
+            AddPoolVisibilityRequirements(ug_crimson_snow_remix, demonic);
+            AddPoolVisibilityRequirements(ug_crimson_snow_hm_remix, steampunk);
+
+            AddPoolAccessRequirements(ug_crimson_snow_hm, hardmodeOnly);
+            AddPoolAccessRequirements(ug_crimson_snow_hm_remix, hardmodeOnly);
+
+            AddPoolWorldChecks(ug_crimson_snow, notremix);
+            AddPoolWorldChecks(ug_crimson_snow_hm, notremix);
+            AddPoolWorldChecks(crimson_snow_remix, remix);
+            AddPoolWorldChecks(ug_crimson_snow_remix, remix);
+            AddPoolWorldChecks(ug_crimson_snow_hm_remix, remix);
+
+            AddPoolBiomeChecks(crimson_snow, inMainWorld, evil300.Invoke(crimsonIceBlocks));
+            AddPoolBiomeChecks(ug_crimson_snow, inMainWorld, belowSurfaceLayer, evil300.Invoke(crimsonIceBlocks));
+            AddPoolBiomeChecks(ug_crimson_snow_hm, inMainWorld, belowSurfaceLayer, evil300.Invoke(crimsonIceBlocks));
+            AddPoolBiomeChecks(crimson_snow_remix, inMainWorld, cavernLayer, evil300.Invoke(crimsonIceBlocks));
+            AddPoolBiomeChecks(ug_crimson_snow_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonIceBlocks));
+            AddPoolBiomeChecks(ug_crimson_snow_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(crimsonIceBlocks));
 
             AddItemInPool(crimson_snow, ItemID.None, 30);
             AddItemInPool(crimson_snow, ItemID.SnowBlock, 27);
@@ -1913,23 +2130,44 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupCorruptionBase()
         {
-            AddPool(corrupt_forest, 300, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_forest));
-            AddPool(corrupt_forest_hm, 300, [steampunk, hardmodeOnly]);
-            AddPool(ug_corrupt, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt));
-            AddPool(ug_corrupt_caverns_hm, 1300, ExtractionTiers.STEAMPUNK);
-            AddPool(corrupt_forest_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_forest));
-            AddPool(corrupt_forest_hm_remix, 301, [steampunk, hardmodeOnly]);
-            AddPool(ug_corrupt_caverns_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt));
-            AddPool(ug_corrupt_caverns_hm_remix, 1300, ExtractionTiers.STEAMPUNK);
+            AddPool(corrupt_forest, 300, LocalizeAs(corrupt_forest));
+            AddPool(corrupt_forest_hm, 300);
+            AddPool(ug_corrupt, 1300, LocalizeAs(ug_corrupt));
+            AddPool(ug_corrupt_caverns_hm, 1300);
+            AddPool(corrupt_forest_remix, 301, LocalizeAs(corrupt_forest));
+            AddPool(corrupt_forest_hm_remix, 301);
+            AddPool(ug_corrupt_caverns_remix, 1300, LocalizeAs(ug_corrupt));
+            AddPool(ug_corrupt_caverns_hm_remix, 1300);
 
-            AddPoolRequirements(corrupt_forest, inMainWorld, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
-            AddPoolRequirements(corrupt_forest_hm, inMainWorld, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
-            AddPoolRequirements(ug_corrupt, inMainWorld, belowSurfaceLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), notremix);
-            AddPoolRequirements(ug_corrupt_caverns_hm, inMainWorld, belowSurfaceLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), notremix);
-            AddPoolRequirements(corrupt_forest_remix, inMainWorld, cavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), remix);
-            AddPoolRequirements(corrupt_forest_hm_remix, inMainWorld, cavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), remix);
-            AddPoolRequirements(ug_corrupt_caverns_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), remix);
-            AddPoolRequirements(ug_corrupt_caverns_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock), remix);
+            AddPoolVisibilityRequirements(corrupt_forest, demonic);
+            AddPoolVisibilityRequirements(corrupt_forest_hm, steampunk);
+            AddPoolVisibilityRequirements(ug_corrupt, demonic);
+            AddPoolVisibilityRequirements(ug_corrupt_caverns_hm, steampunk);
+            AddPoolVisibilityRequirements(corrupt_forest_remix, demonic);
+            AddPoolVisibilityRequirements(corrupt_forest_hm_remix, steampunk);
+            AddPoolVisibilityRequirements(ug_corrupt_caverns_remix, demonic);
+            AddPoolVisibilityRequirements(ug_corrupt_caverns_hm_remix, steampunk);
+
+            AddPoolAccessRequirements(corrupt_forest_hm, hardmodeOnly);
+            AddPoolAccessRequirements(ug_corrupt_caverns_hm, hardmodeOnly);
+            AddPoolAccessRequirements(corrupt_forest_hm_remix, hardmodeOnly);
+            AddPoolAccessRequirements(ug_corrupt_caverns_hm_remix, hardmodeOnly);
+
+            AddPoolWorldChecks(ug_corrupt, notremix);
+            AddPoolWorldChecks(ug_corrupt_caverns_hm, notremix);
+            AddPoolWorldChecks(corrupt_forest_remix, remix);
+            AddPoolWorldChecks(corrupt_forest_hm_remix, remix);
+            AddPoolWorldChecks(ug_corrupt_caverns_remix, remix);
+            AddPoolWorldChecks(ug_corrupt_caverns_hm_remix, remix);
+
+            AddPoolBiomeChecks(corrupt_forest, inMainWorld, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
+            AddPoolBiomeChecks(corrupt_forest_hm, inMainWorld, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
+            AddPoolBiomeChecks(ug_corrupt, inMainWorld, belowSurfaceLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
+            AddPoolBiomeChecks(ug_corrupt_caverns_hm, inMainWorld, belowSurfaceLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
+            AddPoolBiomeChecks(corrupt_forest_remix, inMainWorld, cavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
+            AddPoolBiomeChecks(corrupt_forest_hm_remix, inMainWorld, cavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
+            AddPoolBiomeChecks(ug_corrupt_caverns_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
+            AddPoolBiomeChecks(ug_corrupt_caverns_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300a.Invoke(corruptForestBlocks, TileID.LesionBlock));
 
             AddItemInPool(corrupt_forest, ItemID.None, 15);
             AddItemInPool(corrupt_forest, ItemID.DirtBlock, 26);
@@ -1958,23 +2196,44 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupCorruptionDesert()
         {
-            AddPool(corrupt_desert, 300, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_desert));
-            AddPool(corrupt_desert_hm, 300, [steampunk, hardmodeOnly]);
-            AddPool(ug_corrupt_desert, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_desert));
-            AddPool(ug_corrupt_desert_hm, 1300, [steampunk, hardmodeOnly]);
-            AddPool(corrupt_desert_remix, 301, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_desert));
-            AddPool(corrupt_desert_hm_remix, 301, [steampunk, hardmodeOnly]);
-            AddPool(ug_corrupt_desert_remix, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_desert));
-            AddPool(ug_corrupt_desert_hm_remix, 1300, [steampunk, hardmodeOnly]);
+            AddPool(corrupt_desert, 300, LocalizeAs(corrupt_desert));
+            AddPool(corrupt_desert_hm, 300);
+            AddPool(ug_corrupt_desert, 1300, LocalizeAs(ug_corrupt_desert));
+            AddPool(ug_corrupt_desert_hm, 1300);
+            AddPool(corrupt_desert_remix, 301, LocalizeAs(corrupt_desert));
+            AddPool(corrupt_desert_hm_remix, 301);
+            AddPool(ug_corrupt_desert_remix, 1300, LocalizeAs(ug_corrupt_desert));
+            AddPool(ug_corrupt_desert_hm_remix, 1300);
 
-            AddPoolRequirements(corrupt_desert, inMainWorld, evil300.Invoke(corruptSandBlocks));
-            AddPoolRequirements(corrupt_desert_hm, inMainWorld, evil300.Invoke(corruptSandBlocks));
-            AddPoolRequirements(ug_corrupt_desert, inMainWorld, belowSurfaceLayer, evil300.Invoke(corruptSandBlocks), notremix);
-            AddPoolRequirements(ug_corrupt_desert_hm, inMainWorld, belowSurfaceLayer, evil300.Invoke(corruptSandBlocks), notremix);
-            AddPoolRequirements(corrupt_desert_remix, inMainWorld, cavernLayer, evil300.Invoke(corruptSandBlocks), remix);
-            AddPoolRequirements(corrupt_desert_hm_remix, inMainWorld, cavernLayer, evil300.Invoke(corruptSandBlocks), remix);
-            AddPoolRequirements(ug_corrupt_desert_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptSandBlocks), remix);
-            AddPoolRequirements(ug_corrupt_desert_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptSandBlocks), remix);
+            AddPoolVisibilityRequirements(corrupt_desert, demonic);
+            AddPoolVisibilityRequirements(corrupt_desert_hm, steampunk);
+            AddPoolVisibilityRequirements(ug_corrupt_desert, demonic);
+            AddPoolVisibilityRequirements(ug_corrupt_desert_hm, steampunk);
+            AddPoolVisibilityRequirements(corrupt_desert_remix, demonic);
+            AddPoolVisibilityRequirements(corrupt_desert_hm_remix, steampunk);
+            AddPoolVisibilityRequirements(ug_corrupt_desert_remix, demonic);
+            AddPoolVisibilityRequirements(ug_corrupt_desert_hm_remix, steampunk);
+
+            AddPoolAccessRequirements(corrupt_desert_hm, hardmodeOnly);
+            AddPoolAccessRequirements(ug_corrupt_desert_hm, hardmodeOnly);
+            AddPoolAccessRequirements(corrupt_desert_hm_remix, hardmodeOnly);
+            AddPoolAccessRequirements(ug_corrupt_desert_hm_remix, hardmodeOnly);
+
+            AddPoolWorldChecks(ug_corrupt_desert, notremix);
+            AddPoolWorldChecks(ug_corrupt_desert_hm, notremix);
+            AddPoolWorldChecks(corrupt_desert_remix, remix);
+            AddPoolWorldChecks(corrupt_desert_hm_remix, remix);
+            AddPoolWorldChecks(ug_corrupt_desert_remix, remix);
+            AddPoolWorldChecks(ug_corrupt_desert_hm_remix, remix);
+
+            AddPoolBiomeChecks(corrupt_desert, inMainWorld, evil300.Invoke(corruptSandBlocks));
+            AddPoolBiomeChecks(corrupt_desert_hm, inMainWorld, evil300.Invoke(corruptSandBlocks));
+            AddPoolBiomeChecks(ug_corrupt_desert, inMainWorld, belowSurfaceLayer, evil300.Invoke(corruptSandBlocks));
+            AddPoolBiomeChecks(ug_corrupt_desert_hm, inMainWorld, belowSurfaceLayer, evil300.Invoke(corruptSandBlocks));
+            AddPoolBiomeChecks(corrupt_desert_remix, inMainWorld, cavernLayer, evil300.Invoke(corruptSandBlocks));
+            AddPoolBiomeChecks(corrupt_desert_hm_remix, inMainWorld, cavernLayer, evil300.Invoke(corruptSandBlocks));
+            AddPoolBiomeChecks(ug_corrupt_desert_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptSandBlocks));
+            AddPoolBiomeChecks(ug_corrupt_desert_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptSandBlocks));
 
             AddItemInPool(corrupt_desert, ItemID.None, 30);
             AddItemInPool(corrupt_desert, ItemID.EbonsandBlock, 40);
@@ -2000,23 +2259,44 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupCorruptionSnow()
         {
-            AddPool(corrupt_snow, 300, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_snow));
-            AddPool(corrupt_snow_hm, 300, [steampunk, hardmodeOnly]);
-            AddPool(ug_corrupt_snow, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_snow));
-            AddPool(ug_corrupt_snow_hm, 1300, ExtractionTiers.STEAMPUNK);
-            AddPool(corrupt_snow, 301, ExtractionTiers.DEMONIC, LocalizeAs(corrupt_snow));
-            AddPool(corrupt_snow_hm, 301, [steampunk, hardmodeOnly]);
-            AddPool(ug_corrupt_snow, 1300, ExtractionTiers.DEMONIC, LocalizeAs(ug_corrupt_snow));
-            AddPool(ug_corrupt_snow_hm, 1300, ExtractionTiers.STEAMPUNK);
+            AddPool(corrupt_snow, 300, LocalizeAs(corrupt_snow));
+            AddPool(corrupt_snow_hm, 300);
+            AddPool(ug_corrupt_snow, 1300, LocalizeAs(ug_corrupt_snow));
+            AddPool(ug_corrupt_snow_hm, 1300);
+            AddPool(corrupt_snow_remix, 301, LocalizeAs(corrupt_snow));
+            AddPool(corrupt_snow_hm_remix, 301);
+            AddPool(ug_corrupt_snow_remix, 1300, LocalizeAs(ug_corrupt_snow));
+            AddPool(ug_corrupt_snow_hm_remix, 1300);
 
-            AddPoolRequirements(corrupt_snow, inMainWorld, evil300.Invoke(corruptIceBlocks));
-            AddPoolRequirements(corrupt_snow_hm, inMainWorld, evil300.Invoke(corruptIceBlocks));
-            AddPoolRequirements(ug_corrupt_snow, inMainWorld, belowSurfaceLayer, evil300.Invoke(corruptIceBlocks), notremix);
-            AddPoolRequirements(ug_corrupt_snow_hm, inMainWorld, belowSurfaceLayer, evil300.Invoke(corruptIceBlocks), notremix);
-            AddPoolRequirements(corrupt_snow_remix, inMainWorld, cavernLayer, evil300.Invoke(corruptIceBlocks), remix);
-            AddPoolRequirements(corrupt_snow_hm_remix, inMainWorld, cavernLayer, evil300.Invoke(corruptIceBlocks), remix);
-            AddPoolRequirements(ug_corrupt_snow_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptIceBlocks), remix);
-            AddPoolRequirements(ug_corrupt_snow_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptIceBlocks), remix);
+            AddPoolVisibilityRequirements(corrupt_snow, demonic);
+            AddPoolVisibilityRequirements(corrupt_snow_hm, steampunk);
+            AddPoolVisibilityRequirements(ug_corrupt_snow, demonic);
+            AddPoolVisibilityRequirements(ug_corrupt_snow_hm, steampunk);
+            AddPoolVisibilityRequirements(corrupt_snow_remix, demonic);
+            AddPoolVisibilityRequirements(corrupt_snow_hm_remix, steampunk);
+            AddPoolVisibilityRequirements(ug_corrupt_snow_remix, demonic);
+            AddPoolVisibilityRequirements(ug_corrupt_snow_hm_remix, steampunk);
+
+            AddPoolAccessRequirements(corrupt_snow_hm, hardmodeOnly);
+            AddPoolAccessRequirements(ug_corrupt_snow_hm, hardmodeOnly);
+            AddPoolAccessRequirements(corrupt_snow_hm_remix, hardmodeOnly);
+            AddPoolAccessRequirements(ug_corrupt_snow_hm_remix, hardmodeOnly);
+
+            AddPoolWorldChecks(ug_corrupt_snow, notremix);
+            AddPoolWorldChecks(ug_corrupt_snow_hm, notremix);
+            AddPoolWorldChecks(corrupt_snow_remix, remix);
+            AddPoolWorldChecks(corrupt_snow_hm_remix, remix);
+            AddPoolWorldChecks(ug_corrupt_snow_remix, remix);
+            AddPoolWorldChecks(ug_corrupt_snow_hm_remix, remix);
+
+            AddPoolBiomeChecks(corrupt_snow, inMainWorld, evil300.Invoke(corruptIceBlocks));
+            AddPoolBiomeChecks(corrupt_snow_hm, inMainWorld, evil300.Invoke(corruptIceBlocks));
+            AddPoolBiomeChecks(ug_corrupt_snow, inMainWorld, belowSurfaceLayer, evil300.Invoke(corruptIceBlocks), notremix);
+            AddPoolBiomeChecks(ug_corrupt_snow_hm, inMainWorld, belowSurfaceLayer, evil300.Invoke(corruptIceBlocks), notremix);
+            AddPoolBiomeChecks(corrupt_snow_remix, inMainWorld, cavernLayer, evil300.Invoke(corruptIceBlocks), remix);
+            AddPoolBiomeChecks(corrupt_snow_hm_remix, inMainWorld, cavernLayer, evil300.Invoke(corruptIceBlocks), remix);
+            AddPoolBiomeChecks(ug_corrupt_snow_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptIceBlocks), remix);
+            AddPoolBiomeChecks(ug_corrupt_snow_hm_remix, inMainWorld, belowSurfaceLayer, notCavernLayer, evil300.Invoke(corruptIceBlocks), remix);
 
             AddItemInPool(corrupt_snow, ItemID.None, 30);
             AddItemInPool(corrupt_snow, ItemID.SnowBlock, 27);
@@ -2043,7 +2323,7 @@ namespace BiomeExtractorsMod.Common.Database
         {
             AddPool(graveyard, 500, LocalizeAs(graveyard));
 
-            AddPoolRequirements(graveyard, inMainWorld, surfaceLayer, tombstone5);
+            AddPoolBiomeChecks(graveyard, inMainWorld, surfaceLayer, tombstone5);
 
             AddItemInPool(graveyard, ItemID.None, 423);
             AddItemInPool(graveyard, ItemID.Lens, 40);
@@ -2052,19 +2332,24 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupUndergroundStructures()
         {
-            AddPool(shimmer, 3000, ExtractionTiers.DEMONIC, true, LocalizeAs(shimmer));
+            AddPool(shimmer, 3000, true, LocalizeAs(shimmer));
             AddPool(marble, 3000, true, LocalizeAs(marble));
             AddPool(granite, 3000, true, LocalizeAs(granite));
             AddPool(cobweb, 3000, true, LocalizeAs(cobweb));
-            AddPool(spider, 3000, ExtractionTiers.INFERNAL, true);
+            AddPool(spider, 3000, true);
             AddPool(hive, 3000, true, LocalizeAs(hive));
 
-            AddPoolRequirements(shimmer, inMainWorld, shimmer300);
-            AddPoolRequirements(marble, inMainWorld, belowSurfaceLayer, marble150, marble_bg);
-            AddPoolRequirements(granite, inMainWorld, belowSurfaceLayer, granite150, granite_bg);
-            AddPoolRequirements(cobweb, inMainWorld, belowSurfaceLayer, spider_bg);
-            AddPoolRequirements(spider, inMainWorld, belowSurfaceLayer, hardmodeOnly, spider_bg);
-            AddPoolRequirements(hive, inMainWorld, belowSurfaceLayer, hive100, honey100, hive_bg);
+            AddPoolVisibilityRequirements(shimmer, demonic);
+            AddPoolVisibilityRequirements(spider, infernal);
+
+            AddPoolAccessRequirements(spider, hardmodeOnly);
+
+            AddPoolBiomeChecks(shimmer, inMainWorld, shimmer300);
+            AddPoolBiomeChecks(marble, inMainWorld, belowSurfaceLayer, marble150, marble_bg);
+            AddPoolBiomeChecks(granite, inMainWorld, belowSurfaceLayer, granite150, granite_bg);
+            AddPoolBiomeChecks(cobweb, inMainWorld, belowSurfaceLayer, spider_bg);
+            AddPoolBiomeChecks(spider, inMainWorld, belowSurfaceLayer, hardmodeOnly, spider_bg);
+            AddPoolBiomeChecks(hive, inMainWorld, belowSurfaceLayer, hive100, honey100, hive_bg);
 
             AddItemInPool(shimmer, ItemID.Amethyst, 12);
             AddItemInPool(shimmer, ItemID.Topaz, 11);
@@ -2084,17 +2369,29 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupDungeon()
         {
-            AddPool(dungeon, 2000, [demonic, postSkeletron], LocalizeAs(dungeon));
-            AddPool(dungeon_p, 2000, [demonic, postSkeletron]);
-            AddPool(dungeon_g, 2000, [demonic, postSkeletron]);
-            AddPool(dungeon_b, 2000, [demonic, postSkeletron]);
-            AddPool(ectoplasm, 2000, [cyber, postPlantera]);
+            AddPool(dungeon, 2000, LocalizeAs(dungeon));
+            AddPool(dungeon_p, 2000);
+            AddPool(dungeon_g, 2000);
+            AddPool(dungeon_b, 2000);
+            AddPool(ectoplasm, 2000);
 
-            AddPoolRequirements(dungeon, inMainWorld, dungeon250, belowSurfaceLayer, dungeon_bg);
-            AddPoolRequirements(dungeon_p, inMainWorld, dungeon_p250, belowSurfaceLayer, dungeon_bg_p);
-            AddPoolRequirements(dungeon_g, inMainWorld, dungeon_g250, belowSurfaceLayer, dungeon_bg_g);
-            AddPoolRequirements(dungeon_b, inMainWorld, dungeon_b250, belowSurfaceLayer, dungeon_bg_b);
-            AddPoolRequirements(ectoplasm, inMainWorld, dungeon250, belowSurfaceLayer, dungeon_bg);
+            AddPoolVisibilityRequirements(dungeon, demonic);
+            AddPoolVisibilityRequirements(dungeon_p, demonic);
+            AddPoolVisibilityRequirements(dungeon_g, demonic);
+            AddPoolVisibilityRequirements(dungeon_b, demonic);
+            AddPoolVisibilityRequirements(ectoplasm, cyber);
+
+            AddPoolAccessRequirements(dungeon, postSkeletron);
+            AddPoolAccessRequirements(dungeon_p, postSkeletron);
+            AddPoolAccessRequirements(dungeon_g, postSkeletron);
+            AddPoolAccessRequirements(dungeon_b, postSkeletron);
+            AddPoolAccessRequirements(ectoplasm, postPlantera);
+
+            AddPoolBiomeChecks(dungeon, inMainWorld, dungeon250, belowSurfaceLayer, dungeon_bg);
+            AddPoolBiomeChecks(dungeon_p, inMainWorld, dungeon_p250, belowSurfaceLayer, dungeon_bg_p);
+            AddPoolBiomeChecks(dungeon_g, inMainWorld, dungeon_g250, belowSurfaceLayer, dungeon_bg_g);
+            AddPoolBiomeChecks(dungeon_b, inMainWorld, dungeon_b250, belowSurfaceLayer, dungeon_bg_b);
+            AddPoolBiomeChecks(ectoplasm, inMainWorld, dungeon250, belowSurfaceLayer, dungeon_bg);
 
             AddItemInPool(dungeon_p, ItemID.PinkBrick, 6);
             AddItemInPool(dungeon_g, ItemID.GreenBrick, 6);
@@ -2107,9 +2404,11 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupTemple()
         {
-            AddPool(temple, 2000, [cyber, postGolem], LocalizeAs(temple));
+            AddPool(temple, 2000, LocalizeAs(temple));
 
-            AddPoolRequirements(temple, inMainWorld, lihzahrd_bg);
+            AddPoolVisibilityRequirements(temple, cyber);
+            AddPoolAccessRequirements(temple, postGolem);
+            AddPoolBiomeChecks(temple, inMainWorld, lihzahrd_bg);
 
             AddItemInPool(temple, ItemID.None, 48);
             AddItemInPool(temple, ItemID.LihzahrdBrick, 6);
@@ -2120,14 +2419,23 @@ namespace BiomeExtractorsMod.Common.Database
         private void SetupOcean()
         {
             AddPool(ocean, 75, LocalizeAs(ocean));
-            AddPool(pirate, 75, [steampunk, hardmodeOnly]);
+            AddPool(pirate, 75);
             AddPool(ocean_caverns, 10, true);
-            AddPool(pirate_caverns, 10, [steampunk, hardmodeOnly], true);
+            AddPool(pirate_caverns, 10, true);
 
-            AddPoolRequirements(ocean, inMainWorld, water1k, oceanArea);
-            AddPoolRequirements(pirate, inMainWorld, water1k, oceanArea);
-            AddPoolRequirements(ocean_caverns, inMainWorld, purity100, not_world_center.Invoke(0.14f), cavernLayer, remix);
-            AddPoolRequirements(pirate_caverns, inMainWorld, purity100, not_world_center.Invoke(0.14f), cavernLayer, remix);
+            AddPoolVisibilityRequirements(pirate, steampunk);
+            AddPoolVisibilityRequirements(pirate_caverns, steampunk);
+
+            AddPoolAccessRequirements(pirate, hardmodeOnly);
+            AddPoolAccessRequirements(pirate_caverns, hardmodeOnly);
+
+            AddPoolWorldChecks(ocean_caverns, remix);
+            AddPoolWorldChecks(pirate_caverns, remix);
+
+            AddPoolBiomeChecks(ocean, inMainWorld, water1k, oceanArea);
+            AddPoolBiomeChecks(pirate, inMainWorld, water1k, oceanArea);
+            AddPoolBiomeChecks(ocean_caverns, inMainWorld, purity100, not_world_center.Invoke(0.14f), cavernLayer);
+            AddPoolBiomeChecks(pirate_caverns, inMainWorld, purity100, not_world_center.Invoke(0.14f), cavernLayer);
 
             AddItemInPool(ocean, ItemID.None, 84);
             AddItemInPool(ocean, ItemID.SandBlock, 16);
@@ -2152,15 +2460,21 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupUnderworld()
         {
-            AddPool(underworld, 4000, ExtractionTiers.INFERNAL, LocalizeAs(underworld));
-            AddPool(uw_fire, 4000, [scan => scan.MinTier(ExtractionTiers.STEAMPUNK), hardmodeOnly]);
+            AddPool(underworld, 4000, LocalizeAs(underworld));
+            AddPool(uw_fire, 4000);
             AddPool(ash_forest, 4001, LocalizeAs(ash_forest));
-            AddPool(ash_critters, 4001, ExtractionTiers.INFERNAL);
+            AddPool(ash_critters, 4001);
 
-            AddPoolRequirements(underworld, inMainWorld, underworldLayer);
-            AddPoolRequirements(uw_fire, inMainWorld, underworldLayer);
-            AddPoolRequirements(ash_forest, inMainWorld, underworldLayer, world_center.Invoke(0.24f), remix);
-            AddPoolRequirements(ash_critters, inMainWorld, underworldLayer, world_center.Invoke(0.24f), remix);
+            AddPoolVisibilityRequirements(underworld, infernal);
+            AddPoolVisibilityRequirements(uw_fire, steampunk);
+            AddPoolVisibilityRequirements(ash_critters, infernal);
+
+            AddPoolAccessRequirements(uw_fire, hardmodeOnly);
+
+            AddPoolBiomeChecks(underworld, inMainWorld, underworldLayer);
+            AddPoolBiomeChecks(uw_fire, inMainWorld, underworldLayer);
+            AddPoolBiomeChecks(ash_forest, inMainWorld, underworldLayer, world_center.Invoke(0.24f), remix);
+            AddPoolBiomeChecks(ash_critters, inMainWorld, underworldLayer, world_center.Invoke(0.24f), remix);
 
             AddItemInPool(underworld, ItemID.None, 42);
             AddItemInPool(underworld, new ItemEntry(ItemID.AshBlock, 1, 2), 20);
@@ -2185,9 +2499,11 @@ namespace BiomeExtractorsMod.Common.Database
         }
         private void SetupMeteorite()
         {
-            AddPool(meteorite, 10000, ExtractionTiers.INFERNAL, LocalizeAs(meteorite));
+            AddPool(meteorite, 10000, LocalizeAs(meteorite));
 
-            AddPoolRequirements(meteorite, inMainWorld, meteorite75);
+            AddPoolVisibilityRequirements(meteorite, infernal);
+
+            AddPoolBiomeChecks(meteorite, inMainWorld, meteorite75);
 
             AddItemInPool(meteorite, ItemID.None, 2);
             AddItemInPool(meteorite, ItemID.Meteorite);
