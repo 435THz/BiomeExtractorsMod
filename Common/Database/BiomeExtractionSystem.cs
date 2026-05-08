@@ -1159,7 +1159,12 @@ namespace BiomeExtractorsMod.Common.Database
         {
             PoolEntry pool = GetPoolEntry(poolName);
             if (pool == null) return false;
-            _itemPools[poolName].Add(item, weight.Num, weight.Den);
+            _itemPools[pool.Name].Add(item, weight.Num, weight.Den);
+            foreach(string alias in _poolAliases[pool.Name])
+            {
+                if(!_itemToPool.ContainsKey(item.Id)) _itemToPool[item.Id] = new();
+                if(!_itemToPool[item.Id].Contains(pool.Name)) _itemToPool[item.Id].Add(alias);
+            }
             return true;
         }
 
@@ -1177,7 +1182,8 @@ namespace BiomeExtractorsMod.Common.Database
             if (dest == null || src == null) return false;
             foreach (KeyValuePair<ItemEntry, Fraction> pair in _itemPools[poolSource])
             {
-                _itemPools[poolDest].Add(pair);
+                _itemPools[dest.Name].Add(pair);
+                if(!_itemToPool[pair.Key.Id].Contains(dest.Name)) _itemToPool[pair.Key.Id].Add(dest.Name);
             }
             return true;
         }
@@ -1195,7 +1201,17 @@ namespace BiomeExtractorsMod.Common.Database
             PoolEntry dest = GetPoolEntry(poolDest);
             PoolEntry src = GetPoolEntry(poolSource);
             if (dest == null || src == null) return false;
-            _itemPools[poolDest] = _itemPools[poolSource];
+            if (!_poolAliases.ContainsKey(src.Name)) _poolAliases[src.Name] = [src.Name];
+            if (!_poolAliases[src.Name].Contains(dest.Name)) _poolAliases[src.Name].Add(dest.Name);
+            foreach (ItemEntry item in _itemPools[dest.Name].Keys)
+            {
+                _itemToPool[item.Id].Remove(dest.Name);
+            }
+            foreach (ItemEntry item in _itemPools[src.Name].Keys)
+            {
+                if(!_itemToPool[item.Id].Contains(dest.Name)) _itemToPool[item.Id].Add(dest.Name);
+            }
+            _itemPools[dest.Name] = _itemPools[src.Name];
             return true;
         }
 
@@ -1219,11 +1235,17 @@ namespace BiomeExtractorsMod.Common.Database
             PoolEntry pool = GetPoolEntry(poolName);
             if (pool == null) return false;
             bool result = false;
-            foreach (ItemEntry key in _itemPools[poolName].Keys)
+
+            foreach (ItemEntry key in _itemPools[pool.Name].Keys)
             {
                 if (key.Id == itemId)
                 {
-                    result = _itemPools[poolName].Remove(key) || result;
+                    result = _itemPools[pool.Name].Remove(key) || result;
+                    _itemToPool[key.Id].Remove(pool.Name);
+                    foreach(string alias in _poolAliases[pool.Name])
+                    {
+                        _itemToPool[key.Id].Remove(alias);
+                    }
                 }
             }
             return result;
@@ -1238,7 +1260,12 @@ namespace BiomeExtractorsMod.Common.Database
         {
             PoolEntry pool = GetPoolEntry(poolName);
             if (pool == null) return false;
-            return _itemPools[poolName].Remove(item);
+            _itemToPool[item.Id].Remove(pool.Name);
+            foreach(string alias in _poolAliases[pool.Name])
+            {
+                _itemToPool[item.Id].Remove(alias);
+            }
+            return _itemPools[pool.Name].Remove(item);
         }
 
         /// <summary>
@@ -1250,7 +1277,15 @@ namespace BiomeExtractorsMod.Common.Database
         {
             PoolEntry pool = GetPoolEntry(poolName);
             if (pool == null) return false;
-            _itemPools[poolName].Clear();
+            foreach(ItemEntry item in _itemPools[pool.Name].Keys)
+            {
+                _itemToPool[item.Id].Remove(pool.Name);
+                foreach(string alias in _poolAliases[pool.Name])
+                {
+                    _itemToPool[item.Id].Remove(alias);
+                }
+            }
+            _itemPools[pool.Name].Clear();
             return false;
         }
 
@@ -1277,6 +1312,16 @@ namespace BiomeExtractorsMod.Common.Database
                 }
             }
             return found;
+        }
+
+        internal List<PoolEntry> GetPoolsOfItem(short itemId)
+        {
+            List<PoolEntry> ret = new();
+            foreach(string poolId in _itemToPool[itemId])
+            {
+                ret.Add(_poolNames[poolId]);
+            }
+            return ret;
         }
 
         internal Item RollItem(List<PoolEntry> pools)
