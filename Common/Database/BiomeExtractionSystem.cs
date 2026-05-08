@@ -207,6 +207,10 @@ namespace BiomeExtractorsMod.Common.Database
         {
             /// <summary>The pool's identification string.</summary>
             public string Name { get; private set; } = name;
+            /// <summary>Parent pools used for the analyzer and their respective subset localization key.
+            /// If set, this pool will use the parents' localization in the analyzer.
+            /// All pools with the same parent will be packed in the same line.</summary>
+            public Dictionary<string, string> Parents { get; private set; } = new();
             /// <summary>Requirements necessary to detect this pool. This list exists for requirements that are either always
             /// or never met in a world no matter one's position in it, like the remix flag.
             /// If these requirements are not met, this pool will not show up at all in the analyzer.
@@ -246,6 +250,20 @@ namespace BiomeExtractorsMod.Common.Database
             /// <summary>Returns whether or not this pool has a localized name.</summary>
             /// <returns><see langword="true"/> if <c>this.LocalizationKey != null</c>, <see langword="false"/> otherwise.</returns>
             public bool IsLocalized() => LocalizationKey != null;
+            /// <summary>Returns the pool that has been set as this pool's parent.</summary>
+            /// <returns>A different PoolEntry if a parent was registered, <see langword="this"/> PoolEntry otherwise</returns>
+            public List<PoolEntry> GetParentPools() => Parents.Count>0? Parents.Keys.Select((id, _)=> Instance.GetPoolEntry(id)).ToList() : [this];
+            /// <summary>
+            /// Registers a new parent for this pool, along with its subset localization key.
+            /// A subset localization key is a localization key used by the analyzer to display
+            /// additional requirements that need to be met in order to extract from this pool.
+            /// </summary>
+            /// <param name="parentId">The id of the pool that will be registered as parent.</param>
+            /// <param name="subsetLocalizationKey">The subset localization key to be stored for this parent.</param>
+            public void AddParentPool(string parentId, string subsetLocalizationKey)
+            {
+                Parents[parentId] = subsetLocalizationKey;
+            }
 
             /// <summary>
             /// An identifier object that details an item pool's name and behavior.
@@ -569,6 +587,22 @@ namespace BiomeExtractorsMod.Common.Database
         public static readonly string pirate_caverns = "pirate_caverns";
         public static readonly string ash_forest = "ash_forest";
         public static readonly string ash_critters = "ash_critters";
+
+        // subelements
+        public static readonly string town = "town";
+        public static readonly string post_evil = "post_evil";
+        public static readonly string in_hardmode = "in_hardmode";
+        public static readonly string post_mech = "post_mech";
+        public static readonly string post_mechs = "post_mechs";
+        public static readonly string post_pillars = "post_pillars";
+        public static readonly string post_moon_lord = "post_moon_lord";
+        public static readonly string pink = "pink";
+        public static readonly string green = "green";
+        public static readonly string blue = "blue";
+        public static readonly string post_plantera = "post_plantera";
+        public static readonly string center = "center";
+        public static readonly string not_center = "not_center";
+        public static readonly string not_center_hardmode = "not_center_hardmode";
         #endregion
 
         #region Checks
@@ -903,6 +937,34 @@ namespace BiomeExtractorsMod.Common.Database
             bool found = GetPoolEntry(newPool.Name, out PoolEntry pool);
             if (!found) return false;
             _poolNames[pool.Name] = newPool;
+            return true;
+        }
+        /// <summary>
+        /// Registers a new parent for the given pool, along with its subset localization key.
+        /// A subset localization key is a localization key used by the analyzer to display
+        /// additional requirements that need to be met in order to extract from this pool.
+        /// </summary>
+        /// <param name="pool">The pool to register a new parent for.</param>
+        /// <param name="parent">The pool that will be registered as parent.</param>
+        /// <param name="subsetLocalizationKey">The subset localization key to be stored for this parent.</param>
+        public void AddPoolParent(PoolEntry pool, PoolEntry parent, string subsetLocalizationKey = "")
+        {
+            pool.AddParentPool(parent.Name, subsetLocalizationKey);
+        }
+        /// <summary>
+        /// Registers a new parent for the given pool, along with its subset localization key.
+        /// A subset localization key is a localization key used by the analyzer to display
+        /// additional requirements that need to be met in order to extract from this pool.
+        /// </summary>
+        /// <param name="poolId">The id of the pool to register a new parent for.</param>
+        /// <param name="parentId">The id of the pool that will be registered as parent.</param>
+        /// <param name="subsetLocalizationKey">The subset localization key to be stored for this parent.</param>
+            
+        public bool AddPoolParent(string poolId, string parentId, string subsetLocalizationKey = "")
+        {
+            bool found = GetPoolEntry(poolId, out PoolEntry pool);
+            if (!found) return false;
+            pool.AddParentPool(parentId, subsetLocalizationKey);
             return true;
         }
         /// <summary>
@@ -1283,12 +1345,20 @@ namespace BiomeExtractorsMod.Common.Database
                 {
                     var txt = Language.GetOrRegister(pool.LocalizationKey, () => pool.Name);
                 }
+                foreach(KeyValuePair<string, string> parent_entry in pool.Parents)
+                {
+                    if(!parent_entry.Value.IsWhiteSpace())
+                    {
+                        var txt = Language.GetOrRegister(parent_entry.Value, () => parent_entry.Value);
+                    }
+                }
             }
         }
         #endregion
 
         #region Database Setup
         internal static string LocalizeAs(string suffix) => $"{BiomeExtractorsMod.LocPoolNames}.{suffix}";
+        internal static string SubLocalizeAs(string suffix) => $"{BiomeExtractorsMod.LocSubPoolNames}.{suffix}";
 
         /// <summary>
         /// Clears all data registered in the mod, including all pools, tiers, requirements and items.<br/>
@@ -1356,6 +1426,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(forest, 0, LocalizeAs(forest));
             AddPool(forest_town, 0);
 
+            AddPoolParent(forest_town, forest, town);
+
             AddPoolVisibilityRequirements(forest, basic);
             AddPoolVisibilityRequirements(forest_town, basic);
 
@@ -1402,6 +1474,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(underground, 10, LocalizeAs(underground));
             AddPool(caverns_remix, 10, LocalizeAs(caverns_remix));
             AddPool(cavern_town_remix, 10);
+
+            AddPoolParent(cavern_town_remix, caverns_remix, town);
 
             AddPoolWorldChecks(underground, notremix);
             AddPoolWorldChecks(caverns_remix, remix);
@@ -1496,6 +1570,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(evil_ores, 10, true);
             AddPool(hm_ores, 10, true);
 
+            AddPoolParent(evil_ores, underground); //this one should not have other indications
+            AddPoolParent(evil_ores, caverns, SubLocalizeAs(post_evil));
+            AddPoolParent(hm_ores, underground, SubLocalizeAs(in_hardmode));
+            AddPoolParent(hm_ores, caverns, SubLocalizeAs(in_hardmode));
+
             AddPoolVisibilityRequirements(evil_ores, demonic);
             AddPoolVisibilityRequirements(hm_ores, steampunk);
 
@@ -1521,6 +1600,9 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_desert_remix, 1050, LocalizeAs(ug_desert));
             AddPool(ug_desert_hm, 1050);
             AddPool(ug_desert_hm_remix, 1050);
+
+            AddPoolParent(ug_desert_hm, ug_desert, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_desert_hm_remix, ug_desert_remix, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(ug_desert_hm, steampunk);
             AddPoolVisibilityRequirements(ug_desert_hm_remix, steampunk);
@@ -1604,6 +1686,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(life_fruit, 1050);
             AddPool(chlorophyte, 1050);
 
+            AddPoolParent(shells, jungle, in_hardmode);
+            AddPoolParent(ug_shells, ug_jungle, in_hardmode);
+            AddPoolParent(life_fruit, ug_jungle, post_mech);
+            AddPoolParent(chlorophyte, ug_jungle, post_mechs);
+
             AddPoolVisibilityRequirements(shells, steampunk);
             AddPoolVisibilityRequirements(ug_shells, steampunk);
             AddPoolVisibilityRequirements(life_fruit, steampunk);
@@ -1660,6 +1747,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(pillar, 4000);
             AddPool(luminite, 4000);
 
+            AddPoolParent(flight, sky, in_hardmode);
+            AddPoolParent(spc_flight, space, in_hardmode);
+            AddPoolParent(pillar, space, post_pillars);
+            AddPoolParent(luminite, space, post_moon_lord);
+
             AddPoolVisibilityRequirements(flight, steampunk);
             AddPoolVisibilityRequirements(spc_flight, steampunk);
             AddPoolVisibilityRequirements(pillar, lunar);
@@ -1703,6 +1795,9 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(mushroom_remix, 201, LocalizeAs(ug_mushroom));
             AddPool(ug_mushroom_remix, 1200, LocalizeAs(ug_mushroom));
             AddPool(truffle_worm_remix, 1200);
+
+            AddPoolParent(truffle_worm, ug_mushroom, in_hardmode);
+            AddPoolParent(truffle_worm_remix, ug_mushroom_remix, in_hardmode);
 
             AddPoolVisibilityRequirements(truffle_worm, steampunk);
             AddPoolVisibilityRequirements(truffle_worm_remix, steampunk);
@@ -1756,6 +1851,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(hallowed_bars_forest_remix, 101);
             AddPool(ug_hallowed_caverns_remix, 1100, LocalizeAs(ug_hallowed));
             AddPool(ug_hallowed_bars_remix, 1100);
+
+            AddPoolParent(hallowed_bars_forest, hallowed_forest, post_mechs);
+            AddPoolParent(ug_hallowed_bars, ug_hallowed, post_mechs);
+            AddPoolParent(hallowed_bars_forest_remix, hallowed_forest_remix, post_mechs);
+            AddPoolParent(ug_hallowed_bars_remix, ug_hallowed_caverns_remix, post_mechs);
 
             AddPoolVisibilityRequirements(hallowed_forest, steampunk);
             AddPoolVisibilityRequirements(hallowed_bars_forest, steampunk);
@@ -1829,6 +1929,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_hallowed_desert_remix, 1100, LocalizeAs(ug_hallowed_desert));
             AddPool(ug_hallowed_bars_desert_remix, 1100);
 
+            AddPoolParent(hallowed_bars_desert, hallowed_desert, in_hardmode);
+            AddPoolParent(ug_hallowed_bars_desert, ug_hallowed_desert, in_hardmode);
+            AddPoolParent(hallowed_bars_desert_remix, hallowed_desert_remix, in_hardmode);
+            AddPoolParent(ug_hallowed_bars_desert_remix, ug_hallowed_desert_remix, in_hardmode);
+
             AddPoolVisibilityRequirements(hallowed_desert, steampunk);
             AddPoolVisibilityRequirements(hallowed_bars_desert, steampunk);
             AddPoolVisibilityRequirements(ug_hallowed_desert, steampunk);
@@ -1897,6 +2002,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(hallowed_bars_snow_remix, 101);
             AddPool(ug_hallowed_snow_remix, 1100, LocalizeAs(ug_hallowed_snow));
             AddPool(ug_hallowed_bars_snow_remix, 1100);
+
+            AddPoolParent(hallowed_bars_snow, hallowed_snow, in_hardmode);
+            AddPoolParent(ug_hallowed_bars_snow, ug_hallowed_snow, in_hardmode);
+            AddPoolParent(hallowed_bars_snow_remix, hallowed_snow_remix, in_hardmode);
+            AddPoolParent(ug_hallowed_bars_snow_remix, ug_hallowed_snow_remix, in_hardmode);
 
             AddPoolVisibilityRequirements(hallowed_snow, steampunk);
             AddPoolVisibilityRequirements(hallowed_bars_snow, steampunk);
@@ -1968,6 +2078,9 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_crimson_caverns_remix, 1300, LocalizeAs(ug_crimson));
             AddPool(ug_crimson_caverns_hm_remix, 1300);
 
+            AddPoolParent(ug_crimson_caverns_hm, ug_crimson, in_hardmode);
+            AddPoolParent(ug_crimson_caverns_hm_remix, ug_crimson_caverns_remix, in_hardmode);
+
             AddPoolVisibilityRequirements(crimson_forest, demonic);
             AddPoolVisibilityRequirements(ug_crimson, demonic);
             AddPoolVisibilityRequirements(ug_crimson_caverns_hm, steampunk);
@@ -2022,6 +2135,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(crimson_desert_hm_remix, 301);
             AddPool(ug_crimson_desert_remix, 1300, LocalizeAs(ug_crimson_desert));
             AddPool(ug_crimson_desert_hm_remix, 1300);
+
+            AddPoolParent(crimson_desert_hm, crimson_desert, in_hardmode);
+            AddPoolParent(ug_crimson_desert_hm, ug_crimson_desert, in_hardmode);
+            AddPoolParent(crimson_desert_hm_remix, crimson_desert_remix, in_hardmode);
+            AddPoolParent(ug_crimson_desert_hm_remix, ug_crimson_desert_remix, in_hardmode);
 
             AddPoolVisibilityRequirements(crimson_desert, demonic);
             AddPoolVisibilityRequirements(crimson_desert_hm, steampunk);
@@ -2082,6 +2200,9 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_crimson_snow_remix, 1300, LocalizeAs(ug_crimson_snow));
             AddPool(ug_crimson_snow_hm_remix, 1300);
 
+            AddPoolParent(ug_crimson_snow_hm, ug_crimson_snow, in_hardmode);
+            AddPoolParent(ug_crimson_snow_hm_remix, ug_crimson_snow_remix, in_hardmode);
+
             AddPoolVisibilityRequirements(crimson_snow, demonic);
             AddPoolVisibilityRequirements(ug_crimson_snow, demonic);
             AddPoolVisibilityRequirements(ug_crimson_snow_hm, steampunk);
@@ -2138,6 +2259,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(corrupt_forest_hm_remix, 301);
             AddPool(ug_corrupt_caverns_remix, 1300, LocalizeAs(ug_corrupt));
             AddPool(ug_corrupt_caverns_hm_remix, 1300);
+
+            AddPoolParent(corrupt_forest_hm, corrupt_forest, in_hardmode);
+            AddPoolParent(ug_corrupt_caverns_hm, ug_corrupt, in_hardmode);
+            AddPoolParent(corrupt_forest_hm_remix, corrupt_forest_remix, in_hardmode);
+            AddPoolParent(ug_corrupt_caverns_hm_remix, ug_corrupt_caverns_remix, in_hardmode);
 
             AddPoolVisibilityRequirements(corrupt_forest, demonic);
             AddPoolVisibilityRequirements(corrupt_forest_hm, steampunk);
@@ -2205,6 +2331,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_corrupt_desert_remix, 1300, LocalizeAs(ug_corrupt_desert));
             AddPool(ug_corrupt_desert_hm_remix, 1300);
 
+            AddPoolParent(corrupt_desert_hm, corrupt_desert, in_hardmode);
+            AddPoolParent(ug_corrupt_desert_hm, ug_corrupt_desert, in_hardmode);
+            AddPoolParent(corrupt_desert_hm_remix, corrupt_desert_remix, in_hardmode);
+            AddPoolParent(ug_corrupt_desert_hm_remix, ug_corrupt_desert_remix, in_hardmode);
+
             AddPoolVisibilityRequirements(corrupt_desert, demonic);
             AddPoolVisibilityRequirements(corrupt_desert_hm, steampunk);
             AddPoolVisibilityRequirements(ug_corrupt_desert, demonic);
@@ -2267,6 +2398,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(corrupt_snow_hm_remix, 301);
             AddPool(ug_corrupt_snow_remix, 1300, LocalizeAs(ug_corrupt_snow));
             AddPool(ug_corrupt_snow_hm_remix, 1300);
+
+            AddPoolParent(corrupt_snow_hm, corrupt_snow, in_hardmode);
+            AddPoolParent(ug_corrupt_snow_hm, ug_corrupt_snow, in_hardmode);
+            AddPoolParent(corrupt_snow_hm_remix, corrupt_snow_remix, in_hardmode);
+            AddPoolParent(ug_corrupt_snow_hm_remix, ug_corrupt_snow_remix, in_hardmode);
 
             AddPoolVisibilityRequirements(corrupt_snow, demonic);
             AddPoolVisibilityRequirements(corrupt_snow_hm, steampunk);
@@ -2339,6 +2475,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(spider, 3000, true);
             AddPool(hive, 3000, true, LocalizeAs(hive));
 
+            AddPoolParent(spider, cobweb, in_hardmode);
+
             AddPoolVisibilityRequirements(shimmer, demonic);
             AddPoolVisibilityRequirements(spider, infernal);
 
@@ -2374,6 +2512,11 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(dungeon_g, 2000);
             AddPool(dungeon_b, 2000);
             AddPool(ectoplasm, 2000);
+
+            AddPoolParent(dungeon_p, dungeon, pink);
+            AddPoolParent(dungeon_g, dungeon, green);
+            AddPoolParent(dungeon_b, dungeon, blue);
+            AddPoolParent(ectoplasm, dungeon, post_plantera);
 
             AddPoolVisibilityRequirements(dungeon, demonic);
             AddPoolVisibilityRequirements(dungeon_p, demonic);
@@ -2423,6 +2566,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ocean_caverns, 10, true);
             AddPool(pirate_caverns, 10, true);
 
+            AddPoolParent(pirate, ocean, in_hardmode);
+            AddPoolParent(ocean_caverns, caverns_remix, not_center);
+            AddPoolParent(pirate_caverns, caverns_remix, not_center_hardmode);
+
             AddPoolVisibilityRequirements(pirate, steampunk);
             AddPoolVisibilityRequirements(pirate_caverns, steampunk);
 
@@ -2464,6 +2611,9 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(uw_fire, 4000);
             AddPool(ash_forest, 4001, LocalizeAs(ash_forest));
             AddPool(ash_critters, 4001);
+
+            AddPoolParent(uw_fire, underworld, in_hardmode);
+            AddPoolParent(ash_critters, ash_forest, center);
 
             AddPoolVisibilityRequirements(underworld, infernal);
             AddPoolVisibilityRequirements(uw_fire, steampunk);

@@ -128,6 +128,27 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         public static readonly string ug_astral_ore_snow = "ug_astral_ore_snow";
         public static readonly string ug_astral_desert = "ug_astral_desert";
         public static readonly string ug_astral_ore_desert = "ug_astral_ore_desert";
+
+        //subelements
+        public static readonly string post_acid_rain_key = "post_acid_rain";
+        public static readonly string post_evil2_key = "post_evil2";
+        public static readonly string post_cryogen_key = "post_cryogen";
+        public static readonly string post_aq_scourge_key = "post_aq_scourge";
+        public static readonly string post_acid_rain2_key = "post_acid_rain2";
+        public static readonly string post_plantera_key = "post_plantera";
+        public static readonly string post_golem_key = "post_golem";
+        public static readonly string post_leviathan_key = "post_leviathan";
+        public static readonly string post_moon_lord_key = BiomeExtractionSystem.post_moon_lord;
+        public static readonly string post_providence_key = "post_providence";
+        public static readonly string post_deus_key = "post_deus";
+        public static readonly string post_polterghast_key = "post_polterghast";
+        public static readonly string forest_post_cal_clone_key = "forest_post_cal_clone";
+        public static readonly string forest_post_dog_key = "forest_post_dog";
+        public static readonly string cold_post_dog_key = "cold_post_dog";
+        public static readonly string evil_post_dog_key = "evil_post_dog";
+        public static readonly string post_yharon_key = "post_yharon";
+        public static readonly string post_exo_key = "post_exo";
+        public static readonly string post_swc_key = "post_swc";
         #endregion
 
         #region Checks
@@ -254,6 +275,11 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(caverns_pla_remix, 10, true);
             BES.AddPool(caverns_yhr_remix, 10, true);
 
+            BES.AddPoolParent(caverns_pla, caverns, post_plantera_key);
+            BES.AddPoolParent(caverns_yhr, caverns, post_yharon_key);
+            BES.AddPoolParent(caverns_pla_remix, caverns_remix, post_plantera_key);
+            BES.AddPoolParent(caverns_yhr_remix, caverns_remix, post_yharon_key);
+
             BES.AddPoolVisibilityRequirements(caverns_pla, cyber);
             BES.AddPoolVisibilityRequirements(caverns_yhr, auric);
             BES.AddPoolVisibilityRequirements(caverns_pla_remix, cyber);
@@ -292,6 +318,13 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(snow_hm_remix, 50);
             BES.AddPool(ug_snow_hm_remix, 1050);
             BES.AddPool(ug_snow_cryo_remix, 1050);
+
+            BES.AddPoolParent(snow_hm, snow, in_hardmode);
+            BES.AddPoolParent(ug_snow_hm, ug_snow, in_hardmode);
+            BES.AddPoolParent(ug_snow_cryo, ug_snow, post_cryogen_key);
+            BES.AddPoolParent(snow_hm_remix, snow, in_hardmode);
+            BES.AddPoolParent(ug_snow_hm_remix, ug_snow, in_hardmode);
+            BES.AddPoolParent(ug_snow_cryo_remix, ug_snow, post_cryogen_key);
 
             BES.AddPoolVisibilityRequirements(snow_hm, steampunk);
             BES.AddPoolVisibilityRequirements(ug_snow_hm, steampunk);
@@ -336,6 +369,11 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(ug_jungle_glm, 1050);
             BES.AddPool(ug_jungle_prv, 1050);
 
+            BES.AddPoolParent(jungle_glm, jungle, post_golem_key);
+            BES.AddPoolParent(jungle_ml, jungle, post_moon_lord_key);
+            BES.AddPoolParent(ug_jungle_glm, ug_jungle_glm, post_golem_key);
+            BES.AddPoolParent(ug_jungle_prv, ug_jungle_prv, post_providence_key);
+
             BES.AddPoolVisibilityRequirements(jungle_glm, cyber);
             BES.AddPoolVisibilityRequirements(jungle_ml, ethereal);
             BES.AddPoolVisibilityRequirements(ug_jungle_glm, cyber);
@@ -377,6 +415,13 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(hallowed_forest_ml_remix, 100);
             BES.AddPool(hallowed_desert_ml_remix, 100);
             BES.AddPool(hallowed_snow_ml_remix, 100);
+
+            BES.AddPoolParent(hallowed_forest_ml, hallowed_forest, post_moon_lord_key);
+            BES.AddPoolParent(hallowed_desert_ml, hallowed_desert, post_moon_lord_key);
+            BES.AddPoolParent(hallowed_snow_ml, hallowed_snow, post_moon_lord_key);
+            BES.AddPoolParent(hallowed_forest_ml_remix, hallowed_forest_remix, post_moon_lord_key);
+            BES.AddPoolParent(hallowed_desert_ml_remix, hallowed_desert_remix, post_moon_lord_key);
+            BES.AddPoolParent(hallowed_snow_ml_remix, hallowed_snow_remix, post_moon_lord_key);
 
             BES.AddPoolVisibilityRequirements(hallowed_forest_ml, ethereal);
             BES.AddPoolVisibilityRequirements(hallowed_desert_ml, ethereal);
@@ -433,6 +478,13 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(ug_hallowed_ore_desert_remix, 1100);
             BES.AddPool(ug_hallowed_ore_snow_remix, 1100);
 
+            BES.AddPoolParent(ug_hallowed_ore, ug_hallowed, post_mechs);
+            BES.AddPoolParent(ug_hallowed_ore_desert, ug_hallowed_desert, post_mechs);
+            BES.AddPoolParent(ug_hallowed_ore_snow, ug_hallowed_snow, post_mechs);
+            BES.AddPoolParent(ug_hallowed_ore_remix, ug_hallowed_caverns_remix, post_mechs);
+            BES.AddPoolParent(ug_hallowed_ore_desert_remix, ug_hallowed_desert_remix, post_mechs);
+            BES.AddPoolParent(ug_hallowed_ore_snow_remix, ug_hallowed_snow_remix, post_mechs);
+
             BES.AddPoolVisibilityRequirements(ug_hallowed_ore, steampunk);
             BES.AddPoolVisibilityRequirements(ug_hallowed_ore_desert, steampunk);
             BES.AddPoolVisibilityRequirements(ug_hallowed_ore_snow, steampunk);
@@ -477,6 +529,12 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(graveyard_dog_cold, 500);
             BES.AddPool(graveyard_dog_evil, 500);
 
+            BES.AddPoolParent(graveyard_infernal, graveyard);
+            BES.AddPoolParent(graveyard_cal_clone, graveyard, forest_post_cal_clone_key);
+            BES.AddPoolParent(graveyard_dog, graveyard, forest_post_dog_key);
+            BES.AddPoolParent(graveyard_dog_cold, graveyard, cold_post_dog_key);
+            BES.AddPoolParent(graveyard_dog_evil, graveyard, evil_post_dog_key);
+
             BES.AddPoolVisibilityRequirements(graveyard_infernal, demonic);
             BES.AddPoolVisibilityRequirements(graveyard_cal_clone, steampunk);
             BES.AddPoolVisibilityRequirements(graveyard_dog, spectral);
@@ -504,6 +562,8 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         {
             BES.AddPool(dungeon_ml, 2000);
 
+            BES.AddPoolParent(dungeon_ml, dungeon, post_moon_lord_key);
+
             BES.AddPoolVisibilityRequirements(dungeon_ml, ethereal);
             BES.AddPoolAccessRequirements(dungeon_ml, post_moon_lord);
             BES.AddPoolBiomeChecks(dungeon_ml, dungeon250, belowSurfaceLayer, dungeon_bg);
@@ -516,6 +576,11 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(space_hm, 4000);
             BES.AddPool(space_ml, 4000);
             BES.AddPool(space_exo, 4000);
+
+            BES.AddPoolParent(space_evil2, space, post_evil2_key);
+            BES.AddPoolParent(space_hm, space, in_hardmode);
+            BES.AddPoolParent(space_ml, space, post_moon_lord_key);
+            BES.AddPoolParent(space_exo, space, post_exo_key);
 
             BES.AddPoolVisibilityRequirements(space_evil2, infernal);
             BES.AddPoolVisibilityRequirements(space_hm, steampunk);
@@ -542,6 +607,8 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
         {
             BES.AddPool(underworld_ml, 4000);
 
+            BES.AddPoolParent(underworld_ml, underworld, post_moon_lord_key);
+
             BES.AddPoolVisibilityRequirements(underworld_ml, ethereal);
             BES.AddPoolAccessRequirements(underworld_ml, post_moon_lord);
             BES.AddPoolBiomeChecks(underworld_ml, underworldLayer);
@@ -555,6 +622,9 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(astral_ore_forest, 350);
             BES.AddPool(ug_astral_forest, 1050, LocalizeAs(ug_astral_forest));
             BES.AddPool(ug_astral_ore_forest, 1050);
+
+            BES.AddPoolParent(astral_ore_forest, astral_forest, post_deus_key);
+            BES.AddPoolParent(ug_astral_ore_forest, ug_astral_forest, post_deus_key);
 
             BES.AddPoolVisibilityRequirements(astral_forest, steampunk);
             BES.AddPoolVisibilityRequirements(astral_ore_forest, lunar);
@@ -598,6 +668,9 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(ug_astral_desert, 1050, LocalizeAs(ug_astral_desert));
             BES.AddPool(ug_astral_ore_desert, 1050);
 
+            BES.AddPoolParent(astral_ore_desert, astral_desert, post_deus_key);
+            BES.AddPoolParent(ug_astral_ore_desert, ug_astral_desert, post_deus_key);
+
             BES.AddPoolVisibilityRequirements(astral_desert, steampunk);
             BES.AddPoolVisibilityRequirements(astral_ore_desert, lunar);
             BES.AddPoolVisibilityRequirements(ug_astral_desert, steampunk);
@@ -637,6 +710,9 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(ug_astral_snow, 1050, LocalizeAs(ug_astral_snow));
             BES.AddPool(ug_astral_ore_snow, 1050);
 
+            BES.AddPoolParent(astral_ore_snow, astral_snow, post_deus_key);
+            BES.AddPoolParent(ug_astral_ore_snow, ug_astral_snow, post_deus_key);
+
             BES.AddPoolVisibilityRequirements(astral_snow, steampunk);
             BES.AddPoolVisibilityRequirements(astral_ore_snow, lunar);
             BES.AddPoolVisibilityRequirements(ug_astral_snow, steampunk);
@@ -675,6 +751,8 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(sunken_sea, 1050, LocalizeAs(sunken_sea));
             BES.AddPool(sunken_sea_hm, 1050);
 
+            BES.AddPoolParent(sunken_sea_hm, sunken_sea, in_hardmode);
+
             BES.AddPoolVisibilityRequirements(sunken_sea_hm, infernal);
             BES.AddPoolAccessRequirements(sunken_sea_hm, hardmodeOnly);
 
@@ -701,6 +779,12 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(sulphur_sea_as, 2600);
             BES.AddPool(acid_rain_as, 2600);
             BES.AddPool(sulphur_sea_ml, 2600);
+
+            BES.AddPoolParent(astral_ore_desert, sulphur_sea, post_acid_rain_key);
+            BES.AddPoolParent(sulphur_sea_hm, sulphur_sea, in_hardmode);
+            BES.AddPoolParent(sulphur_sea_as, sulphur_sea, post_aq_scourge_key);
+            BES.AddPoolParent(acid_rain_as, sulphur_sea, post_acid_rain2_key);
+            BES.AddPoolParent(sulphur_sea_ml, sulphur_sea, post_moon_lord_key);
 
             BES.AddPoolVisibilityRequirements(sulphur_sea, demonic);
             BES.AddPoolVisibilityRequirements(acid_rain, demonic);
@@ -744,6 +828,11 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(brimstone_crag_prv, 4100);
             BES.AddPool(brimstone_crag_swc, 4100);
 
+            BES.AddPoolParent(brimstone_crag_hm, brimstone_crag, in_hardmode);
+            BES.AddPoolParent(brimstone_crag_mch, brimstone_crag);
+            BES.AddPoolParent(brimstone_crag_prv, brimstone_crag, post_providence_key);
+            BES.AddPoolParent(brimstone_crag_swc, brimstone_crag, post_swc_key);
+
             BES.AddPoolVisibilityRequirements(brimstone_crag, infernal);
             BES.AddPoolVisibilityRequirements(brimstone_crag_hm, infernal);
             BES.AddPoolVisibilityRequirements(brimstone_crag_mch, steampunk);
@@ -782,6 +871,8 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(sulphur_depths, 25000, LocalizeAs(sulphur_depths));
             BES.AddPool(sulphur_depths_lev, 25000);
 
+            BES.AddPoolParent(sulphur_depths_lev, sulphur_depths, post_leviathan_key);
+
             BES.AddPoolVisibilityRequirements(sulphur_depths, demonic);
             BES.AddPoolVisibilityRequirements(sulphur_depths_lev, demonic);
 
@@ -801,6 +892,8 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(murky_waters, 25001, LocalizeAs(murky_waters));
             BES.AddPool(murky_waters_lev, 25001);
             BES.AddPool(murky_waters_glm, 25001);
+
+            BES.AddPoolParent(murky_waters_lev, murky_waters, post_leviathan_key);
 
             BES.AddPoolVisibilityRequirements(murky_waters, infernal);
             BES.AddPoolVisibilityRequirements(murky_waters_lev, infernal);
@@ -830,6 +923,10 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(thermal_vents_pla, 25002);
             BES.AddPool(thermal_vents_lev, 25002);
             BES.AddPool(thermal_vents_glm, 25002);
+
+            BES.AddPoolParent(thermal_vents_pla, thermal_vents, post_plantera_key);
+            BES.AddPoolParent(murky_waters_lev, thermal_vents, post_leviathan_key);
+            BES.AddPoolParent(thermal_vents_glm, thermal_vents, post_golem_key);
 
             BES.AddPoolVisibilityRequirements(thermal_vents, cyber);
             BES.AddPoolVisibilityRequirements(thermal_vents_pla, cyber);
@@ -862,6 +959,10 @@ namespace BiomeExtractorsMod.Calamity.Common.Database
             BES.AddPool(the_void_pla, 25003);
             BES.AddPool(the_void_lev, 25003);
             BES.AddPool(the_void_pgh, 25003);
+
+            BES.AddPoolParent(the_void_pla, the_void, post_plantera_key);
+            BES.AddPoolParent(the_void_lev, the_void, post_leviathan_key);
+            BES.AddPoolParent(the_void_pgh, the_void, post_polterghast_key);
 
             BES.AddPoolVisibilityRequirements(the_void, spectral);
             BES.AddPoolVisibilityRequirements(the_void_pla, spectral);
