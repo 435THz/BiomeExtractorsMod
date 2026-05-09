@@ -821,6 +821,12 @@ Text: {
 		Exo: "{$BiomeExtractorsMod.Text.Articles.Infernal}"
 	}
 
+	Analyzer: {
+		Empty: Put an item in the slot above to analyze.
+		NoExtractions: This item cannot be extracted.
+		Obfuscated: ???
+	}
+
 	#Calamity
 	Tiers.Exo: Exo Extractor
 }
