@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
@@ -18,10 +19,17 @@ namespace BiomeExtractorsMod.Common.UI
             set => _chance = value;
         }
         internal readonly double Med => (Min + Max) / 2.0;
-        internal readonly int DailyAmount(double rollsPerDay) => (int)(rollsPerDay * Med * (double)Chance / 100);
+        internal readonly decimal DailyAmount(double rollsPerDay) => (int)(rollsPerDay * Med * (double)Chance / 100);
         internal readonly string AmountString => Min == Max ? $"{Min}" : $"{Min}-{Max}";
         internal readonly string ChanceString => $"{Chance}{Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Percent")}";
-        internal readonly string DailyString(double rollsPerDay) => ((int)DailyAmount(rollsPerDay)).ToString();
+        internal readonly string DailyString(double rollsPerDay) {
+            decimal daily = DailyAmount(rollsPerDay);
+            if(daily>1)
+                return ((int)daily).ToString();
+            daily = Math.Truncate(daily*100)/100;
+            if(daily>0) return daily.ToString();
+            return "<0,01";
+        }
     }
 
     internal class UIResultSlot : UIPanel
