@@ -1,20 +1,18 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using ReLogic.Graphics;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using BiomeExtractorsMod.Common.Players;
 using Terraria.ID;
-using Terraria.Audio;
+using Terraria.Localization;
+using Terraria.GameContent;
 
 namespace BiomeExtractorsMod.Common.UI
 {
-    internal class ExtractorUI : UIState
+    internal class AnalyzerUI : UIState
     {
         private static UISystem uisys => ModContent.GetInstance<UISystem>();
         internal static float PanelWidth => UISlotArea.AreaWidth + 24f;
@@ -22,18 +20,19 @@ namespace BiomeExtractorsMod.Common.UI
         UIText header;
         UIPanel analyzeButton;
         UIPanel closeButton;
-        UIText biomeText;
-        UISlotArea slotArea;
+        UIScrollableText scanResult;
+        UIScanSlot scanSlot;
 
         bool Dragging = false;
         Vector2 CursorDragOffset;
         readonly float panelSnap = 36f;
-        private float DraggingAreaHeight => slotArea.Top.Pixels + 12;
+        private float DraggingAreaHeight => scanSlot.Top.Pixels + 12;
 
         internal Vector2 GetPos()
         {
             return new Vector2(panel.Top.Pixels, panel.Left.Pixels);
         }
+
         public override void OnInitialize()
         {
             panel = new();
@@ -50,31 +49,30 @@ namespace BiomeExtractorsMod.Common.UI
             header.OnLeftMouseDown += MovePanel;
             header.OnLeftMouseUp += StopMovingPanel;
 
-            biomeText = new("");
-            biomeText.Top.Set(40f, 0f);
-            biomeText.Left.Set(0f, 0f);
-            biomeText.IsWrapped = true;
-            biomeText.TextOriginX = 0f;
-            panel.Append(biomeText);
-            biomeText.OnLeftMouseDown += MovePanel;
-            biomeText.OnLeftMouseUp += StopMovingPanel;
+            scanSlot = new(0);
+            scanSlot.Top.Set(40f, 0f);
+            scanSlot.HAlign = 0.5f;
+            panel.Append(scanSlot);
+            scanSlot.OnLeftMouseDown += OnSlotClick;
 
-            if(uisys.isAnalyzer)
-            {
-                analyzeButton = new();
-                analyzeButton.Width.Set(36f, 0f);
-                analyzeButton.Height.Set(36f, 0f);
-                analyzeButton.Top.Set(2f, 0f);
-                analyzeButton.Left.Set(-2f, 0f);
-                analyzeButton.OnLeftClick += OnAnalyzeClick;
-                panel.Append(analyzeButton);
+            scanResult = new();
+            scanResult.Top.Set(80f, 0f);
+            scanResult.Left.Set(0f, 0f);
+            panel.Append(scanResult);
 
-                UIImage magGlass = new(TextureAssets.Cursors[CursorOverrideID.Magnifiers]);
-                magGlass.HAlign = 0.5f;
-                magGlass.VAlign = 0.5f;
-                analyzeButton.Append(magGlass);
-            }
-            
+            analyzeButton = new();
+            analyzeButton.Width.Set(36f, 0f);
+            analyzeButton.Height.Set(36f, 0f);
+            analyzeButton.Top.Set(2f, 0f);
+            analyzeButton.Left.Set(2f, 0f);
+            analyzeButton.OnLeftClick += OnAnalyzeClick;
+            panel.Append(analyzeButton);
+
+            UIImage magGlass = new(TextureAssets.Cursors[CursorOverrideID.Magnifiers]);
+            magGlass.HAlign = 0.5f;
+            magGlass.VAlign = 0.5f;
+            analyzeButton.Append(magGlass);
+
             closeButton = new();
             closeButton.Width.Set(36f, 0f);
             closeButton.Height.Set(36f, 0f);
@@ -88,22 +86,34 @@ namespace BiomeExtractorsMod.Common.UI
             text.HAlign = text.VAlign = 0.5f;
             closeButton.Append(text);
 
-            slotArea = new();
-            slotArea.HAlign = 0.5f;
-            slotArea.OnLeftClick += ToggleClickedItem;
-            panel.Append(slotArea);
-
             panel.Width.Set(PanelWidth, 0f);
-            biomeText.Width.Set(panel.Width.Pixels, 0f);
+            scanResult.Width.Set(panel.Width.Pixels, 0f);
         }
+
+        private void OnSlotClick(UIMouseEvent evt, UIElement listeningElement)
+        {
+            
+			Player player = Main.LocalPlayer;
+			if (player.itemAnimation == 0 && player.itemTime == 0)
+            {
+				scanSlot.itemId = Main.mouseItem.type;
+
+                string text = uisys.GeneratePoolsText(scanSlot.itemId);
+                
+                scanResult.SetText(text);
+            }
+        }
+
         private void OnAnalyzeClick(UIMouseEvent evt, UIElement listeningElement)
         {
-            uisys.SwitchToAnalyzerInterface();
+            uisys.SwitchToScannerInterface();
         }
+
         private void OnExitClick(UIMouseEvent evt, UIElement listeningElement)
         {
             uisys.CloseInterface();
         }
+
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             base.DrawSelf(spriteBatch);
@@ -115,26 +125,14 @@ namespace BiomeExtractorsMod.Common.UI
             {
                 PlayerInput.LockVanillaMouseScroll("BiomeExtractorsMod/LootTable");
             }
-            if (slotArea.Hovered >= 0)
+            if (scanSlot.Hovered && scanSlot.itemId != ItemID.None)
             {
-                int slot = slotArea.Hovered + slotArea.TopRow * UISlotArea.Columns;
-                if (slot < slotArea.SlotData.Length)
-                {
-                    SlotData data = slotArea.SlotData[slot];
-                    string name = data.Item.Name;
-                    string chance = Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Chance") + $": {data.ChanceString}";
-                    string daily = "";
-                    if (uisys is not null)
-                    {
-                        double rolls = (86400 / uisys.tier.Rate) * (uisys.tier.Chance / 100.0) * uisys.tier.Amount;
-                        daily = $"{data.DailyString(rolls)} {Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Per_day")}";
-                    }
+                Item item = new(scanSlot.itemId);
+                string tooltip = item.Name;
+                for (int i = 0; i < item.ToolTip.Lines; i++)
+                    tooltip += "\n" + item.ToolTip.GetLine(i);
+                SetTooltip(tooltip, item.rare);
 
-                    string tooltip = $"{name}\n[c/FFFFFF:{chance}]\n[c/FFFFFF:{daily}]";
-                    if (!data.IsActive)
-                        tooltip += $"\n[c/828282:{Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.InactiveSlot")}]";
-                    SetTooltip(tooltip, data.Item.rare);
-                }
             }
             if (Dragging)
             {
@@ -142,7 +140,9 @@ namespace BiomeExtractorsMod.Common.UI
                 Vector2 newPos = mouse + CursorDragOffset;
                 panel.Left.Set(newPos.X, 0f);
                 panel.Top.Set(newPos.Y, 0f);
-            } else {
+            }
+            else
+            {
                 float draggingAreaRight = panel.Left.Pixels + panel.Width.Pixels;
                 float draggingAreaBottom = panel.Top.Pixels + DraggingAreaHeight;
                 float screenRightLimit = Main.screenWidth - panelSnap;
@@ -159,7 +159,7 @@ namespace BiomeExtractorsMod.Common.UI
             Vector2 panelPos = new(panel.Left.Pixels, panel.Top.Pixels);
             Vector2 cursorPos = new(evt.MousePosition.X, evt.MousePosition.Y);
             CursorDragOffset = panelPos - cursorPos;
-            if(CursorDragOffset.Y > -DraggingAreaHeight)
+            if (CursorDragOffset.Y > -DraggingAreaHeight)
                 Dragging = true;
         }
 
@@ -173,16 +173,7 @@ namespace BiomeExtractorsMod.Common.UI
             if (uisys is not null)
             {
                 header.SetText(uisys.GetWindowTitle());
-                string status = uisys.GetExtractorStatus();
-                biomeText.SetText(status);
-
-                DynamicSpriteFont font = FontAssets.MouseText.Value;
-                float spacing = font.LineSpacing;
-                string visibleText = font.CreateWrappedText(status, panel.Width.Pixels-23f);
-                float height = visibleText.Split('\n').Length * spacing;
-
-                slotArea.Top.Set(40f + height, 0f);
-                slotArea.InitElements();
+                scanResult.SetText(Language.GetTextValue($"{BiomeExtractorsMod.LocAnalyzer}.Empty"));
 
                 if (uisys.UIHolder.CurrentState is null)
                 {
@@ -192,13 +183,13 @@ namespace BiomeExtractorsMod.Common.UI
                 }
                 else if(uisys.switching)
                 {
-                    Vector2 pos = uisys.AnalyzerInterface.GetPos();
+                    Vector2 pos = uisys.Interface.GetPos();
                     panel.Top.Set(pos.Y, 0f);
                     panel.Left.Set(pos.X, 0f);
                 }
                 panel.Width.Set(PanelWidth, 0f);
             }
-            panel.Height.Set(slotArea.Top.Pixels + slotArea.Height.Pixels + 30f, 0f);
+            panel.Height.Set(300f, 0f);
             uisys.switching = false;
         }
 
@@ -206,7 +197,6 @@ namespace BiomeExtractorsMod.Common.UI
         {
             ExtractorPlayer player = ExtractorPlayer.LocalPlayer;
             player.ExtractorWindowPos = new(panel.Left.Pixels, panel.Top.Pixels);
-            slotArea.SlotData = [];
             Dragging = false;
         }
 
@@ -222,30 +212,6 @@ namespace BiomeExtractorsMod.Common.UI
             Main.HoverItem = fakeItem;
             Main.instance.MouseText("");
             Main.mouseText = true;
-        }
-
-        private void ToggleClickedItem(UIMouseEvent evt, UIElement listeningElement)
-        {
-            if (slotArea.Hovered >= 0 && uisys.Extractor is not null)
-            {
-                int slot = slotArea.Hovered + slotArea.TopRow * UISlotArea.Columns;
-                if (slot < slotArea.SlotData.Length)
-                {
-                    Item item = slotArea.SlotData[slot].Item;
-                    if (uisys.Extractor.FilterContains(item))
-                    {
-                        uisys.Extractor.RemoveFilter(slotArea.SlotData[slot].Item);
-                        slotArea.SlotData[slot].IsActive = true;
-                    }
-                    else
-                    {
-                        uisys.Extractor.AddFilter(slotArea.SlotData[slot].Item);
-                        slotArea.SlotData[slot].IsActive = false;
-                    }
-                    SoundEngine.PlaySound(SoundID.MenuTick);
-                    slotArea.UpdateSlots();
-                }
-            }
         }
     }
 }

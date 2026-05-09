@@ -875,6 +875,15 @@ namespace BiomeExtractorsMod.Common.Database
             if (!ret) pool = null;
             return ret;
         }
+        /// <summary>
+        /// Returns a registered PoolEntry's priority, or int.MinValue if that pool does not exist.
+        /// </summary>
+        /// <param name="name">A string corresponding to a pool id</param>
+        /// <returns>the pool's priority if a PoolEntry with the provided name is registered, int.MinValue otherwise.</returns>
+        public int GetPoolPriority(string name)
+        {
+            return _priorityList.GetPriorityOf(name);
+        }
 
         /// <summary>
         /// Creates a new PoolEntry and:

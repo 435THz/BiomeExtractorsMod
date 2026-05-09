@@ -22,7 +22,7 @@ namespace BiomeExtractorsMod.Content.Items
         static readonly BiomeExtractionSystem BES = ModContent.GetInstance<BiomeExtractionSystem>();
         int highestTier = ExtractionTiers.BASIC;
         int currentTier = ExtractionTiers.BASIC;
-        BiomeExtractionSystem.ExtractionTier CurrentTier
+        protected BiomeExtractionSystem.ExtractionTier CurrentTier
         {
             get
             {
