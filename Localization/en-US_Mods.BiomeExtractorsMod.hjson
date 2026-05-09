@@ -13,6 +13,20 @@ Items: {
 			'''
 	}
 
+	ExtractionAnalyzer: {
+		DisplayName: Extraction Analyzer
+		Tooltip:
+			'''
+			Scans for biomes around the user, and shows the location of all Biome Extractors on the map.
+			Place an item in the dedicated slot in its UI to show if it can be extracted and where.
+			<left> to scan your surroundings. The menu will not update automatically if you move around.
+			<right> to cycle between extraction tiers.
+			<right> an Extractor to copy its tier.
+			Can only simulate up to the highest tier it has ever copied.
+			Currently simulating:
+			'''
+	}
+
 	BiomeExtractorItemIron: {
 		DisplayName: Biome Extractor
 		Tooltip:

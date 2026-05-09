@@ -13,6 +13,20 @@ Items: {
 			'''
 	}
 
+	{
+		DisplayName: Analizzatore d'estrazione
+		Tooltip:
+			'''
+			Scansiona i biomi attorno all'utilizzatore e mostra la posizione di tutti gli Estrattori sulla mappa.
+			Metti un oggetto nello slot dedicato della sua schermata per vedere se e dove può essere estratto.
+			<left> per scansionare la tua posizione. Il menù non si aggiorna automaticamente se ti muovi.
+			<right> per cambiare livello di estrazione.
+			<right> su un Estrattore per copiarne il livello di estrazione.
+			Può simulare Estrattori solo fino al livello più alto che abbia mai copiato.
+			Simulato attualmente:
+			'''
+	}
+
 	BiomeExtractorItemIron: {
 		DisplayName: Estrattore ambientale
 		Tooltip:
