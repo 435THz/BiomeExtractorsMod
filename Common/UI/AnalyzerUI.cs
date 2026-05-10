@@ -183,7 +183,7 @@ namespace BiomeExtractorsMod.Common.UI
                 }
                 else if(uisys.switching)
                 {
-                    Vector2 pos = uisys.Interface.GetPos();
+                    Vector2 pos = uisys.ExtractorInterface.GetPos();
                     panel.Top.Set(pos.Y, 0f);
                     panel.Left.Set(pos.X, 0f);
                 }

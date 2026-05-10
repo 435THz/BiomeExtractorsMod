@@ -49,9 +49,9 @@ namespace BiomeExtractorsMod.Common.UI
             {
                 UIHolder = new UserInterface();
 
-                Interface = new ExtractorUI();
+                ExtractorInterface = new ExtractorUI();
                 AnalyzerInterface = new AnalyzerUI();
-                Interface.Activate(); // Activate calls Initialize() on the UIState if not initialized and calls OnActivate, then calls Activate on every child element.
+                ExtractorInterface.Activate(); // Activate calls Initialize() on the UIState if not initialized and calls OnActivate, then calls Activate on every child element.
                 AnalyzerInterface.Activate();
             }
         }
@@ -104,8 +104,8 @@ namespace BiomeExtractorsMod.Common.UI
             tier = clicked.ExtractionTier;
             active = clicked.IsWorking;
 
-            Interface.OnActivate();
-            UIHolder?.SetState(Interface);
+            ExtractorInterface.OnActivate();
+            UIHolder?.SetState(ExtractorInterface);
         }
         internal void OpenScannerInterface(Point16 position, ExtractionTier tier)
         {
@@ -118,8 +118,8 @@ namespace BiomeExtractorsMod.Common.UI
             this.analyzer = false;
             this.active = true;
 
-            Interface.OnActivate();
-            UIHolder?.SetState(Interface);
+            ExtractorInterface.OnActivate();
+            UIHolder?.SetState(ExtractorInterface);
         }
         internal void SwitchToAnalyzerInterface()
         {
@@ -132,8 +132,8 @@ namespace BiomeExtractorsMod.Common.UI
         {
             if(!isAnalyzer) return;
             switching = true;
-            Interface.OnActivate();
-            UIHolder?.SetState(Interface);
+            ExtractorInterface.OnActivate();
+            UIHolder?.SetState(ExtractorInterface);
         }
         internal void OpenAnalyzerScannerInterface(Point16 position, ExtractionTier tier)
         {
@@ -146,8 +146,8 @@ namespace BiomeExtractorsMod.Common.UI
             this.analyzer = true;
             this.active = true;
 
-            Interface.OnActivate();
-            UIHolder?.SetState(Interface);
+            ExtractorInterface.OnActivate();
+            UIHolder?.SetState(ExtractorInterface);
         }
 
         internal WeightedList<ItemEntry> GetDropList()

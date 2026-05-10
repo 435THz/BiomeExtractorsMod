@@ -198,7 +198,7 @@ namespace BiomeExtractorsMod.Content.Tiles
                 Point16 top_left = entity.Position;
                 entity.ToggleState();
                 UISystem ui = ModContent.GetInstance<UISystem>();
-                if (ui?.Extractor == entity) ui.Interface.OnActivate();
+                if (ui?.Extractor == entity) ui.ExtractorInterface.OnActivate();
                 for (short x_off = 0; x_off < 3; x_off++)
                 {
                     for (short y_off = 0; y_off < 3; y_off++)
