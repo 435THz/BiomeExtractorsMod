@@ -91,6 +91,7 @@ namespace BiomeExtractorsMod.Common.UI
             Extractor = null;
             position = Point16.Zero;
             tier = null;
+            analyzer = false;
             active = false;
         }
 
