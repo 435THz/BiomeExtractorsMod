@@ -50,7 +50,9 @@ namespace BiomeExtractorsMod.Common.UI
                 UIHolder = new UserInterface();
 
                 Interface = new ExtractorUI();
+                AnalyzerInterface = new AnalyzerUI();
                 Interface.Activate(); // Activate calls Initialize() on the UIState if not initialized and calls OnActivate, then calls Activate on every child element.
+                AnalyzerInterface.Activate();
             }
         }
 
