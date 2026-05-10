@@ -22,7 +22,7 @@ namespace BiomeExtractorsMod.Common.UI
     internal class UISystem : ModSystem
     {
         internal UserInterface UIHolder;
-        internal ExtractorUI Interface;
+        internal ExtractorUI ExtractorInterface;
         internal AnalyzerUI AnalyzerInterface;
         internal bool switching = false;
         internal BiomeExtractorEnt Extractor;
