@@ -50,13 +50,13 @@ namespace BiomeExtractorsMod.Common.UI
             header.OnLeftMouseUp += StopMovingPanel;
 
             scanSlot = new(0);
-            scanSlot.Top.Set(40f, 0f);
+            scanSlot.Top.Set(50f, 0f);
             scanSlot.HAlign = 0.5f;
             panel.Append(scanSlot);
             scanSlot.OnLeftMouseDown += OnSlotClick;
 
             scanResult = new();
-            scanResult.Top.Set(80f, 0f);
+            scanResult.Top.Set(110f, 0f);
             scanResult.Left.Set(0f, 0f);
             panel.Append(scanResult);
 
@@ -69,6 +69,8 @@ namespace BiomeExtractorsMod.Common.UI
             panel.Append(analyzeButton);
 
             UIImage magGlass = new(TextureAssets.Cursors[CursorOverrideID.Magnifiers]);
+            magGlass.Top.Set(-5f, 0f);
+            magGlass.Left.Set(-5f, 0f);
             magGlass.HAlign = 0.5f;
             magGlass.VAlign = 0.5f;
             analyzeButton.Append(magGlass);
@@ -189,7 +191,7 @@ namespace BiomeExtractorsMod.Common.UI
                     panel.Left.Set(pos.X, 0f);
                 }
                 panel.Width.Set(PanelWidth, 0f);
-                panel.Height.Set(300f, 0f);
+                panel.Height.Set(285f, 0f);
                 uisys.switching = false;
             }
         }

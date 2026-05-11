@@ -68,6 +68,8 @@ namespace BiomeExtractorsMod.Common.UI
             panel.Append(analyzeButton);
 
             UIImage magGlass = new(TextureAssets.Cursors[CursorOverrideID.Magnifiers]);
+            magGlass.Top.Set(-5f, 0f);
+            magGlass.Left.Set(-5f, 0f);
             magGlass.HAlign = 0.5f;
             magGlass.VAlign = 0.5f;
             analyzeButton.Append(magGlass);
