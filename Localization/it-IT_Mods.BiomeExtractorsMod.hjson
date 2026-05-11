@@ -13,7 +13,7 @@ Items: {
 			'''
 	}
 
-	{
+	ExtractionAnalyzer: {
 		DisplayName: Analizzatore d'estrazione
 		Tooltip:
 			'''
