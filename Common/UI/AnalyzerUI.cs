@@ -96,10 +96,8 @@ namespace BiomeExtractorsMod.Common.UI
 			Player player = Main.LocalPlayer;
 			if (player.itemAnimation == 0 && player.itemTime == 0)
             {
-				scanSlot.itemId = Main.mouseItem.type;
-
+                scanSlot.SetItem(Main.mouseItem.type);
                 string text = uisys.GeneratePoolsText(scanSlot.itemId);
-                
                 scanResult.SetText(text);
             }
         }
@@ -131,7 +129,9 @@ namespace BiomeExtractorsMod.Common.UI
                 string tooltip = item.Name;
                 for (int i = 0; i < item.ToolTip.Lines; i++)
                     tooltip += "\n" + item.ToolTip.GetLine(i);
-                SetTooltip(tooltip, item.rare);
+                Main.HoverItem = new(scanSlot.itemId);
+                Main.instance.MouseText("");
+                Main.mouseText = true;
 
             }
             if (Dragging)
@@ -173,6 +173,7 @@ namespace BiomeExtractorsMod.Common.UI
             if (uisys is not null)
             {
                 header.SetText(uisys.GetWindowTitle());
+                scanSlot.SetItem(ItemID.None);
                 scanResult.SetText(Language.GetTextValue($"{BiomeExtractorsMod.LocAnalyzer}.Empty"));
 
                 if (uisys.UIHolder.CurrentState is null)
@@ -198,20 +199,6 @@ namespace BiomeExtractorsMod.Common.UI
             ExtractorPlayer player = ExtractorPlayer.LocalPlayer;
             player.ExtractorWindowPos = new(panel.Left.Pixels, panel.Top.Pixels);
             Dragging = false;
-        }
-
-        private static void SetTooltip(string text, int rarity)
-        {
-            Item fakeItem = new();
-            fakeItem.SetDefaults(ItemID.None, noMatCheck: true);
-            fakeItem.SetNameOverride(text);
-            fakeItem.type = ItemID.IronPickaxe;
-            fakeItem.scale = 0f;
-            fakeItem.rare = rarity;
-            fakeItem.value = -1;
-            Main.HoverItem = fakeItem;
-            Main.instance.MouseText("");
-            Main.mouseText = true;
         }
     }
 }
