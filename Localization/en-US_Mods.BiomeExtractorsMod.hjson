@@ -837,6 +837,7 @@ Text: {
 
 	Analyzer: {
 		Empty: Put an item in the slot above to analyze.
+		PreList: Found in:
 		NoExtractions: This item cannot be extracted.
 		Obfuscated: ???
 	}
