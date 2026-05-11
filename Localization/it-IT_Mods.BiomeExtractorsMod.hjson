@@ -823,6 +823,41 @@ Text: {
 		// ug_astral_desert: Underground Astral Desert
 	}
 
+	PoolSubNames: {
+		town: Villaggio
+		post_evil: Dopo Divoratore o Cervello
+		in_hardmode: In Hardmode
+		post_mech: Dopo un Boss Meccanico
+		post_mechs: Dopo i Boss Meccanici
+		post_plantera: Dopo Plantera
+		post_golem: Dopo Golem
+		post_pillars: Dopo Pilastri
+		post_moon_lord: Dopo Signore della Luna
+		pink: Muri Rosa
+		green: Muri Verdi
+		blue: Muri Blu
+		not_center: Ai lati del mondo
+		not_center_hardmode: Ai lati del mondo in Hardmode
+		center: Al centro del mondo
+		#Calamity
+		// post_acid_rain: After Acid Rain
+		// post_evil2: After Perforators or Hive Mind
+		// post_cryogen: After Cryogen
+		// post_aq_scourge: After Aquatic Scourge
+		// post_acid_rain2: Ater Acid Rain tier 2
+		// forest_post_cal_clone: After Calamitas Clone
+		// post_leviathan: After Leviathan
+		// post_deus: After Astrum Deus
+		// post_providence: After Providence
+		// post_polterghast: After Polterghast
+		// forest_post_dog: After DoG in Forest
+		// evil_post_dog: After DoG in an evil biome
+		// cold_post_dog: After DoG in the Snow
+		// post_yharon: After Yharon
+		// post_exo: After Exo Mechs
+		// post_swc: After Calamitas
+	}
+
 	Diagnostics: {
 		MachineStatePrint: Estraendo da:
 		MachineStateFail: Questo macchinario non può estrarre nulla da questo posto.
@@ -851,6 +886,13 @@ Text: {
 		// Spectral: "{$BiomeExtractorsMod.Text.Articles.Basic}"
 		// Auric: "{$BiomeExtractorsMod.Text.Articles.Infernal}"
 		// Exo: "{$BiomeExtractorsMod.Text.Articles.Infernal}"
+	}
+
+	Analyzer: {
+		Empty: Metti un oggetto qui sopra per analizzarlo.
+		PreList: Estraibile in:
+		NoExtractions: Questo oggetto non può essere estratto.
+		// Obfuscated: ???
 	}
 
 	#Calamity
