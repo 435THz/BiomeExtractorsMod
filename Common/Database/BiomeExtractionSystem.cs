@@ -1330,9 +1330,12 @@ namespace BiomeExtractorsMod.Common.Database
         internal List<PoolEntry> GetPoolsOfItem(short itemId)
         {
             List<PoolEntry> ret = new();
-            foreach(string poolId in _itemToPool[itemId])
+            if(_itemToPool.ContainsKey(itemId))
             {
-                ret.Add(_poolNames[poolId]);
+                foreach(string poolId in _itemToPool[itemId])
+                {
+                    ret.Add(_poolNames[poolId]);
+                }
             }
             return ret;
         }
