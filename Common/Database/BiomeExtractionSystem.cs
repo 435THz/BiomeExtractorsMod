@@ -1408,7 +1408,7 @@ namespace BiomeExtractorsMod.Common.Database
                 }
                 foreach(KeyValuePair<string, string> parent_entry in pool.Parents)
                 {
-                    if(!parent_entry.Value.IsWhiteSpace())
+                    if(!string.IsNullOrWhiteSpace(parent_entry.Value))
                     {
                         var txt = Language.GetOrRegister(parent_entry.Value, () => parent_entry.Value);
                     }

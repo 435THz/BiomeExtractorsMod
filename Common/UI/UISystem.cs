@@ -309,7 +309,7 @@ namespace BiomeExtractorsMod.Common.UI
 
                 foreach(string subLocKey in entry.Value.Values)
                 {
-                    if(!subLocKey.IsWhiteSpace()) {
+                    if(!string.IsNullOrWhiteSpace(subLocKey)) {
                         subCategory_list.Add(Language.GetTextValue(subLocKey));
                     }
                 }
@@ -326,7 +326,7 @@ namespace BiomeExtractorsMod.Common.UI
             {
                 if(final_string.Length>0) final_string+="\n";
                 final_string += Language.GetTextValue(string_entry.Key);
-                if(!string_entry.Value.IsWhiteSpace())
+                if(!string.IsNullOrWhiteSpace(string_entry.Value))
                 {
                     final_string += $" ({Language.GetTextValue(string_entry.Value)})";
                 }
@@ -336,7 +336,7 @@ namespace BiomeExtractorsMod.Common.UI
                 if(final_string.Length>0) final_string+="\n";
                 final_string += Language.GetTextValue(obfLoc);
             }
-            if(final_string.IsWhiteSpace()) return Language.GetTextValue($"{BiomeExtractorsMod.LocAnalyzer}.NoExtractions");
+            if(string.IsNullOrWhiteSpace(final_string)) return Language.GetTextValue($"{BiomeExtractorsMod.LocAnalyzer}.NoExtractions");
             return final_string;
         }
 
