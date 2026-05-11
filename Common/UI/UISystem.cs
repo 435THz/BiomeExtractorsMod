@@ -230,12 +230,14 @@ namespace BiomeExtractorsMod.Common.UI
 
         internal string GeneratePoolsText(int itemId)
         {
+            if(itemId==ItemID.None) return Language.GetTextValue($"{BiomeExtractorsMod.LocAnalyzer}.Empty");
             BiomeExtractionSystem system = BiomeExtractionSystem.Instance;
             ScanData scan = new(tier, position, true); //empty dummy scan data. If the checks are set up correctly, the only actually important value should be tier
 
             List<PoolEntry> entries = system.GetPoolsOfItem((short)itemId);
             Dictionary<string, Dictionary<PoolEntry, string>> entrycollection = new(); //id of ancestor => <pool => subLocKey>
             string obfLoc = $"{BiomeExtractorsMod.LocAnalyzer}.Obfuscated";
+            string obfStr = Language.GetTextValue(obfLoc);
             int obf_count = 0;
             
             foreach(PoolEntry pool in entries)
@@ -252,45 +254,60 @@ namespace BiomeExtractorsMod.Common.UI
                 }
                 if(visible)
                 {
-                    foreach(KeyValuePair<string, string> parentEntry in pool.Parents)
+                    if(pool.Parents.Count>0) {
+                        foreach(KeyValuePair<string, string> parentEntry in pool.Parents)
+                        {
+                            List<PoolEntry> ancestors = new(GetBaseAncestorsOf(Instance.GetPoolEntry(parentEntry.Key), [pool.Name]));
+
+                            string subLoc = parentEntry.Value;
+
+                            foreach(Predicate<ScanData> req in pool.VisibilityRequirements)
+                            {
+                                if(!req.Invoke(scan))
+                                {
+                                    obfuscated = true;
+                                    subLoc = obfLoc;
+                                    break;
+                                }
+                            }
+
+                            foreach(PoolEntry ancestor in ancestors) {
+                                if(entrycollection.ContainsKey(ancestor.Name))
+                                {
+                                    if(!entrycollection[ancestor.Name].ContainsKey(ancestor)) // if the base ancestor is already inside the list, ignore this pool
+                                    {
+                                        if(pool.Name == ancestor.Name)
+                                        {
+                                            entrycollection[ancestor.Name] = new(); // delete the entire list and only leave this pool in if it's the base ancestor
+                                            entrycollection[ancestor.Name].Add(pool, obfuscated? obfLoc : "");
+                                        }
+                                        else
+                                        {
+                                            entrycollection[ancestor.Name].Add(pool, subLoc); // add to the list if this pool is not the base ancestor
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    entrycollection.Add(ancestor.Name, new()); // initialize the new list with this pool
+
+                                    entrycollection[ancestor.Name].Add(pool, subLoc);
+                                }
+                            }
+                        }
+                    }
+                    else
                     {
-                        List<PoolEntry> ancestors = GetBaseAncestorsOf(Instance.GetPoolEntry(parentEntry.Key), [pool.Name]);
-
-                        string subLoc = parentEntry.Value;
-
                         foreach(Predicate<ScanData> req in pool.VisibilityRequirements)
                         {
                             if(!req.Invoke(scan))
                             {
                                 obfuscated = true;
-                                subLoc = obfLoc;
                                 break;
                             }
                         }
-
-                        foreach(PoolEntry ancestor in ancestors) {
-                            if(entrycollection.ContainsKey(ancestor.Name))
-                            {
-                                if(!entrycollection[ancestor.Name].ContainsKey(ancestor)) // if the base ancestor is already inside the list, ignore this pool
-                                {
-                                    if(pool.Name == ancestor.Name)
-                                    {
-                                        entrycollection[ancestor.Name] = new(); // delete the entire list and only leave this pool in if it's the base ancestor
-                                        entrycollection[ancestor.Name].Add(pool, obfuscated? obfLoc : "");
-                                    }
-                                    else
-                                    {
-                                        entrycollection[ancestor.Name].Add(pool, subLoc); // add to the list if this pool is not the base ancestor
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                entrycollection.Add(ancestor.Name, new()); // initialize the new list with this pool
-
-                                entrycollection[ancestor.Name].Add(pool, subLoc);
-                            }
-                        }
+                        entrycollection[pool.Name] = new(); // This pool is its own ancestor. Load it as the only entry.
+                        entrycollection[pool.Name].Add(pool, obfuscated? obfLoc : "");
                     }
                 }
 
@@ -300,25 +317,28 @@ namespace BiomeExtractorsMod.Common.UI
 
             List<string> order = entrycollection.Keys.ToList();
             order.Sort((a, b)=>Instance.GetPoolPriority(a).CompareTo(Instance.GetPoolPriority(b)));
-            foreach(KeyValuePair<string, Dictionary<PoolEntry, string>> entry in entrycollection)
+            foreach(string key in order)
             {
+                Dictionary<PoolEntry, string> dict = entrycollection[key];
                 List<string> subCategory_list = [];
-                PoolEntry ancestor = Instance.GetPoolEntry(entry.Key);
+                PoolEntry ancestor = Instance.GetPoolEntry(key);
                 if(!string_entries.ContainsKey(ancestor.LocalizationKey)) //if no list exists for this element yet, make one
                     string_entries.Add(ancestor.LocalizationKey, "");
 
-                foreach(string subLocKey in entry.Value.Values)
+                foreach(string subLocKey in dict.Values)
                 {
                     if(!string.IsNullOrWhiteSpace(subLocKey)) {
                         subCategory_list.Add(Language.GetTextValue(subLocKey));
                     }
                 }
-                if(subCategory_list.Find(str=>str!=obfLoc)==default)
+                if(subCategory_list.Count>0 && subCategory_list.All(str=>str==obfStr))
                 {
                     string_entries.Remove(ancestor.LocalizationKey);
                     obf_count++;
                 }
-                string_entries[ancestor.LocalizationKey] = string.Join(" ,", subCategory_list);
+                else {
+                    string_entries[ancestor.LocalizationKey] = string.Join(" ,", subCategory_list);
+                }
             }
 
             string final_string = "";
@@ -335,9 +355,10 @@ namespace BiomeExtractorsMod.Common.UI
             {
                 if(final_string.Length>0) final_string+="\n";
                 final_string += Language.GetTextValue(obfLoc);
+                obf_count--;
             }
             if(string.IsNullOrWhiteSpace(final_string)) return Language.GetTextValue($"{BiomeExtractorsMod.LocAnalyzer}.NoExtractions");
-            return final_string;
+            return $"{Language.GetTextValue($"{BiomeExtractorsMod.LocAnalyzer}.PreList")}\n{final_string}";
         }
 
         private List<PoolEntry> GetBaseAncestorsOf(PoolEntry pool, List<string> checkd)
