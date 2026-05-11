@@ -805,6 +805,41 @@ Text: {
 		ug_astral_desert: Underground Astral Desert
 	}
 
+	PoolSubNames: {
+		town: Town
+		post_evil: After EoW or BoC
+		in_hardmode: In Hardmode
+		post_mech: After a Mech Boss
+		post_mechs: After all Mech Bosses
+		post_plantera: After Plantera
+		post_golem: After Golem
+		post_pillars: After Pillars
+		post_moon_lord: After Moon Lord
+		pink: Pink Walls
+		green: Green Walls
+		blue: Blue Walls
+		not_center: Sides of the world
+		not_center_hardmode: Sides of the world in Hardmode
+		center: Center of the world
+		#Calamity
+		post_acid_rain: After Acid Rain
+		post_evil2: After Perforators or Hive Mind
+		post_cryogen: After Cryogen
+		post_aq_scourge: After Aquatic Scourge
+		post_acid_rain2: Ater Acid Rain tier 2
+		forest_post_cal_clone: After Calamitas Clone
+		post_leviathan: After Leviathan
+		post_deus: After Astrum Deus
+		post_providence: After Providence
+		post_polterghast: After Polterghast
+		forest_post_dog: After DoG in Forest
+		evil_post_dog: After DoG in an evil biome
+		cold_post_dog: After DoG in the Snow
+		post_yharon: After Yharon
+		post_exo: After Exo Mechs
+		post_swc: After Calamitas
+	}
+
 	Diagnostics: {
 		MachineStatePrint: Extracting from:
 		MachineStateFail: The machine cannot extract anything from this place.
