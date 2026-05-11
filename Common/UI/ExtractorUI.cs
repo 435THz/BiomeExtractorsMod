@@ -198,7 +198,7 @@ namespace BiomeExtractorsMod.Common.UI
                     panel.Top.Set(pos.Y, 0f);
                     panel.Left.Set(pos.X, 0f);
                 }
-                else if(uisys.switching)
+                else if(uisys.switching || (uisys.UIHolder.CurrentState == uisys.AnalyzerInterface && uisys.isScanner))
                 {
                     Vector2 pos = uisys.AnalyzerInterface.GetPos();
                     panel.Top.Set(pos.Y, 0f);
