@@ -32,7 +32,7 @@ namespace BiomeExtractorsMod.Common.UI
 
         internal Vector2 GetPos()
         {
-            return new Vector2(panel.Top.Pixels, panel.Left.Pixels);
+            return new Vector2(panel.Left.Pixels, panel.Top.Pixels);
         }
         public override void OnInitialize()
         {
