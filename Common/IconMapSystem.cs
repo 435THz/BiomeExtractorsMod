@@ -1,4 +1,4 @@
-﻿using BiomeExtractorsMod.Content.Items;
+﻿using BiomeExtractorsMod.Common.UI;
 using BiomeExtractorsMod.Content.TileEntities;
 using BiomeExtractorsMod.Content.Tiles;
 using Microsoft.Xna.Framework;
@@ -14,7 +14,6 @@ using Terraria.Localization;
 using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using Terraria.ObjectData;
 using Terraria.UI;
 
 namespace BiomeExtractorsMod.Common.Database
@@ -164,8 +163,10 @@ namespace BiomeExtractorsMod.Common.Database
             bool hasScanner = false;
             Item[] inventory = Main.LocalPlayer.inventory;
             for (int i = 0; i < inventory.Length; i++)
-                if (inventory[i] != null && inventory[i].type == ModContent.GetInstance<BiomeScanner>().Type)
+                if (inventory[i] != null && UISystem.isItemValidScanner(inventory[i])) {
                     hasScanner = true;
+                    break;
+                }
 
             if (hasScanner)
             {

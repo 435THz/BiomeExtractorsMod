@@ -40,6 +40,7 @@ namespace BiomeExtractorsMod.Common.UI
         private bool analyzer = false;
         internal bool isAnalyzer {get => isScanner && analyzer; }
         internal bool active;
+        public static bool isItemValidScanner(Item item) => item.type == ModContent.GetInstance<BiomeScanner>().Type || item.type == ModContent.GetInstance<ExtractionAnalyzer>().Type;
 
         private GameTime _lastUpdateUiGameTime;
         
@@ -62,7 +63,7 @@ namespace BiomeExtractorsMod.Common.UI
             if (UIHolder?.CurrentState != null) UIHolder.Update(gameTime);
             if (Extractor is null)
             {
-                if (Main.LocalPlayer.HeldItem.type != ModContent.GetInstance<BiomeScanner>().Type) CloseInterface();
+                if (UIHolder.CurrentState == ExtractorInterface && !isItemValidScanner(Main.LocalPlayer.HeldItem)) CloseInterface();
             }
             else if (!Extractor.IsTileValidForEntity(position.X, position.Y) || !ExtractorPlayer.LocalPlayer.IsInRectangleRange(position)) CloseInterface();
         }

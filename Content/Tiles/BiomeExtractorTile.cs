@@ -181,7 +181,7 @@ namespace BiomeExtractorsMod.Content.Tiles
 
         public override bool RightClick(int i, int j)
         {
-            if (Main.LocalPlayer.HeldItem.type == ModContent.GetInstance<BiomeScanner>().Type) return false;
+            if (UISystem.isItemValidScanner(Main.LocalPlayer.HeldItem)) return false;
             if (TileUtils.TryGetTileEntityAs(i, j, out BiomeExtractorEnt entity))
             {
                 ModContent.GetInstance<UISystem>().OpenExtractorInterface(entity);
