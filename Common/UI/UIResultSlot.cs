@@ -19,15 +19,15 @@ namespace BiomeExtractorsMod.Common.UI
             set => _chance = value;
         }
         internal readonly double Med => (Min + Max) / 2.0;
-        internal readonly decimal DailyAmount(double rollsPerDay) => (int)(rollsPerDay * Med * (double)Chance / 100);
+        internal readonly decimal DailyAmount(double rollsPerDay) => (decimal)(rollsPerDay * Med * (double)Chance / 100);
         internal readonly string AmountString => Min == Max ? $"{Min}" : $"{Min}-{Max}";
         internal readonly string ChanceString => $"{Chance}{Language.GetTextValue($"{BiomeExtractorsMod.LocDiagnostics}.Percent")}";
         internal readonly string DailyString(double rollsPerDay) {
             decimal daily = DailyAmount(rollsPerDay);
             if(daily>1)
                 return ((int)daily).ToString();
-            daily = Math.Truncate(daily*100)/100;
-            if(daily>0) return daily.ToString();
+            decimal dailyCents = Math.Truncate(daily*100);
+            if(dailyCents>0) return (dailyCents/100).ToString();
             return "<0,01";
         }
     }
