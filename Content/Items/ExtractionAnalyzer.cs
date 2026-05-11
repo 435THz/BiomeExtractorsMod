@@ -6,11 +6,23 @@ using Terraria.DataStructures;
 using BiomeExtractorsMod.Common.UI;
 using Terraria.ID;
 using System.Collections.Generic;
+using Terraria.Enums;
 
 namespace BiomeExtractorsMod.Content.Items
 {
     public class ExtractionAnalyzer : BiomeScanner
     {
+        
+        public override void SetDefaults()
+        {
+            Item.width = 28;
+            Item.height = 28;
+            Item.maxStack = 1;
+            Item.useStyle = ItemUseStyleID.HoldUp;
+            Item.useAnimation = 15;
+            Item.useTime = 15;
+            Item.SetShopValues(ItemRarityColor.Orange3, Item.buyPrice(gold: 15)); //sell at 3
+        }
         
         public override bool? UseItem(Player player)
         {

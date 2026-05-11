@@ -44,7 +44,7 @@ namespace BiomeExtractorsMod.Content.Items
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.useAnimation = 15;
             Item.useTime = 15;
-            Item.SetShopValues(ItemRarityColor.Pink5, Item.buyPrice(gold: 10)); //sell at 2
+            Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(gold: 10)); //sell at 2
         }
 
         public override bool AltFunctionUse(Player player) => true;
