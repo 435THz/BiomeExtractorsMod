@@ -1169,10 +1169,14 @@ namespace BiomeExtractorsMod.Common.Database
             PoolEntry pool = GetPoolEntry(poolName);
             if (pool == null) return false;
             _itemPools[pool.Name].Add(item, weight.Num, weight.Den);
-            foreach(string alias in _poolAliases[pool.Name])
-            {
-                if(!_itemToPool.ContainsKey(item.Id)) _itemToPool[item.Id] = new();
-                if(!_itemToPool[item.Id].Contains(pool.Name)) _itemToPool[item.Id].Add(alias);
+            if(!_itemToPool.ContainsKey(item.Id)) _itemToPool[item.Id] = new();
+            if(!_itemToPool[item.Id].Contains(pool.Name)) _itemToPool[item.Id].Add(poolName);
+
+            if(_poolAliases.ContainsKey(pool.Name)) {
+                foreach(string alias in _poolAliases[pool.Name])
+                {
+                    if(!_itemToPool[item.Id].Contains(pool.Name)) _itemToPool[item.Id].Add(alias);
+                }
             }
             return true;
         }
@@ -1210,17 +1214,17 @@ namespace BiomeExtractorsMod.Common.Database
             PoolEntry dest = GetPoolEntry(poolDest);
             PoolEntry src = GetPoolEntry(poolSource);
             if (dest == null || src == null) return false;
-            if (!_poolAliases.ContainsKey(src.Name)) _poolAliases[src.Name] = [src.Name];
-            if (!_poolAliases[src.Name].Contains(dest.Name)) _poolAliases[src.Name].Add(dest.Name);
+            if (!_poolAliases.ContainsKey(src.Name)) _poolAliases[src.Name] = [src.Name]; //an aliased pool is always an alias of itself
+            if (!_poolAliases[src.Name].Contains(dest.Name)) _poolAliases[src.Name].Add(dest.Name); //add the alias target as a new alias
             foreach (ItemEntry item in _itemPools[dest.Name].Keys)
             {
-                _itemToPool[item.Id].Remove(dest.Name);
+                _itemToPool[item.Id].Remove(dest.Name); //remove all backreferences connected to the alias target
             }
             foreach (ItemEntry item in _itemPools[src.Name].Keys)
             {
-                if(!_itemToPool[item.Id].Contains(dest.Name)) _itemToPool[item.Id].Add(dest.Name);
+                if(!_itemToPool[item.Id].Contains(dest.Name)) _itemToPool[item.Id].Add(dest.Name); //add all items to the alias' list
             }
-            _itemPools[dest.Name] = _itemPools[src.Name];
+            _itemPools[dest.Name] = _itemPools[src.Name]; //link the two pools
             return true;
         }
 

@@ -188,9 +188,9 @@ namespace BiomeExtractorsMod.Common.UI
                     panel.Left.Set(pos.X, 0f);
                 }
                 panel.Width.Set(PanelWidth, 0f);
+                panel.Height.Set(300f, 0f);
+                uisys.switching = false;
             }
-            panel.Height.Set(300f, 0f);
-            uisys.switching = false;
         }
 
         public override void OnDeactivate()

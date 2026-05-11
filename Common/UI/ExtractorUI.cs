@@ -59,21 +59,18 @@ namespace BiomeExtractorsMod.Common.UI
             biomeText.OnLeftMouseDown += MovePanel;
             biomeText.OnLeftMouseUp += StopMovingPanel;
 
-            if(uisys.isAnalyzer)
-            {
-                analyzeButton = new();
-                analyzeButton.Width.Set(36f, 0f);
-                analyzeButton.Height.Set(36f, 0f);
-                analyzeButton.Top.Set(2f, 0f);
-                analyzeButton.Left.Set(-2f, 0f);
-                analyzeButton.OnLeftClick += OnAnalyzeClick;
-                panel.Append(analyzeButton);
+            analyzeButton = new();
+            analyzeButton.Width.Set(36f, 0f);
+            analyzeButton.Height.Set(36f, 0f);
+            analyzeButton.Top.Set(2f, 0f);
+            analyzeButton.Left.Set(2f, 0f);
+            analyzeButton.OnLeftClick += OnAnalyzeClick;
+            panel.Append(analyzeButton);
 
-                UIImage magGlass = new(TextureAssets.Cursors[CursorOverrideID.Magnifiers]);
-                magGlass.HAlign = 0.5f;
-                magGlass.VAlign = 0.5f;
-                analyzeButton.Append(magGlass);
-            }
+            UIImage magGlass = new(TextureAssets.Cursors[CursorOverrideID.Magnifiers]);
+            magGlass.HAlign = 0.5f;
+            magGlass.VAlign = 0.5f;
+            analyzeButton.Append(magGlass);
             
             closeButton = new();
             closeButton.Width.Set(36f, 0f);
@@ -197,9 +194,9 @@ namespace BiomeExtractorsMod.Common.UI
                     panel.Left.Set(pos.X, 0f);
                 }
                 panel.Width.Set(PanelWidth, 0f);
+                panel.Height.Set(slotArea.Top.Pixels + slotArea.Height.Pixels + 30f, 0f);
+                uisys.switching = false;
             }
-            panel.Height.Set(slotArea.Top.Pixels + slotArea.Height.Pixels + 30f, 0f);
-            uisys.switching = false;
         }
 
         public override void OnDeactivate()
