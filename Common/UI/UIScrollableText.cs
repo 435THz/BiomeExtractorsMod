@@ -3,7 +3,6 @@ using ReLogic.Graphics;
 using System;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace BiomeExtractorsMod.Common.UI
@@ -12,8 +11,8 @@ namespace BiomeExtractorsMod.Common.UI
     {
 
         internal static float AreaWidth = UISlotArea.AreaWidth;
-        internal static float AreaHeight = UISlotArea.AreaHeight;
-        internal static int VisibleLines = (int)AreaHeight/FontAssets.MouseText.Value.LineSpacing;
+        internal static float AreaHeight => FontAssets.MouseText.Value.LineSpacing*VisibleLines;
+        internal static int VisibleLines = 5;
 
         internal UIText[] LineContainers = [];
         internal string[] Lines;
@@ -41,6 +40,8 @@ namespace BiomeExtractorsMod.Common.UI
             {
                 LineContainers[i] = new UIText("");
                 LineContainers[i].TextOriginX = 0f;
+                LineContainers[i].Top.Set(i*FontAssets.MouseText.Value.LineSpacing, 0f);
+                Append(LineContainers[i]);
             }
 
             scrollbar = new();
@@ -59,6 +60,7 @@ namespace BiomeExtractorsMod.Common.UI
             DynamicSpriteFont font = FontAssets.MouseText.Value;
             string visibleText = font.CreateWrappedText(text, AreaWidth-23f);
             Lines = visibleText.Split('\n');
+            scrollbar.SetView(VisibleLines, MaxLines);
             scrollbar.ViewPosition = 0;
             
             UpdateLines();
@@ -96,7 +98,7 @@ namespace BiomeExtractorsMod.Common.UI
         {
             for (int x = 0; x < VisibleLines; x++)
             {
-                int slot = VisibleLines + x;
+                int slot = TopRow + x;
                 string text = "";
                 if (slot < MaxLines)
                 {
