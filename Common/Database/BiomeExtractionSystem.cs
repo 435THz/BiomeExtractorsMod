@@ -1536,7 +1536,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(caverns_remix, 10, LocalizeAs(caverns_remix));
             AddPool(cavern_town_remix, 10);
 
-            AddPoolParent(cavern_town_remix, caverns_remix, town);
+            AddPoolParent(cavern_town_remix, caverns_remix, SubLocalizeAs(town));
 
             AddPoolWorldChecks(underground, notremix);
             AddPoolWorldChecks(caverns_remix, remix);
@@ -1632,7 +1632,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(hm_ores, 10, true);
 
             AddPoolParent(evil_ores, underground); //this one should not have other indications
-            AddPoolParent(evil_ores, caverns, SubLocalizeAs(post_evil));
+            AddPoolParent(evil_ores, caverns);
             AddPoolParent(hm_ores, underground, SubLocalizeAs(in_hardmode));
             AddPoolParent(hm_ores, caverns, SubLocalizeAs(in_hardmode));
 
@@ -1747,10 +1747,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(life_fruit, 1050);
             AddPool(chlorophyte, 1050);
 
-            AddPoolParent(shells, jungle, in_hardmode);
-            AddPoolParent(ug_shells, ug_jungle, in_hardmode);
-            AddPoolParent(life_fruit, ug_jungle, post_mech);
-            AddPoolParent(chlorophyte, ug_jungle, post_mechs);
+            AddPoolParent(shells, jungle, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_shells, ug_jungle, SubLocalizeAs(in_hardmode));
+            AddPoolParent(life_fruit, ug_jungle, SubLocalizeAs(post_mech));
+            AddPoolParent(chlorophyte, ug_jungle, SubLocalizeAs(post_mechs));
 
             AddPoolVisibilityRequirements(shells, steampunk);
             AddPoolVisibilityRequirements(ug_shells, steampunk);
@@ -1808,10 +1808,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(pillar, 4000);
             AddPool(luminite, 4000);
 
-            AddPoolParent(flight, sky, in_hardmode);
-            AddPoolParent(spc_flight, space, in_hardmode);
-            AddPoolParent(pillar, space, post_pillars);
-            AddPoolParent(luminite, space, post_moon_lord);
+            AddPoolParent(flight, sky, SubLocalizeAs(in_hardmode));
+            AddPoolParent(spc_flight, space, SubLocalizeAs(in_hardmode));
+            AddPoolParent(pillar, space, SubLocalizeAs(post_pillars));
+            AddPoolParent(luminite, space, SubLocalizeAs(post_moon_lord));
 
             AddPoolVisibilityRequirements(flight, steampunk);
             AddPoolVisibilityRequirements(spc_flight, steampunk);
@@ -1857,8 +1857,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_mushroom_remix, 1200, LocalizeAs(ug_mushroom));
             AddPool(truffle_worm_remix, 1200);
 
-            AddPoolParent(truffle_worm, ug_mushroom, in_hardmode);
-            AddPoolParent(truffle_worm_remix, ug_mushroom_remix, in_hardmode);
+            AddPoolParent(truffle_worm, ug_mushroom, SubLocalizeAs(in_hardmode));
+            AddPoolParent(truffle_worm_remix, ug_mushroom_remix, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(truffle_worm, steampunk);
             AddPoolVisibilityRequirements(truffle_worm_remix, steampunk);
@@ -1913,10 +1913,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_hallowed_caverns_remix, 1100, LocalizeAs(ug_hallowed));
             AddPool(ug_hallowed_bars_remix, 1100);
 
-            AddPoolParent(hallowed_bars_forest, hallowed_forest, post_mechs);
-            AddPoolParent(ug_hallowed_bars, ug_hallowed, post_mechs);
-            AddPoolParent(hallowed_bars_forest_remix, hallowed_forest_remix, post_mechs);
-            AddPoolParent(ug_hallowed_bars_remix, ug_hallowed_caverns_remix, post_mechs);
+            AddPoolParent(hallowed_bars_forest, hallowed_forest, SubLocalizeAs(post_mechs));
+            AddPoolParent(ug_hallowed_bars, ug_hallowed, SubLocalizeAs(post_mechs));
+            AddPoolParent(hallowed_bars_forest_remix, hallowed_forest_remix, SubLocalizeAs(post_mechs));
+            AddPoolParent(ug_hallowed_bars_remix, ug_hallowed_caverns_remix, SubLocalizeAs(post_mechs));
 
             AddPoolVisibilityRequirements(hallowed_forest, steampunk);
             AddPoolVisibilityRequirements(hallowed_bars_forest, steampunk);
@@ -1990,10 +1990,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_hallowed_desert_remix, 1100, LocalizeAs(ug_hallowed_desert));
             AddPool(ug_hallowed_bars_desert_remix, 1100);
 
-            AddPoolParent(hallowed_bars_desert, hallowed_desert, in_hardmode);
-            AddPoolParent(ug_hallowed_bars_desert, ug_hallowed_desert, in_hardmode);
-            AddPoolParent(hallowed_bars_desert_remix, hallowed_desert_remix, in_hardmode);
-            AddPoolParent(ug_hallowed_bars_desert_remix, ug_hallowed_desert_remix, in_hardmode);
+            AddPoolParent(hallowed_bars_desert, hallowed_desert, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_hallowed_bars_desert, ug_hallowed_desert, SubLocalizeAs(in_hardmode));
+            AddPoolParent(hallowed_bars_desert_remix, hallowed_desert_remix, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_hallowed_bars_desert_remix, ug_hallowed_desert_remix, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(hallowed_desert, steampunk);
             AddPoolVisibilityRequirements(hallowed_bars_desert, steampunk);
@@ -2064,10 +2064,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_hallowed_snow_remix, 1100, LocalizeAs(ug_hallowed_snow));
             AddPool(ug_hallowed_bars_snow_remix, 1100);
 
-            AddPoolParent(hallowed_bars_snow, hallowed_snow, in_hardmode);
-            AddPoolParent(ug_hallowed_bars_snow, ug_hallowed_snow, in_hardmode);
-            AddPoolParent(hallowed_bars_snow_remix, hallowed_snow_remix, in_hardmode);
-            AddPoolParent(ug_hallowed_bars_snow_remix, ug_hallowed_snow_remix, in_hardmode);
+            AddPoolParent(hallowed_bars_snow, hallowed_snow, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_hallowed_bars_snow, ug_hallowed_snow, SubLocalizeAs(in_hardmode));
+            AddPoolParent(hallowed_bars_snow_remix, hallowed_snow_remix, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_hallowed_bars_snow_remix, ug_hallowed_snow_remix, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(hallowed_snow, steampunk);
             AddPoolVisibilityRequirements(hallowed_bars_snow, steampunk);
@@ -2139,8 +2139,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_crimson_caverns_remix, 1300, LocalizeAs(ug_crimson));
             AddPool(ug_crimson_caverns_hm_remix, 1300);
 
-            AddPoolParent(ug_crimson_caverns_hm, ug_crimson, in_hardmode);
-            AddPoolParent(ug_crimson_caverns_hm_remix, ug_crimson_caverns_remix, in_hardmode);
+            AddPoolParent(ug_crimson_caverns_hm, ug_crimson, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_crimson_caverns_hm_remix, ug_crimson_caverns_remix, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(crimson_forest, demonic);
             AddPoolVisibilityRequirements(ug_crimson, demonic);
@@ -2197,10 +2197,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_crimson_desert_remix, 1300, LocalizeAs(ug_crimson_desert));
             AddPool(ug_crimson_desert_hm_remix, 1300);
 
-            AddPoolParent(crimson_desert_hm, crimson_desert, in_hardmode);
-            AddPoolParent(ug_crimson_desert_hm, ug_crimson_desert, in_hardmode);
-            AddPoolParent(crimson_desert_hm_remix, crimson_desert_remix, in_hardmode);
-            AddPoolParent(ug_crimson_desert_hm_remix, ug_crimson_desert_remix, in_hardmode);
+            AddPoolParent(crimson_desert_hm, crimson_desert, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_crimson_desert_hm, ug_crimson_desert, SubLocalizeAs(in_hardmode));
+            AddPoolParent(crimson_desert_hm_remix, crimson_desert_remix, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_crimson_desert_hm_remix, ug_crimson_desert_remix, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(crimson_desert, demonic);
             AddPoolVisibilityRequirements(crimson_desert_hm, steampunk);
@@ -2261,8 +2261,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_crimson_snow_remix, 1300, LocalizeAs(ug_crimson_snow));
             AddPool(ug_crimson_snow_hm_remix, 1300);
 
-            AddPoolParent(ug_crimson_snow_hm, ug_crimson_snow, in_hardmode);
-            AddPoolParent(ug_crimson_snow_hm_remix, ug_crimson_snow_remix, in_hardmode);
+            AddPoolParent(ug_crimson_snow_hm, ug_crimson_snow, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_crimson_snow_hm_remix, ug_crimson_snow_remix, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(crimson_snow, demonic);
             AddPoolVisibilityRequirements(ug_crimson_snow, demonic);
@@ -2321,10 +2321,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_corrupt_caverns_remix, 1300, LocalizeAs(ug_corrupt));
             AddPool(ug_corrupt_caverns_hm_remix, 1300);
 
-            AddPoolParent(corrupt_forest_hm, corrupt_forest, in_hardmode);
-            AddPoolParent(ug_corrupt_caverns_hm, ug_corrupt, in_hardmode);
-            AddPoolParent(corrupt_forest_hm_remix, corrupt_forest_remix, in_hardmode);
-            AddPoolParent(ug_corrupt_caverns_hm_remix, ug_corrupt_caverns_remix, in_hardmode);
+            AddPoolParent(corrupt_forest_hm, corrupt_forest, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_corrupt_caverns_hm, ug_corrupt, SubLocalizeAs(in_hardmode));
+            AddPoolParent(corrupt_forest_hm_remix, corrupt_forest_remix, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_corrupt_caverns_hm_remix, ug_corrupt_caverns_remix, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(corrupt_forest, demonic);
             AddPoolVisibilityRequirements(corrupt_forest_hm, steampunk);
@@ -2392,10 +2392,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_corrupt_desert_remix, 1300, LocalizeAs(ug_corrupt_desert));
             AddPool(ug_corrupt_desert_hm_remix, 1300);
 
-            AddPoolParent(corrupt_desert_hm, corrupt_desert, in_hardmode);
-            AddPoolParent(ug_corrupt_desert_hm, ug_corrupt_desert, in_hardmode);
-            AddPoolParent(corrupt_desert_hm_remix, corrupt_desert_remix, in_hardmode);
-            AddPoolParent(ug_corrupt_desert_hm_remix, ug_corrupt_desert_remix, in_hardmode);
+            AddPoolParent(corrupt_desert_hm, corrupt_desert, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_corrupt_desert_hm, ug_corrupt_desert, SubLocalizeAs(in_hardmode));
+            AddPoolParent(corrupt_desert_hm_remix, corrupt_desert_remix, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_corrupt_desert_hm_remix, ug_corrupt_desert_remix, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(corrupt_desert, demonic);
             AddPoolVisibilityRequirements(corrupt_desert_hm, steampunk);
@@ -2460,10 +2460,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ug_corrupt_snow_remix, 1300, LocalizeAs(ug_corrupt_snow));
             AddPool(ug_corrupt_snow_hm_remix, 1300);
 
-            AddPoolParent(corrupt_snow_hm, corrupt_snow, in_hardmode);
-            AddPoolParent(ug_corrupt_snow_hm, ug_corrupt_snow, in_hardmode);
-            AddPoolParent(corrupt_snow_hm_remix, corrupt_snow_remix, in_hardmode);
-            AddPoolParent(ug_corrupt_snow_hm_remix, ug_corrupt_snow_remix, in_hardmode);
+            AddPoolParent(corrupt_snow_hm, corrupt_snow, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_corrupt_snow_hm, ug_corrupt_snow, SubLocalizeAs(in_hardmode));
+            AddPoolParent(corrupt_snow_hm_remix, corrupt_snow_remix, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ug_corrupt_snow_hm_remix, ug_corrupt_snow_remix, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(corrupt_snow, demonic);
             AddPoolVisibilityRequirements(corrupt_snow_hm, steampunk);
@@ -2536,7 +2536,7 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(spider, 3000, true);
             AddPool(hive, 3000, true, LocalizeAs(hive));
 
-            AddPoolParent(spider, cobweb, in_hardmode);
+            AddPoolParent(spider, cobweb, SubLocalizeAs(in_hardmode));
 
             AddPoolVisibilityRequirements(shimmer, demonic);
             AddPoolVisibilityRequirements(spider, infernal);
@@ -2574,10 +2574,10 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(dungeon_b, 2000);
             AddPool(ectoplasm, 2000);
 
-            AddPoolParent(dungeon_p, dungeon, pink);
-            AddPoolParent(dungeon_g, dungeon, green);
-            AddPoolParent(dungeon_b, dungeon, blue);
-            AddPoolParent(ectoplasm, dungeon, post_plantera);
+            AddPoolParent(dungeon_p, dungeon, SubLocalizeAs(pink));
+            AddPoolParent(dungeon_g, dungeon, SubLocalizeAs(green));
+            AddPoolParent(dungeon_b, dungeon, SubLocalizeAs(blue));
+            AddPoolParent(ectoplasm, dungeon, SubLocalizeAs(post_plantera));
 
             AddPoolVisibilityRequirements(dungeon, demonic);
             AddPoolVisibilityRequirements(dungeon_p, demonic);
@@ -2627,9 +2627,9 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ocean_caverns, 10, true);
             AddPool(pirate_caverns, 10, true);
 
-            AddPoolParent(pirate, ocean, in_hardmode);
-            AddPoolParent(ocean_caverns, caverns_remix, not_center);
-            AddPoolParent(pirate_caverns, caverns_remix, not_center_hardmode);
+            AddPoolParent(pirate, ocean, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ocean_caverns, caverns_remix, SubLocalizeAs(not_center));
+            AddPoolParent(pirate_caverns, caverns_remix, SubLocalizeAs(not_center_hardmode));
 
             AddPoolVisibilityRequirements(pirate, steampunk);
             AddPoolVisibilityRequirements(pirate_caverns, steampunk);
@@ -2673,8 +2673,8 @@ namespace BiomeExtractorsMod.Common.Database
             AddPool(ash_forest, 4001, LocalizeAs(ash_forest));
             AddPool(ash_critters, 4001);
 
-            AddPoolParent(uw_fire, underworld, in_hardmode);
-            AddPoolParent(ash_critters, ash_forest, center);
+            AddPoolParent(uw_fire, underworld, SubLocalizeAs(in_hardmode));
+            AddPoolParent(ash_critters, ash_forest, SubLocalizeAs(center));
 
             AddPoolVisibilityRequirements(underworld, infernal);
             AddPoolVisibilityRequirements(uw_fire, steampunk);
