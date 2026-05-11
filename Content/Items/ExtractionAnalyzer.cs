@@ -26,8 +26,9 @@ namespace BiomeExtractorsMod.Content.Items
                     ModContent.GetInstance<UISystem>().OpenAnalyzerScannerInterface(pCenter, tier);
                     return true;
                 }
+                return base.UseItem(player);
             }
-            return base.UseItem(player);
+            return false;
         }
 
         public override void ModifyTooltips(List<TooltipLine> lines)
