@@ -169,6 +169,15 @@ namespace BiomeExtractorsMod.Common.UI
         {
             if (uisys is not null)
             {
+                if(uisys.isAnalyzer) {
+                    if(!panel.HasChild(analyzeButton))
+                        panel.Append(analyzeButton);
+                }
+                else
+                {
+                    if(panel.HasChild(analyzeButton))
+                        panel.RemoveChild(analyzeButton);
+                }
                 header.SetText(uisys.GetWindowTitle());
                 string status = uisys.GetExtractorStatus();
                 biomeText.SetText(status);
