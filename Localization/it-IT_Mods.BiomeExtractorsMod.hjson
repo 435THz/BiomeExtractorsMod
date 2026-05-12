@@ -61,7 +61,7 @@ Items: {
 		Tooltip:
 			'''
 			Piazzalo in qualsiasi punto del mondo per estrarre i materiali più comuni trovabili nell'area circostante.
-			Può estrarre materiali dagli Inferi e dai meteoiti.
+			Può estrarre materiali dagli Inferi e dai meteoriti.
 			'''
 	}
 
@@ -93,7 +93,7 @@ Items: {
 		Tooltip:
 			'''
 			Piazzalo in qualsiasi punto del mondo per estrarre i materiali più comuni trovabili nell'area circostante.
-			Può estrarre Frammenti di colonna dallo spazio dopo che tutte le Colonne sono state sconfitte.
+			Può estrarre i Frammenti dei pilastri dallo spazio dopo che tutti i Pilastri sono stati sconfitti.
 			'''
 	}
 
