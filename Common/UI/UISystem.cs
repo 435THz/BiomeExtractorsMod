@@ -64,15 +64,7 @@ namespace BiomeExtractorsMod.Common.UI
             if (UIHolder?.CurrentState != null) UIHolder.Update(gameTime);
             if (Extractor is null)
             {
-                if (!isItemValidScanner(Main.LocalPlayer.HeldItem) && Main.mouseItem.type == ItemID.None)
-                {
-                    if(framesWithoutScannerInHand>1) {
-                        framesWithoutScannerInHand = 0;
-                        CloseInterface();
-                    }
-                    framesWithoutScannerInHand++;
-                }
-                else framesWithoutScannerInHand = 0;
+                if (!Main.playerInventory && !isItemValidScanner(Main.LocalPlayer.HeldItem)) CloseInterface();
             }
             else if (!Extractor.IsTileValidForEntity(position.X, position.Y) || !ExtractorPlayer.LocalPlayer.IsInRectangleRange(position)) CloseInterface();
         }
