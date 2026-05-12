@@ -7,7 +7,7 @@ Since Extractinators are very hard to come by, this mod also adds them to the Me
 
 Disclaimer: by “extracting from the biome” we mean “generating items related to the biome from nothing”.
 
-Now with remix world support!
+Now with built-in item lookup!
 
 ## Mod support:
 - This mod can deposit items inside Magic Storage systems: all you need to do is place them beside a connected Storage Configuration Interface.
