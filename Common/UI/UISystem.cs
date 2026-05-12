@@ -21,6 +21,7 @@ namespace BiomeExtractorsMod.Common.UI
 {
     internal class UISystem : ModSystem
     {
+        byte framesWithoutScannerInHand = 0;
         internal UserInterface UIHolder;
         internal ExtractorUI ExtractorInterface;
         internal AnalyzerUI AnalyzerInterface;
@@ -63,7 +64,15 @@ namespace BiomeExtractorsMod.Common.UI
             if (UIHolder?.CurrentState != null) UIHolder.Update(gameTime);
             if (Extractor is null)
             {
-                if (UIHolder.CurrentState == ExtractorInterface && !isItemValidScanner(Main.LocalPlayer.HeldItem)) CloseInterface();
+                if (!isItemValidScanner(Main.LocalPlayer.HeldItem) && Main.mouseItem.type == ItemID.None)
+                {
+                    if(framesWithoutScannerInHand>1) {
+                        framesWithoutScannerInHand = 0;
+                        CloseInterface();
+                    }
+                    framesWithoutScannerInHand++;
+                }
+                else framesWithoutScannerInHand = 0;
             }
             else if (!Extractor.IsTileValidForEntity(position.X, position.Y) || !ExtractorPlayer.LocalPlayer.IsInRectangleRange(position)) CloseInterface();
         }
