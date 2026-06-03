@@ -35,7 +35,6 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
                 .Register();
             
             Recipe quickRecipe = CreateRecipe()
-                                    .AddIngredient(ModContent.ItemType<AbyssalUpgradeKit>())
                                     .AddIngredient(ModContent.ItemType<ThermoresistantUpgradeKit>())
                                     .AddIngredient(ModContent.ItemType<PressurizedUpgradeKit>())
                                     .AddIngredient(ModContent.ItemType<SulphuricUpgradeKit>());
