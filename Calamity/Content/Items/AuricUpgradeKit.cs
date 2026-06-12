@@ -28,8 +28,7 @@ namespace BiomeExtractorsMod.Calamity.Content.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<AuricBar>(), 5)
-                .AddIngredient(ModContent.ItemType<AscendantSpiritEssence>(), 10)
-                .AddIngredient(ModContent.ItemType<GalacticaSingularity>(), 2)
+                .AddIngredient(ModContent.ItemType<AscendantSpiritEssence>(), 12)
                 .AddTile(ModContent.TileType<CosmicAnvil>())
                 .Register();
         }

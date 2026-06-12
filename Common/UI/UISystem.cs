@@ -21,7 +21,6 @@ namespace BiomeExtractorsMod.Common.UI
 {
     internal class UISystem : ModSystem
     {
-        byte framesWithoutScannerInHand = 0;
         internal UserInterface UIHolder;
         internal ExtractorUI ExtractorInterface;
         internal AnalyzerUI AnalyzerInterface;
